@@ -1,0 +1,55 @@
+{
+  "name": "context-values",
+  "version": "1.0.0",
+  "description": "IoC context values provider",
+  "keywords": [
+    "ioc"
+  ],
+  "homepage": "https://github.com/surol/context-values",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:surol/context-values.git"
+  },
+  "license": "MIT",
+  "author": "Ruslan Lopatin <ruslan.lopatin@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/surol/context-values/issues"
+  },
+  "main": "dist/context-values.umd.js",
+  "module": "dist/context-values.esm5.js",
+  "es2015": "dist/context-values.esm2015.js",
+  "typings": "index.d.ts",
+  "dependencies": {
+    "tslib": "^1.9.0"
+  },
+  "peerDependencies": {
+    "a-iterable": "^2.0.0",
+    "call-thru": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^5.0.4",
+    "@types/jest": "^23.3.10",
+    "a-iterable": "^2.0.1",
+    "call-thru": "^2.0.0",
+    "codecov": "^3.1.0",
+    "fs-extra": "^7.0.1",
+    "jest": "^23.6.0",
+    "jest-junit": "^5.2.0",
+    "rollup": "^0.67.4",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-node-resolve": "^3.4.0",
+    "rollup-plugin-sourcemaps": "^0.4.2",
+    "rollup-plugin-terser": "^3.0.0",
+    "rollup-plugin-typescript2": "^0.18.0",
+    "rollup-plugin-uglify": "^6.0.0",
+    "ts-jest": "^23.10.5",
+    "tslint": "^5.11.0",
+    "typescript": "^3.2.2"
+  },
+  "scripts": {
+    "build": "rollup --config ./rollup.config.js",
+    "clean": "node ./build/clean",
+    "lint": "tslint --project .",
+    "test": "jest"
+  }
+}
