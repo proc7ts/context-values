@@ -42,6 +42,6 @@ export abstract class ContextValues {
    * @throws Error If there is no value associated with the given key, the default value is not provided,
    * and the key has no default value.
    */
-  abstract get<V>(request: ContextRequest<V>, opts?: ContextRequest.OrDefault<V>): V;
+  abstract get<V>(request: ContextRequest<V>, opts?: ContextRequest.OrFallback<V>): V;
 
 }

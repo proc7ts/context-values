@@ -5,7 +5,7 @@ import {
   ContextSources,
   ContextSourcesKey,
   ContextTarget,
-  ContextValueDefaultHandler,
+  DefaultContextValueHandler,
 } from './context-value';
 import { ContextSourcesProvider, ContextValueProvider, ContextValueSpec } from './context-value-provider';
 import { ContextValues } from './context-values';
@@ -15,7 +15,7 @@ import { ContextValues } from './context-values';
  *
  * @param <C> A type of context.
  */
-export class ContextRegistry<C extends ContextValues> {
+export class ContextRegistry<C extends ContextValues = ContextValues> {
 
   /** @internal */
   private readonly _initial: ContextSourcesProvider<C>;
@@ -142,7 +142,7 @@ export class ContextRegistry<C extends ContextValues> {
         }
 
         let defaultUsed = false;
-        const handleDefault: ContextValueDefaultHandler<V> = opts
+        const handleDefault: DefaultContextValueHandler<V> = opts
             ? () => {
               defaultUsed = true;
               return opts.or;

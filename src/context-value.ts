@@ -42,13 +42,15 @@ export namespace ContextRequest {
   export interface Opts<V> {
 
     /**
-     * The default value to return if there is no value associated with the given key. Can be `null` or `undefined` too.
+     * The fallback value that will be requrned if there is no value associated with the given key.
+     *
+     * Can be `null` or `undefined`.
      */
     or?: V | null;
 
   }
 
-  export interface OrDefault<V> extends Opts<V> {
+  export interface OrFallback<V> extends Opts<V> {
     or: V;
   }
 
@@ -136,7 +138,7 @@ export abstract class ContextKey<V, S = V> implements ContextRequest<V>, Context
   abstract merge(
       context: ContextValues,
       sources: ContextSources<S>,
-      handleDefault: ContextValueDefaultHandler<V>): V | null | undefined;
+      handleDefault: DefaultContextValueHandler<V>): V | null | undefined;
 
   toString(): string {
     return `ContextKey(${this.name})`;
@@ -147,20 +149,18 @@ export abstract class ContextKey<V, S = V> implements ContextRequest<V>, Context
 /**
  * Default context value handler.
  *
- * It is called from `ContextKey.merge()` operation to handle default values.
+ * It is called from `ContextKey.merge()` operation to select a default value. As a fallback value always takes
+ * precedence over the default one specified by the value key.
  *
- * It is responsible for default value selection. As explicitly specified default value should always take precedence
- * over the one specified in the value key.
+ * @param <V> A type of context value.
+ * @param defaultProvider Default value provider. It is called unless a fallback value is specified.
+ * If it returns a non-null/non-undefined value, then the returned value will be associated with the context key.
  *
- * @param <V> A type of context value key.
- * @param defaultProvider Default value provider. It is called only when the default value is not provided explicitly.
- * If it returns a non-null/non-undefined value, then it will be associated with context key.
- *
- * @return Default value to return.
+ * @return The default value to return.
  *
  * @throws Error If there is no explicitly specified default value, and `defaultProvider` did not provide any value.
  */
-export type ContextValueDefaultHandler<V> = (defaultProvider: () => V | null | undefined) => V | null | undefined;
+export type DefaultContextValueHandler<V> = (defaultProvider: () => V | null | undefined) => V | null | undefined;
 
 /**
  * A key of context value holding sources for some other context value.
@@ -243,7 +243,7 @@ export class SingleContextKey<V> extends AbstractContextKey<V> {
   merge(
       context: ContextValues,
       sources: ContextSources<V>,
-      handleDefault: ContextValueDefaultHandler<V>): V | null | undefined {
+      handleDefault: DefaultContextValueHandler<V>): V | null | undefined {
 
     const value = itsLast(sources);
 
@@ -287,7 +287,7 @@ export class MultiContextKey<V> extends AbstractContextKey<V[], V> {
   merge(
       context: ContextValues,
       sources: ContextSources<V>,
-      handleDefault: ContextValueDefaultHandler<V[]>): V[] | null | undefined {
+      handleDefault: DefaultContextValueHandler<V[]>): V[] | null | undefined {
 
     const result = [...sources];
 

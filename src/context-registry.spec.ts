@@ -41,18 +41,18 @@ describe('ContextRegistry', () => {
 
       expect(values.get(keyWithDefaults)).toBe(defaultValue);
     });
-    it('is associated with default value is there is no provider', () => {
+    it('is associated with default value if there is no provider', () => {
       expect(values.get(new SingleContextKey<string>(key.name, () => 'default'))).toBe('default');
     });
-    it('prefers explicit default value over key one', () => {
+    it('prefers fallback value over default one', () => {
       expect(values.get(new SingleContextKey<string>(key.name, () => 'key default'), { or: 'explicit default' }))
           .toBe('explicit default');
     });
-    it('prefers explicit `null` default value over key one', () => {
+    it('prefers `null` fallback value over key one', () => {
       expect(values.get(new SingleContextKey<string>(key.name, () => 'default'), { or: null }))
           .toBeNull();
     });
-    it('prefers explicit `undefined` default value over key one', () => {
+    it('prefers `undefined` fallback value over key one', () => {
       expect(values.get(new SingleContextKey<string>(key.name, () => 'default'), { or: undefined }))
           .toBeUndefined();
     });
@@ -81,7 +81,7 @@ describe('ContextRegistry', () => {
 
       expect(providerSpy).toHaveBeenCalledTimes(1);
     });
-    it('caches default key value', () => {
+    it('caches default value', () => {
 
       const value = 'default value';
       const defaultProviderSpy = jest.fn(() => value);
@@ -91,7 +91,7 @@ describe('ContextRegistry', () => {
       expect(values.get(keyWithDefault)).toBe(value);
       expect(defaultProviderSpy).toHaveBeenCalledTimes(1);
     });
-    it('does not cache explicit default value', () => {
+    it('does not cache fallback value', () => {
 
       const value1 = 'value1';
       const value2 = 'value2';
@@ -159,7 +159,7 @@ describe('ContextRegistry', () => {
     it('is associated with key default value is there is no value', () => {
       expect(values.get(new MultiContextKey<string>(multiKey.name, () => ['default']))).toEqual(['default']);
     });
-    it('prefers explicit default value over key one', () => {
+    it('prefers fallback value over default one', () => {
       expect(values.get(
           new MultiContextKey<string>(
               multiKey.name,
@@ -167,11 +167,11 @@ describe('ContextRegistry', () => {
           { or: ['explicit', 'default'] }))
           .toEqual(['explicit', 'default']);
     });
-    it('prefers explicit `null` default value over key one', () => {
+    it('prefers `null` fallback value over default one', () => {
       expect(values.get(new MultiContextKey<string>(multiKey.name, () => ['key', 'default']), { or: null }))
           .toBeNull();
     });
-    it('prefers explicit `undefined` default value over key one', () => {
+    it('prefers `undefined` fallback value over default one', () => {
       expect(values.get(new MultiContextKey<string>(multiKey.name, () => ['key', 'default']), { or: undefined }))
           .toBeUndefined();
     });
