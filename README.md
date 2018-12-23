@@ -144,7 +144,7 @@ Context Value Key
 
 Context value keys identify context values.
 
-They extend a `ContextKey` abstract class. There following implementations are available:
+They extend a `ContextKey` abstract class. The following implementations are available:
 
 - `SingleContextKey` that allows associate a single value with it, and  
 - `MultiContextKey` that allows to associate multiple values with it.
@@ -167,6 +167,7 @@ const context = registry.newValues();
 context.get(key1); // 'value2' - SingleContextKey uses the latest value provided
 context.get(key2); // [1, 2] - MultiContextKey returns all provided values as an array
 ```
+
 
 ### Default Value
 
@@ -197,6 +198,7 @@ registry.provide({ a: key2, value: 999 });
 context.get(key2); // 999 - provided explicitly
 ```
 
+
 ### Custom Context Key
 
 [ContextKey.merge()]: #custom-context-key
@@ -218,7 +220,7 @@ The method returns a context value constructed out of the provided value sources
 
 [value sources]: #value-sources
 
-Instead of the values themselves, the registry allows to provide value sources. Those are used by [ContextKey.merge()]
+Instead of the values themselves, the registry allows to provide their sources. Those are used by [ContextKey.merge()]
 method to construct the value.
 
 There could be many sources per single value. And they could be of a type different from the final value.
