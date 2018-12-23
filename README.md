@@ -1,13 +1,13 @@
 IoC Context Values Provider
 ===========================
 
-This library allows to construct an [IoC] context, other components can request values from.
-
-An [IoC] context is an object with `get()` method implemented. This method returns a context value by its key.
-
 [![NPM][npm-image]][npm-url]
 [![CircleCI][ci-image]][ci-url]
 [![codecov][codecov-image]][codecov-url]
+
+This library allows to construct an [IoC] context, other components can request values from.
+
+An [IoC] context is an object with `get()` method implemented. This method returns a context value by its key.
 
 [npm-image]: https://img.shields.io/npm/v/context-values.svg
 [npm-url]: https://www.npmjs.com/package/context-values
@@ -48,7 +48,7 @@ myContext.get(key, { or: 'empty' });
 
 ### Context Value Request
 
-The `get()` method accepts not only a `ContextKey` instances, but arbitrary `ContextRequest`. The latter is just an
+The `get()` method accepts not only a `ContextKey` instance, but arbitrary `ContextRequest`. The latter is just an
 object with `key` property containing a `ContextKey` instance to find.
 
 This can be handy e.g. when requesting an instance of some known type:
@@ -95,7 +95,7 @@ context.get(key2); // 6
 
 [Context Value Target]: #context-value-target
 
-The `provide()` method accepts not only a `ContextKey` instances, but arbitrary `ContextTarget`. The latter is just an
+The `provide()` method accepts not only a `ContextKey` instance, but arbitrary `ContextTarget`. The latter is just an
 object with `key` property containing a `ContextKey` to provide.
 
 
@@ -131,7 +131,7 @@ This specifier defines a value (or, more precisely, the [value sources]). It may
   is the target context.
 - `registry.provide({ a: key, by: (a, b) => calculateValue(a, b), with: [keyA, keyB] })` - evaluates the value based on
   other context values with keys `keyA` and `keyB`.
-- `registry.provide({ a: key, as: MyService })` - constructs the value a `new MyService(ctx)`, where `ctx` is the
+- `registry.provide({ a: key, as: MyService })` - constructs the value as `new MyService(ctx)`, where `ctx` is the
   target context. The `a` property may be omitted if `MyService` has a static property `key`.
   See [Context Value Target].
 - `registry.porvide({ a: key, as: MyService, with: [keyA, keyB] })` - constructs the value as `new MyService(a, b)`,
