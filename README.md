@@ -134,9 +134,11 @@ This specifier defines a value (or, more precisely, the [value sources]). It may
 - `registry.provide({ a: key, as: MyService })` - constructs the value as `new MyService(ctx)`, where `ctx` is the
   target context. The `a` property may be omitted if `MyService` has a static property `key`.
   See [Context Value Target].
-- `registry.porvide({ a: key, as: MyService, with: [keyA, keyB] })` - constructs the value as `new MyService(a, b)`,
+- `registry.provide({ a: key, as: MyService, with: [keyA, keyB] })` - constructs the value as `new MyService(a, b)`,
   where `a` and `b` are context values with keys `keyA` and `keyB` respectively. The `a` property may be omitted if
   `MyService` has a static property `key`. See [Context Value Target].
+- `registry.provide({ a: key, via: otherKey })` - makes the value available under `otherKey` available under `key`.
+  I.e. aliases it.  
 
 
 Context Value Key
