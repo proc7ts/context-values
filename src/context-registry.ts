@@ -34,8 +34,10 @@ export class ContextRegistry<C extends ContextValues = ContextValues> {
    * @param initial An optional source of initially known context values. This can be either a function, or
    * `ContextValues` instance.
    */
-  constructor(initial: ContextSourcesProvider<C> | ContextValues = () => AIterable.none()) {
-    if (typeof initial === 'function') {
+  constructor(initial?: ContextSourcesProvider<C> | ContextValues) {
+    if (initial == null) {
+      this._initial = noContextSources;
+    } else if (typeof initial === 'function') {
       this._initial = initial;
     } else {
       this._initial = <S>({ key }: ContextRequest<S>) => initial.get(key.sourcesKey);
@@ -227,4 +229,8 @@ function valueSources<C extends ContextValues, S>(
 
 function isPresent<S>(value: S | null | undefined): value is S {
   return value != null;
+}
+
+function noContextSources<S>(): ContextSources<S> {
+  return AIterable.none();
 }
