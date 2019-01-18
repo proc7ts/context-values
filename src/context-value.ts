@@ -1,4 +1,4 @@
-import { AIterable, itsLast } from 'a-iterable';
+import { AIterable, itsEmpty, itsLast } from 'a-iterable';
 import { ContextValueProvider } from './context-value-provider';
 import { ContextValues } from './context-values';
 
@@ -185,8 +185,14 @@ export class ContextSourcesKey<S> extends ContextKey<ContextSources<S>, S> {
      return this;
   }
 
-  merge(context: ContextValues, sources: ContextSources<S>): ContextSources<S> {
-    return sources;
+  merge(
+      context: ContextValues,
+      sources: ContextSources<S>,
+      handleDefault: DefaultContextValueHandler<ContextSources<S>>): ContextSources<S> | null | undefined {
+    if (!itsEmpty(sources)) {
+      return sources;
+    }
+    return handleDefault(() => sources);
   }
 
 }

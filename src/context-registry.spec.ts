@@ -17,6 +17,40 @@ describe('ContextRegistry', () => {
     registry.provide({ a: key, by: providerSpy });
   });
 
+  describe('Values sources', () => {
+    it('empty sources by default', () => {
+      expect([...values.get(key.sourcesKey)]).toEqual([]);
+    });
+    it('respects sources fallback', () => {
+
+      const value = 'test value';
+
+      expect([...values.get(key.sourcesKey, { or: AIterable.from([value])})]).toEqual([value]);
+    });
+    it('prefers explicit sources', () => {
+
+      const value = 'test value';
+
+      providerSpy.mockReturnValue(value);
+
+      expect([...values.get(key.sourcesKey, { or: AIterable.from(['default'])})]).toEqual([value]);
+    });
+    it('caches value sources', () => {
+
+      const value = 'test value';
+
+      providerSpy.mockReturnValue(value);
+
+      expect([...values.get(key.sourcesKey)]).toEqual([value]);
+      expect(values.get(key)).toBe(value);
+
+      providerSpy.mockReturnValue('other');
+
+      expect([...values.get(key.sourcesKey)]).toEqual([value]);
+      expect(values.get(key)).toBe(value);
+    });
+  });
+
   describe('Single value', () => {
     it('is associated with provided value', () => {
 
@@ -55,20 +89,6 @@ describe('ContextRegistry', () => {
     it('prefers `undefined` fallback value over key one', () => {
       expect(values.get(new SingleContextKey<string>(key.name, () => 'default'), { or: undefined }))
           .toBeUndefined();
-    });
-    it('caches value sources', () => {
-
-      const value = 'test value';
-
-      providerSpy.mockReturnValue(value);
-
-      expect([...values.get(key.sourcesKey)]).toEqual([value]);
-      expect(values.get(key)).toBe(value);
-
-      providerSpy.mockReturnValue('other');
-
-      expect([...values.get(key.sourcesKey)]).toEqual([value]);
-      expect(values.get(key)).toBe(value);
     });
     it('caches the value', () => {
 
