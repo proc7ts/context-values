@@ -29,11 +29,17 @@ export class ContextRegistry<C extends ContextValues = ContextValues> {
   /**
    * Constructs a registry for context value providers.
    *
-   * @param initial An optional source of initially known context values. This is useful e.g. for chaining
-   * registries.
+   * It can be chained with another registry by providing an initially known source of known context values.
+   *
+   * @param initial An optional source of initially known context values. This can be either a function, or
+   * `ContextValues` instance.
    */
-  constructor(initial: ContextSourcesProvider<C> = () => AIterable.none()) {
-    this._initial = initial;
+  constructor(initial: ContextSourcesProvider<C> | ContextValues = () => AIterable.none()) {
+    if (typeof initial === 'function') {
+      this._initial = initial;
+    } else {
+      this._initial = <S>({ key }: ContextRequest<S>) => initial.get(key.sourcesKey);
+    }
   }
 
   /**

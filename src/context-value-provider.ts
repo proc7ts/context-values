@@ -21,13 +21,13 @@ export type ContextValueProvider<C extends ContextValues, S> =
  * A provider of context value sources.
  *
  * @param <C> A type of context.
- * @param provide A definition of provided context value.
+ * @param target Context value definition target.
  * @param context Target context.
  *
  * @returns Context value sources associated with the given key provided for the given context.
  */
 export type ContextSourcesProvider<C extends ContextValues> =
-    <S>(this: void, provide: ContextTarget<S>, context: C) => ContextSources<S>;
+    <S>(this: void, target: ContextTarget<S>, context: C) => ContextSources<S>;
 
 /**
  * Context value specifier.
