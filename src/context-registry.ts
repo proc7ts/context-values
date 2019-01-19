@@ -1,4 +1,4 @@
-import { AIterable } from 'a-iterable';
+import { AIterable, overArray } from 'a-iterable';
 import {
   ContextKey,
   ContextRequest,
@@ -131,19 +131,19 @@ export class ContextRegistry<C extends ContextValues = ContextValues> {
           return cached;
         }
 
-        let sourceValues: ContextSources<S>;
+        let sources: ContextSources<S>;
 
         if (key.sourcesKey !== key as any) {
           // This is not a sources key
           // Retrieve the sources by sources key
-          sourceValues = context.get(key.sourcesKey);
+          sources = context.get(key.sourcesKey);
         } else {
           // This is a sources key.
           // Find providers.
           const sourceProviders = sourcesProvidersFor(key.sourcesKey);
           const initial = registry._initial(key, context);
 
-          sourceValues = AIterable.from([
+          sources = AIterable.from([
             () => initial,
             () => valueSources(context, sourceProviders),
           ]).flatMap(fn => fn());
@@ -165,7 +165,7 @@ export class ContextRegistry<C extends ContextValues = ContextValues> {
               return providedDefault;
             };
 
-        const constructed = key.merge(context, sourceValues, handleDefault);
+        const constructed = key.merge(context, sources, handleDefault);
 
         if (cache && !defaultUsed) {
           values.set(key, constructed);
@@ -219,11 +219,11 @@ function valueSources<C extends ContextValues, S>(
       return sourceProvider[1];
     }
 
-    const sourceValue = sourceProvider[0](context);
+    const source = sourceProvider[0](context);
 
-    sourceProvider.push(sourceValue);
+    sourceProvider.push(source);
 
-    return sourceValue;
+    return source;
   }).filter<S>(isPresent);
 }
 

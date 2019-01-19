@@ -22,11 +22,8 @@ describe('ContextRegistry', () => {
     it('empty sources by default', () => {
       expect([...values.get(key.sourcesKey)]).toEqual([]);
     });
-    it('respects sources fallback', () => {
-
-      const value = 'test value';
-
-      expect([...values.get(key.sourcesKey, { or: AIterable.from([value])})]).toEqual([value]);
+    it('ignores sources fallback', () => {
+      expect([...values.get(key.sourcesKey, { or: AIterable.from(['fallback value'])})]).toEqual([]);
     });
     it('prefers explicit sources', () => {
 
