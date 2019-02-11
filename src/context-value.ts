@@ -166,9 +166,6 @@ export type DefaultContextValueHandler<V> = (defaultProvider: () => V | null | u
  * A key of context value holding sources for some other context value.
  *
  * An instance of this class is used as `ContextKey.sourcesKey` value by default.
- *
- * Value sources are always present. Even though they can be empty. So fallback value is always ignored when requesting
- * them.
  */
 export class ContextSourcesKey<S> extends ContextKey<ContextSources<S>, S> {
 
@@ -188,8 +185,14 @@ export class ContextSourcesKey<S> extends ContextKey<ContextSources<S>, S> {
      return this;
   }
 
-  merge(context: ContextValues, sources: ContextSources<S>): ContextSources<S> {
-    return sources;
+  merge(
+      context: ContextValues,
+      sources: ContextSources<S>,
+      handleDefault: DefaultContextValueHandler<ContextSources<S>>): ContextSources<S> | null | undefined {
+    if (!itsEmpty(sources)) {
+      return sources;
+    }
+    return handleDefault(() => sources);
   }
 
 }

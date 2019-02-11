@@ -18,12 +18,12 @@ describe('ContextRegistry', () => {
     registry.provide({ a: key, by: providerSpy });
   });
 
-  describe('Values sources', () => {
+  describe('Value sources request', () => {
     it('empty sources by default', () => {
       expect([...values.get(key.sourcesKey)]).toEqual([]);
     });
-    it('ignores sources fallback', () => {
-      expect([...values.get(key.sourcesKey, { or: AIterable.from(['fallback value'])})]).toEqual([]);
+    it('respects sources fallback', () => {
+      expect([...values.get(key.sourcesKey, { or: AIterable.from(['default'])})]).toEqual(['default']);
     });
     it('prefers explicit sources', () => {
 
