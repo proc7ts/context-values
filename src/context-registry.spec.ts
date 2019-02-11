@@ -1,20 +1,20 @@
 import { ContextRegistry } from './context-registry';
 import { MultiContextKey, SingleContextKey } from './context-value';
 import { ContextValues } from './context-values';
-import Mock = jest.Mock;
 import { AIterable } from 'a-iterable';
+import Mock = jest.Mock;
 
 describe('ContextRegistry', () => {
 
   const key = new SingleContextKey<string>('test-key');
   let registry: ContextRegistry<ContextValues>;
   let values: ContextValues;
-  let providerSpy: Mock;
+  let providerSpy: Mock<string>;
 
   beforeEach(() => {
     registry = new ContextRegistry();
     values = registry.newValues();
-    providerSpy = jest.fn();
+    providerSpy = jest.fn<string>().mockName('providerSpy');
     registry.provide({ a: key, by: providerSpy });
   });
 
@@ -293,7 +293,7 @@ describe('ContextRegistry', () => {
     beforeEach(() => {
       registry2 = new ContextRegistry();
       combined = registry.append(registry2);
-      context = { name: 'context' } as any;
+      context = { name: 'context', get: combined.newValues().get } as any;
     });
 
     it('contains all sources', () => {
@@ -302,6 +302,16 @@ describe('ContextRegistry', () => {
       registry2.provide({ a: key, is: '3' });
       expect([...combined.sources(context, key)]).toEqual(['1', '2', '3']);
     });
+    it('accesses sources only once', () => {
+      providerSpy.mockReturnValue('1');
+
+      const provider2 = jest.fn(() => '2').mockName('provider2');
+
+      registry2.provide({ a: key, by: provider2 });
+      expect([...context.get(key.sourcesKey)]).toEqual(['1', '2']);
+      expect(providerSpy).toHaveBeenCalledTimes(1);
+      expect(provider2).toHaveBeenCalledTimes(1);
+    });
     it('contains reverted sources', () => {
       providerSpy.mockReturnValue('1');
       registry2.provide({ a: key, is: '2' });
@@ -309,5 +319,4 @@ describe('ContextRegistry', () => {
       expect([...combined.sources(context, key).reverse()]).toEqual(['3', '2', '1']);
     });
   });
-
 });

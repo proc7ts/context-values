@@ -86,9 +86,7 @@ export class ContextRegistry<C extends ContextValues = ContextValues> {
    *
    * @returns A provider of context value sources bound to the given context.
    */
-  bindSources(context: C, cache?: boolean): <V, S>(
-      this: void,
-      request: ContextTarget<S>) => ContextSources<S> {
+  bindSources(context: C, cache?: boolean): <V, S>(request: ContextTarget<S>) => ContextSources<S> {
 
     const values = this.newValues(cache);
 
@@ -203,12 +201,10 @@ export class ContextRegistry<C extends ContextValues = ContextValues> {
 
     const self = this;
 
-    return new ContextRegistry<C>(<S>(
-        provide: ContextTarget<S>,
-        context: C) => AIterable.from([
-      () => self.sources(context, provide),
-      () => other.sources(context, provide),
-    ]).flatMap(fn => fn()));
+    return new ContextRegistry<C>(<S>(target: ContextTarget<S>, context: C) => AIterable.from([
+      self.sources(context, target),
+      other.sources(context, target),
+    ]).flatMap(s => s));
   }
 
 }
