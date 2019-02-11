@@ -1,4 +1,4 @@
-import { AIterable, overArray } from 'a-iterable';
+import { AIterable } from 'a-iterable';
 import {
   ContextKey,
   ContextRequest,
@@ -110,13 +110,6 @@ export class ContextRegistry<C extends ContextValues = ContextValues> {
     const values = new Map<ContextKey<any>, any>();
     const registry = this;
 
-    function sourcesProvidersFor<S>(key: ContextSourcesKey<S>): AIterable<SourceProvider<C, S>> {
-
-      const providers: ContextValueProvider<C, S>[] = registry._providers.get(key) || [];
-
-      return AIterable.from(providers.map(toSourceProvider));
-    }
-
     class Values extends ContextValues {
 
       get<V, S>(
@@ -131,41 +124,8 @@ export class ContextRegistry<C extends ContextValues = ContextValues> {
           return cached;
         }
 
-        let sources: ContextSources<S>;
-
-        if (key.sourcesKey !== key as any) {
-          // This is not a sources key
-          // Retrieve the sources by sources key
-          sources = context.get(key.sourcesKey);
-        } else {
-          // This is a sources key.
-          // Find providers.
-          const sourceProviders = sourcesProvidersFor(key.sourcesKey);
-          const initial = registry._initial(key, context);
-
-          sources = AIterable.from([
-            () => initial,
-            () => valueSources(context, sourceProviders),
-          ]).flatMap(fn => fn());
-        }
-
-        let defaultUsed = false;
-        const handleDefault: DefaultContextValueHandler<V> = opts
-            ? () => {
-              defaultUsed = true;
-              return opts.or;
-            } : defaultProvider => {
-
-              const providedDefault = defaultProvider();
-
-              if (providedDefault == null) {
-                throw new Error(`There is no value with key ${key}`);
-              }
-
-              return providedDefault;
-            };
-
-        const constructed = key.merge(context, sources, handleDefault);
+        const sources = keySources(context, key);
+        const [constructed, defaultUsed] = mergeSources(context, key, sources, opts);
 
         if (cache && !defaultUsed) {
           values.set(key, constructed);
@@ -181,6 +141,55 @@ export class ContextRegistry<C extends ContextValues = ContextValues> {
     }
 
     return new Values();
+
+    function keySources<S>(context: C, key: ContextKey<any, S>): ContextSources<S> {
+      if (key.sourcesKey !== key as any) {
+        // This is not a sources key
+        // Retrieve the sources by sources key
+        return context.get(key.sourcesKey);
+      }
+      // This is a sources key.
+      // Find providers.
+      const sourceProviders = sourcesProvidersFor(key.sourcesKey);
+      const initial = registry._initial(key, context);
+
+      return AIterable.from([
+        () => initial,
+        () => valueSources(context, sourceProviders),
+      ]).flatMap(fn => fn());
+    }
+
+    function sourcesProvidersFor<S>(key: ContextSourcesKey<S>): AIterable<SourceProvider<C, S>> {
+
+      const providers: ContextValueProvider<C, S>[] = registry._providers.get(key) || [];
+
+      return AIterable.from(providers.map(toSourceProvider));
+    }
+
+    function mergeSources<V, S>(
+        context: C,
+        key: ContextKey<V, S>,
+        sources: ContextSources<S>,
+        opts: ContextRequest.Opts<V> | undefined): [V | null | undefined, boolean] {
+
+      let defaultUsed = false;
+      const handleDefault: DefaultContextValueHandler<V> = (opts && 'or' in opts)
+          ? () => {
+            defaultUsed = true;
+            return opts.or;
+          } : defaultProvider => {
+
+            const providedDefault = defaultProvider();
+
+            if (providedDefault == null) {
+              throw new Error(`There is no value with key ${key}`);
+            }
+
+            return providedDefault;
+          };
+
+      return [key.merge(context, sources, handleDefault), defaultUsed];
+    }
   }
 
   /**

@@ -50,7 +50,7 @@ describe('ContextRegistry', () => {
   });
 
   describe('Single value', () => {
-    it('is associated with provided value', () => {
+    it('provides value', () => {
 
       const value = 'test value';
 
@@ -58,11 +58,12 @@ describe('ContextRegistry', () => {
 
       expect(values.get(key)).toBe(value);
     });
-    it('throws if there is no default value', () => {
+    it('throws if there is neither default nor fallback value', () => {
       expect(() => values.get(new SingleContextKey(key.name))).toThrowError();
+      expect(() => values.get(new SingleContextKey(key.name), {})).toThrowError();
     });
-    it('provides default value is there is no provider', () => {
-      expect(values.get(new SingleContextKey<string>(key.name), { or: 'default' })).toBe('default');
+    it('provides fallback value is there is no provider', () => {
+      expect(values.get(new SingleContextKey<string>(key.name), { or: 'fallback' })).toBe('fallback');
     });
     it('provides default value if provider did not provide any value', () => {
 
@@ -73,12 +74,16 @@ describe('ContextRegistry', () => {
 
       expect(values.get(keyWithDefaults)).toBe(defaultValue);
     });
-    it('is associated with default value if there is no provider', () => {
+    it('provides default value if there is no provider', () => {
       expect(values.get(new SingleContextKey<string>(key.name, () => 'default'))).toBe('default');
     });
     it('prefers fallback value over default one', () => {
-      expect(values.get(new SingleContextKey<string>(key.name, () => 'key default'), { or: 'explicit default' }))
-          .toBe('explicit default');
+      expect(values.get(new SingleContextKey<string>(key.name, () => 'default'), { or: 'fallback' }))
+          .toBe('fallback');
+    });
+    it('prefers default value if fallback one is absent', () => {
+      expect(values.get(new SingleContextKey<string>(key.name, () => 'default'), {}))
+          .toBe('default');
     });
     it('prefers `null` fallback value over key one', () => {
       expect(values.get(new SingleContextKey<string>(key.name, () => 'default'), { or: null }))
