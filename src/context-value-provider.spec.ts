@@ -1,13 +1,14 @@
 import { ContextKey, ContextRequest, SingleContextKey } from './context-value';
 import { ContextValueSpec } from './context-value-provider';
 import { ContextValues } from './context-values';
-import Mocked = jest.Mocked;
 import Mock = jest.Mock;
 
 describe('ContextValueSpec', () => {
   describe('of', () => {
 
-    let contextSpy: Mocked<ContextValues>;
+    let contextSpy: {
+      get: Mock<any, [ContextRequest<any>]>;
+    };
 
     beforeEach(() => {
       contextSpy = {

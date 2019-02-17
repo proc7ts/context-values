@@ -14,7 +14,7 @@ describe('ContextRegistry', () => {
   beforeEach(() => {
     registry = new ContextRegistry();
     values = registry.newValues();
-    providerSpy = jest.fn<string>().mockName('providerSpy');
+    providerSpy = jest.fn().mockName('providerSpy');
     registry.provide({ a: key, by: providerSpy });
   });
 
