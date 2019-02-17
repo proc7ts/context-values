@@ -7,7 +7,12 @@ import {
   ContextTarget,
   DefaultContextValueHandler,
 } from './context-value';
-import { ContextSourcesProvider, ContextValueProvider, ContextValueSpec } from './context-value-provider';
+import {
+  ContextSourcesProvider,
+  ContextValueProvider,
+  contextValueSpec,
+  ContextValueSpec
+} from './context-value-provider';
 import { ContextValues } from './context-values';
 
 /**
@@ -53,7 +58,7 @@ export class ContextRegistry<C extends ContextValues = ContextValues> {
    */
   provide<D extends any[], S>(spec: ContextValueSpec<C, any, D, S>): void {
 
-    const { a: { key: { sourcesKey } }, by } = ContextValueSpec.of(spec);
+    const { a: { key: { sourcesKey } }, by } = contextValueSpec(spec);
     let providers: ContextValueProvider<C, S>[] | undefined = this._providers.get(sourcesKey);
 
     if (providers == null) {
