@@ -190,60 +190,68 @@ export namespace ContextValueSpec {
     [index in keyof P]: ContextRequest<P[index]>;
   };
 
-  function byProvider<C extends ContextValues, D extends any[], S>(
-      spec: ContextValueSpec<C, any, D, S>): spec is ByProvider<C, S> | ByProviderWithDeps<D, S> {
-    return 'by' in spec;
-  }
+}
 
-  function asInstance<C extends ContextValues, D extends any[], S>(
-      spec: ContextValueSpec<C, any, D, S>): spec is AsInstance<C, S> | AsInstanceWithDeps<D, S> {
-    return 'as' in spec;
-  }
+/**
+ * Constructs a specifier of context value defined by provider out of arbitrary one.
+ *
+ * @param spec Context value specifier to convert.
+ *
+ * @throws TypeError On malformed context value specifier.
+ */
+export function contextValueSpec<C extends ContextValues, V, D extends any[], S = V>(
+    spec: ContextValueSpec<C, V, D, S>): ContextValueSpec.ByProvider<C, S> {
+  if (byProvider(spec)) {
+    if (!withDeps<C, D, S>(spec)) {
+      return spec;
+    }
 
-  function selfInstance<C extends ContextValues, D extends any[], S>(
-      spec: ContextValueSpec<C, any, D, S>): spec is SelfInstance<C, S> | SelfInstanceWithDeps<D, S> {
-    return !('a' in spec);
-  }
+    const { a, by, with: deps } = spec;
 
-  function toAsInstance<C extends ContextValues, D extends any[], S>(
-      spec: SelfInstance<C, S> | SelfInstanceWithDeps<D, S>): AsInstance<C, S> | AsInstanceWithDeps<D, S> {
     return {
-      ...spec,
-      a: spec.as,
-    } as AsInstance<C, S> | AsInstanceWithDeps<D, S>;
+      a,
+      by(this: void, context: C) {
+        function dep<T>(request: ContextRequest<T>): T {
+          return context.get(request);
+        }
+
+        return by(...deps.map(dep) as D);
+      },
+    };
   }
+  if (isConstant<S>(spec)) {
 
-  function isConstant<S>(spec: ContextValueSpec<any, any, any, S>): spec is IsConstant<S> {
-    return 'is' in spec;
+    const { a, is: value } = spec;
+
+    return {
+      a,
+      by: () => value,
+    };
   }
+  if (viaAlias(spec)) {
 
-  function viaAlias<S>(spec: ContextValueSpec<any, any, any, S>): spec is ViaAlias<S> {
-    return 'via' in spec;
+    const { a, via } = spec;
+
+    return {
+      a,
+      by: (ctx: C) => ctx.get(via),
+    };
   }
+  if (asInstance<C, D, S>(spec)) {
+    if (selfInstance<C, D, S>(spec)) {
+      spec = toAsInstance(spec);
+    }
+    if (!withDeps<C, D, S>(spec)) {
 
-  function withDeps<C extends ContextValues, D extends any[], S>(
-      spec: ByProvider<C, S> | ByProviderWithDeps<D, S>): spec is ByProviderWithDeps<D, S>;
-  function withDeps<C extends ContextValues, D extends any[], S>(
-      spec: AsInstance<C, S> | AsInstanceWithDeps<D, S>): spec is AsInstanceWithDeps<D, S>;
-  function withDeps<C extends ContextValues, D extends any[], S>(spec: ContextValueSpec<C, any, D, S>): boolean {
-    return 'with' in spec;
-  }
+      const { a, as: type } = spec;
 
-  /**
-   * Constructs a specifier of context value defined by provider out of arbitrary one.
-   *
-   * @param spec Context value specifier to convert.
-   *
-   * @throws TypeError On malformed context value specifier.
-   */
-  export function of<C extends ContextValues, V, D extends any[], S = V>(
-      spec: ContextValueSpec<C, V, D, S>): ByProvider<C, S> {
-    if (byProvider(spec)) {
-      if (!withDeps<C, D, S>(spec)) {
-        return spec;
-      }
+      return {
+        a,
+        by: (ctx: C) => new type(ctx),
+      };
+    } else {
 
-      const { a, by, with: deps } = spec;
+      const { a, as: type, with: deps } = spec;
 
       return {
         a,
@@ -252,58 +260,56 @@ export namespace ContextValueSpec {
             return context.get(request);
           }
 
-          return by(...deps.map(dep) as D);
+          return new type(...deps.map(dep) as D);
         },
       };
     }
-    if (isConstant<S>(spec)) {
-
-      const { a, is: value } = spec;
-
-      return {
-        a,
-        by: () => value,
-      };
-    }
-    if (viaAlias(spec)) {
-
-      const { a, via } = spec;
-
-      return {
-        a,
-        by: (ctx: C) => ctx.get(via),
-      };
-    }
-    if (asInstance<C, D, S>(spec)) {
-      if (selfInstance<C, D, S>(spec)) {
-        spec = toAsInstance(spec);
-      }
-      if (!withDeps<C, D, S>(spec)) {
-
-        const { a, as: type } = spec;
-
-        return {
-          a,
-          by: (ctx: C) => new type(ctx),
-        };
-      } else {
-
-        const { a, as: type, with: deps } = spec;
-
-        return {
-          a,
-          by(this: void, context: C) {
-            function dep<T>(request: ContextRequest<T>): T {
-              return context.get(request);
-            }
-
-            return new type(...deps.map(dep) as D);
-          },
-        };
-      }
-    }
-
-    throw new TypeError(`Malformed context value specifier: ${spec}`);
   }
 
+  throw new TypeError(`Malformed context value specifier: ${spec}`);
+}
+
+function byProvider<C extends ContextValues, D extends any[], S>(
+    spec: ContextValueSpec<C, any, D, S>):
+    spec is ContextValueSpec.ByProvider<C, S> | ContextValueSpec.ByProviderWithDeps<D, S> {
+  return 'by' in spec;
+}
+
+function asInstance<C extends ContextValues, D extends any[], S>(
+    spec: ContextValueSpec<C, any, D, S>):
+    spec is ContextValueSpec.AsInstance<C, S> | ContextValueSpec.AsInstanceWithDeps<D, S> {
+  return 'as' in spec;
+}
+
+function selfInstance<C extends ContextValues, D extends any[], S>(
+    spec: ContextValueSpec<C, any, D, S>):
+    spec is ContextValueSpec.SelfInstance<C, S> | ContextValueSpec.SelfInstanceWithDeps<D, S> {
+  return !('a' in spec);
+}
+
+function toAsInstance<C extends ContextValues, D extends any[], S>(
+    spec: ContextValueSpec.SelfInstance<C, S> | ContextValueSpec.SelfInstanceWithDeps<D, S>):
+    ContextValueSpec.AsInstance<C, S> | ContextValueSpec.AsInstanceWithDeps<D, S> {
+  return {
+    ...spec,
+    a: spec.as,
+  } as ContextValueSpec.AsInstance<C, S> | ContextValueSpec.AsInstanceWithDeps<D, S>;
+}
+
+function isConstant<S>(spec: ContextValueSpec<any, any, any, S>): spec is ContextValueSpec.IsConstant<S> {
+  return 'is' in spec;
+}
+
+function viaAlias<S>(spec: ContextValueSpec<any, any, any, S>): spec is ContextValueSpec.ViaAlias<S> {
+  return 'via' in spec;
+}
+function withDeps<C extends ContextValues, D extends any[], S>(
+    spec: ContextValueSpec.ByProvider<C, S> | ContextValueSpec.ByProviderWithDeps<D, S>):
+    spec is ContextValueSpec.ByProviderWithDeps<D, S>;
+function withDeps<C extends ContextValues, D extends any[], S>(
+    spec: ContextValueSpec.AsInstance<C, S> | ContextValueSpec.AsInstanceWithDeps<D, S>):
+    spec is ContextValueSpec.AsInstanceWithDeps<D, S>;
+
+function withDeps<C extends ContextValues, D extends any[], S>(spec: ContextValueSpec<C, any, D, S>): boolean {
+  return 'with' in spec;
 }
