@@ -16,7 +16,6 @@
     "url": "https://github.com/surol/context-values/issues"
   },
   "main": "dist/context-values.js",
-  "browser": "dist/context-values.umd.js",
   "module": "dist/context-values.mjs",
   "esm5": "dist/context-values.esm5.js",
   "typings": "index.d.ts",
