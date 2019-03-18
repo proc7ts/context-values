@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "moduleResolution": "node",
-    "module": "es2015",
-    "target": "es2015",
+    "module": "es6",
+    "target": "es6",
     "strict": true,
     "experimentalDecorators": true,
     "noFallthroughCasesInSwitch": true,
@@ -11,8 +11,7 @@
     "importHelpers": true,
     "noEmitHelpers": true,
     "lib": [
-      "es2015",
-      "esnext.array"
+      "es6"
     ],
     "outDir": "target/js",
     "sourceMap": true,
