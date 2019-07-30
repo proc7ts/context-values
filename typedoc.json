@@ -1,0 +1,8 @@
+{
+  "excludeNotExported": true,
+  "mode": "file",
+  "name": "Context Values",
+  "out": "./target/typedoc",
+  "theme": "minimal",
+  "tsconfig": "tsconfig.main.json"
+}

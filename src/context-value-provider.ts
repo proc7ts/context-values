@@ -1,3 +1,6 @@
+/**
+ * @module context-values
+ */
 import { ContextRequest, ContextSources, ContextTarget } from './context-value';
 import { ContextValues } from './context-values';
 
@@ -7,9 +10,9 @@ import { ContextValues } from './context-values';
  * It is responsible for constructing the values associated with particular key for the given context. Note that
  * provider generates source value, not the context values themselves.
  *
- * @param <C> The type of context.
- * @param <S> The type of source value.
- * @param context Target context.
+ * @typeparam C  The type of context.
+ * @typeparam S  The type of source value.
+ * @param context  Target context.
  *
  * @return Either constructed value, or `null`/`undefined` if the value can not be constructed.
  */
@@ -20,9 +23,9 @@ export type ContextValueProvider<C extends ContextValues, S> =
 /**
  * A provider of context value sources.
  *
- * @param <C> A type of context.
- * @param target Context value definition target.
- * @param context Target context.
+ * @typeparam C  A type of context.
+ * @param target  Context value definition target.
+ * @param context  Target context.
  *
  * @returns Context value sources associated with the given key provided for the given context.
  */
@@ -195,9 +198,9 @@ export namespace ContextValueSpec {
 /**
  * Constructs a specifier of context value defined by provider out of arbitrary one.
  *
- * @param spec Context value specifier to convert.
+ * @param spec  Context value specifier to convert.
  *
- * @throws TypeError On malformed context value specifier.
+ * @throws TypeError  On malformed context value specifier.
  */
 export function contextValueSpec<C extends ContextValues, V, D extends any[], S = V>(
     spec: ContextValueSpec<C, V, D, S>): ContextValueSpec.ByProvider<C, S> {

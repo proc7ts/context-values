@@ -1,3 +1,6 @@
+/**
+ * @module context-values
+ */
 import { AIterable } from 'a-iterable';
 import {
   ContextKey,
@@ -18,7 +21,7 @@ import { ContextValues } from './context-values';
 /**
  * A registry of context value providers.
  *
- * @param <C> A type of context.
+ * @typeparam C  A type of context.
  */
 export class ContextRegistry<C extends ContextValues = ContextValues> {
 
@@ -36,7 +39,7 @@ export class ContextRegistry<C extends ContextValues = ContextValues> {
    *
    * It can be chained with another registry by providing an initially known source of known context values.
    *
-   * @param initial An optional source of initially known context values. This can be either a function, or
+   * @param initial  An optional source of initially known context values. This can be either a function, or
    * `ContextValues` instance.
    */
   constructor(initial?: ContextSourcesProvider<C> | ContextValues) {
@@ -52,9 +55,9 @@ export class ContextRegistry<C extends ContextValues = ContextValues> {
   /**
    * Defines a context value.
    *
-   * @param <D> A type of dependencies.
-   * @param <S> A type of context value sources.
-   * @param spec Context value specifier.
+   * @typeparam D  A type of dependencies.
+   * @typeparam S  A type of context value sources.
+   * @param spec  Context value specifier.
    */
   provide<D extends any[], S>(spec: ContextValueSpec<C, any, D, S>): void {
 
@@ -74,8 +77,8 @@ export class ContextRegistry<C extends ContextValues = ContextValues> {
   /**
    * Returns the value sources provided for the given key.
    *
-   * @param context Context to provide value for.
-   * @param request Context value sources request.
+   * @param context  Context to provide value for.
+   * @param request  Context value sources request.
    *
    * @returns A revertible iterable of the value sources associated with the given key.
    */
@@ -86,8 +89,8 @@ export class ContextRegistry<C extends ContextValues = ContextValues> {
   /**
    * Binds value sources to the given context.
    *
-   * @param context Target value context.
-   * @param cache Whether to cache context values. When `false` the value providers may be called multiple times.
+   * @param context  Target value context.
+   * @param cache  Whether to cache context values. When `false` the value providers may be called multiple times.
    *
    * @returns A provider of context value sources bound to the given context.
    */
@@ -101,7 +104,7 @@ export class ContextRegistry<C extends ContextValues = ContextValues> {
   /**
    * Creates new context values instance consulting this registry for value providers.
    *
-   * @param cache Whether to cache context values. When `false` the value providers may be called multiple times.
+   * @param cache  Whether to cache context values. When `false` the value providers may be called multiple times.
    *
    * @returns New context values instance which methods expect `this` instance to be a context the values provided for.
    */
@@ -198,7 +201,7 @@ export class ContextRegistry<C extends ContextValues = ContextValues> {
   /**
    * Appends values provided by another value registry to the ones provided by this one.
    *
-   * @param other Another context value registry.
+   * @param other  Another context value registry.
    *
    * @return New context value registry which values provided by both registries.
    */

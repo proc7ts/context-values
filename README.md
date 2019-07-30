@@ -4,17 +4,23 @@ IoC Context Values Provider
 [![NPM][npm-image]][npm-url]
 [![CircleCI][ci-image]][ci-url]
 [![codecov][codecov-image]][codecov-url]
+[![GitHub Project][github-image]][github-url]
+[![API Documentation][api-docs-image]][api-docs-url]
 
 This library allows to construct an [IoC] context, other components can request values from.
 
 An [IoC] context is an object with `get()` method implemented. This method returns a context value by its key.
 
-[npm-image]: https://img.shields.io/npm/v/context-values.svg
+[npm-image]: https://img.shields.io/npm/v/context-values.svg?logo=npm
 [npm-url]: https://www.npmjs.com/package/context-values
-[ci-image]:https://circleci.com/gh/surol/context-values.svg?style=shield
-[ci-url]:https://circleci.com/gh/surol/context-values  
+[ci-image]: https://img.shields.io/circleci/build/github/surol/context-values?logo=circleci
+[ci-url]: https://img.shields.io/codecov/c/github/surol/context-values?logo=codecov
 [codecov-image]: https://codecov.io/gh/surol/context-values/branch/master/graph/badge.svg
-[codecov-url]: https://codecov.io/gh/surol/context-values 
+[codecov-url]: https://codecov.io/gh/surol/context-values
+[github-image]: https://img.shields.io/static/v1?logo=github&label=GitHub&message=project&color=informational
+[github-url]: https://github.com/surol/context-values
+[api-docs-image]: https://img.shields.io/static/v1?logo=typescript&label=API&message=docs&color=informational
+[api-docs-url]: https://surol.github.io/context-values/
 [IoC]: https://en.wikipedia.org/wiki/Inversion_of_control
 
 
