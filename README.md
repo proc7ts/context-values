@@ -14,7 +14,7 @@ An [IoC] context is an object with `get()` method implemented. This method retur
 [npm-image]: https://img.shields.io/npm/v/context-values.svg?logo=npm
 [npm-url]: https://www.npmjs.com/package/context-values
 [ci-image]: https://img.shields.io/circleci/build/github/surol/context-values?logo=circleci
-[ci-url]: https://img.shields.io/codecov/c/github/surol/context-values?logo=codecov
+[ci-url]: https://circleci.com/gh/surol/context-values
 [codecov-image]: https://codecov.io/gh/surol/context-values/branch/master/graph/badge.svg
 [codecov-url]: https://codecov.io/gh/surol/context-values
 [github-image]: https://img.shields.io/static/v1?logo=github&label=GitHub&message=project&color=informational
