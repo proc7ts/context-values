@@ -2450,21 +2450,16 @@ img {
 				</div>
 				<p>Represents context value as array of source values.</p>
 				<p>Associated with empty array by default.</p>
-				<dl class="tsd-comment-tags">
-					<dt>typeparam</dt>
-					<dd><p>The type of source values.</p>
-					</dd>
-				</dl>
 			</div>
 		</section>
 		<section class="tsd-panel tsd-type-parameters">
 			<h3>Type parameters</h3>
 			<ul class="tsd-type-parameters">
 				<li>
-					<h4>V</h4>
+					<h4>S</h4>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>The type of associated value.</p>
+							<p>Values source type and context value item type.</p>
 						</div>
 					</div>
 				</li>
@@ -2474,7 +2469,7 @@ img {
 			<h3>Hierarchy</h3>
 			<ul class="tsd-hierarchy">
 				<li>
-					<a href="abstractcontextkey.html" class="tsd-signature-type">AbstractContextKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span>
+					<a href="abstractcontextkey.html" class="tsd-signature-type">AbstractContextKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span>
 					<ul class="tsd-hierarchy">
 						<li>
 							<span class="target">MultiContextKey</span>
@@ -2486,8 +2481,8 @@ img {
 		<section class="tsd-panel">
 			<h3>Implements</h3>
 			<ul class="tsd-hierarchy">
-				<li><a href="../modules/contextrequest.html" class="tsd-signature-type">ContextRequest</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
-				<li><a href="../interfaces/contexttarget.html" class="tsd-signature-type">ContextTarget</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span></li>
+				<li><a href="../modules/contextrequest.html" class="tsd-signature-type">ContextRequest</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+				<li><a href="../interfaces/contexttarget.html" class="tsd-signature-type">ContextTarget</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span></li>
 			</ul>
 		</section>
 		<section class="tsd-panel-group tsd-index-group">
@@ -2530,14 +2525,14 @@ img {
 				<a name="constructor" class="tsd-anchor"></a>
 				<h3>constructor</h3>
 				<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-					<li class="tsd-signature tsd-kind-icon">new <wbr>Multi<wbr>Context<wbr>Key<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, defaultProvider<span class="tsd-signature-symbol">?: </span><a href="../globals.html#contextvalueprovider" class="tsd-signature-type">ContextValueProvider</a><span class="tsd-signature-symbol">&lt;</span><a href="contextvalues.html" class="tsd-signature-type">ContextValues</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="multicontextkey.html" class="tsd-signature-type">MultiContextKey</a></li>
+					<li class="tsd-signature tsd-kind-icon">new <wbr>Multi<wbr>Context<wbr>Key<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, defaultProvider<span class="tsd-signature-symbol">?: </span><a href="../globals.html#contextvalueprovider" class="tsd-signature-type">ContextValueProvider</a><span class="tsd-signature-symbol">&lt;</span><a href="contextvalues.html" class="tsd-signature-type">ContextValues</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="multicontextkey.html" class="tsd-signature-type">MultiContextKey</a></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<p>Overrides <a href="abstractcontextkey.html">AbstractContextKey</a>.<a href="abstractcontextkey.html#constructor">constructor</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/surol/context-values/blob/2b1bf1b/src/context-value.ts#L284">context-value.ts:284</a></li>
+								<li>Defined in <a href="https://github.com/surol/context-values/blob/81c0760/src/context-value.ts#L290">context-value.ts:290</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2556,7 +2551,7 @@ img {
 								</div>
 							</li>
 							<li>
-								<h5><span class="tsd-flag ts-flagDefault value">Default value</span> defaultProvider: <a href="../globals.html#contextvalueprovider" class="tsd-signature-type">ContextValueProvider</a><span class="tsd-signature-symbol">&lt;</span><a href="contextvalues.html" class="tsd-signature-type">ContextValues</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;() &#x3D;&gt; []</span></h5>
+								<h5><span class="tsd-flag ts-flagDefault value">Default value</span> defaultProvider: <a href="../globals.html#contextvalueprovider" class="tsd-signature-type">ContextValueProvider</a><span class="tsd-signature-symbol">&lt;</span><a href="contextvalues.html" class="tsd-signature-type">ContextValues</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;() &#x3D;&gt; []</span></h5>
 								<div class="tsd-comment tsd-typography">
 									<div class="lead">
 										<p>Optional default value provider. If unspecified then the default value is empty array.</p>
@@ -2574,10 +2569,10 @@ img {
 			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 				<a name="defaultprovider" class="tsd-anchor"></a>
 				<h3>default<wbr>Provider</h3>
-				<div class="tsd-signature tsd-kind-icon">default<wbr>Provider<span class="tsd-signature-symbol">:</span> <a href="../globals.html#contextvalueprovider" class="tsd-signature-type">ContextValueProvider</a><span class="tsd-signature-symbol">&lt;</span><a href="contextvalues.html" class="tsd-signature-type">ContextValues</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></div>
+				<div class="tsd-signature tsd-kind-icon">default<wbr>Provider<span class="tsd-signature-symbol">:</span> <a href="../globals.html#contextvalueprovider" class="tsd-signature-type">ContextValueProvider</a><span class="tsd-signature-symbol">&lt;</span><a href="contextvalues.html" class="tsd-signature-type">ContextValues</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/surol/context-values/blob/2b1bf1b/src/context-value.ts#L284">context-value.ts:284</a></li>
+						<li>Defined in <a href="https://github.com/surol/context-values/blob/81c0760/src/context-value.ts#L290">context-value.ts:290</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -2593,7 +2588,7 @@ img {
 				<aside class="tsd-sources">
 					<p>Inherited from <a href="contextkey.html">ContextKey</a>.<a href="contextkey.html#name">name</a></p>
 					<ul>
-						<li>Defined in <a href="https://github.com/surol/context-values/blob/2b1bf1b/src/context-value.ts#L104">context-value.ts:104</a></li>
+						<li>Defined in <a href="https://github.com/surol/context-values/blob/81c0760/src/context-value.ts#L104">context-value.ts:104</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -2606,12 +2601,12 @@ img {
 			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
 				<a name="sourceskey" class="tsd-anchor"></a>
 				<h3>sources<wbr>Key</h3>
-				<div class="tsd-signature tsd-kind-icon">sources<wbr>Key<span class="tsd-signature-symbol">:</span> <a href="contextsourceskey.html" class="tsd-signature-type">ContextSourcesKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span></div>
+				<div class="tsd-signature tsd-kind-icon">sources<wbr>Key<span class="tsd-signature-symbol">:</span> <a href="contextsourceskey.html" class="tsd-signature-type">ContextSourcesKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span></div>
 				<aside class="tsd-sources">
 					<p>Inherited from <a href="abstractcontextkey.html">AbstractContextKey</a>.<a href="abstractcontextkey.html#sourceskey">sourcesKey</a></p>
 					<p>Overrides <a href="contextkey.html">ContextKey</a>.<a href="contextkey.html#sourceskey">sourcesKey</a></p>
 					<ul>
-						<li>Defined in <a href="https://github.com/surol/context-values/blob/2b1bf1b/src/context-value.ts#L208">context-value.ts:208</a></li>
+						<li>Defined in <a href="https://github.com/surol/context-values/blob/81c0760/src/context-value.ts#L215">context-value.ts:215</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -2626,7 +2621,7 @@ img {
 					<p>Implementation of <a href="../interfaces/contexttarget.html">ContextTarget</a>.<a href="../interfaces/contexttarget.html#key">key</a></p>
 					<p>Inherited from <a href="contextkey.html">ContextKey</a>.<a href="contextkey.html#key">key</a></p>
 					<ul>
-						<li>Defined in <a href="https://github.com/surol/context-values/blob/2b1bf1b/src/context-value.ts#L128">context-value.ts:128</a></li>
+						<li>Defined in <a href="https://github.com/surol/context-values/blob/81c0760/src/context-value.ts#L128">context-value.ts:128</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -2643,14 +2638,14 @@ img {
 				<a name="merge" class="tsd-anchor"></a>
 				<h3>merge</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-					<li class="tsd-signature tsd-kind-icon">merge<span class="tsd-signature-symbol">(</span>context<span class="tsd-signature-symbol">: </span><a href="contextvalues.html" class="tsd-signature-type">ContextValues</a>, sources<span class="tsd-signature-symbol">: </span><a href="../globals.html#contextsources" class="tsd-signature-type">ContextSources</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span>, handleDefault<span class="tsd-signature-symbol">: </span><a href="../globals.html#defaultcontextvaluehandler" class="tsd-signature-type">DefaultContextValueHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
+					<li class="tsd-signature tsd-kind-icon">merge<span class="tsd-signature-symbol">(</span>context<span class="tsd-signature-symbol">: </span><a href="contextvalues.html" class="tsd-signature-type">ContextValues</a>, sources<span class="tsd-signature-symbol">: </span><a href="../globals.html#contextsources" class="tsd-signature-type">ContextSources</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span>, handleDefault<span class="tsd-signature-symbol">: </span><a href="../globals.html#defaultcontextvaluehandler" class="tsd-signature-type">DefaultContextValueHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<p>Overrides <a href="contextkey.html">ContextKey</a>.<a href="contextkey.html#merge">merge</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/surol/context-values/blob/2b1bf1b/src/context-value.ts#L297">context-value.ts:297</a></li>
+								<li>Defined in <a href="https://github.com/surol/context-values/blob/81c0760/src/context-value.ts#L303">context-value.ts:303</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2659,13 +2654,13 @@ img {
 								<h5>context: <a href="contextvalues.html" class="tsd-signature-type">ContextValues</a></h5>
 							</li>
 							<li>
-								<h5>sources: <a href="../globals.html#contextsources" class="tsd-signature-type">ContextSources</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								<h5>sources: <a href="../globals.html#contextsources" class="tsd-signature-type">ContextSources</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span></h5>
 							</li>
 							<li>
-								<h5>handleDefault: <a href="../globals.html#defaultcontextvaluehandler" class="tsd-signature-type">DefaultContextValueHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								<h5>handleDefault: <a href="../globals.html#defaultcontextvaluehandler" class="tsd-signature-type">DefaultContextValueHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h5>
 							</li>
 						</ul>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">[]</span>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">[]</span>
 							<span class="tsd-signature-symbol"> | </span>
 							<span class="tsd-signature-type">null</span>
 							<span class="tsd-signature-symbol"> | </span>
@@ -2685,7 +2680,7 @@ img {
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="contextkey.html">ContextKey</a>.<a href="contextkey.html#tostring">toString</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/surol/context-values/blob/2b1bf1b/src/context-value.ts#L146">context-value.ts:146</a></li>
+								<li>Defined in <a href="https://github.com/surol/context-values/blob/81c0760/src/context-value.ts#L147">context-value.ts:147</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>

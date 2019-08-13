@@ -2708,7 +2708,7 @@ context.get(key2, { or: <span class="hljs-literal">undefined</span> }); <span cl
 				<div class="tsd-signature tsd-kind-icon">Context<wbr>Sources&lt;S&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">AIterable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/surol/context-values/blob/2b1bf1b/src/context-value.ts#L16">context-value.ts:16</a></li>
+						<li>Defined in <a href="https://github.com/surol/context-values/blob/81c0760/src/context-value.ts#L16">context-value.ts:16</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -2736,24 +2736,13 @@ context.get(key2, { or: <span class="hljs-literal">undefined</span> }); <span cl
 				<div class="tsd-signature tsd-kind-icon">Context<wbr>Sources<wbr>Provider&lt;C&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/surol/context-values/blob/2b1bf1b/src/context-value-provider.ts#L32">context-value-provider.ts:32</a></li>
+						<li>Defined in <a href="https://github.com/surol/context-values/blob/81c0760/src/context-value-provider.ts#L30">context-value-provider.ts:30</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
 						<p>A provider of context value sources.</p>
 					</div>
-					<dl class="tsd-comment-tags">
-						<dt>param</dt>
-						<dd><p>Context value definition target.</p>
-						</dd>
-						<dt>param</dt>
-						<dd><p>Target context.</p>
-						</dd>
-						<dt>returns</dt>
-						<dd><p>Context value sources associated with the given key provided for the given context.</p>
-						</dd>
-					</dl>
 				</div>
 				<h4 class="tsd-type-parameters-title">Type parameters</h4>
 				<ul class="tsd-type-parameters">
@@ -2761,7 +2750,7 @@ context.get(key2, { or: <span class="hljs-literal">undefined</span> }); <span cl
 						<h4>C<span class="tsd-signature-symbol">: </span><a href="classes/contextvalues.html" class="tsd-signature-type">ContextValues</a></h4>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
-								<p>A type of context.</p>
+								<p>Context type.</p>
 							</div>
 						</div>
 					</li>
@@ -2775,10 +2764,15 @@ context.get(key2, { or: <span class="hljs-literal">undefined</span> }); <span cl
 							</ul>
 							<ul class="tsd-descriptions">
 								<li class="tsd-description">
+									<div class="tsd-comment tsd-typography">
+									</div>
 									<h4 class="tsd-type-parameters-title">Type parameters</h4>
 									<ul class="tsd-type-parameters">
 										<li>
 											<h4>S</h4>
+											<div class="tsd-comment tsd-typography">
+												<p>Source value type.</p>
+											</div>
 										</li>
 									</ul>
 									<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2788,12 +2782,23 @@ context.get(key2, { or: <span class="hljs-literal">undefined</span> }); <span cl
 										</li>
 										<li>
 											<h5>target: <a href="interfaces/contexttarget.html" class="tsd-signature-type">ContextTarget</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span></h5>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Context value definition target.</p>
+												</div>
+											</div>
 										</li>
 										<li>
 											<h5>context: <span class="tsd-signature-type">C</span></h5>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Target context.</p>
+												</div>
+											</div>
 										</li>
 									</ul>
 									<h4 class="tsd-returns-title">Returns <a href="globals.html#contextsources" class="tsd-signature-type">ContextSources</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span></h4>
+									<p>Context value sources associated with the given key provided for the given context.</p>
 								</li>
 							</ul>
 						</li>
@@ -2806,7 +2811,7 @@ context.get(key2, { or: <span class="hljs-literal">undefined</span> }); <span cl
 				<div class="tsd-signature tsd-kind-icon">Context<wbr>Value<wbr>Provider&lt;C, S&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/surol/context-values/blob/2b1bf1b/src/context-value-provider.ts#L20">context-value-provider.ts:20</a></li>
+						<li>Defined in <a href="https://github.com/surol/context-values/blob/81c0760/src/context-value-provider.ts#L17">context-value-provider.ts:17</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -2815,14 +2820,6 @@ context.get(key2, { or: <span class="hljs-literal">undefined</span> }); <span cl
 					</div>
 					<p>It is responsible for constructing the values associated with particular key for the given context. Note that
 					provider generates source value, not the context values themselves.</p>
-					<dl class="tsd-comment-tags">
-						<dt>param</dt>
-						<dd><p>Target context.</p>
-						</dd>
-						<dt>returns</dt>
-						<dd><p>Either constructed value, or <code>null</code>/<code>undefined</code> if the value can not be constructed.</p>
-						</dd>
-					</dl>
 				</div>
 				<h4 class="tsd-type-parameters-title">Type parameters</h4>
 				<ul class="tsd-type-parameters">
@@ -2830,7 +2827,7 @@ context.get(key2, { or: <span class="hljs-literal">undefined</span> }); <span cl
 						<h4>C<span class="tsd-signature-symbol">: </span><a href="classes/contextvalues.html" class="tsd-signature-type">ContextValues</a></h4>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
-								<p>The type of context.</p>
+								<p>Context type.</p>
 							</div>
 						</div>
 					</li>
@@ -2838,7 +2835,7 @@ context.get(key2, { or: <span class="hljs-literal">undefined</span> }); <span cl
 						<h4>S</h4>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
-								<p>The type of source value.</p>
+								<p>Source value type.</p>
 							</div>
 						</div>
 					</li>
@@ -2852,6 +2849,8 @@ context.get(key2, { or: <span class="hljs-literal">undefined</span> }); <span cl
 							</ul>
 							<ul class="tsd-descriptions">
 								<li class="tsd-description">
+									<div class="tsd-comment tsd-typography">
+									</div>
 									<h4 class="tsd-parameters-title">Parameters</h4>
 									<ul class="tsd-parameters">
 										<li>
@@ -2859,6 +2858,11 @@ context.get(key2, { or: <span class="hljs-literal">undefined</span> }); <span cl
 										</li>
 										<li>
 											<h5>context: <span class="tsd-signature-type">C</span></h5>
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Target context.</p>
+												</div>
+											</div>
 										</li>
 									</ul>
 									<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">S</span>
@@ -2867,6 +2871,7 @@ context.get(key2, { or: <span class="hljs-literal">undefined</span> }); <span cl
 										<span class="tsd-signature-symbol"> | </span>
 										<span class="tsd-signature-type">undefined</span>
 									</h4>
+									<p>Either constructed value, or <code>null</code>/<code>undefined</code> if the value can not be constructed.</p>
 								</li>
 							</ul>
 						</li>
@@ -2879,7 +2884,7 @@ context.get(key2, { or: <span class="hljs-literal">undefined</span> }); <span cl
 				<div class="tsd-signature tsd-kind-icon">Default<wbr>Context<wbr>Value<wbr>Handler&lt;V&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/surol/context-values/blob/2b1bf1b/src/context-value.ts#L166">context-value.ts:166</a></li>
+						<li>Defined in <a href="https://github.com/surol/context-values/blob/81c0760/src/context-value.ts#L161">context-value.ts:161</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -2888,18 +2893,6 @@ context.get(key2, { or: <span class="hljs-literal">undefined</span> }); <span cl
 					</div>
 					<p>It is called from <a href="classes/contextkey.html#merge">ContextKey.merge</a> operation to select a default value. As a fallback value always takes
 					precedence over the default one specified by the value key.</p>
-					<dl class="tsd-comment-tags">
-						<dt>param</dt>
-						<dd><p>Default value provider. It is called unless a fallback value is specified.
-							If it returns a non-null/non-undefined value, then the returned value will be associated with the context key.</p>
-						</dd>
-						<dt>returns</dt>
-						<dd><p>The default value to return.</p>
-						</dd>
-						<dt>throws</dt>
-						<dd><p>Error If there is no explicitly specified default value, and <code>defaultProvider</code> did not provide any value.</p>
-						</dd>
-					</dl>
 				</div>
 				<h4 class="tsd-type-parameters-title">Type parameters</h4>
 				<ul class="tsd-type-parameters">
@@ -2921,10 +2914,21 @@ context.get(key2, { or: <span class="hljs-literal">undefined</span> }); <span cl
 							</ul>
 							<ul class="tsd-descriptions">
 								<li class="tsd-description">
+									<div class="tsd-comment tsd-typography">
+										<dl class="tsd-comment-tags">
+											<dt>throws</dt>
+											<dd><p>Error  If there is no explicitly specified default value, and <code>defaultProvider</code> did not provide any value.</p>
+											</dd>
+										</dl>
+									</div>
 									<h4 class="tsd-parameters-title">Parameters</h4>
 									<ul class="tsd-parameters">
 										<li>
 											<h5>defaultProvider: <span class="tsd-signature-type">function</span></h5>
+											<div class="tsd-comment tsd-typography">
+												<p>Default value provider. It is called unless a fallback value is specified.
+												If it returns a non-null/non-undefined value, then the returned value will be associated with the context key.</p>
+											</div>
 											<ul class="tsd-parameters">
 												<li class="tsd-parameter-siganture">
 													<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
@@ -2932,6 +2936,10 @@ context.get(key2, { or: <span class="hljs-literal">undefined</span> }); <span cl
 													</ul>
 													<ul class="tsd-descriptions">
 														<li class="tsd-description">
+															<div class="tsd-comment tsd-typography">
+																<p>Default value provider. It is called unless a fallback value is specified.
+																If it returns a non-null/non-undefined value, then the returned value will be associated with the context key.</p>
+															</div>
 															<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">V</span>
 																<span class="tsd-signature-symbol"> | </span>
 																<span class="tsd-signature-type">null</span>
@@ -2950,6 +2958,7 @@ context.get(key2, { or: <span class="hljs-literal">undefined</span> }); <span cl
 										<span class="tsd-signature-symbol"> | </span>
 										<span class="tsd-signature-type">undefined</span>
 									</h4>
+									<p>The default value to return.</p>
 								</li>
 							</ul>
 						</li>
@@ -2969,7 +2978,7 @@ context.get(key2, { or: <span class="hljs-literal">undefined</span> }); <span cl
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/surol/context-values/blob/2b1bf1b/src/context-value-provider.ts#L205">context-value-provider.ts:205</a></li>
+								<li>Defined in <a href="https://github.com/surol/context-values/blob/81c0760/src/context-value-provider.ts#L251">context-value-provider.ts:251</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2986,15 +2995,27 @@ context.get(key2, { or: <span class="hljs-literal">undefined</span> }); <span cl
 						<ul class="tsd-type-parameters">
 							<li>
 								<h4>C<span class="tsd-signature-symbol">: </span><a href="classes/contextvalues.html" class="tsd-signature-type">ContextValues</a></h4>
+								<div class="tsd-comment tsd-typography">
+									<p>Context type.</p>
+								</div>
 							</li>
 							<li>
 								<h4>V</h4>
+								<div class="tsd-comment tsd-typography">
+									<p>Context value type.</p>
+								</div>
 							</li>
 							<li>
 								<h4>D<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h4>
+								<div class="tsd-comment tsd-typography">
+									<p>Dependencies tuple type.</p>
+								</div>
 							</li>
 							<li>
 								<h4>S</h4>
+								<div class="tsd-comment tsd-typography">
+									<p>Source value type.</p>
+								</div>
 							</li>
 						</ul>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3007,6 +3028,7 @@ context.get(key2, { or: <span class="hljs-literal">undefined</span> }); <span cl
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <a href="interfaces/contextvaluespec.byprovider.html" class="tsd-signature-type">ByProvider</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						<p>A specifier of context value defined by provider function.</p>
 					</li>
 				</ul>
 			</section>
