@@ -17,7 +17,6 @@
   },
   "main": "dist/context-values.js",
   "module": "dist/context-values.mjs",
-  "esm5": "dist/context-values.esm5.js",
   "typings": "index.d.ts",
   "dependencies": {
     "a-iterable": "^2.4.2",
