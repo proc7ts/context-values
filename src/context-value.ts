@@ -91,8 +91,8 @@ export interface ContextTarget<S> extends ContextRequest<any> {
  * Multiple source values can be provided internally per value key. Then they are merged with [[ContextKey.merge]]
  * method into single context value.
  *
- * @typeparam V  A type of associated value.
- * @typeparam S  A type of source values.
+ * @typeparam V  Context value type.
+ * @typeparam S  Source value type.
  */
 export abstract class ContextKey<V, S = V> implements ContextRequest<V>, ContextTarget<S> {
 
@@ -141,7 +141,8 @@ export abstract class ContextKey<V, S = V> implements ContextRequest<V>, Context
   abstract merge(
       context: ContextValues,
       sources: ContextSources<S>,
-      handleDefault: DefaultContextValueHandler<V>): V | null | undefined;
+      handleDefault: DefaultContextValueHandler<V>,
+  ): V | null | undefined;
 
   toString(): string {
     return `ContextKey(${this.name})`;
@@ -156,19 +157,24 @@ export abstract class ContextKey<V, S = V> implements ContextRequest<V>, Context
  * precedence over the default one specified by the value key.
  *
  * @typeparam V  A type of context value.
+ */
+export type DefaultContextValueHandler<V> =
+/**
  * @param defaultProvider  Default value provider. It is called unless a fallback value is specified.
  * If it returns a non-null/non-undefined value, then the returned value will be associated with the context key.
  *
- * @return The default value to return.
+ * @returns The default value to return.
  *
- * @throws Error If there is no explicitly specified default value, and `defaultProvider` did not provide any value.
+ * @throws Error  If there is no explicitly specified default value, and `defaultProvider` did not provide any value.
  */
-export type DefaultContextValueHandler<V> = (defaultProvider: () => V | null | undefined) => V | null | undefined;
+    (defaultProvider: () => V | null | undefined) => V | null | undefined;
 
 /**
  * A key of context value holding sources for some other context value.
  *
  * An instance of this class is used as [[ContextKey.sourcesKey]] value by default.
+ *
+ * @typeparam S  Source value type.
  */
 export class ContextSourcesKey<S> extends ContextKey<ContextSources<S>, S> {
 
@@ -185,13 +191,14 @@ export class ContextSourcesKey<S> extends ContextKey<ContextSources<S>, S> {
    * Always refers to itself.
    */
   get sourcesKey(): this {
-     return this;
+    return this;
   }
 
   merge(
       context: ContextValues,
       sources: ContextSources<S>,
-      handleDefault: DefaultContextValueHandler<ContextSources<S>>): ContextSources<S> | null | undefined {
+      handleDefault: DefaultContextValueHandler<ContextSources<S>>,
+  ): ContextSources<S> | null | undefined {
     if (!itsEmpty(sources)) {
       return sources;
     }
@@ -226,8 +233,7 @@ export abstract class AbstractContextKey<V, S = V> extends ContextKey<V, S> {
  *
  * Treats the last source value as context one and ignores the rest of them.
  *
- * @typeparam V  The type of associated value.
- * @typeparam S  The type of source values.
+ * @typeparam V  Context value type.
  */
 export class SingleContextKey<V> extends AbstractContextKey<V> {
 
@@ -253,7 +259,8 @@ export class SingleContextKey<V> extends AbstractContextKey<V> {
   merge(
       context: ContextValues,
       sources: ContextSources<V>,
-      handleDefault: DefaultContextValueHandler<V>): V | null | undefined {
+      handleDefault: DefaultContextValueHandler<V>,
+  ): V | null | undefined {
 
     const value = itsLast(sources);
 
@@ -273,15 +280,14 @@ export class SingleContextKey<V> extends AbstractContextKey<V> {
  *
  * Associated with empty array by default.
  *
- * @typeparam V  The type of associated value.
- * @typeparam S  The type of source values.
+ * @typeparam S  Values source type and context value item type.
  */
-export class MultiContextKey<V> extends AbstractContextKey<V[], V> {
+export class MultiContextKey<S> extends AbstractContextKey<S[], S> {
 
   /**
    * A provider of context value used when there is no value associated with this key.
    */
-  readonly defaultProvider: ContextValueProvider<ContextValues, V[]>;
+  readonly defaultProvider: ContextValueProvider<ContextValues, S[]>;
 
   /**
    * Constructs multiple context values key.
@@ -289,15 +295,16 @@ export class MultiContextKey<V> extends AbstractContextKey<V[], V> {
    * @param name  Human-readable key name.
    * @param defaultProvider  Optional default value provider. If unspecified then the default value is empty array.
    */
-  constructor(name: string, defaultProvider: ContextValueProvider<ContextValues, V[]> = () => []) {
+  constructor(name: string, defaultProvider: ContextValueProvider<ContextValues, S[]> = () => []) {
     super(name);
     this.defaultProvider = defaultProvider;
   }
 
   merge(
       context: ContextValues,
-      sources: ContextSources<V>,
-      handleDefault: DefaultContextValueHandler<V[]>): V[] | null | undefined {
+      sources: ContextSources<S>,
+      handleDefault: DefaultContextValueHandler<S[]>,
+  ): S[] | null | undefined {
 
     const result = [...sources];
 

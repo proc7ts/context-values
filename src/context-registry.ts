@@ -21,7 +21,7 @@ import { ContextValues } from './context-values';
 /**
  * A registry of context value providers.
  *
- * @typeparam C  A type of context.
+ * @typeparam C  Context type.
  */
 export class ContextRegistry<C extends ContextValues = ContextValues> {
 
@@ -55,8 +55,8 @@ export class ContextRegistry<C extends ContextValues = ContextValues> {
   /**
    * Defines a context value.
    *
-   * @typeparam D  A type of dependencies.
-   * @typeparam S  A type of context value sources.
+   * @typeparam D  Dependencies tuple type.
+   * @typeparam S  Source value type.
    * @param spec  Context value specifier.
    */
   provide<D extends any[], S>(spec: ContextValueSpec<C, any, D, S>): void {
@@ -77,8 +77,8 @@ export class ContextRegistry<C extends ContextValues = ContextValues> {
   /**
    * Returns the value sources provided for the given key.
    *
-   * @param context  Context to provide value for.
-   * @param request  Context value sources request.
+   * @param context  A context to provide value for.
+   * @param request  Target context value sources request.
    *
    * @returns A revertible iterable of the value sources associated with the given key.
    */

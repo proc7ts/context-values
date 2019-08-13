@@ -10,30 +10,41 @@ import { ContextValues } from './context-values';
  * It is responsible for constructing the values associated with particular key for the given context. Note that
  * provider generates source value, not the context values themselves.
  *
- * @typeparam C  The type of context.
- * @typeparam S  The type of source value.
+ * @typeparam C  Context type.
+ * @typeparam S  Source value type.
+ */
+
+export type ContextValueProvider<C extends ContextValues, S> =
+/**
  * @param context  Target context.
  *
  * @return Either constructed value, or `null`/`undefined` if the value can not be constructed.
  */
-
-export type ContextValueProvider<C extends ContextValues, S> =
     (this: void, context: C) => S | null | undefined;
 
 /**
  * A provider of context value sources.
  *
- * @typeparam C  A type of context.
+ * @typeparam C  Context type.
+ */
+export type ContextSourcesProvider<C extends ContextValues> =
+/**
+ * @typeparam S  Source value type.
+ *
  * @param target  Context value definition target.
  * @param context  Target context.
  *
  * @returns Context value sources associated with the given key provided for the given context.
  */
-export type ContextSourcesProvider<C extends ContextValues> =
     <S>(this: void, target: ContextTarget<S>, context: C) => ContextSources<S>;
 
 /**
  * Context value specifier.
+ *
+ * @typeparam C  Context type.
+ * @typeparam V  Context value type.
+ * @typeparam D  Dependencies tuple type.
+ * @typeparam S  Source value type.
  */
 export type ContextValueSpec<C extends ContextValues, V, D extends any[] = unknown[], S = V> =
     ContextValueSpec.IsConstant<S>
@@ -49,6 +60,8 @@ export namespace ContextValueSpec {
 
   /**
    * A specifier defining a context value is constant.
+   *
+   * @typeparam S  Source value type.
    */
   export interface IsConstant<S> {
 
@@ -66,6 +79,8 @@ export namespace ContextValueSpec {
 
   /**
    * A specifier defining a context value via another one (alias).
+   *
+   * @typeparam S  Source value type.
    */
   export interface ViaAlias<S> {
 
@@ -83,6 +98,9 @@ export namespace ContextValueSpec {
 
   /**
    * A specifier of context value defined by provider function.
+   *
+   * @typeparam C  Context type.
+   * @typeparam S  Source value type.
    */
   export interface ByProvider<C extends ContextValues, S> {
 
@@ -100,6 +118,9 @@ export namespace ContextValueSpec {
 
   /**
    * A specifier of context value defined by provider function depending on other context values.
+   *
+   * @typeparam D  Dependencies tuple type.
+   * @typeparam S  Source value type.
    */
   export interface ByProviderWithDeps<D extends any[], S> {
 
@@ -122,6 +143,9 @@ export namespace ContextValueSpec {
 
   /**
    * A specifier of context value defined as instance of some class.
+   *
+   * @typeparam C  Context type.
+   * @typeparam S  Source value type.
    */
   export interface AsInstance<C extends ContextValues, S> {
 
@@ -139,6 +163,9 @@ export namespace ContextValueSpec {
 
   /**
    * A specifier of context value defined as instance of the same class as value.
+   *
+   * @typeparam C  Context type.
+   * @typeparam S  Source value type.
    */
   export interface SelfInstance<C extends ContextValues, S> {
 
@@ -151,6 +178,9 @@ export namespace ContextValueSpec {
 
   /**
    * A specifier of context value defined as instance of some class with constructor depending on other context values.
+   *
+   * @typeparam D  Dependencies tuple type.
+   * @typeparam S  Source value type.
    */
   export interface AsInstanceWithDeps<D extends any[], S> {
 
@@ -174,6 +204,9 @@ export namespace ContextValueSpec {
   /**
    * A specifier of context value defined as instance of the same class as value with constructor depending on other
    * context values.
+   *
+   * @typeparam D  Dependencies tuple type.
+   * @typeparam S  Source value type.
    */
   export interface SelfInstanceWithDeps<D extends any[], S> {
 
@@ -189,8 +222,15 @@ export namespace ContextValueSpec {
 
   }
 
-  export type DepsRequests<P extends any[]> = {
-    [index in keyof P]: ContextRequest<P[index]>;
+  /**
+   * Dependencies requests.
+   *
+   * This is a tuple of context value requests, each of which corresponds to dependency.
+   *
+   * @typeparam D  Dependencies tuple type.
+   */
+  export type DepsRequests<D extends any[]> = {
+    [K in keyof D]: ContextRequest<D[K]>;
   };
 
 }
@@ -198,12 +238,19 @@ export namespace ContextValueSpec {
 /**
  * Constructs a specifier of context value defined by provider out of arbitrary one.
  *
+ * @typeparam C  Context type.
+ * @typeparam V  Context value type.
+ * @typeparam D  Dependencies tuple type.
+ * @typeparam S  Source value type.
  * @param spec  Context value specifier to convert.
+ *
+ * @returns A specifier of context value defined by provider function.
  *
  * @throws TypeError  On malformed context value specifier.
  */
 export function contextValueSpec<C extends ContextValues, V, D extends any[], S = V>(
-    spec: ContextValueSpec<C, V, D, S>): ContextValueSpec.ByProvider<C, S> {
+    spec: ContextValueSpec<C, V, D, S>,
+): ContextValueSpec.ByProvider<C, S> {
   if (byProvider(spec)) {
     if (!withDeps<C, D, S>(spec)) {
       return spec;
