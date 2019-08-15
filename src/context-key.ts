@@ -127,7 +127,7 @@ export abstract class ContextSeedKey<Src, Seed extends ContextSeed> extends Cont
   abstract seeder<Ctx extends ContextValues>(): ContextSeeder<Ctx, Src, Seed>;
 
   grow(
-      context: ContextValues,
+      _context: ContextValues,
       seed: Seed,
       handleDefault: DefaultContextValueHandler<Seed>,
   ): Seed | null | undefined {

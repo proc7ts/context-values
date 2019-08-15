@@ -2,7 +2,7 @@
  * @module context-values
  */
 import { ContextSeedKey } from './context-key';
-import { ContextTarget, ContextValueProvider } from './context-value-spec';
+import { ContextValueProvider } from './context-value-spec';
 import { ContextValues } from './context-values';
 
 export interface ContextSeed {

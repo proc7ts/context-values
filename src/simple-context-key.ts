@@ -11,7 +11,7 @@ import { ContextValues } from './context-values';
 export interface IterableContextSeed<Src> extends AIterable<Src>, ContextSeed {
 }
 
-class SimpleContextSeed<Ctx extends ContextValues, Src> extends AIterable<Src> implements IterableContextSeed<Src> {
+class SimpleContextSeed<Src> extends AIterable<Src> implements IterableContextSeed<Src> {
 
   constructor(private readonly _sources: AIterable<Src>) {
     super();
@@ -52,7 +52,7 @@ class SimpleContextSeeder<Ctx extends ContextValues, Src>
     );
   }
 
-  combine(context: Ctx, first: IterableContextSeed<Src>, second: IterableContextSeed<Src>): IterableContextSeed<Src> {
+  combine(_context: Ctx, first: IterableContextSeed<Src>, second: IterableContextSeed<Src>): IterableContextSeed<Src> {
     return new SimpleContextSeed(AIterable.from([first, second]).flatMap(asis));
   }
 
