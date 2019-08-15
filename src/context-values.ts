@@ -1,7 +1,7 @@
 /**
  * @module context-values
  */
-import { ContextRequest } from './context-value';
+import { ContextRequest } from './context-request';
 
 /**
  * The values available from context.

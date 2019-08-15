@@ -1,8 +1,25 @@
 /**
  * @module context-values
  */
-import { ContextRequest, ContextSources, ContextTarget } from './context-value';
+import { ContextRequest } from './context-request';
+import { ContextKey } from './context-key';
 import { ContextValues } from './context-values';
+
+/**
+ * Context value definition target.
+ *
+ * Designates a declared declaring context value.
+ *
+ * @typeparam S  A type of declared context value sources.
+ */
+export interface ContextTarget<S> extends ContextRequest<any> {
+
+  /**
+   * A key of context value to provide.
+   */
+  readonly key: ContextKey<any, S>;
+
+}
 
 /**
  * Context value provider.
@@ -13,7 +30,6 @@ import { ContextValues } from './context-values';
  * @typeparam C  Context type.
  * @typeparam S  Source value type.
  */
-
 export type ContextValueProvider<C extends ContextValues, S> =
 /**
  * @param context  Target context.
@@ -21,22 +37,6 @@ export type ContextValueProvider<C extends ContextValues, S> =
  * @return Either constructed value, or `null`/`undefined` if the value can not be constructed.
  */
     (this: void, context: C) => S | null | undefined;
-
-/**
- * A provider of context value sources.
- *
- * @typeparam C  Context type.
- */
-export type ContextSourcesProvider<C extends ContextValues> =
-/**
- * @typeparam S  Source value type.
- *
- * @param target  Context value definition target.
- * @param context  Target context.
- *
- * @returns Context value sources associated with the given key provided for the given context.
- */
-    <S>(this: void, target: ContextTarget<S>, context: C) => ContextSources<S>;
 
 /**
  * Context value specifier.
@@ -47,7 +47,7 @@ export type ContextSourcesProvider<C extends ContextValues> =
  * @typeparam S  Source value type.
  */
 export type ContextValueSpec<C extends ContextValues, V, D extends any[] = unknown[], S = V> =
-    ContextValueSpec.IsConstant<S>
+    | ContextValueSpec.IsConstant<S>
     | ContextValueSpec.ViaAlias<S>
     | ContextValueSpec.ByProvider<C, S>
     | ContextValueSpec.ByProviderWithDeps<D, S>
@@ -320,25 +320,26 @@ export function contextValueSpec<C extends ContextValues, V, D extends any[], S 
 }
 
 function byProvider<C extends ContextValues, D extends any[], S>(
-    spec: ContextValueSpec<C, any, D, S>):
-    spec is ContextValueSpec.ByProvider<C, S> | ContextValueSpec.ByProviderWithDeps<D, S> {
+    spec: ContextValueSpec<C, any, D, S>,
+): spec is ContextValueSpec.ByProvider<C, S> | ContextValueSpec.ByProviderWithDeps<D, S> {
   return 'by' in spec;
 }
 
 function asInstance<C extends ContextValues, D extends any[], S>(
-    spec: ContextValueSpec<C, any, D, S>):
-    spec is ContextValueSpec.AsInstance<C, S> | ContextValueSpec.AsInstanceWithDeps<D, S> {
+    spec: ContextValueSpec<C, any, D, S>,
+): spec is ContextValueSpec.AsInstance<C, S> | ContextValueSpec.AsInstanceWithDeps<D, S> {
   return 'as' in spec;
 }
 
 function selfInstance<C extends ContextValues, D extends any[], S>(
-    spec: ContextValueSpec<C, any, D, S>):
-    spec is ContextValueSpec.SelfInstance<C, S> | ContextValueSpec.SelfInstanceWithDeps<D, S> {
+    spec: ContextValueSpec<C, any, D, S>,
+): spec is ContextValueSpec.SelfInstance<C, S> | ContextValueSpec.SelfInstanceWithDeps<D, S> {
   return !('a' in spec);
 }
 
 function toAsInstance<C extends ContextValues, D extends any[], S>(
-    spec: ContextValueSpec.SelfInstance<C, S> | ContextValueSpec.SelfInstanceWithDeps<D, S>):
+    spec: ContextValueSpec.SelfInstance<C, S> | ContextValueSpec.SelfInstanceWithDeps<D, S>,
+):
     ContextValueSpec.AsInstance<C, S> | ContextValueSpec.AsInstanceWithDeps<D, S> {
   return {
     ...spec,
@@ -354,11 +355,12 @@ function viaAlias<S>(spec: ContextValueSpec<any, any, any, S>): spec is ContextV
   return 'via' in spec;
 }
 function withDeps<C extends ContextValues, D extends any[], S>(
-    spec: ContextValueSpec.ByProvider<C, S> | ContextValueSpec.ByProviderWithDeps<D, S>):
-    spec is ContextValueSpec.ByProviderWithDeps<D, S>;
+    spec: ContextValueSpec.ByProvider<C, S> | ContextValueSpec.ByProviderWithDeps<D, S>,
+): spec is ContextValueSpec.ByProviderWithDeps<D, S>;
+
 function withDeps<C extends ContextValues, D extends any[], S>(
-    spec: ContextValueSpec.AsInstance<C, S> | ContextValueSpec.AsInstanceWithDeps<D, S>):
-    spec is ContextValueSpec.AsInstanceWithDeps<D, S>;
+    spec: ContextValueSpec.AsInstance<C, S> | ContextValueSpec.AsInstanceWithDeps<D, S>,
+): spec is ContextValueSpec.AsInstanceWithDeps<D, S>;
 
 function withDeps<C extends ContextValues, D extends any[], S>(spec: ContextValueSpec<C, any, D, S>): boolean {
   return 'with' in spec;

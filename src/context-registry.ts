@@ -1,36 +1,31 @@
 /**
  * @module context-values
  */
-import { AIterable } from 'a-iterable';
-import { asis } from 'call-thru';
-import {
-  ContextKey,
-  ContextRequest,
-  ContextSources,
-  ContextSourcesKey,
-  ContextTarget,
-  DefaultContextValueHandler,
-} from './context-value';
-import {
-  ContextSourcesProvider,
-  ContextValueProvider,
-  contextValueSpec,
-  ContextValueSpec,
-} from './context-value-provider';
+import { noop } from 'call-thru';
+import { ContextKey, ContextSeedKey, DefaultContextValueHandler } from './context-key';
+import { ContextRequest } from './context-request';
+import { ContextSeed, ContextSeeder, ContextSeedProvider } from './context-seed';
+import { contextValueSpec, ContextValueSpec } from './context-value-spec';
 import { ContextValues } from './context-values';
+
+type SeedFactory<Ctx extends ContextValues, Seed extends ContextSeed> =
+    (this: void, context: Ctx) => Seed;
+
+type Seeding<Ctx extends ContextValues, Src, Seed extends ContextSeed> =
+    [ContextSeeder<Ctx, Src, Seed>, SeedFactory<Ctx, Seed>];
 
 /**
  * A registry of context value providers.
  *
- * @typeparam C  Context type.
+ * @typeparam Ctx  Context type.
  */
-export class ContextRegistry<C extends ContextValues = ContextValues> {
+export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
 
   /** @internal */
-  private readonly _initial: ContextSourcesProvider<C>;
+  private readonly _initial: ContextSeedProvider<Ctx>;
 
   /** @internal */
-  private readonly _providers = new Map<ContextSourcesKey<any>, ContextValueProvider<C, any>[]>();
+  private readonly _seeds = new Map<ContextSeedKey<any, any>, Seeding<Ctx, any, any>>();
 
   /** @internal */
   private _nonCachedValues?: ContextValues;
@@ -43,48 +38,65 @@ export class ContextRegistry<C extends ContextValues = ContextValues> {
    * @param initial  An optional source of initially known context values. This can be either a function, or
    * `ContextValues` instance.
    */
-  constructor(initial?: ContextSourcesProvider<C> | ContextValues) {
+  constructor(initial?: ContextSeedProvider<Ctx> | ContextValues) {
     if (initial == null) {
-      this._initial = noContextSources;
+      this._initial = noop;
     } else if (typeof initial === 'function') {
       this._initial = initial;
     } else {
-      this._initial = <S>({ key }: ContextRequest<S>) => initial.get(key.sourcesKey);
+      this._initial = (_context, seedKey) => initial.get(seedKey);
     }
   }
 
   /**
-   * Defines a context value.
+   * Provides context value.
    *
-   * @typeparam D  Dependencies tuple type.
-   * @typeparam S  Source value type.
+   * @typeparam Deps  Dependencies tuple type.
+   * @typeparam Src  Source value type.
+   * @typeparam Seed  Context value seed type.
    * @param spec  Context value specifier.
    */
-  provide<D extends any[], S>(spec: ContextValueSpec<C, any, D, S>): void {
+  provide<Deps extends any[], Src, Seed extends ContextSeed>(spec: ContextValueSpec<Ctx, any, Deps, Src>): void {
 
-    const { a: { key: { sourcesKey } }, by } = contextValueSpec(spec);
-    let providers: ContextValueProvider<C, S>[] | undefined = this._providers.get(sourcesKey);
+    const { a: { key: { seedKey } }, by } = contextValueSpec(spec);
+    const [seeder] = this._seeding<Src, Seed>(seedKey);
 
-    if (providers == null) {
-      providers = [by];
-      this._providers.set(sourcesKey, providers);
-    } else {
-      providers.push(by);
-    }
-
-    this._providers.set(sourcesKey, providers);
+    seeder.provide(by);
   }
 
   /**
-   * Returns the value sources provided for the given key.
-   *
-   * @param context  A context to provide value for.
-   * @param request  Target context value sources request.
-   *
-   * @returns A revertible iterable of the value sources associated with the given key.
+   * @internal
    */
-  sources<S>(context: C, request: ContextTarget<S>): ContextSources<S> {
-    return this.bindSources(context, false)(request);
+  private _seeding<Src, Seed extends ContextSeed>(seedKey: ContextSeedKey<Src, Seed>): Seeding<Ctx, Src, Seed> {
+
+    const found: Seeding<Ctx, Src, Seed> | undefined = this._seeds.get(seedKey);
+
+    if (found) {
+      return found;
+    }
+
+    const seeder: ContextSeeder<Ctx, Src, Seed> = seedKey.seeder();
+    const factory: SeedFactory<Ctx, Seed> = context => seeder.seed(context, this._initial(context, seedKey));
+    const seeding: Seeding<Ctx, Src, Seed> = [seeder, factory];
+
+    this._seeds.set(seedKey, seeding);
+
+    return seeding;
+  }
+
+  /**
+   * Creates a seed for the given key in target context.
+   *
+   * @param context  Target context.
+   * @param key  Context value seed key.
+   *
+   * @returns New context value seed.
+   */
+  seed<Src, Seed extends ContextSeed>(context: Ctx, key: ContextSeedKey<Src, Seed>): Seed {
+
+    const [, factory] = this._seeding(key);
+
+    return factory(context);
   }
 
   /**
@@ -93,13 +105,14 @@ export class ContextRegistry<C extends ContextValues = ContextValues> {
    * @param context  Target value context.
    * @param cache  Whether to cache context values. When `false` the value providers may be called multiple times.
    *
-   * @returns A provider of context value sources bound to the given context.
+   * @returns A provider of context value seeds bound to the given `context`.
    */
-  bindSources(context: C, cache?: boolean): <V, S>(request: ContextTarget<S>) => ContextSources<S> {
+  bindSources(context: Ctx, cache?: boolean): ContextSeedProvider<Ctx> {
 
     const values = this.newValues(cache);
 
-    return <S>({ key }: ContextTarget<S>) => values.get.call(context, key.sourcesKey) as ContextSources<S>;
+    return <Src, Seed extends ContextSeed>(_context: Ctx, key: ContextSeedKey<Src, Seed>) =>
+        values.get.call<Ctx, [ContextSeedKey<Src, Seed>], Seed>(context, key);
   }
 
   /**
@@ -109,7 +122,7 @@ export class ContextRegistry<C extends ContextValues = ContextValues> {
    *
    * @returns New context values instance which methods expect `this` instance to be a context the values provided for.
    */
-  newValues(cache = true): ContextValues & ThisType<C> {
+  newValues(cache = true): ContextValues & ThisType<Ctx> {
     if (!cache && this._nonCachedValues) {
       return this._nonCachedValues;
     }
@@ -120,7 +133,7 @@ export class ContextRegistry<C extends ContextValues = ContextValues> {
     class Values extends ContextValues {
 
       get<V, S>(
-          this: C,
+          this: Ctx,
           { key }: { key: ContextKey<V, S> },
           opts?: ContextRequest.Opts<V>,
       ): V | null | undefined {
@@ -132,8 +145,7 @@ export class ContextRegistry<C extends ContextValues = ContextValues> {
           return cached;
         }
 
-        const sources = keySources(context, key);
-        const [constructed, defaultUsed] = mergeSources(context, key, sources, opts);
+        const [constructed, defaultUsed] = growValue(context, key, opts);
 
         if (cache && !defaultUsed) {
           values.set(key, constructed);
@@ -150,39 +162,16 @@ export class ContextRegistry<C extends ContextValues = ContextValues> {
 
     return new Values();
 
-    function keySources<S>(context: C, key: ContextKey<any, S>): ContextSources<S> {
-      if (key.sourcesKey !== key as any) {
-        // This is not a sources key
-        // Retrieve the sources by sources key
-        return context.get(key.sourcesKey);
-      }
-      // This is a sources key.
-      // Find providers.
-      const sourceProviders = sourcesProvidersFor(key.sourcesKey);
-      const initial = registry._initial(key, context);
+    function growValue<Value, Src, Seed extends ContextSeed>(
+        context: Ctx,
+        key: ContextKey<Value, Src, Seed>,
+        opts: ContextRequest.Opts<Value> | undefined,
+    ): [Value | null | undefined, boolean] {
 
-      return AIterable.from([
-        () => initial,
-        () => valueSources(context, sourceProviders),
-      ]).flatMap(fn => fn());
-    }
-
-    function sourcesProvidersFor<S>(key: ContextSourcesKey<S>): AIterable<SourceProvider<C, S>> {
-
-      const providers: ContextValueProvider<C, S>[] = registry._providers.get(key) || [];
-
-      return AIterable.from(providers.map(toSourceProvider));
-    }
-
-    function mergeSources<V, S>(
-        context: C,
-        key: ContextKey<V, S>,
-        sources: ContextSources<S>,
-        opts: ContextRequest.Opts<V> | undefined,
-    ): [V | null | undefined, boolean] {
-
+      const seed: Seed = findSeed(context, key);
       let defaultUsed = false;
-      const handleDefault: DefaultContextValueHandler<V> = (opts && 'or' in opts)
+
+      const handleDefault: DefaultContextValueHandler<Value> = (opts && 'or' in opts)
           ? () => {
             defaultUsed = true;
             return opts.or;
@@ -197,7 +186,22 @@ export class ContextRegistry<C extends ContextValues = ContextValues> {
             return providedDefault;
           };
 
-      return [key.merge(context, sources, handleDefault), defaultUsed];
+      return [key.grow(context, seed, handleDefault), defaultUsed];
+    }
+
+    function findSeed<Src, Seed extends ContextSeed>(context: Ctx, key: ContextKey<any, Src>): Seed {
+
+      const { seedKey } = key;
+
+      if (seedKey !== key as any) {
+        // This is not a seed key
+        // Retrieve the seed by seed key
+        return context.get(seedKey);
+      }
+
+      const [, factory] = registry._seeding(seedKey);
+
+      return factory(context);
     }
   }
 
@@ -208,52 +212,21 @@ export class ContextRegistry<C extends ContextValues = ContextValues> {
    *
    * @return New context value registry which values provided by both registries.
    */
-  append(other: ContextRegistry<C>): ContextRegistry<C> {
+  append(other: ContextRegistry<Ctx>): ContextRegistry<Ctx> {
 
     const self = this;
 
-    return new ContextRegistry<C>(combine);
+    return new ContextRegistry<Ctx>(combine);
 
-    function combine<S>(target: ContextTarget<S>, context: C): ContextSources<S> {
-      return AIterable.from([
-        self.sources(context, target),
-        other.sources(context, target),
-      ]).flatMap(asis);
+    function combine<Src, Seed extends ContextSeed>(
+        context: Ctx,
+        key: ContextSeedKey<Src, Seed>,
+    ): Seed {
+
+      const [seeder] = self._seeding(key);
+
+      return seeder.combine(context, self.seed(context, key), other.seed(context, key));
     }
   }
 
-}
-
-// Context value provider and cached context value source.
-type SourceProvider<C extends ContextValues, S> = [ContextValueProvider<C, S>, (S | null | undefined)?];
-
-function toSourceProvider<C extends ContextValues, S>(
-    valueProvider: ContextValueProvider<C, S>,
-): SourceProvider<C, S> {
-  return [valueProvider];
-}
-
-function valueSources<C extends ContextValues, S>(
-    context: C,
-    sourceProviders: AIterable<SourceProvider<C, S>>,
-): AIterable<S> {
-  return sourceProviders.map(sourceProvider => {
-    if (sourceProvider.length > 1) {
-      return sourceProvider[1];
-    }
-
-    const source = sourceProvider[0](context);
-
-    sourceProvider.push(source);
-
-    return source;
-  }).filter<S>(isPresent);
-}
-
-function isPresent<S>(value: S | null | undefined): value is S {
-  return value != null;
-}
-
-function noContextSources<S>(): ContextSources<S> {
-  return AIterable.none();
 }
