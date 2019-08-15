@@ -2,6 +2,7 @@
  * @module context-values
  */
 import { AIterable } from 'a-iterable';
+import { asis } from 'call-thru';
 import {
   ContextKey,
   ContextRequest,
@@ -14,7 +15,7 @@ import {
   ContextSourcesProvider,
   ContextValueProvider,
   contextValueSpec,
-  ContextValueSpec
+  ContextValueSpec,
 } from './context-value-provider';
 import { ContextValues } from './context-values';
 
@@ -121,7 +122,8 @@ export class ContextRegistry<C extends ContextValues = ContextValues> {
       get<V, S>(
           this: C,
           { key }: { key: ContextKey<V, S> },
-          opts?: ContextRequest.Opts<V>): V | null | undefined {
+          opts?: ContextRequest.Opts<V>,
+      ): V | null | undefined {
 
         const context = this;
         const cached: V | undefined = values.get(key);
@@ -176,7 +178,8 @@ export class ContextRegistry<C extends ContextValues = ContextValues> {
         context: C,
         key: ContextKey<V, S>,
         sources: ContextSources<S>,
-        opts: ContextRequest.Opts<V> | undefined): [V | null | undefined, boolean] {
+        opts: ContextRequest.Opts<V> | undefined,
+    ): [V | null | undefined, boolean] {
 
       let defaultUsed = false;
       const handleDefault: DefaultContextValueHandler<V> = (opts && 'or' in opts)
@@ -209,10 +212,14 @@ export class ContextRegistry<C extends ContextValues = ContextValues> {
 
     const self = this;
 
-    return new ContextRegistry<C>(<S>(target: ContextTarget<S>, context: C) => AIterable.from([
-      self.sources(context, target),
-      other.sources(context, target),
-    ]).flatMap(s => s));
+    return new ContextRegistry<C>(combine);
+
+    function combine<S>(target: ContextTarget<S>, context: C): ContextSources<S> {
+      return AIterable.from([
+        self.sources(context, target),
+        other.sources(context, target),
+      ]).flatMap(asis);
+    }
   }
 
 }
@@ -220,13 +227,16 @@ export class ContextRegistry<C extends ContextValues = ContextValues> {
 // Context value provider and cached context value source.
 type SourceProvider<C extends ContextValues, S> = [ContextValueProvider<C, S>, (S | null | undefined)?];
 
-function toSourceProvider<C extends ContextValues, S>(valueProvider: ContextValueProvider<C, S>): SourceProvider<C, S> {
+function toSourceProvider<C extends ContextValues, S>(
+    valueProvider: ContextValueProvider<C, S>,
+): SourceProvider<C, S> {
   return [valueProvider];
 }
 
 function valueSources<C extends ContextValues, S>(
     context: C,
-    sourceProviders: AIterable<SourceProvider<C, S>>): AIterable<S> {
+    sourceProviders: AIterable<SourceProvider<C, S>>,
+): AIterable<S> {
   return sourceProviders.map(sourceProvider => {
     if (sourceProvider.length > 1) {
       return sourceProvider[1];
