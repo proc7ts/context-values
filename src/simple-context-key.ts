@@ -1,38 +1,14 @@
 /**
  * @module context-values
  */
-import { AIterable, itsEmpty, itsIterator, itsLast, overArray, overNone } from 'a-iterable';
-import { asis, isPresent } from 'call-thru';
-import { ContextKey, ContextSeedKey, DefaultContextValueHandler } from './context-key';
-import { ContextSeed, ContextSeeder } from './context-seed';
+import { AIterable, itsEmpty, itsLast, overArray, overNone } from 'a-iterable';
+import { asis, isPresent, noop, valuesProvider } from 'call-thru';
+import { ContextKey, ContextSeedKey, ContextValueOpts } from './context-key';
+import { ContextSeeder } from './context-seeder';
 import { ContextValueProvider } from './context-value-spec';
 import { ContextValues } from './context-values';
 
-export interface IterableContextSeed<Src> extends AIterable<Src>, ContextSeed {
-}
-
-class SimpleContextSeed<Src> extends AIterable<Src> implements IterableContextSeed<Src> {
-
-  constructor(private readonly _sources: AIterable<Src>) {
-    super();
-  }
-
-  get empty(): boolean {
-    return itsEmpty(this._sources);
-  }
-
-  [Symbol.iterator](): Iterator<Src> {
-    return itsIterator(this._sources);
-  }
-
-  reverse(): AIterable<Src> {
-    return this._sources.reverse();
-  }
-
-}
-
-class SimpleContextSeeder<Ctx extends ContextValues, Src>
-    implements ContextSeeder<Ctx, Src, IterableContextSeed<Src>> {
+class SimpleContextSeeder<Ctx extends ContextValues, Src> implements ContextSeeder<Ctx, Src, AIterable<Src>> {
 
   private readonly _providers: SourceEntry<Ctx, Src>[] = [];
 
@@ -40,25 +16,27 @@ class SimpleContextSeeder<Ctx extends ContextValues, Src>
     this._providers.push([provider]);
   }
 
-  seed(context: Ctx, initial?: IterableContextSeed<Src>): IterableContextSeed<Src> {
-    return new SimpleContextSeed(
-        AIterable.from([
-          initial || AIterable.from<Src>(overNone()),
-          sourceValues(
-              context,
-              AIterable.from(overArray(this._providers)),
-          ),
-        ]).flatMap(asis),
-    );
+  seed(context: Ctx, initial?: AIterable<Src>): AIterable<Src> {
+    return AIterable.from([
+      initial || AIterable.from<Src>(overNone()),
+      sourceValues(
+          context,
+          AIterable.from(overArray(this._providers)),
+      ),
+    ]).flatMap(asis);
   }
 
-  combine(_context: Ctx, first: IterableContextSeed<Src>, second: IterableContextSeed<Src>): IterableContextSeed<Src> {
-    return new SimpleContextSeed(AIterable.from([first, second]).flatMap(asis));
+  isEmpty(seed: AIterable<Src>): boolean {
+    return itsEmpty(seed);
+  }
+
+  combine(_context: Ctx, first: AIterable<Src>, second: AIterable<Src>): AIterable<Src> {
+    return AIterable.from([first, second]).flatMap(asis);
   }
 
 }
 
-class SimpleSeedKey<Src> extends ContextSeedKey<Src, IterableContextSeed<Src>> {
+class SimpleSeedKey<Src> extends ContextSeedKey<Src, AIterable<Src>> {
 
   constructor(key: ContextKey<any, Src>) {
     super(key);
@@ -73,7 +51,7 @@ class SimpleSeedKey<Src> extends ContextSeedKey<Src, IterableContextSeed<Src>> {
 /**
  * Simple context value key implementation.
  *
- * Collects value sources into {@link IterableContextSeed iterable instance}.
+ * Collects value sources into iterable instance.
  *
  * A context value associated with this key is never changes once constructed.
  *
@@ -82,9 +60,9 @@ class SimpleSeedKey<Src> extends ContextSeedKey<Src, IterableContextSeed<Src>> {
  * @typeparam Seed  Value seed type.
  */
 export abstract class SimpleContextKey<Value, Src = Value>
-    extends ContextKey<Value, Src, IterableContextSeed<Src>> {
+    extends ContextKey<Value, Src, AIterable<Src>> {
 
-  readonly seedKey: ContextSeedKey<Src, IterableContextSeed<Src>>;
+  readonly seedKey: ContextSeedKey<Src, AIterable<Src>>;
 
   /**
    * Constructs context value key.
@@ -112,33 +90,31 @@ export class SingleContextKey<Value> extends SimpleContextKey<Value> {
    *
    * If `undefined`, then there is no default value.
    */
-  readonly defaultProvider: (context: ContextValues) => Value | null | undefined;
+  readonly byDefault: (context: ContextValues) => Value | null | undefined;
 
   /**
    * Constructs single context value key.
    *
    * @param name  Human-readable key name.
-   * @param defaultProvider  Optional default value provider. If unspecified or `undefined` the key has no default
+   * @param byDefault  Optional default value provider. If unspecified or `undefined` the key has no default
    * value.
    */
-  constructor(name: string, defaultProvider: (context: ContextValues) => Value | null | undefined = () => undefined) {
+  constructor(name: string, byDefault: (context: ContextValues) => Value | null | undefined = noop) {
     super(name);
-    this.defaultProvider = defaultProvider;
+    this.byDefault = byDefault;
   }
 
-  grow(
-      context: ContextValues,
-      seed: IterableContextSeed<Value>,
-      handleDefault: DefaultContextValueHandler<Value>,
+  grow<Ctx extends ContextValues>(
+      opts: ContextValueOpts<Ctx, Value, Value, AIterable<Value>>,
   ): Value | null | undefined {
 
-    const value = itsLast(seed);
+    const value = itsLast(opts.seed);
 
     if (value != null) {
       return value;
     }
 
-    return handleDefault(() => this.defaultProvider(context));
+    return opts.byDefault(() => this.byDefault(opts.context));
   }
 
 }
@@ -157,34 +133,32 @@ export class MultiContextKey<Src> extends SimpleContextKey<Src[], Src> {
   /**
    * A provider of context value used when there is no value associated with this key.
    */
-  readonly defaultProvider: ContextValueProvider<ContextValues, Src[]>;
+  readonly byDefault: ContextValueProvider<ContextValues, Src[]>;
 
   /**
    * Constructs multiple context values key.
    *
    * @param name  Human-readable key name.
-   * @param defaultProvider  Optional default value provider. If unspecified then the default value is empty array.
+   * @param byDefault  Optional default value provider. If unspecified then the default value is empty array.
    */
-  constructor(name: string, defaultProvider: ContextValueProvider<ContextValues, Src[]> = () => []) {
+  constructor(name: string, byDefault: ContextValueProvider<ContextValues, Src[]> = valuesProvider()) {
     super(name);
-    this.defaultProvider = defaultProvider;
+    this.byDefault = byDefault;
   }
 
-  grow(
-      context: ContextValues,
-      seed: IterableContextSeed<Src>,
-      handleDefault: DefaultContextValueHandler<Src[]>,
+  grow<Ctx extends ContextValues>(
+      opts: ContextValueOpts<Ctx, Src[], Src, AIterable<Src>>,
   ): Src[] | null | undefined {
 
-    const result = [...seed];
+    const result = [...opts.seed];
 
     if (result.length) {
       return result;
     }
 
-    return handleDefault(() => {
+    return opts.byDefault(() => {
 
-      const defaultSources = this.defaultProvider(context);
+      const defaultSources = this.byDefault(opts.context);
 
       if (defaultSources) {
         return [...defaultSources];

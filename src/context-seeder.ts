@@ -5,17 +5,6 @@ import { ContextSeedKey } from './context-key';
 import { ContextValueProvider } from './context-value-spec';
 import { ContextValues } from './context-values';
 
-export interface ContextSeed {
-
-  /**
-   * Whether this seed is empty.
-   *
-   * This is `true` when no providers added to the seeder.
-   */
-  readonly empty: boolean;
-
-}
-
 /**
  * Context value seeder.
  *
@@ -28,7 +17,7 @@ export interface ContextSeed {
  * @typeparam Seed  Context value seed type.
  * @typeparam Self  This type.
  */
-export interface ContextSeeder<Ctx extends ContextValues, Src, Seed extends ContextSeed> {
+export interface ContextSeeder<Ctx extends ContextValues, Src, Seed> {
 
   /**
    * Provides context value.
@@ -46,6 +35,15 @@ export interface ContextSeeder<Ctx extends ContextValues, Src, Seed extends Cont
    * @returns New context value seed.
    */
   seed(context: Ctx, initial?: Seed): Seed;
+
+  /**
+   * Checks whether the given context value `seed` is empty.
+   *
+   * @param seed  Context value seed to check.
+   *
+   * @returns `true` is the given seed does not contain any source values, or `false` otherwise.
+   */
+  isEmpty(seed: Seed): boolean;
 
   /**
    * Combines two seeds into one in target `context`.
@@ -75,4 +73,4 @@ export type ContextSeedProvider<Ctx extends ContextValues> =
  *
  * @returns Context value seed associated with the given `key` provided for target `context`.
  */
-    <Src, Seed extends ContextSeed>(this: void, context: Ctx, key: ContextSeedKey<Src, Seed>) => Seed | undefined;
+    <Src, Seed>(this: void, context: Ctx, key: ContextSeedKey<Src, Seed>) => Seed | undefined;

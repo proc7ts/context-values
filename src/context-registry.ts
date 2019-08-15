@@ -4,15 +4,13 @@
 import { noop } from 'call-thru';
 import { ContextKey, ContextSeedKey, DefaultContextValueHandler } from './context-key';
 import { ContextRequest } from './context-request';
-import { ContextSeed, ContextSeeder, ContextSeedProvider } from './context-seed';
+import { ContextSeeder, ContextSeedProvider } from './context-seeder';
 import { contextValueSpec, ContextValueSpec } from './context-value-spec';
 import { ContextValues } from './context-values';
 
-type SeedFactory<Ctx extends ContextValues, Seed extends ContextSeed> =
-    (this: void, context: Ctx) => Seed;
+type SeedFactory<Ctx extends ContextValues, Seed> = (this: void, context: Ctx) => Seed;
 
-type Seeding<Ctx extends ContextValues, Src, Seed extends ContextSeed> =
-    [ContextSeeder<Ctx, Src, Seed>, SeedFactory<Ctx, Seed>];
+type Seeding<Ctx extends ContextValues, Src, Seed> = [ContextSeeder<Ctx, Src, Seed>, SeedFactory<Ctx, Seed>];
 
 /**
  * A registry of context value providers.
@@ -56,7 +54,7 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
    * @typeparam Seed  Context value seed type.
    * @param spec  Context value specifier.
    */
-  provide<Deps extends any[], Src, Seed extends ContextSeed>(spec: ContextValueSpec<Ctx, any, Deps, Src>): void {
+  provide<Deps extends any[], Src, Seed>(spec: ContextValueSpec<Ctx, any, Deps, Src>): void {
 
     const { a: { key: { seedKey } }, by } = contextValueSpec(spec);
     const [seeder] = this._seeding<Src, Seed>(seedKey);
@@ -67,7 +65,7 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
   /**
    * @internal
    */
-  private _seeding<Src, Seed extends ContextSeed>(seedKey: ContextSeedKey<Src, Seed>): Seeding<Ctx, Src, Seed> {
+  private _seeding<Src, Seed>(seedKey: ContextSeedKey<Src, Seed>): Seeding<Ctx, Src, Seed> {
 
     const found: Seeding<Ctx, Src, Seed> | undefined = this._seeds.get(seedKey);
 
@@ -92,7 +90,7 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
    *
    * @returns New context value seed.
    */
-  seed<Src, Seed extends ContextSeed>(context: Ctx, key: ContextSeedKey<Src, Seed>): Seed {
+  seed<Src, Seed>(context: Ctx, key: ContextSeedKey<Src, Seed>): Seed {
 
     const [, factory] = this._seeding(key);
 
@@ -111,7 +109,7 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
 
     const values = this.newValues(cache);
 
-    return <Src, Seed extends ContextSeed>(_context: Ctx, key: ContextSeedKey<Src, Seed>) =>
+    return <Src, Seed>(_context: Ctx, key: ContextSeedKey<Src, Seed>) =>
         values.get.call<Ctx, [ContextSeedKey<Src, Seed>], Seed>(context, key);
   }
 
@@ -162,16 +160,16 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
 
     return new Values();
 
-    function growValue<Value, Src, Seed extends ContextSeed>(
+    function growValue<Value, Src, Seed>(
         context: Ctx,
         key: ContextKey<Value, Src, Seed>,
         opts: ContextRequest.Opts<Value> | undefined,
     ): [Value | null | undefined, boolean] {
 
-      const seed: Seed = findSeed(context, key);
+      const [seeder, seed] = findSeed<Src, Seed>(context, key);
       let defaultUsed = false;
 
-      const handleDefault: DefaultContextValueHandler<Value> = (opts && 'or' in opts)
+      const byDefault: DefaultContextValueHandler<Value> = (opts && 'or' in opts)
           ? () => {
             defaultUsed = true;
             return opts.or;
@@ -186,22 +184,27 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
             return providedDefault;
           };
 
-      return [key.grow(context, seed, handleDefault), defaultUsed];
+      return [
+        key.grow({ context, seeder, seed, byDefault }),
+        defaultUsed,
+      ];
     }
 
-    function findSeed<Src, Seed extends ContextSeed>(context: Ctx, key: ContextKey<any, Src>): Seed {
+    function findSeed<Src, Seed>(
+        context: Ctx,
+        key: ContextKey<any, Src>,
+    ): [ContextSeeder<Ctx, Src, Seed>, Seed] {
 
       const { seedKey } = key;
+      const [seeder, factory] = registry._seeding(seedKey);
 
       if (seedKey !== key as any) {
         // This is not a seed key
         // Retrieve the seed by seed key
-        return context.get(seedKey);
+        return [seeder, context.get(seedKey)];
       }
 
-      const [, factory] = registry._seeding(seedKey);
-
-      return factory(context);
+      return [seeder, factory(context)];
     }
   }
 
@@ -218,10 +221,7 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
 
     return new ContextRegistry<Ctx>(combine);
 
-    function combine<Src, Seed extends ContextSeed>(
-        context: Ctx,
-        key: ContextSeedKey<Src, Seed>,
-    ): Seed {
+    function combine<Src, Seed>(context: Ctx, key: ContextSeedKey<Src, Seed>): Seed {
 
       const [seeder] = self._seeding(key);
 
