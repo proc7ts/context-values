@@ -2,7 +2,7 @@
  * @module context-values
  */
 import { noop } from 'call-thru';
-import { ContextKey, ContextSeedKey, DefaultContextValueHandler } from './context-key';
+import { ContextKey, ContextSeedKey, ContextValueOpts } from './context-key';
 import { ContextRequest } from './context-request';
 import { ContextSeeder, ContextSeedProvider } from './context-seeder';
 import { contextValueSpec, ContextValueSpec } from './context-value-spec';
@@ -169,23 +169,28 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
       const [seeder, seed] = findSeed<Src, Seed>(context, key);
       let defaultUsed = false;
 
-      const byDefault: DefaultContextValueHandler<Value> = (opts && 'or' in opts)
-          ? () => {
-            defaultUsed = true;
-            return opts.or;
-          } : defaultProvider => {
+      const valueOpts: ContextValueOpts<Ctx, Value, Src, Seed> = {
+        context,
+        seeder,
+        seed,
+        byDefault: (opts && 'or' in opts)
+            ? () => {
+              defaultUsed = true;
+              return opts.or;
+            } : defaultProvider => {
 
-            const providedDefault = defaultProvider();
+              const defaultValue = defaultProvider();
 
-            if (providedDefault == null) {
-              throw new Error(`There is no value with key ${key}`);
+              if (defaultValue == null) {
+                throw new Error(`There is no value with key ${key}`);
+              }
+
+              return defaultValue;
             }
-
-            return providedDefault;
-          };
+      };
 
       return [
-        key.grow({ context, seeder, seed, byDefault }),
+        key.grow(valueOpts),
         defaultUsed,
       ];
     }

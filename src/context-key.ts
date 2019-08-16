@@ -109,25 +109,6 @@ export interface ContextValueOpts<Ctx extends ContextValues, Value, Src, Seed> {
 }
 
 /**
- * Default context value handler.
- *
- * It is called from [[ContextKey.merge]] operation to select a default value. As a fallback value always takes
- * precedence over the default one specified by the value key.
- *
- * @typeparam V  A type of context value.
- */
-export type DefaultContextValueHandler<V> =
-/**
- * @param defaultProvider  Default value provider. It is called unless a fallback value is specified.
- * If it returns a non-null/non-undefined value, then the returned value will be associated with the context key.
- *
- * @returns The default value to return.
- *
- * @throws Error  If there is no explicitly specified default value, and `defaultProvider` did not provide any value.
- */
-    (defaultProvider: () => V | null | undefined) => V | null | undefined;
-
-/**
  * A key of context value holding a seed of context value.
  *
  * @typeparam Src  Source value type.
