@@ -1,7 +1,7 @@
 import { AIterable } from 'a-iterable';
 import { ContextRegistry } from './context-registry';
-import { MultiContextKey, SingleContextKey } from './context-value';
 import { ContextValues } from './context-values';
+import { MultiContextKey, SingleContextKey } from './simple-context-key';
 import Mock = jest.Mock;
 
 describe('ContextRegistry', () => {
@@ -9,42 +9,42 @@ describe('ContextRegistry', () => {
   const key = new SingleContextKey<string>('test-key');
   let registry: ContextRegistry<ContextValues>;
   let values: ContextValues;
-  let providerSpy: Mock<string>;
+  let mockProvider: Mock<string>;
 
   beforeEach(() => {
     registry = new ContextRegistry();
     values = registry.newValues();
-    providerSpy = jest.fn().mockName('providerSpy');
-    registry.provide({ a: key, by: providerSpy });
+    mockProvider = jest.fn().mockName('mockProvider');
+    registry.provide({ a: key, by: mockProvider });
   });
 
-  describe('Value sources request', () => {
-    it('empty sources by default', () => {
-      expect([...values.get(key.sourcesKey)]).toEqual([]);
+  describe('Value seed request', () => {
+    it('empty seed by default', () => {
+      expect([...values.get(key.seedKey)]).toEqual([]);
     });
-    it('respects sources fallback', () => {
-      expect([...values.get(key.sourcesKey, { or: AIterable.from(['default'])})]).toEqual(['default']);
+    it('respects seed fallback', () => {
+      expect([...values.get(key.seedKey, { or: AIterable.from(['default']) })]).toEqual(['default']);
     });
-    it('prefers explicit sources', () => {
+    it('prefers explicit seed', () => {
 
       const value = 'test value';
 
-      providerSpy.mockReturnValue(value);
+      mockProvider.mockReturnValue(value);
 
-      expect([...values.get(key.sourcesKey, { or: AIterable.from(['default'])})]).toEqual([value]);
+      expect([...values.get(key.seedKey, { or: AIterable.from(['default']) })]).toEqual([value]);
     });
-    it('caches value sources', () => {
+    it('caches value seed', () => {
 
       const value = 'test value';
 
-      providerSpy.mockReturnValue(value);
+      mockProvider.mockReturnValue(value);
 
-      expect([...values.get(key.sourcesKey)]).toEqual([value]);
+      expect([...values.get(key.seedKey)]).toEqual([value]);
       expect(values.get(key)).toBe(value);
 
-      providerSpy.mockReturnValue('other');
+      mockProvider.mockReturnValue('other');
 
-      expect([...values.get(key.sourcesKey)]).toEqual([value]);
+      expect([...values.get(key.seedKey)]).toEqual([value]);
       expect(values.get(key)).toBe(value);
     });
   });
@@ -54,7 +54,7 @@ describe('ContextRegistry', () => {
 
       const value = 'test value';
 
-      providerSpy.mockReturnValue(value);
+      mockProvider.mockReturnValue(value);
 
       expect(values.get(key)).toBe(value);
     });
@@ -97,12 +97,12 @@ describe('ContextRegistry', () => {
 
       const value = 'value';
 
-      providerSpy.mockReturnValue(value);
+      mockProvider.mockReturnValue(value);
 
       expect(values.get(key)).toBe(value);
       expect(values.get(key)).toBe(value);
 
-      expect(providerSpy).toHaveBeenCalledTimes(1);
+      expect(mockProvider).toHaveBeenCalledTimes(1);
     });
     it('caches default value', () => {
 
@@ -121,6 +121,22 @@ describe('ContextRegistry', () => {
 
       expect(values.get(key, { or: value1 })).toBe(value1);
       expect(values.get(key, { or: value2 })).toBe(value2);
+    });
+    it('rebuilds the value in another context', () => {
+
+      const value1 = 'value1';
+      const value2 = 'value2';
+
+      mockProvider.mockReturnValue(value1);
+      expect(values.get(key)).toBe(value1);
+
+      const values2 = registry.newValues();
+
+      mockProvider.mockReturnValue(value2);
+      expect(values.get(key)).toBe(value1);
+      expect(values2.get(key)).toBe(value2);
+
+      expect(mockProvider).toHaveBeenCalledTimes(2);
     });
   });
 
@@ -210,18 +226,18 @@ describe('ContextRegistry', () => {
     });
 
     it('provides the last constructed value', () => {
-      providerSpy.mockReturnValue('value1');
+      mockProvider.mockReturnValue('value1');
       provider2Spy.mockReturnValue('value2');
 
       expect(values.get(key)).toBe('value2');
     });
     it('provides the first constructed value if the second one is undefined', () => {
-      providerSpy.mockReturnValue('value1');
+      mockProvider.mockReturnValue('value1');
 
       expect(values.get(key)).toBe('value1');
     });
     it('provides the first constructed value if the second one is null', () => {
-      providerSpy.mockReturnValue('value1');
+      mockProvider.mockReturnValue('value1');
       provider2Spy.mockReturnValue(null);
 
       expect(values.get(key)).toBe('value1');
@@ -246,7 +262,7 @@ describe('ContextRegistry', () => {
         const value1 = 'initial value';
         const value2 = 'actual value';
 
-        providerSpy.mockReturnValue(value1);
+        mockProvider.mockReturnValue(value1);
 
         chained.provide({a: key, by: provider2Spy});
         provider2Spy.mockReturnValue(value2);
@@ -257,7 +273,7 @@ describe('ContextRegistry', () => {
 
         const value1 = 'initial value';
 
-        providerSpy.mockReturnValue(value1);
+        mockProvider.mockReturnValue(value1);
 
         chained.provide({a: key, by: provider2Spy});
         provider2Spy.mockReturnValue(null);
@@ -268,8 +284,8 @@ describe('ContextRegistry', () => {
   }
 
   testChained(
-      'Registry chained with bound sources',
-      () => new ContextRegistry(registry.bindSources({ name: 'context' } as any)));
+      'Registry chained with bound seeds',
+      () => new ContextRegistry(registry.seedIn({ name: 'context' } as any)));
   testChained(
       'Registry chained with context values',
       () => new ContextRegistry(values));
@@ -297,26 +313,26 @@ describe('ContextRegistry', () => {
     });
 
     it('contains all sources', () => {
-      providerSpy.mockReturnValue('1');
+      mockProvider.mockReturnValue('1');
       registry2.provide({ a: key, is: '2' });
       registry2.provide({ a: key, is: '3' });
-      expect([...combined.sources(context, key)]).toEqual(['1', '2', '3']);
+      expect([...combined.seed(context, key.seedKey)]).toEqual(['1', '2', '3']);
     });
     it('accesses sources only once', () => {
-      providerSpy.mockReturnValue('1');
+      mockProvider.mockReturnValue('1');
 
       const provider2 = jest.fn(() => '2').mockName('provider2');
 
       registry2.provide({ a: key, by: provider2 });
-      expect([...context.get(key.sourcesKey)]).toEqual(['1', '2']);
-      expect(providerSpy).toHaveBeenCalledTimes(1);
+      expect([...context.get(key.seedKey)]).toEqual(['1', '2']);
+      expect(mockProvider).toHaveBeenCalledTimes(1);
       expect(provider2).toHaveBeenCalledTimes(1);
     });
     it('contains reverted sources', () => {
-      providerSpy.mockReturnValue('1');
+      mockProvider.mockReturnValue('1');
       registry2.provide({ a: key, is: '2' });
       registry2.provide({ a: key, is: '3' });
-      expect([...combined.sources(context, key).reverse()]).toEqual(['3', '2', '1']);
+      expect([...combined.seed(context, key.seedKey).reverse()]).toEqual(['3', '2', '1']);
     });
   });
 });
