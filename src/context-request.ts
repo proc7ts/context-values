@@ -10,14 +10,14 @@ import { ContextKey } from './context-key';
  *
  * This is typically a context value key. But may also be any object with `key` property containing such key.
  *
- * @typeparam V  A type of requested context value.
+ * @typeparam Value  A type of requested context value.
  */
-export interface ContextRequest<V> {
+export interface ContextRequest<Value> {
 
   /**
    * A key of context value to request.
    */
-  readonly key: ContextKey<V, any>;
+  readonly key: ContextKey<Value, any>;
 
 }
 
@@ -28,28 +28,28 @@ export namespace ContextRequest {
    *
    * This can be passed to [[ContextValues.get]] method as a second parameter.
    *
-   * @typeparam V  A type of requested context value.
+   * @typeparam Value  A type of requested context value.
    */
-  export interface Opts<V> {
+  export interface Opts<Value> {
 
     /**
      * A fallback value that will be returned if there is no value associated with the given key.
      *
      * Can be `null` or `undefined`.
      */
-    or?: V | null;
+    or?: Value | null;
 
   }
 
-  export interface OrFallback<V> extends Opts<V> {
-    or: V;
+  export interface OrFallback<Value> extends Opts<Value> {
+    or: Value;
   }
 
-  export interface OrNull<V> extends Opts<V> {
+  export interface OrNull<Value> extends Opts<Value> {
     or: null;
   }
 
-  export interface OrUndefined<V> extends Opts<V> {
+  export interface OrUndefined<Value> extends Opts<Value> {
     or?: undefined;
   }
 

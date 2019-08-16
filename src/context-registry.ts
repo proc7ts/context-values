@@ -130,14 +130,14 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
 
     class Values extends ContextValues {
 
-      get<V, S>(
+      get<Value, Src>(
           this: Ctx,
-          { key }: { key: ContextKey<V, S> },
-          opts?: ContextRequest.Opts<V>,
-      ): V | null | undefined {
+          { key }: { key: ContextKey<Value, Src> },
+          opts?: ContextRequest.Opts<Value>,
+      ): Value | null | undefined {
 
         const context = this;
-        const cached: V | undefined = values.get(key);
+        const cached: Value | undefined = values.get(key);
 
         if (cached != null) {
           return cached;

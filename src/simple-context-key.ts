@@ -59,8 +59,7 @@ class SimpleSeedKey<Src> extends ContextSeedKey<Src, AIterable<Src>> {
  * @typeparam Src  Source value type.
  * @typeparam Seed  Value seed type.
  */
-export abstract class SimpleContextKey<Value, Src = Value>
-    extends ContextKey<Value, Src, AIterable<Src>> {
+export abstract class SimpleContextKey<Value, Src = Value> extends ContextKey<Value, Src, AIterable<Src>> {
 
   readonly seedKey: ContextSeedKey<Src, AIterable<Src>>;
 
