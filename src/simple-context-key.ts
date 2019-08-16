@@ -77,8 +77,9 @@ export abstract class SimpleContextKey<Value, Src = Value> extends ContextKey<Va
  * Single context value reference.
  *
  * @typeparam Value  Context value type.
+ * @typeparam Seed  Value seed type.
  */
-export type SingleContextRef<Value> = ContextRef<Value, Value, AIterable<Value>>;
+export type SingleContextRef<Value, Seed = unknown> = ContextRef<Value, Value, Seed>;
 
 /**
  * Single context value key.
@@ -87,7 +88,9 @@ export type SingleContextRef<Value> = ContextRef<Value, Value, AIterable<Value>>
  *
  * @typeparam Value  Context value type.
  */
-export class SingleContextKey<Value> extends SimpleContextKey<Value> implements SingleContextRef<Value> {
+export class SingleContextKey<Value>
+    extends SimpleContextKey<Value>
+    implements SingleContextRef<Value, AIterable<Value>> {
 
   /**
    * A provider of context value used when there is no value associated with this key.
@@ -128,7 +131,7 @@ export class SingleContextKey<Value> extends SimpleContextKey<Value> implements 
  *
  * @typeparam Src  Value source type and context value item type.
  */
-export type MultiContextRef<Src> = ContextRef<Src[], Src, AIterable<Src>>;
+export type MultiContextRef<Src, Seed = unknown> = ContextRef<Src[], Src, Seed>;
 
 /**
  * Multiple context values key.
@@ -139,7 +142,9 @@ export type MultiContextRef<Src> = ContextRef<Src[], Src, AIterable<Src>>;
  *
  * @typeparam Src  Value source type and context value item type.
  */
-export class MultiContextKey<Src> extends SimpleContextKey<Src[], Src> implements MultiContextRef<Src> {
+export class MultiContextKey<Src>
+    extends SimpleContextKey<Src[], Src>
+    implements MultiContextRef<Src, AIterable<Src>> {
 
   /**
    * A provider of context value used when there is no value associated with this key.
