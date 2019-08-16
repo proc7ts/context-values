@@ -65,10 +65,11 @@ export abstract class SimpleContextKey<Value, Src = Value> extends ContextKey<Va
    * Constructs context value key.
    *
    * @param name  Human-readable key name.
+   * @param seedKey  Value seed key. A new one will be constructed when omitted.
    */
-  protected constructor(name: string) {
+  protected constructor(name: string, seedKey?: ContextSeedKey<Src, AIterable<Src>>) {
     super(name);
-    this.seedKey = new SimpleSeedKey(this);
+    this.seedKey = seedKey || new SimpleSeedKey(this);
   }
 
 }
@@ -101,11 +102,20 @@ export class SingleContextKey<Value>
    * Constructs single context value key.
    *
    * @param name  Human-readable key name.
+   * @param seedKey  Value seed key. A new one will be constructed when omitted.
    * @param byDefault  Optional default value provider. If unspecified or `undefined` the key has no default
    * value.
    */
-  constructor(name: string, byDefault: ContextValueProvider<ContextValues, Value> = noop) {
-    super(name);
+  constructor(
+      name: string,
+      {
+        seedKey,
+        byDefault = noop,
+      }: {
+        seedKey?: ContextSeedKey<Value, AIterable<Value>>,
+        byDefault?: ContextValueProvider<ContextValues, Value>,
+      } = {}) {
+    super(name, seedKey);
     this.byDefault = byDefault;
   }
 
@@ -155,10 +165,19 @@ export class MultiContextKey<Src>
    * Constructs multiple context values key.
    *
    * @param name  Human-readable key name.
+   * @param seedKey  Value seed key. A new one will be constructed when omitted.
    * @param byDefault  Optional default value provider. If unspecified then the default value is empty array.
    */
-  constructor(name: string, byDefault: ContextValueProvider<ContextValues, readonly Src[]> = valuesProvider()) {
-    super(name);
+  constructor(
+      name: string,
+      {
+        seedKey,
+        byDefault = valuesProvider(),
+      }: {
+        seedKey?: ContextSeedKey<Src, AIterable<Src>>,
+        byDefault?: ContextValueProvider<ContextValues, readonly Src[]>,
+      } = {}) {
+    super(name, seedKey);
     this.byDefault = byDefault;
   }
 
