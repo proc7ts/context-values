@@ -94,10 +94,8 @@ export class SingleContextKey<Value>
 
   /**
    * A provider of context value used when there is no value associated with this key.
-   *
-   * If `undefined`, then there is no default value.
    */
-  readonly byDefault: (context: ContextValues) => Value | null | undefined;
+  readonly byDefault: ContextValueProvider<ContextValues, Value>;
 
   /**
    * Constructs single context value key.
@@ -106,7 +104,7 @@ export class SingleContextKey<Value>
    * @param byDefault  Optional default value provider. If unspecified or `undefined` the key has no default
    * value.
    */
-  constructor(name: string, byDefault: (context: ContextValues) => Value | null | undefined = noop) {
+  constructor(name: string, byDefault: ContextValueProvider<ContextValues, Value> = noop) {
     super(name);
     this.byDefault = byDefault;
   }
