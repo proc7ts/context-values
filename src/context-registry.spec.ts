@@ -122,6 +122,22 @@ describe('ContextRegistry', () => {
       expect(values.get(key, { or: value1 })).toBe(value1);
       expect(values.get(key, { or: value2 })).toBe(value2);
     });
+    it('rebuilds the value in another context', () => {
+
+      const value1 = 'value1';
+      const value2 = 'value2';
+
+      mockProvider.mockReturnValue(value1);
+      expect(values.get(key)).toBe(value1);
+
+      const values2 = registry.newValues();
+
+      mockProvider.mockReturnValue(value2);
+      expect(values.get(key)).toBe(value1);
+      expect(values2.get(key)).toBe(value2);
+
+      expect(mockProvider).toHaveBeenCalledTimes(2);
+    });
   });
 
   describe('Multi-value', () => {

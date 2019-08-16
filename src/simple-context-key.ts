@@ -11,19 +11,16 @@ import { ContextValues } from './context-values';
 
 class SimpleContextSeeder<Ctx extends ContextValues, Src> implements ContextSeeder<Ctx, Src, AIterable<Src>> {
 
-  private readonly _providers: SourceEntry<Ctx, Src>[] = [];
+  private readonly _providers: ContextValueProvider<Ctx, Src>[] = [];
 
   provide(provider: ContextValueProvider<Ctx, Src>): void {
-    this._providers.push([provider]);
+    this._providers.push(provider);
   }
 
   seed(context: Ctx, initial?: AIterable<Src>): AIterable<Src> {
     return AIterable.from([
       initial || AIterable.from<Src>(overNone()),
-      sourceValues(
-          context,
-          AIterable.from(overArray(this._providers)),
-      ),
+      sourceValues(context, this._providers),
     ]).flatMap(asis);
   }
 
@@ -189,17 +186,19 @@ type SourceEntry<Ctx extends ContextValues, Src> = [ContextValueProvider<Ctx, Sr
 
 function sourceValues<Ctx extends ContextValues, Src>(
     context: Ctx,
-    sourceEntries: AIterable<SourceEntry<Ctx, Src>>,
+    providers: ContextValueProvider<Ctx, Src>[],
 ): AIterable<Src> {
-  return sourceEntries.map(sourceProvider => {
-    if (sourceProvider.length > 1) {
-      return sourceProvider[1];
-    }
+  return AIterable.from(overArray(providers.map<SourceEntry<Ctx, Src>>(provider => [provider])))
+      .map(entry => {
+        if (entry.length > 1) {
+          return entry[1];
+        }
 
-    const source = sourceProvider[0](context);
+        const source = entry[0](context);
 
-    sourceProvider.push(source);
+        entry.push(source);
 
-    return source;
-  }).filter<Src>(isPresent);
+        return source;
+      })
+      .filter<Src>(isPresent);
 }
