@@ -51,10 +51,10 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
    *
    * @typeparam Deps  Dependencies tuple type.
    * @typeparam Src  Source value type.
-   * @typeparam Seed  Context value seed type.
+   * @typeparam Seed  Value seed type.
    * @param spec  Context value specifier.
    */
-  provide<Deps extends any[], Src, Seed>(spec: ContextValueSpec<Ctx, any, Deps, Src>): void {
+  provide<Deps extends any[], Src, Seed>(spec: ContextValueSpec<Ctx, any, Deps, Src, Seed>): void {
 
     const { a: { key: { seedKey } }, by } = contextValueSpec(spec);
     const [seeder] = this._seeding<Src, Seed>(seedKey);
@@ -197,7 +197,7 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
 
     function findSeed<Src, Seed>(
         context: Ctx,
-        key: ContextKey<any, Src>,
+        key: ContextKey<any, Src, Seed>,
     ): [ContextSeeder<Ctx, Src, Seed>, Seed] {
 
       const { seedKey } = key;

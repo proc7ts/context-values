@@ -18,8 +18,8 @@ import { ContextValues } from './context-values';
  * @typeparam Src  Source value type.
  * @typeparam Seed  Value seed type.
  */
-export abstract class ContextKey<Value, Src = Value, Seed = any>
-    implements ContextRequest<Value>, ContextTarget<Src> {
+export abstract class ContextKey<Value, Src = Value, Seed = unknown>
+    implements ContextRequest<Value, Seed>, ContextTarget<Src, Seed> {
 
   /**
    * Human-readable key name.

@@ -11,13 +11,14 @@ import { ContextKey } from './context-key';
  * This is typically a context value key. But may also be any object with `key` property containing such key.
  *
  * @typeparam Value  A type of requested context value.
+ * @typeparam Seed  Requested value seed type.
  */
-export interface ContextRequest<Value> {
+export interface ContextRequest<Value, Seed = unknown> {
 
   /**
    * A key of context value to request.
    */
-  readonly key: ContextKey<Value, any>;
+  readonly key: ContextKey<Value, any, Seed>;
 
 }
 
