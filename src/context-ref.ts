@@ -1,7 +1,7 @@
 /**
  * @module context-values
  */
-import { ContextKey } from './context-key';
+import { ContextKey, ContextKey__symbol } from './context-key';
 
 /**
  * A request for context value.
@@ -18,7 +18,7 @@ export interface ContextRequest<Value, Seed = unknown> {
   /**
    * A key of context value to request.
    */
-  readonly key: ContextKey<Value, any, Seed>;
+  readonly [ContextKey__symbol]: ContextKey<Value, any, Seed>;
 
 }
 
@@ -69,7 +69,7 @@ export interface ContextTarget<Src, Seed = unknown> extends ContextRequest<any, 
   /**
    * A key of context value to provide.
    */
-  readonly key: ContextKey<any, Src, Seed>;
+  readonly [ContextKey__symbol]: ContextKey<any, Src, Seed>;
 
 }
 
@@ -79,6 +79,6 @@ export interface ContextTarget<Src, Seed = unknown> extends ContextRequest<any, 
 export interface ContextRef<Value, Src = Value, Seed = unknown>
     extends ContextRequest<Value, Seed>, ContextTarget<Src, Seed> {
 
-  key: ContextKey<Value, Src, Seed>;
+  readonly [ContextKey__symbol]: ContextKey<Value, Src, Seed>;
 
 }

@@ -2,8 +2,8 @@
  * @module context-values
  */
 import { noop } from 'call-thru';
-import { ContextKey, ContextSeedKey, ContextValueOpts } from './context-key';
-import { ContextRequest } from './context-ref';
+import { ContextKey, ContextKey__symbol, ContextSeedKey, ContextValueOpts } from './context-key';
+import { ContextRef, ContextRequest } from './context-ref';
 import { ContextSeeder, ContextSeeds } from './context-seeder';
 import { contextValueSpec, ContextValueSpec } from './context-value-spec';
 import { ContextValues } from './context-values';
@@ -56,7 +56,7 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
    */
   provide<Deps extends any[], Src, Seed>(spec: ContextValueSpec<Ctx, any, Deps, Src, Seed>): void {
 
-    const { a: { key: { seedKey } }, by } = contextValueSpec(spec);
+    const { a: { [ContextKey__symbol]: { seedKey } }, by } = contextValueSpec(spec);
     const [seeder] = this._seeding<Src, Seed>(seedKey);
 
     seeder.provide(by);
@@ -132,7 +132,7 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
 
       get<Value, Src>(
           this: Ctx,
-          { key }: { key: ContextKey<Value, Src> },
+          { [ContextKey__symbol]: key }: ContextRef<Value, Src>,
           opts?: ContextRequest.Opts<Value>,
       ): Value | null | undefined {
 

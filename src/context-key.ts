@@ -6,6 +6,11 @@ import { ContextSeeder } from './context-seeder';
 import { ContextValues } from './context-values';
 
 /**
+ * A symbol of the property containing a [[ContextKey]] instance.
+ */
+export const ContextKey__symbol = /*#__PURE__*/ Symbol('context-key');
+
+/**
  * Context value key.
  *
  * Every key should be an unique instance of this class.
@@ -47,7 +52,7 @@ export abstract class ContextKey<Value, Src = Value, Seed = unknown> implements 
    *
    * This is to use this context value key both as a context value request and its definition target.
    */
-  get key(): this {
+  get [ContextKey__symbol](): this {
     return this;
   }
 

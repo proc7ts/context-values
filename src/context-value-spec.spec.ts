@@ -1,4 +1,4 @@
-import { ContextKey } from './context-key';
+import { ContextKey, ContextKey__symbol } from './context-key';
 import { ContextRequest } from './context-ref';
 import { contextValueSpec, ContextValueSpec } from './context-value-spec';
 import { ContextValues } from './context-values';
@@ -49,7 +49,7 @@ describe('contextValueSpec', () => {
     const aliasValue = 'alias-value';
 
     contextSpy.get.mockImplementation((request: ContextRequest<any>) => {
-      if (request.key === aliasKey) {
+      if (request[ContextKey__symbol] === aliasKey) {
         return aliasValue;
       }
       return;
@@ -76,10 +76,10 @@ describe('contextValueSpec', () => {
     const arg2 = 2;
 
     contextSpy.get.mockImplementation((request: ContextRequest<any>) => {
-      if (request.key === key1) {
+      if (request[ContextKey__symbol] === key1) {
         return arg1;
       }
-      if (request.key === key2) {
+      if (request[ContextKey__symbol] === key2) {
         return arg2;
       }
       return;
@@ -95,7 +95,7 @@ describe('contextValueSpec', () => {
     let constructorSpy: Mock;
     class Value {
 
-      static readonly key: ContextKey<Value> = new SingleContextKey('value');
+      static readonly [ContextKey__symbol]: ContextKey<Value> = new SingleContextKey('value');
 
       constructor(...args: any[]) {
         constructorSpy(...args);
@@ -168,10 +168,10 @@ describe('contextValueSpec', () => {
       const arg2 = 2;
 
       contextSpy.get.mockImplementation((request: ContextRequest<any>) => {
-        if (request.key === key1) {
+        if (request[ContextKey__symbol] === key1) {
           return arg1;
         }
-        if (request.key === key2) {
+        if (request[ContextKey__symbol] === key2) {
           return arg2;
         }
         return;
@@ -202,10 +202,10 @@ describe('contextValueSpec', () => {
       const arg2 = 2;
 
       contextSpy.get.mockImplementation((request: ContextRequest<any>) => {
-        if (request.key === key1) {
+        if (request[ContextKey__symbol] === key1) {
           return arg1;
         }
-        if (request.key === key2) {
+        if (request[ContextKey__symbol] === key2) {
           return arg2;
         }
         return;
