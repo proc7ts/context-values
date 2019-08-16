@@ -42,7 +42,7 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
     } else if (typeof initial === 'function') {
       this._initial = initial;
     } else {
-      this._initial = (_context, seedKey) => initial.get(seedKey);
+      this._initial = seedKey => initial.get(seedKey);
     }
   }
 
@@ -74,7 +74,7 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
     }
 
     const seeder: ContextSeeder<Ctx, Src, Seed> = seedKey.seeder();
-    const factory: SeedFactory<Ctx, Seed> = context => seeder.seed(context, this._initial(context, seedKey));
+    const factory: SeedFactory<Ctx, Seed> = context => seeder.seed(context, this._initial(seedKey, context));
     const seeding: Seeding<Ctx, Src, Seed> = [seeder, factory];
 
     this._seeds.set(seedKey, seeding);
@@ -105,11 +105,11 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
    *
    * @returns A provider of context value seeds bound to the given `context`.
    */
-  seedIn(context: Ctx, cache?: boolean): ContextSeeds<Ctx> {
+  seedIn(context: Ctx, cache?: boolean): <Src, Seed>(this: void, key: ContextSeedKey<Src, Seed>) => Seed | undefined {
 
     const values = this.newValues(cache);
 
-    return <Src, Seed>(_context: Ctx, key: ContextSeedKey<Src, Seed>) =>
+    return <Src, Seed>(key: ContextSeedKey<Src, Seed>) =>
         values.get.call<Ctx, [ContextSeedKey<Src, Seed>], Seed>(context, key);
   }
 
@@ -226,11 +226,11 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
 
     return new ContextRegistry<Ctx>(combine);
 
-    function combine<Src, Seed>(context: Ctx, key: ContextSeedKey<Src, Seed>): Seed {
+    function combine<Src, Seed>(key: ContextSeedKey<Src, Seed>, context: Ctx): Seed {
 
       const [seeder] = self._seeding(key);
 
-      return seeder.combine(context, self.seed(context, key), other.seed(context, key));
+      return seeder.combine(self.seed(context, key), other.seed(context, key), context);
     }
   }
 

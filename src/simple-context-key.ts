@@ -28,7 +28,7 @@ class SimpleContextSeeder<Ctx extends ContextValues, Src> implements ContextSeed
     return itsEmpty(seed);
   }
 
-  combine(_context: Ctx, first: AIterable<Src>, second: AIterable<Src>): AIterable<Src> {
+  combine(first: AIterable<Src>, second: AIterable<Src>): AIterable<Src> {
     return AIterable.from([first, second]).flatMap(asis);
   }
 
