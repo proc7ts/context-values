@@ -10,7 +10,7 @@ import { ContextValues } from './context-values';
  *
  * Contains context value providers for particular key.
  *
- * Created by [[ContextSourceKey.seeder]] method.
+ * Created by [[ContextSeedKey.seeder]] method.
  *
  * @typeparam Ctx  Context type.
  * @typeparam Src  Source value type.
