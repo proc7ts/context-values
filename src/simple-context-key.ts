@@ -4,6 +4,7 @@
 import { AIterable, itsEmpty, itsLast, overArray, overNone } from 'a-iterable';
 import { asis, isPresent, noop, valuesProvider } from 'call-thru';
 import { ContextKey, ContextSeedKey, ContextValueOpts } from './context-key';
+import { ContextRef } from './context-ref';
 import { ContextSeeder } from './context-seeder';
 import { ContextValueProvider } from './context-value-spec';
 import { ContextValues } from './context-values';
@@ -76,13 +77,20 @@ export abstract class SimpleContextKey<Value, Src = Value> extends ContextKey<Va
 }
 
 /**
+ * Single context value reference.
+ *
+ * @typeparam Value  Context value type.
+ */
+export type SingleContextRef<Value> = ContextRef<Value, Value, AIterable<Value>>;
+
+/**
  * Single context value key.
  *
  * Treats the last source value as context one and ignores the rest of them.
  *
  * @typeparam Value  Context value type.
  */
-export class SingleContextKey<Value> extends SimpleContextKey<Value> {
+export class SingleContextKey<Value> extends SimpleContextKey<Value> implements SingleContextRef<Value> {
 
   /**
    * A provider of context value used when there is no value associated with this key.
@@ -119,6 +127,13 @@ export class SingleContextKey<Value> extends SimpleContextKey<Value> {
 }
 
 /**
+ * Multiple context value reference.
+ *
+ * @typeparam Src  Value source type and context value item type.
+ */
+export type MultiContextRef<Src> = ContextRef<Src[], Src, AIterable<Src>>;
+
+/**
  * Multiple context values key.
  *
  * Represents context value as array of source values.
@@ -127,7 +142,7 @@ export class SingleContextKey<Value> extends SimpleContextKey<Value> {
  *
  * @typeparam Src  Value source type and context value item type.
  */
-export class MultiContextKey<Src> extends SimpleContextKey<Src[], Src> {
+export class MultiContextKey<Src> extends SimpleContextKey<Src[], Src> implements MultiContextRef<Src> {
 
   /**
    * A provider of context value used when there is no value associated with this key.

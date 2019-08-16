@@ -1,5 +1,5 @@
 import { ContextKey } from './context-key';
-import { ContextRequest } from './context-request';
+import { ContextRequest } from './context-ref';
 import { contextValueSpec, ContextValueSpec } from './context-value-spec';
 import { ContextValues } from './context-values';
 import { SingleContextKey } from './simple-context-key';

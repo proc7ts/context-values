@@ -2,26 +2,8 @@
  * @module context-values
  */
 import { valueProvider } from 'call-thru';
-import { ContextRequest } from './context-request';
-import { ContextKey } from './context-key';
+import { ContextRequest, ContextTarget } from './context-ref';
 import { ContextValues } from './context-values';
-
-/**
- * Context value definition target.
- *
- * Designates a declared declaring context value.
- *
- * @typeparam Src  A type of declared context value sources.
- * @typeparam Seed  Declared value seed type.
- */
-export interface ContextTarget<Src, Seed = unknown> extends ContextRequest<any, Seed> {
-
-  /**
-   * A key of context value to provide.
-   */
-  readonly key: ContextKey<any, Src, Seed>;
-
-}
 
 /**
  * Context value provider.

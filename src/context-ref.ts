@@ -55,3 +55,30 @@ export namespace ContextRequest {
   }
 
 }
+
+/**
+ * Context value definition target.
+ *
+ * Designates a declared declaring context value.
+ *
+ * @typeparam Src  A type of declared context value sources.
+ * @typeparam Seed  Declared value seed type.
+ */
+export interface ContextTarget<Src, Seed = unknown> extends ContextRequest<any, Seed> {
+
+  /**
+   * A key of context value to provide.
+   */
+  readonly key: ContextKey<any, Src, Seed>;
+
+}
+
+/**
+ * Context value reference that can serve both as [[ContextRequest]] and as [[ContextTarget]].
+ */
+export interface ContextRef<Value, Src = Value, Seed = unknown>
+    extends ContextRequest<Value, Seed>, ContextTarget<Src, Seed> {
+
+  key: ContextKey<Value, Src, Seed>;
+
+}

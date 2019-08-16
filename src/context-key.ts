@@ -1,9 +1,8 @@
 /**
  * @module context-values
  */
-import { ContextRequest } from './context-request';
+import { ContextRef } from './context-ref';
 import { ContextSeeder } from './context-seeder';
-import { ContextTarget } from './context-value-spec';
 import { ContextValues } from './context-values';
 
 /**
@@ -18,8 +17,7 @@ import { ContextValues } from './context-values';
  * @typeparam Src  Source value type.
  * @typeparam Seed  Value seed type.
  */
-export abstract class ContextKey<Value, Src = Value, Seed = unknown>
-    implements ContextRequest<Value, Seed>, ContextTarget<Src, Seed> {
+export abstract class ContextKey<Value, Src = Value, Seed = unknown> implements ContextRef<Value, Src, Seed> {
 
   /**
    * Human-readable key name.

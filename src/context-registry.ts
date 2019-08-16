@@ -3,7 +3,7 @@
  */
 import { noop } from 'call-thru';
 import { ContextKey, ContextSeedKey, ContextValueOpts } from './context-key';
-import { ContextRequest } from './context-request';
+import { ContextRequest } from './context-ref';
 import { ContextSeeder, ContextSeeds } from './context-seeder';
 import { contextValueSpec, ContextValueSpec } from './context-value-spec';
 import { ContextValues } from './context-values';
