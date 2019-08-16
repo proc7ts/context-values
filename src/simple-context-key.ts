@@ -129,27 +129,29 @@ export class SingleContextKey<Value>
 /**
  * Multiple context value reference.
  *
+ * Represents context value as read-only array of source values.
+ *
  * @typeparam Src  Value source type and context value item type.
  */
-export type MultiContextRef<Src, Seed = unknown> = ContextRef<Src[], Src, Seed>;
+export type MultiContextRef<Src, Seed = unknown> = ContextRef<readonly Src[], Src, Seed>;
 
 /**
  * Multiple context values key.
  *
- * Represents context value as array of source values.
+ * Represents context value as read-only array of source values.
  *
  * Associated with empty array by default.
  *
  * @typeparam Src  Value source type and context value item type.
  */
 export class MultiContextKey<Src>
-    extends SimpleContextKey<Src[], Src>
+    extends SimpleContextKey<readonly Src[], Src>
     implements MultiContextRef<Src, AIterable<Src>> {
 
   /**
    * A provider of context value used when there is no value associated with this key.
    */
-  readonly byDefault: ContextValueProvider<ContextValues, Src[]>;
+  readonly byDefault: ContextValueProvider<ContextValues, readonly Src[]>;
 
   /**
    * Constructs multiple context values key.
@@ -157,14 +159,14 @@ export class MultiContextKey<Src>
    * @param name  Human-readable key name.
    * @param byDefault  Optional default value provider. If unspecified then the default value is empty array.
    */
-  constructor(name: string, byDefault: ContextValueProvider<ContextValues, Src[]> = valuesProvider()) {
+  constructor(name: string, byDefault: ContextValueProvider<ContextValues, readonly Src[]> = valuesProvider()) {
     super(name);
     this.byDefault = byDefault;
   }
 
   grow<Ctx extends ContextValues>(
-      opts: ContextValueOpts<Ctx, Src[], Src, AIterable<Src>>,
-  ): Src[] | null | undefined {
+      opts: ContextValueOpts<Ctx, readonly Src[], Src, AIterable<Src>>,
+  ): readonly Src[] | null | undefined {
 
     const result = [...opts.seed];
 
