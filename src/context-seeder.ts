@@ -59,11 +59,11 @@ export interface ContextSeeder<Ctx extends ContextValues, Src, Seed> {
 }
 
 /**
- * A provider of context value seeds.
+ * Context seeds provider.
  *
  * @typeparam Ctx  Context type.
  */
-export type ContextSeedProvider<Ctx extends ContextValues> =
+export type ContextSeeds<Ctx extends ContextValues> =
 /**
  * @typeparam Src  Source value type.
  * @typeparam Seed  Value seed type.

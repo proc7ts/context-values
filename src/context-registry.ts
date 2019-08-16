@@ -4,7 +4,7 @@
 import { noop } from 'call-thru';
 import { ContextKey, ContextSeedKey, ContextValueOpts } from './context-key';
 import { ContextRequest } from './context-request';
-import { ContextSeeder, ContextSeedProvider } from './context-seeder';
+import { ContextSeeder, ContextSeeds } from './context-seeder';
 import { contextValueSpec, ContextValueSpec } from './context-value-spec';
 import { ContextValues } from './context-values';
 
@@ -20,7 +20,7 @@ type Seeding<Ctx extends ContextValues, Src, Seed> = [ContextSeeder<Ctx, Src, Se
 export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
 
   /** @internal */
-  private readonly _initial: ContextSeedProvider<Ctx>;
+  private readonly _initial: ContextSeeds<Ctx>;
 
   /** @internal */
   private readonly _seeds = new Map<ContextSeedKey<any, any>, Seeding<Ctx, any, any>>();
@@ -36,7 +36,7 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
    * @param initial  An optional source of initially known context values. This can be either a function, or
    * `ContextValues` instance.
    */
-  constructor(initial?: ContextSeedProvider<Ctx> | ContextValues) {
+  constructor(initial?: ContextSeeds<Ctx> | ContextValues) {
     if (initial == null) {
       this._initial = noop;
     } else if (typeof initial === 'function') {
@@ -98,14 +98,14 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
   }
 
   /**
-   * Binds value sources to the given context.
+   * Builds context seeds provider that binds seeds to target `context`.
    *
    * @param context  Target value context.
    * @param cache  Whether to cache context values. When `false` the value providers may be called multiple times.
    *
    * @returns A provider of context value seeds bound to the given `context`.
    */
-  bindSources(context: Ctx, cache?: boolean): ContextSeedProvider<Ctx> {
+  seedIn(context: Ctx, cache?: boolean): ContextSeeds<Ctx> {
 
     const values = this.newValues(cache);
 

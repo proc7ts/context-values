@@ -268,8 +268,8 @@ describe('ContextRegistry', () => {
   }
 
   testChained(
-      'Registry chained with bound sources',
-      () => new ContextRegistry(registry.bindSources({ name: 'context' } as any)));
+      'Registry chained with bound seeds',
+      () => new ContextRegistry(registry.seedIn({ name: 'context' } as any)));
   testChained(
       'Registry chained with context values',
       () => new ContextRegistry(values));
