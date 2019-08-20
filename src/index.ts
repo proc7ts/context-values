@@ -3,6 +3,7 @@ export * from './context-key-error';
 export * from './context-ref';
 export * from './context-registry';
 export * from './context-seeder';
+export * from './context-up-key';
 export * from './context-value-spec';
 export * from './context-values';
 export * from './simple-context-key';

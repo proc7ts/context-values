@@ -63,7 +63,7 @@ describe('ContextRegistry', () => {
       expect(() => values.get(new SingleContextKey(key.name))).toThrowError(ContextKeyError);
       expect(() => values.get(new SingleContextKey(key.name), {})).toThrowError(ContextKeyError);
     });
-    it('provides fallback value is there is no provider', () => {
+    it('provides fallback value if there is no provider', () => {
       expect(values.get(new SingleContextKey<string>(key.name), { or: 'fallback' })).toBe('fallback');
     });
     it('provides default value if provider did not provide any value', () => {
