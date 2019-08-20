@@ -54,13 +54,15 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
    * @typeparam Src  Source value type.
    * @typeparam Seed  Value seed type.
    * @param spec  Context value specifier.
+   *
+   * @returns A function that removes the given context value specifier when called.
    */
-  provide<Deps extends any[], Src, Seed>(spec: ContextValueSpec<Ctx, any, Deps, Src, Seed>): void {
+  provide<Deps extends any[], Src, Seed>(spec: ContextValueSpec<Ctx, any, Deps, Src, Seed>): () => void {
 
     const { a: { [ContextKey__symbol]: { seedKey } }, by } = contextValueSpec(spec);
     const [seeder] = this._seeding<Src, Seed>(seedKey);
 
-    seeder.provide(by);
+    return seeder.provide(by);
   }
 
   /**

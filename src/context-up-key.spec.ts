@@ -36,6 +36,41 @@ describe('ContextUpKey', () => {
       registry.provide({ a: key, is: afterEventOf(value) });
       expect(readValue(values.get(key))).toBe(value);
     });
+    it('selects the last value if more than one provided', () => {
+
+      const value1 = 'value1';
+      const value2 = 'value2';
+
+      registry.provide({ a: key, is: value1 });
+      registry.provide({ a: key, is: value2 });
+
+      expect(readValue(values.get(key))).toBe(value2);
+    });
+    it('removes the value specifier', () => {
+
+      const value1 = 'value1';
+      const value2 = 'value2';
+
+      registry.provide({ a: key, is: value1 });
+      registry.provide({ a: key, is: value2 })();
+
+      expect(readValue(values.get(key))).toBe(value1);
+    });
+    it('updates the value when specifier removed', () => {
+
+      const value1 = 'value1';
+      const value2 = 'value2';
+
+      registry.provide({ a: key, is: value1 });
+
+      const remove = registry.provide({ a: key, is: value2 });
+
+      expect(readValue(values.get(key))).toBe(value2);
+
+      remove();
+      remove();
+      expect(readValue(values.get(key))).toBe(value1);
+    });
     it('throws if there is neither default nor fallback value', () => {
       expect(() => readValue(values.get(key))).toThrowError(ContextKeyError);
       expect(() => readValue(values.get(key, {})!)).toThrowError(ContextKeyError);

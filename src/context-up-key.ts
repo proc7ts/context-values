@@ -22,8 +22,17 @@ class ContextUpSeeder<Ctx extends ContextValues, Src>
 
   private readonly _providers: ValueTracker<ContextValueProvider<Ctx, Src | EventKeeper<Src[]>>[]> = trackValue([]);
 
-  provide(provider: ContextValueProvider<Ctx, Src | EventKeeper<Src[]>>): void {
+  provide(provider: ContextValueProvider<Ctx, Src | EventKeeper<Src[]>>): () => void {
     this._providers.it = [...this._providers.it, provider];
+    return () => {
+
+      const providers = this._providers.it;
+      const found = providers.indexOf(provider);
+
+      if (found >= 0) {
+        this._providers.it = providers.slice(0, found).concat(providers.slice(found + 1));
+      }
+    };
   }
 
   seed(context: Ctx, initial: AfterEvent<Src[]> = afterEventOf<Src[]>()): AfterEvent<Src[]> {

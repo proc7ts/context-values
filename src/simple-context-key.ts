@@ -13,8 +13,16 @@ class SimpleContextSeeder<Ctx extends ContextValues, Src> implements ContextSeed
 
   private readonly _providers: ContextValueProvider<Ctx, Src>[] = [];
 
-  provide(provider: ContextValueProvider<Ctx, Src>): void {
+  provide(provider: ContextValueProvider<Ctx, Src>): () => void {
     this._providers.push(provider);
+    return () => {
+
+      const found = this._providers.indexOf(provider);
+
+      if (found >= 0) {
+        this._providers.splice(found, 1);
+      }
+    };
   }
 
   seed(context: Ctx, initial: AIterable<Src> = AIterable.from(overNone())): AIterable<Src> {

@@ -23,8 +23,10 @@ export interface ContextSeeder<Ctx extends ContextValues, Src, Seed> {
    * Provides context value.
    *
    * @param provider  Context value provider.
+   *
+   * @returns A function that removes the given context value `provider` when called.
    */
-  provide(provider: ContextValueProvider<Ctx, Src>): void;
+  provide(provider: ContextValueProvider<Ctx, Src>): () => void;
 
   /**
    * Creates context value seed for target `context`.

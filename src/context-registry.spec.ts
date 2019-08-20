@@ -1,7 +1,7 @@
 import { AIterable } from 'a-iterable';
+import { ContextKeyError } from './context-key-error';
 import { ContextRegistry } from './context-registry';
 import { ContextValues } from './context-values';
-import { ContextKeyError } from './context-key-error';
 import { MultiContextKey, SingleContextKey } from './simple-context-key';
 import Mock = jest.Mock;
 
@@ -58,6 +58,41 @@ describe('ContextRegistry', () => {
       mockProvider.mockReturnValue(value);
 
       expect(values.get(key)).toBe(value);
+    });
+    it('selects the last value if more than one provided', () => {
+
+      const value1 = 'value1';
+      const value2 = 'value2';
+
+      registry.provide({ a: key, is: value1 });
+      registry.provide({ a: key, is: value2 });
+
+      expect(values.get(key)).toBe(value2);
+    });
+    it('removes the value specifier', () => {
+
+      const value1 = 'value1';
+      const value2 = 'value2';
+
+      registry.provide({ a: key, is: value1 });
+      registry.provide({ a: key, is: value2 })();
+
+      expect(values.get(key)).toBe(value1);
+    });
+    it('retains the constructed value when specifier removed', () => {
+
+      const value1 = 'value1';
+      const value2 = 'value2';
+
+      registry.provide({ a: key, is: value1 });
+
+      const remove = registry.provide({ a: key, is: value2 });
+
+      expect(values.get(key)).toBe(value2);
+
+      remove();
+      remove();
+      expect(values.get(key)).toBe(value2);
     });
     it('throws if there is neither default nor fallback value', () => {
       expect(() => values.get(new SingleContextKey(key.name))).toThrowError(ContextKeyError);
