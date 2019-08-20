@@ -3,7 +3,7 @@ import { ContextKey } from './context-key';
 /**
  * An error indicating the absence of context value with the given key.
  */
-export class InvalidContextKeyError extends Error {
+export class ContextKeyError extends Error {
 
   /**
    * A missing value key.
