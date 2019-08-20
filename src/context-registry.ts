@@ -7,6 +7,7 @@ import { ContextRef, ContextRequest } from './context-ref';
 import { ContextSeeder, ContextSeeds } from './context-seeder';
 import { contextValueSpec, ContextValueSpec } from './context-value-spec';
 import { ContextValues } from './context-values';
+import { InvalidContextKeyError } from './invalid-context-key-error';
 
 type SeedFactory<Ctx extends ContextValues, Seed> = (this: void, context: Ctx) => Seed;
 
@@ -182,7 +183,7 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
               const defaultValue = defaultProvider();
 
               if (defaultValue == null) {
-                throw new Error(`There is no value with key ${key}`);
+                throw new InvalidContextKeyError(key);
               }
 
               return defaultValue;

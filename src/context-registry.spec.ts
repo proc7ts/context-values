@@ -1,6 +1,7 @@
 import { AIterable } from 'a-iterable';
 import { ContextRegistry } from './context-registry';
 import { ContextValues } from './context-values';
+import { InvalidContextKeyError } from './invalid-context-key-error';
 import { MultiContextKey, SingleContextKey } from './simple-context-key';
 import Mock = jest.Mock;
 
@@ -59,8 +60,8 @@ describe('ContextRegistry', () => {
       expect(values.get(key)).toBe(value);
     });
     it('throws if there is neither default nor fallback value', () => {
-      expect(() => values.get(new SingleContextKey(key.name))).toThrowError();
-      expect(() => values.get(new SingleContextKey(key.name), {})).toThrowError();
+      expect(() => values.get(new SingleContextKey(key.name))).toThrowError(InvalidContextKeyError);
+      expect(() => values.get(new SingleContextKey(key.name), {})).toThrowError(InvalidContextKeyError);
     });
     it('provides fallback value is there is no provider', () => {
       expect(values.get(new SingleContextKey<string>(key.name), { or: 'fallback' })).toBe('fallback');
