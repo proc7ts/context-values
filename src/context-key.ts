@@ -124,7 +124,7 @@ export abstract class ContextSeedKey<Src, Seed> extends ContextKey<Seed, Src, Se
    *
    * @param key  A key of context value having its sources associated with this key.
    */
-  protected constructor(key: ContextKey<any, Src>) {
+  constructor(key: ContextKey<any, Src>) {
     super(`${key.name}:seed`);
   }
 
