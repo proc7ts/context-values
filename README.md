@@ -102,17 +102,17 @@ context.get(key2); // 6
 [Context Value Target]: #context-value-target
 
 The `provide()` method accepts not only a `ContextKey` instance, but arbitrary `ContextTarget`. The latter is just an
-object with `key` property containing a `ContextKey` to provide.
+object with `[ContextKey__symbol]` property containing a `ContextKey` to provide.
 
 
 This can be handy e.g. when providing an instance of some known type:
 ```typescript
-import { ContextKey, ContextRegistry, SingleContextKey } from 'context-values';
+import { ContextKey, ContextKey__symbol, ContextRegistry, SingleContextKey } from 'context-values';
 
 class MyService {
   
   // MyService class (not instance) implements a `ContextRequest`
-  static readonly key: ContextKey<MyService> = new SingleContextKey('my-service');
+  static readonly [ContextKey__symbol]: ContextKey<MyService> = new SingleContextKey('my-service');
   
 }
 
@@ -138,11 +138,11 @@ This specifier defines a value (or, more precisely, the [value sources]). It may
 - `registry.provide({ a: key, by: (a, b) => calculateValue(a, b), with: [keyA, keyB] })` - evaluates the value based on
   other context values with keys `keyA` and `keyB`.
 - `registry.provide({ a: key, as: MyService })` - constructs the value as `new MyService(ctx)`, where `ctx` is the
-  target context. The `a` property may be omitted if `MyService` has a static property `key`.
+  target context. The `a` property may be omitted if `MyService` has a static `[ContextKey__symbol]` property.
   See [Context Value Target].
 - `registry.provide({ a: key, as: MyService, with: [keyA, keyB] })` - constructs the value as `new MyService(a, b)`,
   where `a` and `b` are context values with keys `keyA` and `keyB` respectively. The `a` property may be omitted if
-  `MyService` has a static property `key`. See [Context Value Target].
+  `MyService` has a static `[ContextKey__symbol]` property. See [Context Value Target].
 - `registry.provide({ a: key, via: otherKey })` - makes the value available under `otherKey` available under `key`.
   I.e. aliases it.  
 
@@ -187,7 +187,7 @@ The default value is evaluated by the function accepting a `ContextValues` insta
 import { ContextRegistry, SingleContextKey, MultiContextKey } from 'context-values';
 
 const key1 = new SingleContextKey<string>('key1');
-const key2 = new SingleContextKey<number>('key2', ctx => ctx.get('key1').length);
+const key2 = new SingleContextKey<number>('key2', { byDefault: ctx => ctx.get('key1').length });
 const key3 = new MultiContextKey<number>('key3');
 
 const registry = new ContextRegistry();
@@ -209,63 +209,58 @@ context.get(key2); // 999 - provided explicitly
 
 ### Custom Context Key
 
-[ContextKey.merge()]: #custom-context-key
+[ContextKey.grow()]: #custom-context-key
 
 It is possible to implement a custom `ContextKey`.
 
-For that extend an `AbstractContextKey` that implements the boilerplate. The only method left to implement then is a
-`merge()` one.
+For that extend e.g. a `SimpleContextKey` that implements the boilerplate. The only method left to implement then is a
+`grow()` one.
 
-The `merge()` method takes three parameters:
-- a `ContextValues` instance (to consult other context values if necessary),
-- a `ContextSources` instance (containing provided [value sources]), and
-- a `handleDefault` function responsible for the default value selection.
-
-The method returns a context value constructed out of the provided value sources.
+The `grow()` method takes a single `ContextValueOpts` parameter containing the value construction options and returns
+a context value constructed out of the provided value sources.
 
 
-#### Value Sources
+#### Value Sources and Seeds
 
 [value sources]: #value-sources
 
-Instead of the values themselves, the registry allows to provide their sources. Those are used by [ContextKey.merge()]
-method to construct the value.
+Instead of the value itself, the registry allows to provide its sources. Those are combined into _value seed_.
+That is passed to [ContextKey.grow()] method to construct the value (or grow it from the seed).
 
-There could be many sources per single value. And they could be of a type different from the final value.
+There could be multiple sources per single value. And they could be of different type.
 
-The sources are passed to the `merge()` function as an [AIterable] instance. The latter is an enhanced `Iterable` with
-Array-like API, including `map()`, `flatMap()`, `forEach()`, and other methods.
+For example, the seed of `SimpleValueKey` and `MultiValueKey` is an [AIterable] instance. The latter is enhanced
+`Iterable` with Array-like API, including `map()`, `flatMap()`, `forEach()`, and other methods.
 
-[AIterable]: https://www.npmjs.com/package/a-iterable 
+[AIterable]: https://www.npmjs.com/package/a-iterable
 
 ```typescript
+import { AIterable } from 'a-iterable';
 import { 
-  AbstractContextKey,
   ContextRegistry,
-  ContextSources,
+  ContextValueOpts,
   ContextValues,
-  Handler,
-  DefaultContextValueHandler
+  SimpleContextKey,
 } from 'context-values';
 
-class ConcatContextKey<V> extends AbstractContextKey<V, string> {
+class ConcatContextKey<Src> extends SimpleContextKey<string, Src> {
 
   constructor(name: string) {
-    super(name);
+    super(name);  
   }
 
-  merge(
-      context: ContextValues,
-      sources: ContextSources<string>,
-      handleDefault: DefaultContextValueHandler<string>): string | null | undefined {
+  grow<Ctx extends ContextValues>(
+    opts: ContextValueOpts<Ctx, string, Src, AIterable<Src>>,
+  ): string | null | undefined {
     
-    const result = sources.reduce((p, s) => p != null ? `${p}, ${s}` : `${s}`, null);
+    const result = opts.seed.reduce((p, s) => p != null ? `${p}, ${s}` : `${s}`, null);
     
     if (result != null) {
       return result;
     }
-    
-    return handleDefault(() => ''); // No sources provided. Returning empty string, unless a fallback value provided.
+
+    // No sources provided. Returning empty string, unless a fallback value provided.    
+    return opts.byDefault(() => '');
   }
 
 }
@@ -286,9 +281,43 @@ context.get(key2); // '' - empty string by default
 context.get(key2, { or: undefined }); // undefined - fallback value 
 ```
 
-A context value for particular key is constructed at most once. Thus, the `merge()` method is called at most once per
+A context value for particular key is constructed at most once. Thus, the `grow()` method is called at most once per
 key.
 
-A [context value specifier](#context-value-specifier) is consulted at most once per key. And only when the `merge()`
+A [context value specifier](#context-value-specifier) is consulted at most once per key. And only when the `grow()`
 method requested the source value. So, for example, if multiple sources specified for the same `SingleContextKey`, only
 the last one will be constructed and used as a context value. The rest of them won't be constructed at all.
+
+
+Updatable Context Values
+------------------------
+
+A `SimpleContextKey`, and thus `SingleContextKey` and `MultiContextKey` extending it, imply that once the associated
+context value constructed, it no longer changes. I.e. event though more sources provided for the same key in
+`ContextRegistry`, they won't affect the already constructed value. 
+
+However, it is possible to update context values. For that a `ContextUpKey` abstract context value key implementation
+may be used, or `SingleContextUpKey` and `MultiContextUpKey` implementations.
+
+They provide the values of [AfterEvent] registrar of value receivers. This registrar is a function accepting a callback
+that will be called with actual value each time it changes. E.g. when new value source is provided in `ContextRegistry`:
+
+```typescript
+import {
+  ContextRegistry, 
+  SingleContextUpKey,
+} from 'context-values';
+
+const key = new SingleContextUpKey<string>('updatable-value');
+const registry = new ContextRegistry();
+
+registry.provide({ a: key, is: 'initial' });
+
+const values = registry.newValues();
+
+values.get(key)(value => console.log(value)); // Log: 'initial'
+
+registry.provide({ a: key, is: 'updated' }); // Log: 'updated'
+```
+
+[AfterEvent]: https://www.npmjs.com/package/fun-events
