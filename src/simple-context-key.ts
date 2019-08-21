@@ -13,13 +13,21 @@ class SimpleContextSeeder<Ctx extends ContextValues, Src> implements ContextSeed
 
   private readonly _providers: ContextValueProvider<Ctx, Src>[] = [];
 
-  provide(provider: ContextValueProvider<Ctx, Src>): void {
+  provide(provider: ContextValueProvider<Ctx, Src>): () => void {
     this._providers.push(provider);
+    return () => {
+
+      const found = this._providers.indexOf(provider);
+
+      if (found >= 0) {
+        this._providers.splice(found, 1);
+      }
+    };
   }
 
-  seed(context: Ctx, initial?: AIterable<Src>): AIterable<Src> {
+  seed(context: Ctx, initial: AIterable<Src> = AIterable.from(overNone())): AIterable<Src> {
     return AIterable.from([
-      initial || AIterable.from<Src>(overNone()),
+      initial,
       sourceValues(context, this._providers),
     ]).flatMap(asis);
   }
@@ -36,10 +44,6 @@ class SimpleContextSeeder<Ctx extends ContextValues, Src> implements ContextSeed
 
 class SimpleSeedKey<Src> extends ContextSeedKey<Src, AIterable<Src>> {
 
-  constructor(key: ContextKey<any, Src>) {
-    super(key);
-  }
-
   seeder<Ctx extends ContextValues>(): SimpleContextSeeder<Ctx, Src> {
     return new SimpleContextSeeder();
   }
@@ -55,14 +59,13 @@ class SimpleSeedKey<Src> extends ContextSeedKey<Src, AIterable<Src>> {
  *
  * @typeparam Value  Context value type.
  * @typeparam Src  Source value type.
- * @typeparam Seed  Value seed type.
  */
 export abstract class SimpleContextKey<Value, Src = Value> extends ContextKey<Value, Src, AIterable<Src>> {
 
   readonly seedKey: ContextSeedKey<Src, AIterable<Src>>;
 
   /**
-   * Constructs context value key.
+   * Constructs simple context value key.
    *
    * @param name  Human-readable key name.
    * @param seedKey  Value seed key. A new one will be constructed when omitted.

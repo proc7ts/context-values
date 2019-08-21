@@ -7,6 +7,7 @@ import { ContextRef, ContextRequest } from './context-ref';
 import { ContextSeeder, ContextSeeds } from './context-seeder';
 import { contextValueSpec, ContextValueSpec } from './context-value-spec';
 import { ContextValues } from './context-values';
+import { ContextKeyError } from './context-key-error';
 
 type SeedFactory<Ctx extends ContextValues, Seed> = (this: void, context: Ctx) => Seed;
 
@@ -53,13 +54,15 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
    * @typeparam Src  Source value type.
    * @typeparam Seed  Value seed type.
    * @param spec  Context value specifier.
+   *
+   * @returns A function that removes the given context value specifier when called.
    */
-  provide<Deps extends any[], Src, Seed>(spec: ContextValueSpec<Ctx, any, Deps, Src, Seed>): void {
+  provide<Deps extends any[], Src, Seed>(spec: ContextValueSpec<Ctx, any, Deps, Src, Seed>): () => void {
 
     const { a: { [ContextKey__symbol]: { seedKey } }, by } = contextValueSpec(spec);
     const [seeder] = this._seeding<Src, Seed>(seedKey);
 
-    seeder.provide(by);
+    return seeder.provide(by);
   }
 
   /**
@@ -182,7 +185,7 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
               const defaultValue = defaultProvider();
 
               if (defaultValue == null) {
-                throw new Error(`There is no value with key ${key}`);
+                throw new ContextKeyError(key);
               }
 
               return defaultValue;

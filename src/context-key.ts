@@ -102,7 +102,7 @@ export interface ContextValueOpts<Ctx extends ContextValues, Value, Src, Seed> {
   /**
    * Handles missing context value.
    *
-   * It can be called to prefer a fallback value over default one specified by the value key.
+   * It can be called to prefer a fallback value over the default one specified in the value key.
    *
    * @param defaultProvider  Default value provider. It is called unless a fallback value is specified.
    * If it returns a non-null/non-undefined value, then the returned value will be associated with the context key.
@@ -124,7 +124,7 @@ export abstract class ContextSeedKey<Src, Seed> extends ContextKey<Seed, Src, Se
    *
    * @param key  A key of context value having its sources associated with this key.
    */
-  protected constructor(key: ContextKey<any, Src>) {
+  constructor(key: ContextKey<any, Src>) {
     super(`${key.name}:seed`);
   }
 
