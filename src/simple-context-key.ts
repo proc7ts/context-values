@@ -70,7 +70,7 @@ export abstract class SimpleContextKey<Value, Src = Value> extends ContextKey<Va
    * @param name  Human-readable key name.
    * @param seedKey  Value seed key. A new one will be constructed when omitted.
    */
-  protected constructor(name: string, seedKey?: ContextSeedKey<Src, AIterable<Src>>) {
+  constructor(name: string, seedKey?: ContextSeedKey<Src, AIterable<Src>>) {
     super(name);
     this.seedKey = seedKey || new SimpleSeedKey(this);
   }
@@ -143,6 +143,7 @@ export class SingleContextKey<Value>
  * Represents context value as read-only array of source values.
  *
  * @typeparam Src  Value source type and context value item type.
+ * @typeparam Seed  Value seed type.
  */
 export type MultiContextRef<Src, Seed = unknown> = ContextRef<readonly Src[], Src, Seed>;
 
