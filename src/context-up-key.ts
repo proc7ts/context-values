@@ -181,8 +181,77 @@ export class SingleContextUpKey<Value> extends ContextUpKey<AfterEvent<[Value]>,
         return backup; // Backup value found.
       }
 
-      // Backup value is absent. Construct a error response.
+      // Backup value is absent. Construct an error response.
       return afterEventBy<[Value]>(() => {
+        throw new ContextKeyError(this);
+      });
+    });
+  }
+
+}
+
+/**
+ * Multiple updatable context values key.
+ *
+ * The associated value is an `AfterEvent` registrar of receivers of the source values array. It is always present,
+ * even though the array can be empty.
+ *
+ * It is an error to provide a `null` or `undefined` {@link ContextRequest.Opts.or fallback value} when requesting
+ * an associated value. Use an `afterEventOf()` result as a fallback instead.
+ *
+ * @typeparam Value  Context value type.
+ */
+export class MultiContextUpKey<Src> extends ContextUpKey<AfterEvent<Src[]>, Src> {
+
+  /**
+   * A provider of context value used when there is no value associated with this key.
+   */
+  readonly byDefault: ContextValueProvider<ContextValues, readonly Src[]>;
+
+  /**
+   * Constructs multiple updatable context value key.
+   *
+   * @param name  Human-readable key name.
+   * @param seedKey  Value seed key. A new one will be constructed when omitted.
+   * @param byDefault  Optional default value provider. If unspecified or `undefined` the key has no default
+   * value.
+   */
+  constructor(
+      name: string,
+      {
+        seedKey,
+        byDefault = noop,
+      }: {
+        seedKey?: ContextSeedKey<Src | EventKeeper<Src[]>, AfterEvent<Src[]>>,
+        byDefault?: ContextValueProvider<ContextValues, readonly Src[]>,
+      } = {}) {
+    super(name, seedKey);
+    this.byDefault = byDefault;
+  }
+
+  grow<Ctx extends ContextValues>(
+      opts: ContextValueOpts<Ctx, AfterEvent<Src[]>, EventKeeper<Src[]> | Src, AfterEvent<Src[]>>,
+  ): AfterEvent<Src[]> {
+    return opts.seed.keep.dig((...sources) => {
+      if (sources.length) {
+        // Sources present. Use them.
+        return afterEventOf(...sources);
+      }
+
+      // Sources absent. Attempt to detect the backup value.
+      const backup = opts.byDefault(() => {
+
+        const defaultValue = this.byDefault(opts.context);
+
+        return defaultValue ? afterEventOf(...defaultValue) : afterEventOf();
+      });
+
+      if (backup != null) {
+        return backup; // Backup value found.
+      }
+
+      // Backup value is absent. Construct an error response.
+      return afterEventBy<Src[]>(() => {
         throw new ContextKeyError(this);
       });
     });

@@ -194,44 +194,36 @@ describe('SimpleContextKey', () => {
 
       expect(values.get(key)).toEqual(['value']);
     });
+    it('is associated with fallback value if there is no value provided', () => {
+      expect(values.get(key, { or: ['fallback'] })).toEqual(['fallback']);
+    });
     it('throws if there is no default value', () => {
       expect(() => values.get(new MultiContextKey(key.name, { byDefault: () => null }))).toThrowError();
-    });
-    it('is associated with empty array by default', () => {
-      expect(values.get(new MultiContextKey(key.name))).toEqual([]);
-    });
-    it('is associated with default value is there is no value', () => {
-      expect(values.get(new MultiContextKey<string>(key.name), { or: ['default'] }))
-          .toEqual(['default']);
-    });
-    it('is associated with key default value is there is no value', () => {
-      expect(values.get(new MultiContextKey<string>(key.name, { byDefault: () => ['default'] })))
-          .toEqual(['default']);
     });
     it('prefers fallback value over default one', () => {
       expect(
           values.get(
               new MultiContextKey<string>(
                   key.name,
-                  { byDefault: () => ['key', 'default'] }
+                  { byDefault: () => ['default', 'value'] }
               ),
-              { or: ['explicit', 'default'] }
+              { or: ['fallback', 'value'] },
           )
-      ).toEqual(['explicit', 'default']);
+      ).toEqual(['fallback', 'value']);
     });
     it('prefers `null` fallback value over default one', () => {
       expect(values.get(
-          new MultiContextKey<string>(key.name, { byDefault: () => ['key', 'default'] }),
-          { or: null }
+          new MultiContextKey<string>(key.name, { byDefault: () => ['default', 'value'] }),
+          { or: null },
       )).toBeNull();
     });
     it('prefers `undefined` fallback value over default one', () => {
       expect(
           values.get(new MultiContextKey<string>(
               key.name,
-              { byDefault: () => ['key', 'default'] }
+              { byDefault: () => ['default', 'value'] }
               ),
-              { or: undefined }
+              { or: undefined },
           )
       ).toBeUndefined();
     });

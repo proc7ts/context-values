@@ -1,7 +1,7 @@
 import { AfterEvent, afterEventOf } from 'fun-events';
 import { ContextKeyError } from './context-key-error';
 import { ContextRegistry } from './context-registry';
-import { SingleContextUpKey } from './context-up-key';
+import { MultiContextUpKey, SingleContextUpKey } from './context-up-key';
 import { ContextValues } from './context-values';
 
 describe('ContextUpKey', () => {
@@ -93,15 +93,85 @@ describe('ContextUpKey', () => {
 
       expect(readValue(values.get(keyWithDefaults))).toBe(defaultValue);
     });
+
+    function readValue<Value>(from: AfterEvent<[Value]>): Value {
+
+      let received: Value = undefined!;
+
+      from.once(value => received = value);
+
+      return received;
+    }
   });
 
+  describe('MultiContextUpKey', () => {
+
+    let key: MultiContextUpKey<string>;
+
+    beforeEach(() => {
+      key = new MultiContextUpKey('values');
+    });
+
+    it('is associated with empty array by default', () => {
+      expect(readValue(values.get(key))).toHaveLength(0);
+    });
+    it('is associated with default value if there is no provider', () => {
+
+      const defaultValue = ['default'];
+      const keyWithDefaults = new MultiContextUpKey('key', { byDefault: () => defaultValue });
+
+      expect(readValue(values.get(keyWithDefaults))).toEqual(defaultValue);
+    });
+    it('is associated with default value if providers did not return any values', () => {
+
+      const defaultValue = ['default'];
+      const keyWithDefaults = new MultiContextUpKey('key', { byDefault: () => defaultValue });
+
+      registry.provide({ a: keyWithDefaults, is: null });
+      registry.provide({ a: keyWithDefaults, is: undefined });
+
+      expect(readValue(values.get(keyWithDefaults))).toEqual(defaultValue);
+    });
+    it('is associated with provided values array', () => {
+      registry.provide({ a: key, is: 'a' });
+      registry.provide({ a: key, is: undefined });
+      registry.provide({ a: key, is: 'c' });
+
+      expect(readValue(values.get(key))).toEqual(['a', 'c']);
+    });
+    it('is associated with value', () => {
+      registry.provide({ a: key, is: 'value' });
+
+      expect(readValue(values.get(key))).toEqual(['value']);
+    });
+    it('is associated with fallback value if there is no value provided', () => {
+      expect(readValue(values.get(key, { or: afterEventOf('fallback') }))).toEqual(['fallback']);
+    });
+    it('prefers fallback value over default one', () => {
+      expect(readValue(
+          values.get(
+              new MultiContextUpKey<string>(
+                  key.name,
+                  { byDefault: () => ['default', 'value'] }
+              ),
+              { or: afterEventOf('fallback', 'value') },
+          )
+      )).toEqual(['fallback', 'value']);
+    });
+    it('throws if fallback value is `null`', () => {
+      expect(() => readValue(values.get(key, { or: null })!)).toThrowError(ContextKeyError);
+    });
+    it('throws if fallback value is `undefined`', () => {
+      expect(() => readValue(values.get(key, { or: undefined })!)).toThrowError(ContextKeyError);
+    });
+
+    function readValue<Src>(from: AfterEvent<Src[]>): Src[] {
+
+      let received: Src[] = undefined!;
+
+      from.once((...value) => received = value);
+
+      return received;
+    }
+  });
 });
-
-function readValue<Value>(from: AfterEvent<[Value]>): Value {
-
-  let received: Value = undefined!;
-
-  from.once(value => received = value);
-
-  return received;
-}
