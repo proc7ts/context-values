@@ -1,8 +1,7 @@
 import { AfterEvent, EventKeeper } from 'fun-events';
 import { ContextSeedKey, ContextValueOpts } from './context-key';
 import { ContextKeyError } from './context-key-error';
-import { ContextRef } from './context-ref';
-import { ContextUpKey } from './context-up-key';
+import { ContextUpKey, ContextUpRef } from './context-up-key';
 import { ContextValues } from './context-values';
 
 /**
@@ -12,10 +11,8 @@ import { ContextValues } from './context-values';
  * @typeparam Ret  Function return value type.
  * @typeparam Seed  Value seed type.
  */
-export type FnContextRef<Args extends any[], Ret = void, Seed = unknown> = ContextRef<
-    (this: void, ...args: Args) => Ret,
-    ((this: void, ...args: Args) => Ret) | EventKeeper<((this: void, ...args: Args) => Ret)[]>,
-    Seed>;
+export type FnContextRef<Args extends any[], Ret = void, Seed = unknown> =
+    ContextUpRef<(this: void, ...args: Args) => Ret, (this: void, ...args: Args) => Ret, Seed>;
 
 /**
  * A key of updatable context function value.

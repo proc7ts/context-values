@@ -75,6 +75,10 @@ export interface ContextTarget<Src, Seed = unknown> extends ContextRequest<any, 
 
 /**
  * Context value reference that can serve both as [[ContextRequest]] and as [[ContextTarget]].
+ *
+ * @typeparam Value  Context value type.
+ * @typeparam Src  Source value type.
+ * @typeparam Seed  Value seed type.
  */
 export interface ContextRef<Value, Src = Value, Seed = unknown>
     extends ContextRequest<Value, Seed>, ContextTarget<Src, Seed> {
