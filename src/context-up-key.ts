@@ -1,3 +1,6 @@
+/**
+ * @module context-values
+ */
 import { flatMapIt, mapIt, overArray } from 'a-iterable';
 import { asis, NextArgs, nextArgs, noop } from 'call-thru';
 import {
