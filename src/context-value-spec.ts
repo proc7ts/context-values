@@ -18,7 +18,7 @@ export type ContextValueProvider<Ctx extends ContextValues, Src> =
 /**
  * @param context  Target context.
  *
- * @return Either constructed value, or `null`/`undefined` if the value can not be constructed.
+ * @return Either constructed value source, or `null`/`undefined` if unknown.
  */
     (this: void, context: Ctx) => Src | null | undefined;
 

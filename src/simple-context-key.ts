@@ -3,7 +3,7 @@
  */
 import { AIterable, itsEmpty, itsLast, overArray, overNone } from 'a-iterable';
 import { asis, isPresent, noop, valuesProvider } from 'call-thru';
-import { ContextKey, ContextSeedKey, ContextValueOpts } from './context-key';
+import { ContextKey, ContextKeyDefault, ContextSeedKey, ContextValueOpts } from './context-key';
 import { ContextRef } from './context-ref';
 import { ContextSeeder } from './context-seeder';
 import { ContextValueProvider } from './context-value-spec';
@@ -99,7 +99,7 @@ export class SingleContextKey<Value>
   /**
    * A provider of context value used when there is no value associated with this key.
    */
-  readonly byDefault: ContextValueProvider<ContextValues, Value>;
+  readonly byDefault: ContextKeyDefault<Value, ContextKey<Value>>;
 
   /**
    * Constructs single context value key.
@@ -116,8 +116,9 @@ export class SingleContextKey<Value>
         byDefault = noop,
       }: {
         seedKey?: ContextSeedKey<Value, AIterable<Value>>,
-        byDefault?: ContextValueProvider<ContextValues, Value>,
-      } = {}) {
+        byDefault?: ContextKeyDefault<Value, ContextKey<Value>>,
+      } = {},
+  ) {
     super(name, seedKey);
     this.byDefault = byDefault;
   }
@@ -132,7 +133,7 @@ export class SingleContextKey<Value>
       return value;
     }
 
-    return opts.byDefault(() => this.byDefault(opts.context));
+    return opts.byDefault(() => this.byDefault(opts.context, this));
   }
 
 }
@@ -163,7 +164,7 @@ export class MultiContextKey<Src>
   /**
    * A provider of context value used when there is no value associated with this key.
    */
-  readonly byDefault: ContextValueProvider<ContextValues, readonly Src[]>;
+  readonly byDefault: ContextKeyDefault<readonly Src[], ContextKey<readonly Src[], Src>>;
 
   /**
    * Constructs multiple context values key.
@@ -179,8 +180,9 @@ export class MultiContextKey<Src>
         byDefault = valuesProvider(),
       }: {
         seedKey?: ContextSeedKey<Src, AIterable<Src>>,
-        byDefault?: ContextValueProvider<ContextValues, readonly Src[]>,
-      } = {}) {
+        byDefault?: ContextKeyDefault<readonly Src[], ContextKey<readonly Src[], Src>>,
+      } = {},
+  ) {
     super(name, seedKey);
     this.byDefault = byDefault;
   }
@@ -197,7 +199,7 @@ export class MultiContextKey<Src>
 
     return opts.byDefault(() => {
 
-      const defaultSources = this.byDefault(opts.context);
+      const defaultSources = this.byDefault(opts.context, this);
 
       if (defaultSources) {
         return [...defaultSources];

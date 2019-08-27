@@ -112,6 +112,24 @@ export interface ContextValueOpts<Ctx extends ContextValues, Value, Src, Seed> {
 }
 
 /**
+ * A provider of default value of context key.
+ *
+ * This is typically passed as `byDefault` option to context value key constructor.
+ *
+ * @typeparam Ctx  Context type.
+ * @typeparam Value  Context value type.
+ * @typeparam Key  Context key type.
+ */
+export type ContextKeyDefault<Value, Key extends ContextKey<any, any, any>> =
+/**
+ * @param context  Target context.
+ * @param key  Context value key the default value is provided for.
+ *
+ * @return Either constructed value, or `null`/`undefined` if unknown.
+ */
+    (this: void, context: ContextValues, key: Key) => Value | null | undefined;
+
+/**
  * A key of context value holding a seed of context value.
  *
  * @typeparam Src  Source value type.

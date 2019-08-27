@@ -14,12 +14,12 @@ import {
   trackValue,
   ValueTracker,
 } from 'fun-events';
-import { ContextKey, ContextSeedKey, ContextValueOpts } from './context-key';
+import { ContextKey, ContextSeedKey, ContextKeyDefault, ContextValueOpts } from './context-key';
+import { ContextKeyError } from './context-key-error';
 import { ContextRef } from './context-ref';
 import { ContextSeeder } from './context-seeder';
 import { ContextValueProvider } from './context-value-spec';
 import { ContextValues } from './context-values';
-import { ContextKeyError } from './context-key-error';
 
 class ContextUpSeeder<Ctx extends ContextValues, Src>
     implements ContextSeeder<Ctx, Src | EventKeeper<Src[]>, AfterEvent<Src[]>> {
@@ -162,7 +162,7 @@ export class SingleContextUpKey<Value>
   /**
    * A provider of context value used when there is no value associated with this key.
    */
-  readonly byDefault: ContextValueProvider<ContextValues, Value>;
+  readonly byDefault: ContextKeyDefault<Value, ContextUpKey<AfterEvent<[Value]>, Value>>;
 
   /**
    * Constructs single updatable context value key.
@@ -179,8 +179,9 @@ export class SingleContextUpKey<Value>
         byDefault = noop,
       }: {
         seedKey?: ContextSeedKey<Value | EventKeeper<Value[]>, AfterEvent<Value[]>>,
-        byDefault?: ContextValueProvider<ContextValues, Value>,
-      } = {}) {
+        byDefault?: ContextKeyDefault<Value, ContextUpKey<AfterEvent<[Value]>, Value>>,
+      } = {},
+  ) {
     super(name, seedKey);
     this.byDefault = byDefault;
   }
@@ -197,7 +198,7 @@ export class SingleContextUpKey<Value>
       // Sources absent. Attempt to detect the backup value.
       const backup = opts.byDefault(() => {
 
-        const defaultValue = this.byDefault(opts.context);
+        const defaultValue = this.byDefault(opts.context, this);
 
         return defaultValue && afterEventOf(defaultValue);
       });
@@ -241,7 +242,7 @@ export class MultiContextUpKey<Src>
   /**
    * A provider of context value used when there is no value associated with this key.
    */
-  readonly byDefault: ContextValueProvider<ContextValues, readonly Src[]>;
+  readonly byDefault: ContextKeyDefault<readonly Src[], ContextUpKey<AfterEvent<Src[]>, Src>>;
 
   /**
    * Constructs multiple updatable context value key.
@@ -258,8 +259,9 @@ export class MultiContextUpKey<Src>
         byDefault = noop,
       }: {
         seedKey?: ContextSeedKey<Src | EventKeeper<Src[]>, AfterEvent<Src[]>>,
-        byDefault?: ContextValueProvider<ContextValues, readonly Src[]>,
-      } = {}) {
+        byDefault?: ContextKeyDefault<readonly Src[], ContextUpKey<AfterEvent<Src[]>, Src>>,
+      } = {},
+  ) {
     super(name, seedKey);
     this.byDefault = byDefault;
   }
@@ -276,7 +278,7 @@ export class MultiContextUpKey<Src>
       // Sources absent. Attempt to detect the backup value.
       const backup = opts.byDefault(() => {
 
-        const defaultValue = this.byDefault(opts.context);
+        const defaultValue = this.byDefault(opts.context, this);
 
         return defaultValue ? afterEventOf(...defaultValue) : afterEventOf();
       });

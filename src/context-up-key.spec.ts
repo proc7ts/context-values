@@ -84,14 +84,16 @@ describe('ContextUpKey', () => {
     it('provides fallback value if there is no provider', () => {
       expect(readValue(values.get(key, { or: afterEventOf('fallback') }))).toBe('fallback');
     });
-    it('provides default value if provider did not provide any value', () => {
+    it('provides default value if not provided', () => {
 
       const defaultValue = 'default';
-      const keyWithDefaults = new SingleContextUpKey<string>(key.name, { byDefault: () => defaultValue });
+      const byDefault = jest.fn(() => defaultValue);
+      const keyWithDefaults = new SingleContextUpKey<string>(key.name, { byDefault });
 
       registry.provide({ a: keyWithDefaults, is: null });
 
       expect(readValue(values.get(keyWithDefaults))).toBe(defaultValue);
+      expect(byDefault).toHaveBeenCalledWith(values, keyWithDefaults);
     });
 
     function readValue<Value>(from: AfterEvent<[Value]>): Value {
@@ -125,12 +127,14 @@ describe('ContextUpKey', () => {
     it('is associated with default value if providers did not return any values', () => {
 
       const defaultValue = ['default'];
-      const keyWithDefaults = new MultiContextUpKey('key', { byDefault: () => defaultValue });
+      const byDefault = jest.fn(() => defaultValue);
+      const keyWithDefaults = new MultiContextUpKey('key', { byDefault });
 
       registry.provide({ a: keyWithDefaults, is: null });
       registry.provide({ a: keyWithDefaults, is: undefined });
 
       expect(readValue(values.get(keyWithDefaults))).toEqual(defaultValue);
+      expect(byDefault).toHaveBeenCalledWith(values, keyWithDefaults);
     });
     it('is associated with provided values array', () => {
       registry.provide({ a: key, is: 'a' });

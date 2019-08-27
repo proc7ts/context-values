@@ -71,14 +71,16 @@ describe('SimpleContextKey', () => {
     it('provides fallback value if there is no provider', () => {
       expect(values.get(new SingleContextKey<string>(key.name), { or: 'fallback' })).toBe('fallback');
     });
-    it('provides default value if provider did not provide any value', () => {
+    it('provides default value if no value provided', () => {
 
       const defaultValue = 'default';
-      const keyWithDefaults = new SingleContextKey(key.name, { byDefault: () => defaultValue });
+      const byDefault = jest.fn(() => defaultValue);
+      const keyWithDefaults = new SingleContextKey(key.name, { byDefault });
 
       registry.provide({ a: keyWithDefaults, is: null });
 
       expect(values.get(keyWithDefaults)).toBe(defaultValue);
+      expect(byDefault).toHaveBeenCalledWith(values, keyWithDefaults);
     });
     it('provides default value if there is no provider', () => {
       expect(values.get(new SingleContextKey<string>(key.name, { byDefault: () => 'default' }))).toBe('default');
@@ -175,12 +177,14 @@ describe('SimpleContextKey', () => {
     it('is associated with default value if providers did not return any values', () => {
 
       const defaultValue = ['default'];
-      const keyWithDefaults = new MultiContextKey('key', { byDefault: () => defaultValue });
+      const byDefault = jest.fn(() => defaultValue);
+      const keyWithDefaults = new MultiContextKey('key', { byDefault });
 
       registry.provide({ a: keyWithDefaults, is: null });
       registry.provide({ a: keyWithDefaults, is: undefined });
 
       expect(values.get(keyWithDefaults)).toEqual(defaultValue);
+      expect(byDefault).toHaveBeenCalledWith(values, keyWithDefaults);
     });
     it('is associated with provided values array', () => {
       registry.provide({ a: key, is: 'a' });
