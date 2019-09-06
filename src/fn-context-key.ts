@@ -34,27 +34,28 @@ export class FnContextKey<Args extends any[], Ret = void>
     implements FnContextRef<Args, Ret, AfterEvent<((this: void, ...args: Args) => Ret)[]>> {
 
   /**
-   * A function that will be called unless the function or fallback provided.
+   * Constructs a function that will be called unless fallback provided.
    */
-  readonly byDefault: (this: void, ...args: Args) => Ret;
+  readonly byDefault: (this: void, context: ContextValues) => (this: void, ...args: Args) => Ret;
 
   /**
    * Constructs updatable context function key.
    *
    * @param name  Human-readable key name.
    * @param seedKey  Value seed key. A new one will be constructed when omitted.
-   * @param byDefault  The default function to call. If unspecified then the default function would raise an error.
+   * @param byDefault  Constructs a default function to call. If unspecified then the default function would raise
+   * an error.
    */
   constructor(
       name: string,
       {
         seedKey,
-        byDefault = () => { throw new ContextKeyError(this); },
+        byDefault = () => () => { throw new ContextKeyError(this); },
       }: {
         seedKey?: ContextSeedKey<
             ((this: void, ...args: Args) => Ret) | EventKeeper<((this: void, ...args: Args) => Ret)[]>,
             AfterEvent<((this: void, ...args: Args) => Ret)[]>>,
-        byDefault?: (this: void, ...args: Args) => Ret,
+        byDefault?: (this: void, context: ContextValues) => (this: void, ...args: Args) => Ret,
       } = {},
   ) {
     super(name, seedKey);
@@ -76,9 +77,9 @@ export class FnContextKey<Args extends any[], Ret = void>
         delegated = fns[fns.length - 1];
       } else {
 
-        const fallback = opts.byDefault(() => this.byDefault);
+        const fallback = opts.byDefault(() => this.byDefault(opts.context));
 
-        delegated = fallback || this.byDefault;
+        delegated = fallback || this.byDefault(opts.context);
       }
     });
 
