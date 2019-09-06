@@ -44,13 +44,17 @@
     "typescript": "^3.6.2"
   },
   "scripts": {
+    "all": "run-p rebuild lint test",
     "build": "rollup --config ./rollup.config.js",
+    "ci:all": "run-p build lint ci:test",
+    "ci:test": "jest --ci --runInBand",
     "clean": "node ./build/clean",
     "doc": "typedoc",
     "doc:gh-pages": "gh-pages --dist target/typedoc --dotfiles",
     "doc:ci": "node ./build/doc-ci",
     "doc:publish": "run-s doc doc:ci \"doc:gh-pages {@}\" --",
     "lint": "tslint --project .",
+    "rebuild": "run-s clean build",
     "test": "jest"
   }
 }
