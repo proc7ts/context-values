@@ -1,5 +1,6 @@
+import { noop } from 'call-thru';
 import { AfterEvent, EventKeeper } from 'fun-events';
-import { ContextSeedKey, ContextValueOpts } from './context-key';
+import { ContextKeyDefault, ContextSeedKey, ContextValueOpts } from './context-key';
 import { ContextKeyError } from './context-key-error';
 import { ContextUpKey, ContextUpRef } from './context-up-key';
 import { ContextValues } from './context-values';
@@ -36,7 +37,8 @@ export class FnContextKey<Args extends any[], Ret = void>
   /**
    * Constructs a function that will be called unless fallback provided.
    */
-  readonly byDefault: (this: void, context: ContextValues) => (this: void, ...args: Args) => Ret;
+  readonly byDefault: (this: void, context: ContextValues, key: FnContextKey<Args, Ret>) =>
+      (this: void, ...args: Args) => Ret;
 
   /**
    * Constructs updatable context function key.
@@ -50,16 +52,16 @@ export class FnContextKey<Args extends any[], Ret = void>
       name: string,
       {
         seedKey,
-        byDefault = () => () => { throw new ContextKeyError(this); },
+        byDefault = noop,
       }: {
         seedKey?: ContextSeedKey<
             ((this: void, ...args: Args) => Ret) | EventKeeper<((this: void, ...args: Args) => Ret)[]>,
             AfterEvent<((this: void, ...args: Args) => Ret)[]>>,
-        byDefault?: (this: void, context: ContextValues) => (this: void, ...args: Args) => Ret,
+        byDefault?: ContextKeyDefault<(this: void, ...args: Args) => Ret, FnContextKey<Args, Ret>>,
       } = {},
   ) {
     super(name, seedKey);
-    this.byDefault = byDefault;
+    this.byDefault = (context, key) => byDefault(context, key) || (() => { throw new ContextKeyError(this); });
   }
 
   grow<Ctx extends ContextValues>(
@@ -77,9 +79,10 @@ export class FnContextKey<Args extends any[], Ret = void>
         delegated = fns[fns.length - 1];
       } else {
 
-        const fallback = opts.byDefault(() => this.byDefault(opts.context));
+        const defaultProvider = () => this.byDefault(opts.context, this);
+        const fallback = opts.byDefault(defaultProvider);
 
-        delegated = fallback || this.byDefault(opts.context);
+        delegated = fallback || defaultProvider();
       }
     });
 
