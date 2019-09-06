@@ -2378,10 +2378,10 @@ img {
 <nav class="tsd-navigation secondary">
 	<ul>
 		<li class=" tsd-kind-class tsd-has-type-parameter">
-			<a href="abstractcontextkey.html" class="tsd-kind-icon">Abstract<wbr>Context<wbr>Key</a>
-		</li>
-		<li class=" tsd-kind-class tsd-has-type-parameter">
 			<a href="contextkey.html" class="tsd-kind-icon">Context<wbr>Key</a>
+		</li>
+		<li class=" tsd-kind-class">
+			<a href="contextkeyerror.html" class="tsd-kind-icon">Context<wbr>Key<wbr>Error</a>
 		</li>
 		<li class="current tsd-kind-class tsd-has-type-parameter">
 			<a href="contextregistry.html" class="tsd-kind-icon">Context<wbr>Registry</a>
@@ -2396,13 +2396,13 @@ img {
 					<a href="contextregistry.html#_noncachedvalues" class="tsd-kind-icon">_non<wbr>Cached<wbr>Values</a>
 				</li>
 				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a href="contextregistry.html#_providers" class="tsd-kind-icon">_providers</a>
+					<a href="contextregistry.html#_seeds" class="tsd-kind-icon">_seeds</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-private">
+					<a href="contextregistry.html#_seeding" class="tsd-kind-icon">_seeding</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
 					<a href="contextregistry.html#append" class="tsd-kind-icon">append</a>
-				</li>
-				<li class=" tsd-kind-method tsd-parent-kind-class">
-					<a href="contextregistry.html#bindsources" class="tsd-kind-icon">bind<wbr>Sources</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
 					<a href="contextregistry.html#newvalues" class="tsd-kind-icon">new<wbr>Values</a>
@@ -2411,36 +2411,81 @@ img {
 					<a href="contextregistry.html#provide" class="tsd-kind-icon">provide</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-					<a href="contextregistry.html#sources" class="tsd-kind-icon">sources</a>
+					<a href="contextregistry.html#seed" class="tsd-kind-icon">seed</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class">
+					<a href="contextregistry.html#seedin" class="tsd-kind-icon">seed<wbr>In</a>
 				</li>
 			</ul>
 		</li>
 		<li class=" tsd-kind-class tsd-has-type-parameter">
-			<a href="contextsourceskey.html" class="tsd-kind-icon">Context<wbr>Sources<wbr>Key</a>
+			<a href="contextseedkey.html" class="tsd-kind-icon">Context<wbr>Seed<wbr>Key</a>
+		</li>
+		<li class=" tsd-kind-class tsd-has-type-parameter">
+			<a href="contextupkey.html" class="tsd-kind-icon">Context<wbr>UpKey</a>
 		</li>
 		<li class=" tsd-kind-class">
 			<a href="contextvalues.html" class="tsd-kind-icon">Context<wbr>Values</a>
 		</li>
 		<li class=" tsd-kind-class tsd-has-type-parameter">
+			<a href="fncontextkey.html" class="tsd-kind-icon">Fn<wbr>Context<wbr>Key</a>
+		</li>
+		<li class=" tsd-kind-class tsd-has-type-parameter">
 			<a href="multicontextkey.html" class="tsd-kind-icon">Multi<wbr>Context<wbr>Key</a>
+		</li>
+		<li class=" tsd-kind-class tsd-has-type-parameter">
+			<a href="multicontextupkey.html" class="tsd-kind-icon">Multi<wbr>Context<wbr>UpKey</a>
+		</li>
+		<li class=" tsd-kind-class tsd-has-type-parameter">
+			<a href="simplecontextkey.html" class="tsd-kind-icon">Simple<wbr>Context<wbr>Key</a>
 		</li>
 		<li class=" tsd-kind-class tsd-has-type-parameter">
 			<a href="singlecontextkey.html" class="tsd-kind-icon">Single<wbr>Context<wbr>Key</a>
 		</li>
+		<li class=" tsd-kind-class tsd-has-type-parameter">
+			<a href="singlecontextupkey.html" class="tsd-kind-icon">Single<wbr>Context<wbr>UpKey</a>
+		</li>
+		<li class=" tsd-kind-interface tsd-has-type-parameter">
+			<a href="../interfaces/contextref.html" class="tsd-kind-icon">Context<wbr>Ref</a>
+		</li>
+		<li class=" tsd-kind-interface tsd-has-type-parameter">
+			<a href="../interfaces/contextseeder.html" class="tsd-kind-icon">Context<wbr>Seeder</a>
+		</li>
 		<li class=" tsd-kind-interface tsd-has-type-parameter">
 			<a href="../interfaces/contexttarget.html" class="tsd-kind-icon">Context<wbr>Target</a>
 		</li>
-		<li class=" tsd-kind-type-alias tsd-has-type-parameter">
-			<a href="../globals.html#contextsources" class="tsd-kind-icon">Context<wbr>Sources</a>
+		<li class=" tsd-kind-interface tsd-has-type-parameter">
+			<a href="../interfaces/contextvalueopts.html" class="tsd-kind-icon">Context<wbr>Value<wbr>Opts</a>
 		</li>
 		<li class=" tsd-kind-type-alias tsd-has-type-parameter">
-			<a href="../globals.html#contextsourcesprovider" class="tsd-kind-icon">Context<wbr>Sources<wbr>Provider</a>
+			<a href="../globals.html#contextkeydefault" class="tsd-kind-icon">Context<wbr>Key<wbr>Default</a>
+		</li>
+		<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+			<a href="../globals.html#contextseeds" class="tsd-kind-icon">Context<wbr>Seeds</a>
+		</li>
+		<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+			<a href="../globals.html#contextupref" class="tsd-kind-icon">Context<wbr>UpRef</a>
 		</li>
 		<li class=" tsd-kind-type-alias tsd-has-type-parameter">
 			<a href="../globals.html#contextvalueprovider" class="tsd-kind-icon">Context<wbr>Value<wbr>Provider</a>
 		</li>
 		<li class=" tsd-kind-type-alias tsd-has-type-parameter">
-			<a href="../globals.html#defaultcontextvaluehandler" class="tsd-kind-icon">Default<wbr>Context<wbr>Value<wbr>Handler</a>
+			<a href="../globals.html#fncontextref" class="tsd-kind-icon">Fn<wbr>Context<wbr>Ref</a>
+		</li>
+		<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+			<a href="../globals.html#multicontextref" class="tsd-kind-icon">Multi<wbr>Context<wbr>Ref</a>
+		</li>
+		<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+			<a href="../globals.html#multicontextupref" class="tsd-kind-icon">Multi<wbr>Context<wbr>UpRef</a>
+		</li>
+		<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+			<a href="../globals.html#singlecontextref" class="tsd-kind-icon">Single<wbr>Context<wbr>Ref</a>
+		</li>
+		<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+			<a href="../globals.html#singlecontextupref" class="tsd-kind-icon">Single<wbr>Context<wbr>UpRef</a>
+		</li>
+		<li class=" tsd-kind-variable">
+			<a href="../globals.html#contextkey__symbol" class="tsd-kind-icon">Context<wbr>Key__symbol</a>
 		</li>
 		<li class=" tsd-kind-function tsd-has-type-parameter">
 			<a href="../globals.html#contextvaluespec" class="tsd-kind-icon">context<wbr>Value<wbr>Spec</a>
@@ -2460,7 +2505,7 @@ img {
 			<h3>Type parameters</h3>
 			<ul class="tsd-type-parameters">
 				<li>
-					<h4>C<span class="tsd-signature-symbol">: </span><a href="contextvalues.html" class="tsd-signature-type">ContextValues</a></h4>
+					<h4>Ctx<span class="tsd-signature-symbol">: </span><a href="contextvalues.html" class="tsd-signature-type">ContextValues</a></h4>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>Context type.</p>
@@ -2492,17 +2537,18 @@ img {
 						<ul class="tsd-index-list">
 							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="contextregistry.html#_initial" class="tsd-kind-icon">_initial</a></li>
 							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="contextregistry.html#_noncachedvalues" class="tsd-kind-icon">_non<wbr>Cached<wbr>Values</a></li>
-							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="contextregistry.html#_providers" class="tsd-kind-icon">_providers</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="contextregistry.html#_seeds" class="tsd-kind-icon">_seeds</a></li>
 						</ul>
 					</section>
 					<section class="tsd-index-section ">
 						<h3>Methods</h3>
 						<ul class="tsd-index-list">
+							<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-private"><a href="contextregistry.html#_seeding" class="tsd-kind-icon">_seeding</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="contextregistry.html#append" class="tsd-kind-icon">append</a></li>
-							<li class="tsd-kind-method tsd-parent-kind-class"><a href="contextregistry.html#bindsources" class="tsd-kind-icon">bind<wbr>Sources</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="contextregistry.html#newvalues" class="tsd-kind-icon">new<wbr>Values</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="contextregistry.html#provide" class="tsd-kind-icon">provide</a></li>
-							<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="contextregistry.html#sources" class="tsd-kind-icon">sources</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="contextregistry.html#seed" class="tsd-kind-icon">seed</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="contextregistry.html#seedin" class="tsd-kind-icon">seed<wbr>In</a></li>
 						</ul>
 					</section>
 				</div>
@@ -2514,13 +2560,13 @@ img {
 				<a name="constructor" class="tsd-anchor"></a>
 				<h3>constructor</h3>
 				<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">new <wbr>Context<wbr>Registry<span class="tsd-signature-symbol">(</span>initial<span class="tsd-signature-symbol">?: </span><a href="../globals.html#contextsourcesprovider" class="tsd-signature-type">ContextSourcesProvider</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="contextvalues.html" class="tsd-signature-type">ContextValues</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="contextregistry.html" class="tsd-signature-type">ContextRegistry</a></li>
+					<li class="tsd-signature tsd-kind-icon">new <wbr>Context<wbr>Registry<span class="tsd-signature-symbol">(</span>initial<span class="tsd-signature-symbol">?: </span><a href="../globals.html#contextseeds" class="tsd-signature-type">ContextSeeds</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Ctx</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="contextvalues.html" class="tsd-signature-type">ContextValues</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="contextregistry.html" class="tsd-signature-type">ContextRegistry</a></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/surol/context-values/blob/81c0760/src/context-registry.ts#L35">context-registry.ts:35</a></li>
+								<li>Defined in <a href="https://github.com/surol/context-values/blob/56d32b0/src/context-registry.ts#L30">context-registry.ts:30</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2532,7 +2578,7 @@ img {
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5><span class="tsd-flag ts-flagOptional">Optional</span> initial: <a href="../globals.html#contextsourcesprovider" class="tsd-signature-type">ContextSourcesProvider</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="contextvalues.html" class="tsd-signature-type">ContextValues</a></h5>
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> initial: <a href="../globals.html#contextseeds" class="tsd-signature-type">ContextSeeds</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Ctx</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="contextvalues.html" class="tsd-signature-type">ContextValues</a></h5>
 								<div class="tsd-comment tsd-typography">
 									<div class="lead">
 										<p>An optional source of initially known context values. This can be either a function, or
@@ -2551,10 +2597,10 @@ img {
 			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 				<a name="_initial" class="tsd-anchor"></a>
 				<h3><span class="tsd-flag ts-flagPrivate">Private</span> _initial</h3>
-				<div class="tsd-signature tsd-kind-icon">_initial<span class="tsd-signature-symbol">:</span> <a href="../globals.html#contextsourcesprovider" class="tsd-signature-type">ContextSourcesProvider</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span></div>
+				<div class="tsd-signature tsd-kind-icon">_initial<span class="tsd-signature-symbol">:</span> <a href="../globals.html#contextseeds" class="tsd-signature-type">ContextSeeds</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Ctx</span><span class="tsd-signature-symbol">&gt;</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/surol/context-values/blob/81c0760/src/context-registry.ts#L29">context-registry.ts:29</a></li>
+						<li>Defined in <a href="https://github.com/surol/context-values/blob/56d32b0/src/context-registry.ts#L24">context-registry.ts:24</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -2570,7 +2616,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">_non<wbr>Cached<wbr>Values<span class="tsd-signature-symbol">:</span> <a href="contextvalues.html" class="tsd-signature-type">ContextValues</a></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/surol/context-values/blob/81c0760/src/context-registry.ts#L35">context-registry.ts:35</a></li>
+						<li>Defined in <a href="https://github.com/surol/context-values/blob/56d32b0/src/context-registry.ts#L30">context-registry.ts:30</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -2581,12 +2627,12 @@ img {
 				</div>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-				<a name="_providers" class="tsd-anchor"></a>
-				<h3><span class="tsd-flag ts-flagPrivate">Private</span> _providers</h3>
-				<div class="tsd-signature tsd-kind-icon">_providers<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><a href="contextsourceskey.html" class="tsd-signature-type">ContextSourcesKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;new Map&lt;ContextSourcesKey&lt;any&gt;, ContextValueProvider&lt;C, any&gt;[]&gt;()</span></div>
+				<a name="_seeds" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagPrivate">Private</span> _seeds</h3>
+				<div class="tsd-signature tsd-kind-icon">_seeds<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><a href="contextseedkey.html" class="tsd-signature-type">ContextSeedKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">[</span><a href="../interfaces/contextseeder.html" class="tsd-signature-type">ContextSeeder</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Ctx</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;new Map&lt;ContextSeedKey&lt;any, any&gt;, Seeding&lt;Ctx, any, any&gt;&gt;()</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/surol/context-values/blob/81c0760/src/context-registry.ts#L32">context-registry.ts:32</a></li>
+						<li>Defined in <a href="https://github.com/surol/context-values/blob/56d32b0/src/context-registry.ts#L27">context-registry.ts:27</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -2599,17 +2645,55 @@ img {
 		</section>
 		<section class="tsd-panel-group tsd-member-group ">
 			<h2>Methods</h2>
-			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-				<a name="append" class="tsd-anchor"></a>
-				<h3>append</h3>
-				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">append<span class="tsd-signature-symbol">(</span>other<span class="tsd-signature-symbol">: </span><a href="contextregistry.html" class="tsd-signature-type">ContextRegistry</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="contextregistry.html" class="tsd-signature-type">ContextRegistry</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span></li>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-private">
+				<a name="_seeding" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagPrivate">Private</span> _seeding</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-private">
+					<li class="tsd-signature tsd-kind-icon">_seeding&lt;Src, Seed&gt;<span class="tsd-signature-symbol">(</span>seedKey<span class="tsd-signature-symbol">: </span><a href="contextseedkey.html" class="tsd-signature-type">ContextSeedKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Seed</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Seeding</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Ctx</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Seed</span><span class="tsd-signature-symbol">&gt;</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/surol/context-values/blob/81c0760/src/context-registry.ts#L208">context-registry.ts:208</a></li>
+								<li>Defined in <a href="https://github.com/surol/context-values/blob/56d32b0/src/context-registry.ts#L71">context-registry.ts:71</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<dl class="tsd-comment-tags">
+								<dt>internal</dt>
+								<dd></dd>
+							</dl>
+						</div>
+						<h4 class="tsd-type-parameters-title">Type parameters</h4>
+						<ul class="tsd-type-parameters">
+							<li>
+								<h4>Src</h4>
+							</li>
+							<li>
+								<h4>Seed</h4>
+							</li>
+						</ul>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>seedKey: <a href="contextseedkey.html" class="tsd-signature-type">ContextSeedKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Seed</span><span class="tsd-signature-symbol">&gt;</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Seeding</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Ctx</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Seed</span><span class="tsd-signature-symbol">&gt;</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="append" class="tsd-anchor"></a>
+				<h3>append</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">append<span class="tsd-signature-symbol">(</span>other<span class="tsd-signature-symbol">: </span><a href="contextregistry.html" class="tsd-signature-type">ContextRegistry</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Ctx</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="contextregistry.html" class="tsd-signature-type">ContextRegistry</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Ctx</span><span class="tsd-signature-symbol">&gt;</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/surol/context-values/blob/56d32b0/src/context-registry.ts#L226">context-registry.ts:226</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2620,79 +2704,14 @@ img {
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>other: <a href="contextregistry.html" class="tsd-signature-type">ContextRegistry</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								<h5>other: <a href="contextregistry.html" class="tsd-signature-type">ContextRegistry</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Ctx</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								<div class="tsd-comment tsd-typography">
 									<p>Another context value registry.</p>
 								</div>
 							</li>
 						</ul>
-						<h4 class="tsd-returns-title">Returns <a href="contextregistry.html" class="tsd-signature-type">ContextRegistry</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						<h4 class="tsd-returns-title">Returns <a href="contextregistry.html" class="tsd-signature-type">ContextRegistry</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Ctx</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						<p>New context value registry which values provided by both registries.</p>
-					</li>
-				</ul>
-			</section>
-			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-				<a name="bindsources" class="tsd-anchor"></a>
-				<h3>bind<wbr>Sources</h3>
-				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">bind<wbr>Sources<span class="tsd-signature-symbol">(</span>context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">C</span>, cache<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span></li>
-				</ul>
-				<ul class="tsd-descriptions">
-					<li class="tsd-description">
-						<aside class="tsd-sources">
-							<ul>
-								<li>Defined in <a href="https://github.com/surol/context-values/blob/81c0760/src/context-registry.ts#L97">context-registry.ts:97</a></li>
-							</ul>
-						</aside>
-						<div class="tsd-comment tsd-typography">
-							<div class="lead">
-								<p>Binds value sources to the given context.</p>
-							</div>
-						</div>
-						<h4 class="tsd-parameters-title">Parameters</h4>
-						<ul class="tsd-parameters">
-							<li>
-								<h5>context: <span class="tsd-signature-type">C</span></h5>
-								<div class="tsd-comment tsd-typography">
-									<p>Target value context.</p>
-								</div>
-							</li>
-							<li>
-								<h5><span class="tsd-flag ts-flagOptional">Optional</span> cache: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></h5>
-								<div class="tsd-comment tsd-typography">
-									<p>Whether to cache context values. When <code>false</code> the value providers may be called multiple times.</p>
-								</div>
-							</li>
-						</ul>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">function</span></h4>
-						<p>A provider of context value sources bound to the given context.</p>
-						<ul class="tsd-parameters">
-							<li class="tsd-parameter-siganture">
-								<ul class="tsd-signatures tsd-kind-type-literal tsd-has-type-parameter tsd-is-not-exported">
-									<li class="tsd-signature tsd-kind-icon">&lt;V, S&gt;<span class="tsd-signature-symbol">(</span>request<span class="tsd-signature-symbol">: </span><a href="../interfaces/contexttarget.html" class="tsd-signature-type">ContextTarget</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../globals.html#contextsources" class="tsd-signature-type">ContextSources</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span></li>
-								</ul>
-								<ul class="tsd-descriptions">
-									<li class="tsd-description">
-										<h4 class="tsd-type-parameters-title">Type parameters</h4>
-										<ul class="tsd-type-parameters">
-											<li>
-												<h4>V</h4>
-											</li>
-											<li>
-												<h4>S</h4>
-											</li>
-										</ul>
-										<h4 class="tsd-parameters-title">Parameters</h4>
-										<ul class="tsd-parameters">
-											<li>
-												<h5>request: <a href="../interfaces/contexttarget.html" class="tsd-signature-type">ContextTarget</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span></h5>
-											</li>
-										</ul>
-										<h4 class="tsd-returns-title">Returns <a href="../globals.html#contextsources" class="tsd-signature-type">ContextSources</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span></h4>
-									</li>
-								</ul>
-							</li>
-						</ul>
 					</li>
 				</ul>
 			</section>
@@ -2700,13 +2719,13 @@ img {
 				<a name="newvalues" class="tsd-anchor"></a>
 				<h3>new<wbr>Values</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">new<wbr>Values<span class="tsd-signature-symbol">(</span>cache<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="contextvalues.html" class="tsd-signature-type">ContextValues</a><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">ThisType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span></li>
+					<li class="tsd-signature tsd-kind-icon">new<wbr>Values<span class="tsd-signature-symbol">(</span>cache<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="contextvalues.html" class="tsd-signature-type">ContextValues</a><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">ThisType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Ctx</span><span class="tsd-signature-symbol">&gt;</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/surol/context-values/blob/81c0760/src/context-registry.ts#L111">context-registry.ts:111</a></li>
+								<li>Defined in <a href="https://github.com/surol/context-values/blob/56d32b0/src/context-registry.ts#L126">context-registry.ts:126</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2725,7 +2744,7 @@ img {
 						</ul>
 						<h4 class="tsd-returns-title">Returns <a href="contextvalues.html" class="tsd-signature-type">ContextValues</a>
 							<span class="tsd-signature-symbol"> &amp; </span>
-							<span class="tsd-signature-type">ThisType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span>
+							<span class="tsd-signature-type">ThisType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Ctx</span><span class="tsd-signature-symbol">&gt;</span>
 						</h4>
 						<p>New context values instance which methods expect <code>this</code> instance to be a context the values provided for.</p>
 					</li>
@@ -2735,89 +2754,182 @@ img {
 				<a name="provide" class="tsd-anchor"></a>
 				<h3>provide</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-					<li class="tsd-signature tsd-kind-icon">provide&lt;D, S&gt;<span class="tsd-signature-symbol">(</span>spec<span class="tsd-signature-symbol">: </span><a href="../modules/contextvaluespec.html" class="tsd-signature-type">ContextValueSpec</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					<li class="tsd-signature tsd-kind-icon">provide&lt;Deps, Src, Seed&gt;<span class="tsd-signature-symbol">(</span>spec<span class="tsd-signature-symbol">: </span><a href="../modules/contextvaluespec.html" class="tsd-signature-type">ContextValueSpec</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Ctx</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Deps</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Seed</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/surol/context-values/blob/81c0760/src/context-registry.ts#L62">context-registry.ts:62</a></li>
+								<li>Defined in <a href="https://github.com/surol/context-values/blob/56d32b0/src/context-registry.ts#L60">context-registry.ts:60</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
-								<p>Defines a context value.</p>
+								<p>Provides context value.</p>
 							</div>
 						</div>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
 						<ul class="tsd-type-parameters">
 							<li>
-								<h4>D<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h4>
+								<h4>Deps<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h4>
 								<div class="tsd-comment tsd-typography">
 									<p>Dependencies tuple type.</p>
 								</div>
 							</li>
 							<li>
-								<h4>S</h4>
+								<h4>Src</h4>
 								<div class="tsd-comment tsd-typography">
 									<p>Source value type.</p>
+								</div>
+							</li>
+							<li>
+								<h4>Seed</h4>
+								<div class="tsd-comment tsd-typography">
+									<p>Value seed type.</p>
 								</div>
 							</li>
 						</ul>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>spec: <a href="../modules/contextvaluespec.html" class="tsd-signature-type">ContextValueSpec</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								<h5>spec: <a href="../modules/contextvaluespec.html" class="tsd-signature-type">ContextValueSpec</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Ctx</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Deps</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Seed</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								<div class="tsd-comment tsd-typography">
 									<p>Context value specifier.</p>
 								</div>
 							</li>
 						</ul>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">function</span></h4>
+						<p>A function that removes the given context value specifier when called.</p>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-siganture">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+									</li>
+								</ul>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-				<a name="sources" class="tsd-anchor"></a>
-				<h3>sources</h3>
+				<a name="seed" class="tsd-anchor"></a>
+				<h3>seed</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-					<li class="tsd-signature tsd-kind-icon">sources&lt;S&gt;<span class="tsd-signature-symbol">(</span>context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">C</span>, request<span class="tsd-signature-symbol">: </span><a href="../interfaces/contexttarget.html" class="tsd-signature-type">ContextTarget</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../globals.html#contextsources" class="tsd-signature-type">ContextSources</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span></li>
+					<li class="tsd-signature tsd-kind-icon">seed&lt;Src, Seed&gt;<span class="tsd-signature-symbol">(</span>context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Ctx</span>, key<span class="tsd-signature-symbol">: </span><a href="contextseedkey.html" class="tsd-signature-type">ContextSeedKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Seed</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Seed</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/surol/context-values/blob/81c0760/src/context-registry.ts#L85">context-registry.ts:85</a></li>
+								<li>Defined in <a href="https://github.com/surol/context-values/blob/56d32b0/src/context-registry.ts#L96">context-registry.ts:96</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
-								<p>Returns the value sources provided for the given key.</p>
+								<p>Creates a seed for the given key in target context.</p>
 							</div>
 						</div>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
 						<ul class="tsd-type-parameters">
 							<li>
-								<h4>S</h4>
+								<h4>Src</h4>
+							</li>
+							<li>
+								<h4>Seed</h4>
 							</li>
 						</ul>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>context: <span class="tsd-signature-type">C</span></h5>
+								<h5>context: <span class="tsd-signature-type">Ctx</span></h5>
 								<div class="tsd-comment tsd-typography">
-									<p>A context to provide value for.</p>
+									<p>Target context.</p>
 								</div>
 							</li>
 							<li>
-								<h5>request: <a href="../interfaces/contexttarget.html" class="tsd-signature-type">ContextTarget</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								<h5>key: <a href="contextseedkey.html" class="tsd-signature-type">ContextSeedKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Seed</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								<div class="tsd-comment tsd-typography">
-									<p>Target context value sources request.</p>
+									<p>Context value seed key.</p>
 								</div>
 							</li>
 						</ul>
-						<h4 class="tsd-returns-title">Returns <a href="../globals.html#contextsources" class="tsd-signature-type">ContextSources</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span></h4>
-						<p>A revertible iterable of the value sources associated with the given key.</p>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Seed</span></h4>
+						<p>New context value seed.</p>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="seedin" class="tsd-anchor"></a>
+				<h3>seed<wbr>In</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">seed<wbr>In<span class="tsd-signature-symbol">(</span>context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Ctx</span>, cache<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/surol/context-values/blob/56d32b0/src/context-registry.ts#L111">context-registry.ts:111</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Builds context seeds provider that binds seeds to target <code>context</code>.</p>
+							</div>
+						</div>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>context: <span class="tsd-signature-type">Ctx</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>Target value context.</p>
+								</div>
+							</li>
+							<li>
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> cache: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>Whether to cache context values. When <code>false</code> the value providers may be called multiple times.</p>
+								</div>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">function</span></h4>
+						<p>A provider of context value seeds bound to the given <code>context</code>.</p>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-siganture">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-has-type-parameter tsd-is-not-exported">
+									<li class="tsd-signature tsd-kind-icon">&lt;Src, Seed&gt;<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, key<span class="tsd-signature-symbol">: </span><a href="contextseedkey.html" class="tsd-signature-type">ContextSeedKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Seed</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Seed</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<h4 class="tsd-type-parameters-title">Type parameters</h4>
+										<ul class="tsd-type-parameters">
+											<li>
+												<h4>Src</h4>
+											</li>
+											<li>
+												<h4>Seed</h4>
+											</li>
+										</ul>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>this: <span class="tsd-signature-type">void</span></h5>
+											</li>
+											<li>
+												<h5>key: <a href="contextseedkey.html" class="tsd-signature-type">ContextSeedKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Seed</span><span class="tsd-signature-symbol">&gt;</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Seed</span>
+											<span class="tsd-signature-symbol"> | </span>
+											<span class="tsd-signature-type">undefined</span>
+										</h4>
+									</li>
+								</ul>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
