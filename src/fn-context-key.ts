@@ -74,7 +74,7 @@ export class FnContextKey<Args extends any[], Ret = void>
 
     let delegated!: (this: void, ...args: Args) => Ret;
 
-    opts.seed.consume((...fns) => {
+    opts.seed((...fns) => {
       if (fns.length) {
         delegated = fns[fns.length - 1];
       } else {
