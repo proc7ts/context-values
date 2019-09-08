@@ -19,9 +19,9 @@
   "module": "dist/context-values.mjs",
   "typings": "index.d.ts",
   "dependencies": {
-    "a-iterable": "^2.4.2",
-    "call-thru": "^2.5.2",
-    "fun-events": "^5.0.4"
+    "a-iterable": "^2.4.3",
+    "call-thru": "^2.5.3",
+    "fun-events": "^5.0.5"
   },
   "devDependencies": {
     "@types/jest": "^24.0.18",
