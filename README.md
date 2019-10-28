@@ -299,8 +299,8 @@ context value constructed, it no longer changes. I.e. event though more sources 
 However, it is possible to update context values. For that a `ContextUpKey` abstract context value key implementation
 may be used, or `SingleContextUpKey` and `MultiContextUpKey` implementations.
 
-They provide the values of [AfterEvent] registrar of value receivers. This registrar is a function accepting a callback
-that will be called with actual value each time it changes. E.g. when new value source is provided in `ContextRegistry`:
+They provide an [AfterEvent] keeper of value. The receivers registered in this keeper would receive the actual value
+each time it changes. E.g. when new value source is provided in `ContextRegistry`:
 
 ```typescript
 import {

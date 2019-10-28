@@ -3,11 +3,11 @@
  */
 import { noop } from 'call-thru';
 import { ContextKey, ContextKey__symbol, ContextSeedKey, ContextValueOpts } from './context-key';
+import { ContextKeyError } from './context-key-error';
 import { ContextRef, ContextRequest } from './context-ref';
 import { ContextSeeder, ContextSeeds } from './context-seeder';
 import { contextValueSpec, ContextValueSpec } from './context-value-spec';
 import { ContextValues } from './context-values';
-import { ContextKeyError } from './context-key-error';
 
 type SeedFactory<Ctx extends ContextValues, Seed> = (this: void, context: Ctx) => Seed;
 

@@ -4,17 +4,17 @@
 import { flatMapIt, mapIt, overArray } from 'a-iterable';
 import { asis, NextArgs, nextArgs, noop } from 'call-thru';
 import {
+  afterEach,
   AfterEvent,
   afterEventBy,
-  afterEventFrom,
-  afterEventFromEach,
-  afterEventOf,
+  afterSupplied,
+  afterThe,
   EventKeeper,
   isEventKeeper,
   trackValue,
   ValueTracker,
 } from 'fun-events';
-import { ContextKey, ContextSeedKey, ContextKeyDefault, ContextValueOpts } from './context-key';
+import { ContextKey, ContextKeyDefault, ContextSeedKey, ContextValueOpts } from './context-key';
 import { ContextKeyError } from './context-key-error';
 import { ContextRef } from './context-ref';
 import { ContextSeeder } from './context-seeder';
@@ -39,7 +39,7 @@ class ContextUpSeeder<Ctx extends ContextValues, Src>
     };
   }
 
-  seed(context: Ctx, initial: AfterEvent<Src[]> = afterEventOf<Src[]>()): AfterEvent<Src[]> {
+  seed(context: Ctx, initial: AfterEvent<Src[]> = afterThe<Src[]>()): AfterEvent<Src[]> {
     return this.combine(initial, upSrcKeepers(context, this._providers));
   }
 
@@ -48,7 +48,7 @@ class ContextUpSeeder<Ctx extends ContextValues, Src>
   }
 
   combine(first: AfterEvent<Src[]>, second: AfterEvent<Src[]>): AfterEvent<Src[]> {
-    return afterEventFromEach(
+    return afterEach(
         first,
         second,
     ).keep.thru(
@@ -63,7 +63,7 @@ function upSrcKeepers<Ctx extends ContextValues, Src>(
     providersTracker: ValueTracker<ContextValueProvider<Ctx, Src | EventKeeper<Src[]>>[]>,
 ): AfterEvent<Src[]> {
   return providersTracker.read.keep.dig(
-      providers => !providers.length ? afterEventOf() : afterEventFromEach(
+      providers => !providers.length ? afterThe() : afterEach(
           ...mapIt(
               mapIt(
                   overArray(providers),
@@ -77,7 +77,7 @@ function upSrcKeepers<Ctx extends ContextValues, Src>(
 }
 
 function toUpSrcKeeper<Src>(src: null | undefined | Src | EventKeeper<Src[]>): AfterEvent<Src[]> {
-  return src == null ? afterEventOf() : isUpSrcKeeper(src) ? afterEventFrom(src) : afterEventOf(src);
+  return src == null ? afterThe() : isUpSrcKeeper(src) ? afterSupplied(src) : afterThe(src);
 }
 
 function isUpSrcKeeper<Src>(src: Src | EventKeeper<Src[]>): src is EventKeeper<Src[]> {
@@ -112,7 +112,7 @@ export type ContextUpRef<Value, Src, Seed = unknown> = ContextRef<Value, Src | E
  *
  * Accepts single value sources and `EventKeeper`s of value source arrays.
  *
- * Collects value sources into `AfterEvent` registrar of source values array receivers.
+ * Collects value sources into `AfterEvent` keeper of source values.
  *
  * @typeparam Value  Context value type.
  * @typeparam Src  Source value type.
@@ -147,11 +147,11 @@ export type SingleContextUpRef<Value, Seed = unknown> = ContextUpRef<AfterEvent<
 /**
  * Single updatable context value key.
  *
- * The associated value is an `AfterEvent` registrar of receivers of the last source value. It is always present,
+ * The associated value is an `AfterEvent` keeper of the last source value. It is always present,
  * but signals an [[ContextKeyError]] error on attempt to receive an absent value.
  *
  * It is an error to provide a `null` or `undefined` {@link ContextRequest.Opts.or fallback value} when requesting
- * an associated value. Use an `afterEventOf()` result as a fallback instead.
+ * an associated value. Use an `afterThe()` result as a fallback instead.
  *
  * @typeparam Value  Context value type.
  */
@@ -192,7 +192,7 @@ export class SingleContextUpKey<Value>
     return opts.seed.keep.dig((...sources) => {
       if (sources.length) {
         // Sources present. Take the last one.
-        return afterEventOf(sources[sources.length - 1]);
+        return afterThe(sources[sources.length - 1]);
       }
 
       // Sources absent. Attempt to detect the backup value.
@@ -200,7 +200,7 @@ export class SingleContextUpKey<Value>
 
         const defaultValue = this.byDefault(opts.context, this);
 
-        return defaultValue && afterEventOf(defaultValue);
+        return defaultValue && afterThe(defaultValue);
       });
 
       if (backup != null) {
@@ -227,11 +227,11 @@ export type MultiContextUpRef<Src, Seed = unknown> = ContextUpRef<AfterEvent<Src
 /**
  * Multiple updatable context values key.
  *
- * The associated value is an `AfterEvent` registrar of receivers of the source values array. It is always present,
- * even though the array can be empty.
+ * The associated value is an `AfterEvent` keeper of the source values. It is always present, even though
+ * the array can be empty.
  *
  * It is an error to provide a `null` or `undefined` {@link ContextRequest.Opts.or fallback value} when requesting
- * an associated value. Use an `afterEventOf()` result as a fallback instead.
+ * an associated value. Use an `afterThe()` result as a fallback instead.
  *
  * @typeparam Src  Source value type.
  */
@@ -272,7 +272,7 @@ export class MultiContextUpKey<Src>
     return opts.seed.keep.dig((...sources) => {
       if (sources.length) {
         // Sources present. Use them.
-        return afterEventOf(...sources);
+        return afterThe(...sources);
       }
 
       // Sources absent. Attempt to detect the backup value.
@@ -280,7 +280,7 @@ export class MultiContextUpKey<Src>
 
         const defaultValue = this.byDefault(opts.context, this);
 
-        return defaultValue ? afterEventOf(...defaultValue) : afterEventOf();
+        return defaultValue ? afterThe(...defaultValue) : afterThe();
       });
 
       if (backup != null) {

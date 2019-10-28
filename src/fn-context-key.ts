@@ -25,7 +25,7 @@ export type FnContextRef<Args extends any[], Ret = void, Seed = unknown> =
  * provided, an attempt to call the delegate would throw an [[ContextKeyError]].
  *
  * It is an error to provide a `null` or `undefined` {@link ContextRequest.Opts.or fallback value} when requesting
- * an associated value. Use an `afterEventOf()` result as a fallback instead.
+ * an associated value. Use an `afterThe()` result as a fallback instead.
  *
  * @typeparam Args  Function arguments tuple type.
  * @typeparam Ret  Function return value type.
