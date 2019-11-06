@@ -1,4 +1,4 @@
-import { AfterEvent, afterEventOf } from 'fun-events';
+import { AfterEvent, afterThe } from 'fun-events';
 import { ContextKeyError } from './context-key-error';
 import { ContextRegistry } from './context-registry';
 import { MultiContextUpKey, SingleContextUpKey } from './context-up-key';
@@ -33,7 +33,7 @@ describe('ContextUpKey', () => {
 
       const value = 'test value';
 
-      registry.provide({ a: key, is: afterEventOf(value) });
+      registry.provide({ a: key, is: afterThe(value) });
       expect(readValue(values.get(key))).toBe(value);
     });
     it('selects the last value if more than one provided', () => {
@@ -82,7 +82,7 @@ describe('ContextUpKey', () => {
       expect(() => readValue(values.get(key, { or: undefined })!)).toThrowError(ContextKeyError);
     });
     it('provides fallback value if there is no provider', () => {
-      expect(readValue(values.get(key, { or: afterEventOf('fallback') }))).toBe('fallback');
+      expect(readValue(values.get(key, { or: afterThe('fallback') }))).toBe('fallback');
     });
     it('provides default value if not provided', () => {
 
@@ -149,7 +149,7 @@ describe('ContextUpKey', () => {
       expect(readValue(values.get(key))).toEqual(['value']);
     });
     it('is associated with fallback value if there is no value provided', () => {
-      expect(readValue(values.get(key, { or: afterEventOf('fallback') }))).toEqual(['fallback']);
+      expect(readValue(values.get(key, { or: afterThe('fallback') }))).toEqual(['fallback']);
     });
     it('prefers fallback value over default one', () => {
       expect(readValue(
@@ -158,7 +158,7 @@ describe('ContextUpKey', () => {
                   key.name,
                   { byDefault: () => ['default', 'value'] }
               ),
-              { or: afterEventOf('fallback', 'value') },
+              { or: afterThe('fallback', 'value') },
           )
       )).toEqual(['fallback', 'value']);
     });
