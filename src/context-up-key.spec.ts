@@ -156,10 +156,10 @@ describe('ContextUpKey', () => {
           values.get(
               new MultiContextUpKey<string>(
                   key.name,
-                  { byDefault: () => ['default', 'value'] }
+                  { byDefault: () => ['default', 'value'] },
               ),
               { or: afterThe('fallback', 'value') },
-          )
+          ),
       )).toEqual(['fallback', 'value']);
     });
     it('throws if fallback value is `null`', () => {

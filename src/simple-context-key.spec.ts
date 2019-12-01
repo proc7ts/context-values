@@ -5,7 +5,7 @@ import { MultiContextKey, SingleContextKey } from './simple-context-key';
 
 describe('SimpleContextKey', () => {
 
-  let registry: ContextRegistry<ContextValues>;
+  let registry: ContextRegistry;
   let values: ContextValues;
 
   beforeEach(() => {
@@ -209,10 +209,10 @@ describe('SimpleContextKey', () => {
           values.get(
               new MultiContextKey<string>(
                   key.name,
-                  { byDefault: () => ['default', 'value'] }
+                  { byDefault: () => ['default', 'value'] },
               ),
               { or: ['fallback', 'value'] },
-          )
+          ),
       ).toEqual(['fallback', 'value']);
     });
     it('prefers `null` fallback value over default one', () => {
@@ -225,10 +225,10 @@ describe('SimpleContextKey', () => {
       expect(
           values.get(new MultiContextKey<string>(
               key.name,
-              { byDefault: () => ['default', 'value'] }
+              { byDefault: () => ['default', 'value'] },
               ),
               { or: undefined },
-          )
+          ),
       ).toBeUndefined();
     });
   });

@@ -86,7 +86,7 @@ function isUpSrcKeeper<Src>(src: Src | EventKeeper<Src[]>): src is EventKeeper<S
 
 function flatUpSources<Src, NextReturn>(sources: Src[][]): NextArgs<Src[], NextReturn> {
   return nextArgs<Src[], NextReturn>(
-      ...flatMapIt(overArray(sources), asis)
+      ...flatMapIt(overArray(sources), asis),
   );
 }
 

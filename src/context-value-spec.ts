@@ -289,25 +289,24 @@ export function contextValueSpec<Ctx extends ContextValues, Value, Deps extends 
     }
     if (!withDeps<Ctx, Deps, Src, Seed>(spec)) {
 
-      const { a, as: type } = spec;
+      const { as: Type } = spec;
 
       return {
-        a,
+        a: spec.a,
         by(ctx: Ctx) {
-          return new type(ctx);
-        },
-      };
-    } else {
-
-      const { a, as: type, with: deps } = spec;
-
-      return {
-        a,
-        by(this: void, context: Ctx) {
-          return new type(...deps.map(dep => context.get(dep)) as Deps);
+          return new Type(ctx);
         },
       };
     }
+
+    const { as: DepType, with: deps } = spec;
+
+    return {
+      a: spec.a,
+      by(this: void, context: Ctx) {
+        return new DepType(...deps.map(dep => context.get(dep)) as Deps);
+      },
+    };
   }
 
   throw new TypeError(`Malformed context value specifier: ${spec}`);

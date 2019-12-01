@@ -189,7 +189,7 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
               }
 
               return defaultValue;
-            }
+            },
       };
 
       return [
