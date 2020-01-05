@@ -224,17 +224,12 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
    * @return New context value registry which values provided by both registries.
    */
   append(other: ContextRegistry<Ctx>): ContextRegistry<Ctx> {
+    return new ContextRegistry(<Src, Seed>(key: ContextSeedKey<Src, Seed>, context: Ctx) => {
 
-    const self = this;
+      const [seeder, factory] = this._seeding(key);
 
-    return new ContextRegistry<Ctx>(combine);
-
-    function combine<Src, Seed>(key: ContextSeedKey<Src, Seed>, context: Ctx): Seed {
-
-      const [seeder] = self._seeding(key);
-
-      return seeder.combine(self.seed(context, key), other.seed(context, key), context);
-    }
+      return seeder.combine(factory(context), other.seed(context, key), context);
+    });
   }
 
 }
