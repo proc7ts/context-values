@@ -191,7 +191,7 @@ export class MultiContextKey<Src>
       opts: ContextValueOpts<Ctx, readonly Src[], Src, AIterable<Src>>,
   ): readonly Src[] | null | undefined {
 
-    const result = [...opts.seed];
+    const result = Array.from(opts.seed);
 
     if (result.length) {
       return result;
@@ -202,7 +202,7 @@ export class MultiContextKey<Src>
       const defaultSources = this.byDefault(opts.context, this);
 
       if (defaultSources) {
-        return [...defaultSources];
+        return Array.from(defaultSources);
       }
 
       return;
