@@ -73,9 +73,8 @@ export class FnContextKey<Args extends any[], Ret = void>
               opts.context,
               this,
           ));
-          const fallback = opts.byDefault(defaultProvider)!;
 
-          return fallback || defaultProvider();
+          return opts.byDefault(defaultProvider)! || defaultProvider();
         }),
     );
   }
@@ -92,9 +91,7 @@ export class FnContextKey<Args extends any[], Ret = void>
 
     opts.context.get(
         this.upKey,
-        {
-          or: opts.or != null ? afterThe(opts.or) : null,
-        },
+        'or' in opts ? { or: opts.or != null ? afterThe(opts.or) : opts.or } : undefined,
     )!(fn => delegated = fn);
 
     return (...args) => delegated(...args);

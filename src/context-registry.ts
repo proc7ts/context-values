@@ -178,8 +178,9 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
       const [seeder, seed] = findSeed<Src, Seed>(context, key);
       let defaultUsed = false;
 
-      const valueOpts: ContextValueOpts<Ctx, Value, Src, Seed> = {
-        or: opts && opts.or,
+      const valueOpts: {
+        -readonly [K in keyof ContextValueOpts<Ctx, Value, Src, Seed>]: ContextValueOpts<Ctx, Value, Src, Seed>[K];
+      } = {
         context,
         seeder,
         seed,
@@ -198,6 +199,10 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
               return defaultValue;
             },
       };
+
+      if (opts && 'or' in opts) {
+        valueOpts.or = opts.or;
+      }
 
       return [
         key.grow(valueOpts),
