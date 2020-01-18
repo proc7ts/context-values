@@ -9,8 +9,14 @@ import { ContextSeeder, ContextSeeds } from './context-seeder';
 import { contextValueSpec, ContextValueSpec } from './context-value-spec';
 import { ContextValues } from './context-values';
 
+/**
+ * @internal
+ */
 type SeedFactory<Ctx extends ContextValues, Seed> = (this: void, context: Ctx) => Seed;
 
+/**
+ * @internal
+ */
 type Seeding<Ctx extends ContextValues, Src, Seed> = [ContextSeeder<Ctx, Src, Seed>, SeedFactory<Ctx, Seed>];
 
 /**

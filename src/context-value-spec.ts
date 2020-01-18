@@ -312,24 +312,36 @@ export function contextValueSpec<Ctx extends ContextValues, Value, Deps extends 
   throw new TypeError(`Malformed context value specifier: ${spec}`);
 }
 
+/**
+ * @internal
+ */
 function byProvider<Ctx extends ContextValues, Deps extends any[], Src, Seed>(
     spec: ContextValueSpec<Ctx, any, Deps, Src, Seed>,
 ): spec is ContextValueSpec.ByProvider<Ctx, Src, Seed> | ContextValueSpec.ByProviderWithDeps<Deps, Src, Seed> {
   return 'by' in spec;
 }
 
+/**
+ * @internal
+ */
 function asInstance<Ctx extends ContextValues, Deps extends any[], Src, Seed>(
     spec: ContextValueSpec<Ctx, any, Deps, Src, Seed>,
 ): spec is ContextValueSpec.AsInstance<Ctx, Src, Seed> | ContextValueSpec.AsInstanceWithDeps<Deps, Src, Seed> {
   return 'as' in spec;
 }
 
+/**
+ * @internal
+ */
 function selfInstance<Ctx extends ContextValues, Deps extends any[], Src, Seed>(
     spec: ContextValueSpec<Ctx, any, Deps, Src, Seed>,
 ): spec is ContextValueSpec.SelfInstance<Ctx, Src, Seed> | ContextValueSpec.SelfInstanceWithDeps<Deps, Src, Seed> {
   return !('a' in spec);
 }
 
+/**
+ * @internal
+ */
 function toAsInstance<Ctx extends ContextValues, Deps extends any[], Src, Seed>(
     spec: ContextValueSpec.SelfInstance<Ctx, Src, Seed> | ContextValueSpec.SelfInstanceWithDeps<Deps, Src, Seed>,
 ): ContextValueSpec.AsInstance<Ctx, Src, Seed> | ContextValueSpec.AsInstanceWithDeps<Deps, Src, Seed> {
@@ -339,25 +351,41 @@ function toAsInstance<Ctx extends ContextValues, Deps extends any[], Src, Seed>(
   } as ContextValueSpec.AsInstance<Ctx, Src, Seed> | ContextValueSpec.AsInstanceWithDeps<Deps, Src, Seed>;
 }
 
+/**
+ * @internal
+ */
 function isConstant<Src, Seed>(
     spec: ContextValueSpec<any, any, any, Src, Seed>,
 ): spec is ContextValueSpec.IsConstant<Src, Seed> {
   return 'is' in spec;
 }
 
+/**
+ * @internal
+ */
 function viaAlias<Src, Seed>(
     spec: ContextValueSpec<any, any, any, Src, Seed>,
 ): spec is ContextValueSpec.ViaAlias<Src, Seed> {
   return 'via' in spec;
 }
+
+/**
+ * @internal
+ */
 function withDeps<Ctx extends ContextValues, Deps extends any[], Src, Seed>(
     spec: ContextValueSpec.ByProvider<Ctx, Src, Seed> | ContextValueSpec.ByProviderWithDeps<Deps, Src, Seed>,
 ): spec is ContextValueSpec.ByProviderWithDeps<Deps, Src, Seed>;
 
+/**
+ * @internal
+ */
 function withDeps<Ctx extends ContextValues, Deps extends any[], Src, Seed>(
     spec: ContextValueSpec.AsInstance<Ctx, Src, Seed> | ContextValueSpec.AsInstanceWithDeps<Deps, Src, Seed>,
 ): spec is ContextValueSpec.AsInstanceWithDeps<Deps, Src, Seed>;
 
+/**
+ * @internal
+ */
 function withDeps<Ctx extends ContextValues, Deps extends any[], Src, Seed>(
     spec: ContextValueSpec<Ctx, any, Deps, Src, Seed>,
 ): boolean {

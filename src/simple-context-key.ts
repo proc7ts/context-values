@@ -209,9 +209,16 @@ export class MultiContextKey<Src>
 
 }
 
-// Context value provider and cached context value source.
+/**
+ * Context value provider and cached context value source.
+ *
+ * @internal
+ */
 type SourceEntry<Ctx extends ContextValues, Src> = [ContextValueProvider<Ctx, Src>, (Src | null | undefined)?];
 
+/**
+ * @internal
+ */
 function sourceValues<Ctx extends ContextValues, Src>(
     context: Ctx,
     providers: ContextValueProvider<Ctx, Src>[],

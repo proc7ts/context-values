@@ -21,6 +21,9 @@ import { ContextSeeder } from './context-seeder';
 import { ContextValueProvider } from './context-value-spec';
 import { ContextValues } from './context-values';
 
+/**
+ * @internal
+ */
 class ContextUpSeeder<Ctx extends ContextValues, Src>
     implements ContextSeeder<Ctx, Src | EventKeeper<Src[]>, AfterEvent<Src[]>> {
 
@@ -52,12 +55,15 @@ class ContextUpSeeder<Ctx extends ContextValues, Src>
         first,
         second,
     ).keep.thru(
-        (...sources) => flatUpSources(sources),
+        flatUpSources,
     );
   }
 
 }
 
+/**
+ * @internal
+ */
 function upSrcKeepers<Ctx extends ContextValues, Src>(
     context: Ctx,
     providersTracker: ValueTracker<ContextValueProvider<Ctx, Src | EventKeeper<Src[]>>[]>,
@@ -72,24 +78,36 @@ function upSrcKeepers<Ctx extends ContextValues, Src>(
               toUpSrcKeeper,
           ),
       ).keep.thru(
-          (...sources) => flatUpSources(sources),
+          flatUpSources,
       ));
 }
 
+/**
+ * @internal
+ */
 function toUpSrcKeeper<Src>(src: null | undefined | Src | EventKeeper<Src[]>): AfterEvent<Src[]> {
   return src == null ? afterThe() : isUpSrcKeeper(src) ? afterSupplied(src) : afterThe(src);
 }
 
+/**
+ * @internal
+ */
 function isUpSrcKeeper<Src>(src: Src | EventKeeper<Src[]>): src is EventKeeper<Src[]> {
   return (typeof src === 'object' || typeof src === 'function') && isEventKeeper(src as (object | Function));
 }
 
-function flatUpSources<Src, NextReturn>(sources: Src[][]): NextArgs<Src[], NextReturn> {
+/**
+ * @internal
+ */
+function flatUpSources<Src, NextReturn>(...sources: Src[][]): NextArgs<Src[], NextReturn> {
   return nextArgs<Src[], NextReturn>(
       ...flatMapIt(overArray(sources), asis),
   );
 }
 
+/**
+ * @internal
+ */
 class ContextSeedUpKey<Src> extends ContextSeedKey<Src | EventKeeper<Src[]>, AfterEvent<Src[]>> {
 
   seeder<Ctx extends ContextValues>(): ContextSeeder<Ctx, Src | EventKeeper<Src[]>, AfterEvent<Src[]>> {
@@ -202,6 +220,9 @@ export namespace ContextUpKey {
 
   /**
    * A key of context value containing an {@link ContextUpKey.Up updates keeper} of this key value.
+   *
+   * @typeparam Value  Context value type.
+   * @typeparam Src  Source value type.
    */
   export type UpKey<Value, Src> = ContextKey<ContextUpKey.Up<Value>, Src>;
 
