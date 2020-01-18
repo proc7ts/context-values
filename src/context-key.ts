@@ -100,6 +100,13 @@ export interface ContextValueOpts<Ctx extends ContextValues, Value, Src, Seed> {
   readonly seed: Seed;
 
   /**
+   * A fallback value to use if there is no value associated with the given key.
+   *
+   * Can be `null` or `undefined`.
+   */
+  readonly or?: Value | null;
+
+  /**
    * Handles missing context value.
    *
    * It can be called to prefer a fallback value over the default one specified in the value key.

@@ -173,6 +173,7 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
       let defaultUsed = false;
 
       const valueOpts: ContextValueOpts<Ctx, Value, Src, Seed> = {
+        or: opts && opts.or,
         context,
         seeder,
         seed,
