@@ -6,7 +6,7 @@ import { ContextValues } from './context-values';
 
 describe('ContextUpKey', () => {
 
-  let registry: ContextRegistry<ContextValues>;
+  let registry: ContextRegistry;
   let values: ContextValues;
 
   beforeEach(() => {
@@ -96,6 +96,12 @@ describe('ContextUpKey', () => {
       expect(byDefault).toHaveBeenCalledWith(values, keyWithDefaults);
     });
 
+    describe('upKey', () => {
+      it('is the key itself', () => {
+        expect(key.upKey).toBe(key);
+      });
+    });
+
     function readValue<Value>(from: AfterEvent<[Value]>): Value {
 
       let received: Value = undefined!;
@@ -167,6 +173,12 @@ describe('ContextUpKey', () => {
     });
     it('throws if fallback value is `undefined`', () => {
       expect(() => readValue(values.get(key, { or: undefined })!)).toThrowError(ContextKeyError);
+    });
+
+    describe('upKey', () => {
+      it('is the key itself', () => {
+        expect(key.upKey).toBe(key);
+      });
     });
 
     function readValue<Src>(from: AfterEvent<Src[]>): Src[] {

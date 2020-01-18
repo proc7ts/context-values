@@ -1,5 +1,5 @@
 import { noop } from 'call-thru';
-import { AfterEvent, EventKeeper } from 'fun-events';
+import { AfterEvent, afterThe, EventKeeper } from 'fun-events';
 import { ContextKeyDefault, ContextSeedKey, ContextValueOpts } from './context-key';
 import { ContextKeyError } from './context-key-error';
 import { ContextUpKey, ContextUpRef } from './context-up-key';
@@ -10,10 +10,9 @@ import { ContextValues } from './context-values';
  *
  * @typeparam Args  Function arguments tuple type.
  * @typeparam Ret  Function return value type.
- * @typeparam Seed  Value seed type.
  */
-export type FnContextRef<Args extends any[], Ret = void, Seed = unknown> =
-    ContextUpRef<(this: void, ...args: Args) => Ret, (this: void, ...args: Args) => Ret, Seed>;
+export type FnContextRef<Args extends any[], Ret = void> =
+    ContextUpRef<(this: void, ...args: Args) => Ret, (this: void, ...args: Args) => Ret>;
 
 /**
  * A key of updatable context function value.
@@ -32,13 +31,15 @@ export type FnContextRef<Args extends any[], Ret = void, Seed = unknown> =
  */
 export class FnContextKey<Args extends any[], Ret = void>
     extends ContextUpKey<(this: void, ...args: Args) => Ret, (this: void, ...args: Args) => Ret>
-    implements FnContextRef<Args, Ret, AfterEvent<((this: void, ...args: Args) => Ret)[]>> {
+    implements FnContextRef<Args, Ret> {
 
   /**
    * Constructs a function that will be called unless fallback provided.
    */
   readonly byDefault: (this: void, context: ContextValues, key: FnContextKey<Args, Ret>) =>
       (this: void, ...args: Args) => Ret;
+
+  readonly upKey: ContextUpKey.UpKey<(this: void, ...args: Args) => Ret, (this: void, ...args: Args) => Ret>;
 
   /**
    * Constructs updatable context function key.
@@ -62,6 +63,21 @@ export class FnContextKey<Args extends any[], Ret = void>
   ) {
     super(name, seedKey);
     this.byDefault = (context, key) => byDefault(context, key) || (() => { throw new ContextKeyError(this); });
+    this.upKey = this.createUpKey(
+        opts => opts.seed.keep.dig((...fns) => {
+          if (fns.length) {
+            return afterThe(fns[fns.length - 1]);
+          }
+
+          const defaultProvider = () => afterThe<[(this: void, ...args: Args) => Ret]>(this.byDefault(
+              opts.context,
+              this,
+          ));
+          const fallback = opts.byDefault(defaultProvider)!;
+
+          return fallback || defaultProvider();
+        }),
+    );
   }
 
   grow<Ctx extends ContextValues>(
@@ -74,17 +90,12 @@ export class FnContextKey<Args extends any[], Ret = void>
 
     let delegated!: (this: void, ...args: Args) => Ret;
 
-    opts.seed((...fns) => {
-      if (fns.length) {
-        delegated = fns[fns.length - 1];
-      } else {
-
-        const defaultProvider = () => this.byDefault(opts.context, this);
-        const fallback = opts.byDefault(defaultProvider);
-
-        delegated = fallback || defaultProvider();
-      }
-    });
+    opts.context.get(
+        this.upKey,
+        {
+          or: opts.or != null ? afterThe(opts.or) : null,
+        },
+    )!(fn => delegated = fn);
 
     return (...args) => delegated(...args);
   }
