@@ -114,7 +114,7 @@ export interface ContextUpRef<Value, Src> extends ContextRef<Value, Src | EventK
  * @internal
  */
 class ContextUpKeyUpKey<Value, Src>
-    extends ContextKey<ContextUpKey.AfterValue<Value>, Src | EventKeeper<Src[]>, AfterEvent<Src[]>> {
+    extends ContextKey<ContextUpKey.Up<Value>, Src | EventKeeper<Src[]>, AfterEvent<Src[]>> {
 
   get seedKey() {
     return this._key.seedKey;
@@ -123,8 +123,8 @@ class ContextUpKeyUpKey<Value, Src>
   constructor(
       private readonly _key: ContextUpKey<Value, Src>,
       readonly grow: <Ctx extends ContextValues>(
-          opts: ContextValueOpts<Ctx, ContextUpKey.AfterValue<Value>, EventKeeper<Src[]> | Src, AfterEvent<Src[]>>,
-      ) => ContextUpKey.AfterValue<Value>,
+          opts: ContextValueOpts<Ctx, ContextUpKey.Up<Value>, EventKeeper<Src[]> | Src, AfterEvent<Src[]>>,
+      ) => ContextUpKey.Up<Value>,
   ) {
     super(_key.name + ':up');
   }
@@ -148,7 +148,7 @@ export abstract class ContextUpKey<Value, Src>
   readonly seedKey: ContextSeedKey<Src | EventKeeper<Src[]>, AfterEvent<Src[]>>;
 
   /**
-   * A key of context value containing an {@link ContextUpKey.AfterValue updates keeper} of this key value.
+   * A key of context value containing an {@link ContextUpKey.Up updates keeper} of this key value.
    *
    * It is expected to report any updates to this key's value.
    *
@@ -168,7 +168,7 @@ export abstract class ContextUpKey<Value, Src>
   }
 
   /**
-   * A key of context value containing an {@link ContextUpKey.AfterValue updates keeper} of the value of this key.
+   * A key of context value containing an {@link ContextUpKey.Up updates keeper} of the value of this key.
    *
    * @param grow  A function that grows an updates keeper of context value out of its seed.
    *
@@ -176,8 +176,8 @@ export abstract class ContextUpKey<Value, Src>
    */
   protected createUpKey(
       grow: <Ctx extends ContextValues>(
-          opts: ContextValueOpts<Ctx, ContextUpKey.AfterValue<Value>, EventKeeper<Src[]> | Src, AfterEvent<Src[]>>,
-      ) => ContextUpKey.AfterValue<Value>,
+          opts: ContextValueOpts<Ctx, ContextUpKey.Up<Value>, EventKeeper<Src[]> | Src, AfterEvent<Src[]>>,
+      ) => ContextUpKey.Up<Value>,
   ): ContextUpKey.UpKey<Value, Src> {
     return new ContextUpKeyUpKey(this, grow);
   }
@@ -194,16 +194,16 @@ export namespace ContextUpKey {
    *
    * @typeparam Value  Original context value type.
    */
-  export type AfterValue<Value> = Value extends AfterEvent<any>
+  export type Up<Value> = Value extends AfterEvent<any>
       ? Value
       : (Value extends EventKeeper<infer E>
           ? AfterEvent<E>
           : AfterEvent<[Value]>);
 
   /**
-   * A key of context value containing an {@link ContextUpKey.AfterValue updates keeper} of this key value.
+   * A key of context value containing an {@link ContextUpKey.Up updates keeper} of this key value.
    */
-  export type UpKey<Value, Src> = ContextKey<ContextUpKey.AfterValue<Value>, Src>;
+  export type UpKey<Value, Src> = ContextKey<ContextUpKey.Up<Value>, Src>;
 
 }
 
