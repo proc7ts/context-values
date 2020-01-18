@@ -78,11 +78,10 @@ export interface ContextTarget<Src, Seed = unknown> extends ContextRequest<any, 
  *
  * @typeparam Value  Context value type.
  * @typeparam Src  Source value type.
- * @typeparam Seed  Value seed type.
  */
-export interface ContextRef<Value, Src = Value, Seed = unknown>
-    extends ContextRequest<Value, Seed>, ContextTarget<Src, Seed> {
+export interface ContextRef<Value, Src = Value>
+    extends ContextRequest<Value>, ContextTarget<Src> {
 
-  readonly [ContextKey__symbol]: ContextKey<Value, Src, Seed>;
+  readonly [ContextKey__symbol]: ContextKey<Value, Src>;
 
 }

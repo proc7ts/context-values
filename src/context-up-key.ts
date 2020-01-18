@@ -14,7 +14,7 @@ import {
   trackValue,
   ValueTracker,
 } from 'fun-events';
-import { ContextKey, ContextKeyDefault, ContextSeedKey, ContextValueOpts } from './context-key';
+import { ContextKey, ContextKey__symbol, ContextKeyDefault, ContextSeedKey, ContextValueOpts } from './context-key';
 import { ContextKeyError } from './context-key-error';
 import { ContextRef } from './context-ref';
 import { ContextSeeder } from './context-seeder';
@@ -103,9 +103,12 @@ class ContextSeedUpKey<Src> extends ContextSeedKey<Src | EventKeeper<Src[]>, Aft
  *
  * @typeparam Value  Context value type.
  * @typeparam Src  Source value type.
- * @typeparam Seed  Value seed type.
  */
-export type ContextUpRef<Value, Src, Seed = unknown> = ContextRef<Value, Src | EventKeeper<Src[]>, Seed>;
+export interface ContextUpRef<Value, Src> extends ContextRef<Value, Src | EventKeeper<Src[]>> {
+
+  readonly [ContextKey__symbol]: ContextUpKey<Value, Src>;
+
+}
 
 /**
  * Abstract implementation of updatable context value key.
@@ -119,7 +122,7 @@ export type ContextUpRef<Value, Src, Seed = unknown> = ContextRef<Value, Src | E
  */
 export abstract class ContextUpKey<Value, Src>
     extends ContextKey<Value, Src | EventKeeper<Src[]>, AfterEvent<Src[]>>
-    implements ContextUpRef<Value, Src, AfterEvent<Src[]>> {
+    implements ContextUpRef<Value, Src> {
 
   readonly seedKey: ContextSeedKey<Src | EventKeeper<Src[]>, AfterEvent<Src[]>>;
 
@@ -140,9 +143,8 @@ export abstract class ContextUpKey<Value, Src>
  * Single updatable context value reference.
  *
  * @typeparam Value  Context value type.
- * @typeparam Seed  Value seed type.
  */
-export type SingleContextUpRef<Value, Seed = unknown> = ContextUpRef<AfterEvent<[Value]>, Value, Seed>;
+export type SingleContextUpRef<Value> = ContextUpRef<AfterEvent<[Value]>, Value>;
 
 /**
  * Single updatable context value key.
@@ -157,7 +159,7 @@ export type SingleContextUpRef<Value, Seed = unknown> = ContextUpRef<AfterEvent<
  */
 export class SingleContextUpKey<Value>
     extends ContextUpKey<AfterEvent<[Value]>, Value>
-    implements SingleContextUpRef<Value, AfterEvent<Value[]>> {
+    implements SingleContextUpRef<Value> {
 
   /**
    * A provider of context value used when there is no value associated with this key.
@@ -220,9 +222,8 @@ export class SingleContextUpKey<Value>
  * Single updatable context value reference.
  *
  * @typeparam Src  Source value type.
- * @typeparam Seed  Value seed type.
  */
-export type MultiContextUpRef<Src, Seed = unknown> = ContextUpRef<AfterEvent<Src[]>, Src, Seed>;
+export type MultiContextUpRef<Src> = ContextUpRef<AfterEvent<Src[]>, Src>;
 
 /**
  * Multiple updatable context values key.
@@ -237,7 +238,7 @@ export type MultiContextUpRef<Src, Seed = unknown> = ContextUpRef<AfterEvent<Src
  */
 export class MultiContextUpKey<Src>
     extends ContextUpKey<AfterEvent<Src[]>, Src>
-    implements MultiContextUpRef<Src, AfterEvent<Src[]>> {
+    implements MultiContextUpRef<Src> {
 
   /**
    * A provider of context value used when there is no value associated with this key.

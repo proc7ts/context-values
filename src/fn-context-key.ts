@@ -10,10 +10,9 @@ import { ContextValues } from './context-values';
  *
  * @typeparam Args  Function arguments tuple type.
  * @typeparam Ret  Function return value type.
- * @typeparam Seed  Value seed type.
  */
-export type FnContextRef<Args extends any[], Ret = void, Seed = unknown> =
-    ContextUpRef<(this: void, ...args: Args) => Ret, (this: void, ...args: Args) => Ret, Seed>;
+export type FnContextRef<Args extends any[], Ret = void> =
+    ContextUpRef<(this: void, ...args: Args) => Ret, (this: void, ...args: Args) => Ret>;
 
 /**
  * A key of updatable context function value.
@@ -32,7 +31,7 @@ export type FnContextRef<Args extends any[], Ret = void, Seed = unknown> =
  */
 export class FnContextKey<Args extends any[], Ret = void>
     extends ContextUpKey<(this: void, ...args: Args) => Ret, (this: void, ...args: Args) => Ret>
-    implements FnContextRef<Args, Ret, AfterEvent<((this: void, ...args: Args) => Ret)[]>> {
+    implements FnContextRef<Args, Ret> {
 
   /**
    * Constructs a function that will be called unless fallback provided.

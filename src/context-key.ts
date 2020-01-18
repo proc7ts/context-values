@@ -22,7 +22,7 @@ export const ContextKey__symbol = /*#__PURE__*/ Symbol('context-key');
  * @typeparam Src  Source value type.
  * @typeparam Seed  Value seed type.
  */
-export abstract class ContextKey<Value, Src = Value, Seed = unknown> implements ContextRef<Value, Src, Seed> {
+export abstract class ContextKey<Value, Src = Value, Seed = unknown> implements ContextRef<Value, Src> {
 
   /**
    * Human-readable key name.
