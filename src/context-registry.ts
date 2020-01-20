@@ -188,7 +188,8 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
             ? () => {
               defaultUsed = true;
               return opts.or;
-            } : defaultProvider => {
+            }
+            : defaultProvider => {
 
               const defaultValue = defaultProvider();
 

@@ -97,7 +97,7 @@ describe('ContextRegistry', () => {
 
         mockProvider.mockReturnValue(value1);
 
-        chained.provide({a: key, by: provider2Spy});
+        chained.provide({ a: key, by: provider2Spy });
         provider2Spy.mockReturnValue(value2);
 
         expect(chainedValues.get(key)).toBe(value2);
@@ -108,7 +108,7 @@ describe('ContextRegistry', () => {
 
         mockProvider.mockReturnValue(value1);
 
-        chained.provide({a: key, by: provider2Spy});
+        chained.provide({ a: key, by: provider2Spy });
         provider2Spy.mockReturnValue(null);
 
         expect(chainedValues.get(key)).toBe(value1);
@@ -118,10 +118,12 @@ describe('ContextRegistry', () => {
 
   testChained(
       'Registry chained with bound seeds',
-      () => new ContextRegistry(registry.seedIn({ name: 'context' } as any)));
+      () => new ContextRegistry(registry.seedIn({ name: 'context' } as any)),
+  );
   testChained(
       'Registry chained with context values',
-      () => new ContextRegistry(values));
+      () => new ContextRegistry(values),
+  );
 
   describe('newValues', () => {
     it('preserves non-caching instance', () => {

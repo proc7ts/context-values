@@ -69,17 +69,20 @@ function upSrcKeepers<Ctx extends ContextValues, Src>(
     providersTracker: ValueTracker<ContextValueProvider<Ctx, Src | EventKeeper<Src[]>>[]>,
 ): AfterEvent<Src[]> {
   return providersTracker.read.keep.dig(
-      providers => !providers.length ? afterThe() : afterEach(
-          ...mapIt(
-              mapIt(
-                  overArray(providers),
-                  prov => prov(context),
+      providers => !providers.length
+          ? afterThe()
+          : afterEach(
+              ...mapIt(
+                  mapIt(
+                      overArray(providers),
+                      prov => prov(context),
+                  ),
+                  toUpSrcKeeper,
               ),
-              toUpSrcKeeper,
+          ).keep.thru(
+              flatUpSources,
           ),
-      ).keep.thru(
-          flatUpSources,
-      ));
+  );
 }
 
 /**

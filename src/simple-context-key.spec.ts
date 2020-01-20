@@ -223,9 +223,10 @@ describe('SimpleContextKey', () => {
     });
     it('prefers `undefined` fallback value over default one', () => {
       expect(
-          values.get(new MultiContextKey<string>(
-              key.name,
-              { byDefault: () => ['default', 'value'] },
+          values.get(
+              new MultiContextKey<string>(
+                  key.name,
+                  { byDefault: () => ['default', 'value'] },
               ),
               { or: undefined },
           ),
