@@ -134,7 +134,7 @@ export interface ContextUpRef<Value, Src> extends ContextRef<Value, Src | EventK
 class ContextUpKeyUpKey<Value, Src>
     extends ContextKey<ContextUpKey.Up<Value>, Src | EventKeeper<Src[]>, AfterEvent<Src[]>> {
 
-  get seedKey() {
+  get seedKey(): ContextSeedKey<Src | EventKeeper<Src[]>, AfterEvent<Src[]>> {
     return this._key.seedKey;
   }
 
@@ -273,8 +273,8 @@ export class SingleContextUpKey<Value>
         seedKey,
         byDefault = noop,
       }: {
-        seedKey?: ContextSeedKey<Value | EventKeeper<Value[]>, AfterEvent<Value[]>>,
-        byDefault?: ContextKeyDefault<Value, ContextUpKey<AfterEvent<[Value]>, Value>>,
+        seedKey?: ContextSeedKey<Value | EventKeeper<Value[]>, AfterEvent<Value[]>>;
+        byDefault?: ContextKeyDefault<Value, ContextUpKey<AfterEvent<[Value]>, Value>>;
       } = {},
   ) {
     super(name, seedKey);
@@ -356,8 +356,8 @@ export class MultiContextUpKey<Src>
         seedKey,
         byDefault = noop,
       }: {
-        seedKey?: ContextSeedKey<Src | EventKeeper<Src[]>, AfterEvent<Src[]>>,
-        byDefault?: ContextKeyDefault<readonly Src[], ContextUpKey<AfterEvent<Src[]>, Src>>,
+        seedKey?: ContextSeedKey<Src | EventKeeper<Src[]>, AfterEvent<Src[]>>;
+        byDefault?: ContextKeyDefault<readonly Src[], ContextUpKey<AfterEvent<Src[]>, Src>>;
       } = {},
   ) {
     super(name, seedKey);

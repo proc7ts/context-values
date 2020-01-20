@@ -57,8 +57,8 @@ export class FnContextKey<Args extends any[], Ret = void>
       }: {
         seedKey?: ContextSeedKey<
             ((this: void, ...args: Args) => Ret) | EventKeeper<((this: void, ...args: Args) => Ret)[]>,
-            AfterEvent<((this: void, ...args: Args) => Ret)[]>>,
-        byDefault?: ContextKeyDefault<(this: void, ...args: Args) => Ret, FnContextKey<Args, Ret>>,
+            AfterEvent<((this: void, ...args: Args) => Ret)[]>>;
+        byDefault?: ContextKeyDefault<(this: void, ...args: Args) => Ret, FnContextKey<Args, Ret>>;
       } = {},
   ) {
     super(name, seedKey);
@@ -69,12 +69,12 @@ export class FnContextKey<Args extends any[], Ret = void>
             return afterThe(fns[fns.length - 1]);
           }
 
-          const defaultProvider = () => afterThe<[(this: void, ...args: Args) => Ret]>(this.byDefault(
+          const defaultProvider = (): AfterEvent<[(this: void, ...args: Args) => Ret]> => afterThe(this.byDefault(
               opts.context,
               this,
           ));
 
-          return opts.byDefault(defaultProvider)! || defaultProvider();
+          return opts.byDefault(defaultProvider) || defaultProvider();
         }),
     );
   }

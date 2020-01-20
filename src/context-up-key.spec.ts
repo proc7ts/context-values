@@ -72,14 +72,14 @@ describe('ContextUpKey', () => {
       expect(readValue(values.get(key))).toBe(value1);
     });
     it('throws if there is neither default nor fallback value', () => {
-      expect(() => readValue(values.get(key))).toThrowError(ContextKeyError);
-      expect(() => readValue(values.get(key, {})!)).toThrowError(ContextKeyError);
+      expect(() => readValue(values.get(key))).toThrow(ContextKeyError);
+      expect(() => readValue(values.get(key, {})!)).toThrow(ContextKeyError);
     });
     it('throws if fallback value is `null`', () => {
-      expect(() => readValue(values.get(key, { or: null })!)).toThrowError(ContextKeyError);
+      expect(() => readValue(values.get(key, { or: null })!)).toThrow(ContextKeyError);
     });
     it('throws if fallback value is `undefined`', () => {
-      expect(() => readValue(values.get(key, { or: undefined })!)).toThrowError(ContextKeyError);
+      expect(() => readValue(values.get(key, { or: undefined })!)).toThrow(ContextKeyError);
     });
     it('provides fallback value if there is no provider', () => {
       expect(readValue(values.get(key, { or: afterThe('fallback') }))).toBe('fallback');
@@ -169,10 +169,10 @@ describe('ContextUpKey', () => {
       )).toEqual(['fallback', 'value']);
     });
     it('throws if fallback value is `null`', () => {
-      expect(() => readValue(values.get(key, { or: null })!)).toThrowError(ContextKeyError);
+      expect(() => readValue(values.get(key, { or: null })!)).toThrow(ContextKeyError);
     });
     it('throws if fallback value is `undefined`', () => {
-      expect(() => readValue(values.get(key, { or: undefined })!)).toThrowError(ContextKeyError);
+      expect(() => readValue(values.get(key, { or: undefined })!)).toThrow(ContextKeyError);
     });
 
     describe('upKey', () => {

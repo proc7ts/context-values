@@ -114,8 +114,8 @@ export class SingleContextKey<Value>
         seedKey,
         byDefault = noop,
       }: {
-        seedKey?: ContextSeedKey<Value, AIterable<Value>>,
-        byDefault?: ContextKeyDefault<Value, ContextKey<Value>>,
+        seedKey?: ContextSeedKey<Value, AIterable<Value>>;
+        byDefault?: ContextKeyDefault<Value, ContextKey<Value>>;
       } = {},
   ) {
     super(name, seedKey);
@@ -177,8 +177,8 @@ export class MultiContextKey<Src>
         seedKey,
         byDefault = valuesProvider(),
       }: {
-        seedKey?: ContextSeedKey<Src, AIterable<Src>>,
-        byDefault?: ContextKeyDefault<readonly Src[], ContextKey<readonly Src[], Src>>,
+        seedKey?: ContextSeedKey<Src, AIterable<Src>>;
+        byDefault?: ContextKeyDefault<readonly Src[], ContextKey<readonly Src[], Src>>;
       } = {},
   ) {
     super(name, seedKey);

@@ -65,8 +65,8 @@ describe('SimpleContextKey', () => {
       expect(values.get(key)).toBe(value2);
     });
     it('throws if there is neither default nor fallback value', () => {
-      expect(() => values.get(new SingleContextKey(key.name))).toThrowError(ContextKeyError);
-      expect(() => values.get(new SingleContextKey(key.name), {})).toThrowError(ContextKeyError);
+      expect(() => values.get(new SingleContextKey(key.name))).toThrow(ContextKeyError);
+      expect(() => values.get(new SingleContextKey(key.name), {})).toThrow(ContextKeyError);
     });
     it('provides fallback value if there is no provider', () => {
       expect(values.get(new SingleContextKey<string>(key.name), { or: 'fallback' })).toBe('fallback');
@@ -202,7 +202,7 @@ describe('SimpleContextKey', () => {
       expect(values.get(key, { or: ['fallback'] })).toEqual(['fallback']);
     });
     it('throws if there is no default value', () => {
-      expect(() => values.get(new MultiContextKey(key.name, { byDefault: () => null }))).toThrowError();
+      expect(() => values.get(new MultiContextKey(key.name, { byDefault: () => null }))).toThrow();
     });
     it('prefers fallback value over default one', () => {
       expect(

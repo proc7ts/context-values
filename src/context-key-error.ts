@@ -19,7 +19,7 @@ export class ContextKeyError extends Error {
    * @param key  Missing value key.
    * @param message  Arbitrary error message.
    */
-  constructor(key: ContextKey<any, any, any>, message: string = `There is no value with key ${key}`) {
+  constructor(key: ContextKey<any, any, any>, message = `There is no value with key ${key}`) {
     super(message);
     this.key = key;
   }

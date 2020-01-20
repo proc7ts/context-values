@@ -101,7 +101,7 @@ describe('contextValueSpec', () => {
         constructorSpy(...args);
       }
 
-      get some() {
+      get some(): string {
         return 'some';
       }
 
@@ -113,7 +113,7 @@ describe('contextValueSpec', () => {
         constructorSpy(...args);
       }
 
-      get some() {
+      get some(): string {
         return 'other';
       }
 
@@ -226,6 +226,6 @@ describe('contextValueSpec', () => {
 
     const spec: ContextValueSpec<ContextValues, string> = {} as any;
 
-    expect(() => contextValueSpec(spec)).toThrowError(TypeError);
+    expect(() => contextValueSpec(spec)).toThrow(TypeError);
   });
 });

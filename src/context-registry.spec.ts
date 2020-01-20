@@ -7,7 +7,7 @@ import Mock = jest.Mock;
 describe('ContextRegistry', () => {
 
   const key = new SingleContextKey<string>('test-key');
-  let registry: ContextRegistry<ContextValues>;
+  let registry: ContextRegistry;
   let values: ContextValues;
   let mockProvider: Mock<string>;
 
@@ -77,7 +77,7 @@ describe('ContextRegistry', () => {
     });
   });
 
-  function testChained(title: string, createChained: () => ContextRegistry) {
+  function testChained(title: string, createChained: () => ContextRegistry): void {
     describe(title, () => {
 
       let chained: ContextRegistry;
@@ -135,8 +135,8 @@ describe('ContextRegistry', () => {
 
   describe('append', () => {
 
-    let registry2: ContextRegistry<ContextValues>;
-    let combined: ContextRegistry<ContextValues>;
+    let registry2: ContextRegistry;
+    let combined: ContextRegistry;
     let context: ContextValues;
 
     beforeEach(() => {
