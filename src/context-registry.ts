@@ -115,11 +115,7 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
    * @returns A provider of context value seeds bound to the given `context`.
    */
   seedIn(context: Ctx, cache?: boolean): <Src, Seed>(this: void, key: ContextSeedKey<Src, Seed>) => Seed | undefined {
-
-    const values = this.newValues(cache);
-
-    return <Src, Seed>(key: ContextSeedKey<Src, Seed>) =>
-        values.get.call<Ctx, [ContextSeedKey<Src, Seed>], Seed>(context, key);
+    return this.newValues(cache).get.bind(context);
   }
 
   /**
