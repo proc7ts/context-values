@@ -1,4 +1,5 @@
 /**
+ * @packageDocumentation
  * @module context-values
  */
 import { ContextSeedKey } from './context-key';

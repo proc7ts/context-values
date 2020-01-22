@@ -1,4 +1,5 @@
 /**
+ * @packageDocumentation
  * @module context-values
  */
 import { AIterable, itsEmpty, itsLast, overArray, overNone } from 'a-iterable';

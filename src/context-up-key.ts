@@ -1,4 +1,5 @@
 /**
+ * @packageDocumentation
  * @module context-values
  */
 import { flatMapIt, mapIt, overArray } from 'a-iterable';

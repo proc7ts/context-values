@@ -1,4 +1,5 @@
 /**
+ * @packageDocumentation
  * @module context-values
  */
 import { ContextKey } from './context-key';
