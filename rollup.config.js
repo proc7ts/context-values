@@ -5,6 +5,12 @@ import ts from 'rollup-plugin-typescript2';
 import typescript from 'typescript';
 import pkg from './package.json';
 
+const externals = Object.keys(pkg.peerDependencies);
+
+function external(id) {
+  return externals.some(ext => id === ext || id.startsWith(ext + '/'));
+}
+
 export default {
   plugins: [
     commonjs(),
@@ -19,7 +25,7 @@ export default {
     sourcemaps(),
   ],
   input: './src/index.ts',
-  external: Object.keys(pkg.peerDependencies),
+  external,
   output: [
     {
       file: pkg.main,
