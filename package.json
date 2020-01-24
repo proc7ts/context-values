@@ -1,6 +1,6 @@
 {
   "name": "context-values",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "IoC context values provider",
   "keywords": [
     "ioc"
