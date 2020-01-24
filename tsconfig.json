@@ -13,7 +13,6 @@
     "importHelpers": true,
     "noEmitHelpers": true,
     "lib": [
-      "dom",
       "es6"
     ],
     "outDir": "target/js",
