@@ -3,11 +3,11 @@
  * @module context-values/updatable
  */
 import { noop } from 'call-thru';
-import { AfterEvent, afterThe, EventKeeper, nextOnEvent } from 'fun-events';
+import { AfterEvent, afterThe, EventKeeper, nextAfterEvent } from 'fun-events';
 import { ContextKeyDefault, ContextSeedKey, ContextValueOpts } from '../context-key';
 import { ContextKeyError } from '../context-key-error';
-import { ContextUpKey, ContextUpRef } from './context-up-key';
 import { ContextValues } from '../context-values';
+import { ContextUpKey, ContextUpRef } from './context-up-key';
 
 /**
  * A reference to updatable context function value.
@@ -79,7 +79,7 @@ export class FnContextKey<Args extends any[], Ret = void>
                   this,
               ));
 
-              return nextOnEvent(opts.byDefault(defaultProvider) || defaultProvider());
+              return nextAfterEvent(opts.byDefault(defaultProvider) || defaultProvider());
             },
         ),
     );

@@ -12,7 +12,7 @@ import {
   afterThe,
   EventKeeper,
   isEventKeeper,
-  nextOnEvent,
+  nextAfterEvent,
   trackValue,
   ValueTracker,
 } from 'fun-events';
@@ -73,7 +73,7 @@ function upSrcKeepers<Ctx extends ContextValues, Src>(
   return providersTracker.read.keep.thru(
       providers => !providers.length
           ? nextArgs()
-          : nextOnEvent(
+          : nextAfterEvent(
               afterEach(
                   ...mapIt(
                       mapIt(
@@ -303,11 +303,11 @@ export class SingleContextUpKey<Value>
       });
 
       if (backup != null) {
-        return nextOnEvent(backup); // Backup value found.
+        return nextAfterEvent(backup); // Backup value found.
       }
 
       // Backup value is absent. Construct an error response.
-      return nextOnEvent(afterEventBy<[Value]>(() => {
+      return nextAfterEvent(afterEventBy<[Value]>(() => {
         throw new ContextKeyError(this);
       }));
     });
@@ -386,11 +386,11 @@ export class MultiContextUpKey<Src>
       });
 
       if (backup != null) {
-        return nextOnEvent(backup); // Backup value found.
+        return nextAfterEvent(backup); // Backup value found.
       }
 
       // Backup value is absent. Construct an error response.
-      return nextOnEvent(afterEventBy<Src[]>(() => {
+      return nextAfterEvent(afterEventBy<Src[]>(() => {
         throw new ContextKeyError(this);
       }));
     });
