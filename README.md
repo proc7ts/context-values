@@ -300,13 +300,13 @@ However, it is possible to update context values. For that a `ContextUpKey` abst
 may be used, or `SingleContextUpKey` and `MultiContextUpKey` implementations.
 
 They provide an [AfterEvent] keeper of value. The receivers registered in this keeper would receive the actual value
-each time it changes. E.g. when new value source is provided in `ContextRegistry`:
+each time it changes. E.g. when new value source is provided in `ContextRegistry`.
+
+This functionality is implemented in `context-value/updatable` sub-module and depends on `fun-events`.
 
 ```typescript
-import {
-  ContextRegistry, 
-  SingleContextUpKey,
-} from 'context-values';
+import { ContextRegistry } from 'context-values'; 
+import { SingleContextUpKey } from 'context-values/updatable';
 
 const key = new SingleContextUpKey<string>('updatable-value');
 const registry = new ContextRegistry();

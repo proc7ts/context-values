@@ -1,0 +1,5 @@
+{
+  "main": "../dist/context-values.updatable.js",
+  "module": "../dist/context-values.updatable.mjs",
+  "typings": "index.d.ts"
+}

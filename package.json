@@ -1,6 +1,6 @@
 {
   "name": "context-values",
-  "version": "2.3.0-dev.1",
+  "version": "2.3.0",
   "description": "IoC context values provider",
   "keywords": [
     "ioc"
@@ -22,6 +22,11 @@
     "a-iterable": "^2.5.0",
     "call-thru": "^3.0.0",
     "fun-events": "^7.3.0"
+  },
+  "peerDependenciesMeta": {
+    "fun-events": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^11.0.2",

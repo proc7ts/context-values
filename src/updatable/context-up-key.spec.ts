@@ -1,8 +1,8 @@
 import { AfterEvent, afterThe } from 'fun-events';
-import { ContextKeyError } from './context-key-error';
-import { ContextRegistry } from './context-registry';
+import { ContextKeyError } from '../context-key-error';
+import { ContextRegistry } from '../context-registry';
 import { MultiContextUpKey, SingleContextUpKey } from './context-up-key';
-import { ContextValues } from './context-values';
+import { ContextValues } from '../context-values';
 
 describe('ContextUpKey', () => {
 
