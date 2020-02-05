@@ -3,7 +3,7 @@
  * @module context-values
  */
 import { flatMapIt, mapIt, overArray } from 'a-iterable';
-import { asis, CallChain, nextArg, nextArgs, NextCall, noop } from 'call-thru';
+import { CallChain, nextArg, nextArgs, NextCall, noop } from 'call-thru';
 import {
   afterEach,
   AfterEvent,
@@ -11,7 +11,8 @@ import {
   afterSupplied,
   afterThe,
   EventKeeper,
-  isEventKeeper, nextOnEvent,
+  isEventKeeper,
+  nextOnEvent,
   trackValue,
   ValueTracker,
 } from 'fun-events';
@@ -105,9 +106,7 @@ function isUpSrcKeeper<Src>(src: Src | EventKeeper<Src[]>): src is EventKeeper<S
  * @internal
  */
 function flatUpSources<Src>(...sources: Src[][]): NextCall<CallChain, Src[]> {
-  return nextArgs<Src[]>(
-      ...flatMapIt(overArray(sources), asis),
-  );
+  return nextArgs<Src[]>(...flatMapIt<Src>(sources));
 }
 
 /**
