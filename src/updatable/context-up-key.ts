@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module context-values
+ * @module context-values/updatable
  */
 import { flatMapIt, mapIt, overArray } from 'a-iterable';
 import { CallChain, nextArg, nextArgs, NextCall, noop } from 'call-thru';
@@ -16,12 +16,12 @@ import {
   trackValue,
   ValueTracker,
 } from 'fun-events';
-import { ContextKey, ContextKey__symbol, ContextKeyDefault, ContextSeedKey, ContextValueOpts } from './context-key';
-import { ContextKeyError } from './context-key-error';
-import { ContextRef } from './context-ref';
-import { ContextSeeder } from './context-seeder';
-import { ContextValueProvider } from './context-value-spec';
-import { ContextValues } from './context-values';
+import { ContextKey, ContextKey__symbol, ContextKeyDefault, ContextSeedKey, ContextValueOpts } from '../context-key';
+import { ContextKeyError } from '../context-key-error';
+import { ContextRef } from '../context-ref';
+import { ContextSeeder } from '../context-seeder';
+import { ContextValueProvider } from '../context-value-spec';
+import { ContextValues } from '../context-values';
 
 /**
  * @internal

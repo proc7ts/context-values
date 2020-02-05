@@ -1,9 +1,13 @@
+/**
+ * @packageDocumentation
+ * @module context-values/updatable
+ */
 import { noop } from 'call-thru';
 import { AfterEvent, afterThe, EventKeeper, nextOnEvent } from 'fun-events';
-import { ContextKeyDefault, ContextSeedKey, ContextValueOpts } from './context-key';
-import { ContextKeyError } from './context-key-error';
+import { ContextKeyDefault, ContextSeedKey, ContextValueOpts } from '../context-key';
+import { ContextKeyError } from '../context-key-error';
 import { ContextUpKey, ContextUpRef } from './context-up-key';
-import { ContextValues } from './context-values';
+import { ContextValues } from '../context-values';
 
 /**
  * A reference to updatable context function value.

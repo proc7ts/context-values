@@ -1,6 +1,6 @@
-import { ContextKeyError } from './context-key-error';
-import { ContextRegistry } from './context-registry';
-import { ContextValues } from './context-values';
+import { ContextKeyError } from '../context-key-error';
+import { ContextRegistry } from '../context-registry';
+import { ContextValues } from '../context-values';
 import { FnContextKey } from './fn-context-key';
 
 describe('FnContextKey', () => {

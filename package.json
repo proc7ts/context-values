@@ -23,6 +23,11 @@
     "call-thru": "^3.0.0",
     "fun-events": "^7.3.0"
   },
+  "peerDependenciesMeta": {
+    "fun-events": {
+      "optional": true
+    }
+  },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^11.0.2",
     "@rollup/plugin-node-resolve": "^7.1.1",
