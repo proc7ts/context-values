@@ -1,5 +1,5 @@
 import { noop } from 'call-thru';
-import { AfterEvent, afterThe, EventKeeper } from 'fun-events';
+import { AfterEvent, afterThe, EventKeeper, nextOnEvent } from 'fun-events';
 import { ContextKeyDefault, ContextSeedKey, ContextValueOpts } from './context-key';
 import { ContextKeyError } from './context-key-error';
 import { ContextUpKey, ContextUpRef } from './context-up-key';
@@ -64,18 +64,20 @@ export class FnContextKey<Args extends any[], Ret = void>
     super(name, seedKey);
     this.byDefault = (context, key) => byDefault(context, key) || (() => { throw new ContextKeyError(this); });
     this.upKey = this.createUpKey(
-        opts => opts.seed.keep.dig((...fns) => {
-          if (fns.length) {
-            return afterThe(fns[fns.length - 1]);
-          }
+        opts => opts.seed.keep.thru(
+            (...fns) => {
+              if (fns.length) {
+                return fns[fns.length - 1];
+              }
 
-          const defaultProvider = (): AfterEvent<[(this: void, ...args: Args) => Ret]> => afterThe(this.byDefault(
-              opts.context,
-              this,
-          ));
+              const defaultProvider = (): AfterEvent<[(this: void, ...args: Args) => Ret]> => afterThe(this.byDefault(
+                  opts.context,
+                  this,
+              ));
 
-          return opts.byDefault(defaultProvider) || defaultProvider();
-        }),
+              return nextOnEvent(opts.byDefault(defaultProvider) || defaultProvider());
+            },
+        ),
     );
   }
 

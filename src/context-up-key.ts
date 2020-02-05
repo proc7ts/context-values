@@ -3,7 +3,7 @@
  * @module context-values
  */
 import { flatMapIt, mapIt, overArray } from 'a-iterable';
-import { asis, NextArgs, nextArgs, noop } from 'call-thru';
+import { asis, CallChain, nextArg, nextArgs, NextCall, noop } from 'call-thru';
 import {
   afterEach,
   AfterEvent,
@@ -11,7 +11,7 @@ import {
   afterSupplied,
   afterThe,
   EventKeeper,
-  isEventKeeper,
+  isEventKeeper, nextOnEvent,
   trackValue,
   ValueTracker,
 } from 'fun-events';
@@ -69,20 +69,21 @@ function upSrcKeepers<Ctx extends ContextValues, Src>(
     context: Ctx,
     providersTracker: ValueTracker<ContextValueProvider<Ctx, Src | EventKeeper<Src[]>>[]>,
 ): AfterEvent<Src[]> {
-  return providersTracker.read.keep.dig(
+  return providersTracker.read.keep.thru(
       providers => !providers.length
-          ? afterThe()
-          : afterEach(
-              ...mapIt(
-                  mapIt(
-                      overArray(providers),
-                      prov => prov(context),
+          ? nextArgs()
+          : nextOnEvent(
+              afterEach(
+                  ...mapIt(
+                      mapIt(
+                          overArray(providers),
+                          prov => prov(context),
+                      ),
+                      toUpSrcKeeper,
                   ),
-                  toUpSrcKeeper,
               ),
-          ).keep.thru(
-              flatUpSources,
           ),
+      flatUpSources,
   );
 }
 
@@ -103,8 +104,8 @@ function isUpSrcKeeper<Src>(src: Src | EventKeeper<Src[]>): src is EventKeeper<S
 /**
  * @internal
  */
-function flatUpSources<Src, NextReturn>(...sources: Src[][]): NextArgs<Src[], NextReturn> {
-  return nextArgs<Src[], NextReturn>(
+function flatUpSources<Src>(...sources: Src[][]): NextCall<CallChain, Src[]> {
+  return nextArgs<Src[]>(
       ...flatMapIt(overArray(sources), asis),
   );
 }
@@ -288,10 +289,10 @@ export class SingleContextUpKey<Value>
   grow<Ctx extends ContextValues>(
       opts: ContextValueOpts<Ctx, AfterEvent<[Value]>, EventKeeper<Value[]> | Value, AfterEvent<Value[]>>,
   ): AfterEvent<[Value]> {
-    return opts.seed.keep.dig((...sources) => {
+    return opts.seed.keep.thru((...sources: Value[]) => {
       if (sources.length) {
         // Sources present. Take the last one.
-        return afterThe(sources[sources.length - 1]);
+        return nextArg(sources[sources.length - 1]);
       }
 
       // Sources absent. Attempt to detect the backup value.
@@ -303,13 +304,13 @@ export class SingleContextUpKey<Value>
       });
 
       if (backup != null) {
-        return backup; // Backup value found.
+        return nextOnEvent(backup); // Backup value found.
       }
 
       // Backup value is absent. Construct an error response.
-      return afterEventBy<[Value]>(() => {
+      return nextOnEvent(afterEventBy<[Value]>(() => {
         throw new ContextKeyError(this);
-      });
+      }));
     });
   }
 
@@ -371,10 +372,10 @@ export class MultiContextUpKey<Src>
   grow<Ctx extends ContextValues>(
       opts: ContextValueOpts<Ctx, AfterEvent<Src[]>, EventKeeper<Src[]> | Src, AfterEvent<Src[]>>,
   ): AfterEvent<Src[]> {
-    return opts.seed.keep.dig((...sources) => {
+    return opts.seed.keep.thru((...sources) => {
       if (sources.length) {
         // Sources present. Use them.
-        return afterThe(...sources);
+        return nextArgs(...sources);
       }
 
       // Sources absent. Attempt to detect the backup value.
@@ -386,13 +387,13 @@ export class MultiContextUpKey<Src>
       });
 
       if (backup != null) {
-        return backup; // Backup value found.
+        return nextOnEvent(backup); // Backup value found.
       }
 
       // Backup value is absent. Construct an error response.
-      return afterEventBy<Src[]>(() => {
+      return nextOnEvent(afterEventBy<Src[]>(() => {
         throw new ContextKeyError(this);
-      });
+      }));
     });
   }
 
