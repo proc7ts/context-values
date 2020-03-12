@@ -45,7 +45,7 @@ describe('FnContextKey', () => {
       let fn!: (arg: string) => number;
       const receiver = jest.fn(f => fn = f);
 
-      values.get(key.upKey)(receiver);
+      values.get(key.upKey).to(receiver);
       expect(receiver).toHaveBeenCalledTimes(1);
       expect(fn('some')).toEqual(4);
 

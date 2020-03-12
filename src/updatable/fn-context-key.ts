@@ -68,7 +68,7 @@ export class FnContextKey<Args extends any[], Ret = void>
     super(name, seedKey);
     this.byDefault = (context, key) => byDefault(context, key) || (() => { throw new ContextKeyError(this); });
     this.upKey = this.createUpKey(
-        opts => opts.seed.keep.thru(
+        opts => opts.seed.keepThru(
             (...fns) => {
               if (fns.length) {
                 return fns[fns.length - 1];
@@ -98,7 +98,7 @@ export class FnContextKey<Args extends any[], Ret = void>
     opts.context.get(
         this.upKey,
         'or' in opts ? { or: opts.or != null ? afterThe(opts.or) : opts.or } : undefined,
-    )!(fn => delegated = fn);
+    )!.to(fn => delegated = fn);
 
     return (...args) => delegated(...args);
   }
