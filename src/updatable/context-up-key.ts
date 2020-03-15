@@ -56,7 +56,7 @@ class ContextUpSeeder<Ctx extends ContextValues, Src>
     return afterEach(
         first,
         second,
-    ).keep.thru(
+    ).keepThru(
         flatUpSources,
     );
   }
@@ -70,7 +70,7 @@ function upSrcKeepers<Ctx extends ContextValues, Src>(
     context: Ctx,
     providersTracker: ValueTracker<ContextValueProvider<Ctx, Src | EventKeeper<Src[]>>[]>,
 ): AfterEvent<Src[]> {
-  return providersTracker.read.keep.thru(
+  return providersTracker.read().keepThru(
       providers => !providers.length
           ? nextArgs()
           : nextAfterEvent(
@@ -288,7 +288,7 @@ export class SingleContextUpKey<Value>
   grow<Ctx extends ContextValues>(
       opts: ContextValueOpts<Ctx, AfterEvent<[Value]>, EventKeeper<Value[]> | Value, AfterEvent<Value[]>>,
   ): AfterEvent<[Value]> {
-    return opts.seed.keep.thru((...sources: Value[]) => {
+    return opts.seed.keepThru((...sources: Value[]) => {
       if (sources.length) {
         // Sources present. Take the last one.
         return nextArg(sources[sources.length - 1]);
@@ -371,7 +371,7 @@ export class MultiContextUpKey<Src>
   grow<Ctx extends ContextValues>(
       opts: ContextValueOpts<Ctx, AfterEvent<Src[]>, EventKeeper<Src[]> | Src, AfterEvent<Src[]>>,
   ): AfterEvent<Src[]> {
-    return opts.seed.keep.thru((...sources) => {
+    return opts.seed.keepThru((...sources) => {
       if (sources.length) {
         // Sources present. Use them.
         return nextArgs(...sources);
