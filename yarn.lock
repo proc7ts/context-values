@@ -422,6 +422,45 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@proc7ts/context-values@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@proc7ts/context-values@workspace:."
+  dependencies:
+    "@proc7ts/a-iterable": ^2.5.1
+    "@proc7ts/call-thru": ^3.0.0
+    "@proc7ts/eslint-config": ^1.0.3
+    "@proc7ts/fun-events": ^9.0.0
+    "@rollup/plugin-commonjs": ^11.0.2
+    "@rollup/plugin-node-resolve": ^7.1.1
+    "@types/jest": ^25.1.4
+    "@typescript-eslint/eslint-plugin": ~2.24.0
+    "@typescript-eslint/parser": ~2.24.0
+    codecov: ^3.6.5
+    eslint: ^6.8.0
+    eslint-plugin-jest: ^23.8.2
+    fs-extra: ^9.0.0
+    gh-pages: ^2.2.0
+    jest: ^25.1.0
+    jest-junit: ^10.0.0
+    npm-run-all: ^4.1.5
+    rollup: ^2.1.0
+    rollup-plugin-sourcemaps: ^0.5.0
+    rollup-plugin-typescript2: ^0.26.0
+    ts-jest: 25.2.0
+    tslib: ^1.11.1
+    typedoc: ^0.17.1
+    typedoc-plugin-external-module-name: ^3.0.0
+    typescript: ^3.8.3
+  peerDependencies:
+    "@proc7ts/a-iterable": ^2.5.1
+    "@proc7ts/call-thru": ^3.0.0
+    "@proc7ts/fun-events": ^9.0.0
+  peerDependenciesMeta:
+    "@proc7ts/fun-events":
+      optional: true
+  languageName: unknown
+  linkType: soft
+
 "@proc7ts/eslint-config@npm:^1.0.3":
   version: 1.0.3
   resolution: "@proc7ts/eslint-config@npm:1.0.3"
@@ -1504,45 +1543,6 @@ __metadata:
   checksum: 2/58a404d951bf270494fb91e136cf064652c1208ccedac23e4da24e6a3a3933998f302cadc45cbf6582a007a4aa44dab944e84056b24e3b1964e9a28aeedf76c9
   languageName: node
   linkType: hard
-
-"context-values@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "context-values@workspace:."
-  dependencies:
-    "@proc7ts/a-iterable": ^2.5.1
-    "@proc7ts/call-thru": ^3.0.0
-    "@proc7ts/eslint-config": ^1.0.3
-    "@proc7ts/fun-events": ^9.0.0
-    "@rollup/plugin-commonjs": ^11.0.2
-    "@rollup/plugin-node-resolve": ^7.1.1
-    "@types/jest": ^25.1.4
-    "@typescript-eslint/eslint-plugin": ~2.24.0
-    "@typescript-eslint/parser": ~2.24.0
-    codecov: ^3.6.5
-    eslint: ^6.8.0
-    eslint-plugin-jest: ^23.8.2
-    fs-extra: ^9.0.0
-    gh-pages: ^2.2.0
-    jest: ^25.1.0
-    jest-junit: ^10.0.0
-    npm-run-all: ^4.1.5
-    rollup: ^2.1.0
-    rollup-plugin-sourcemaps: ^0.5.0
-    rollup-plugin-typescript2: ^0.26.0
-    ts-jest: 25.2.0
-    tslib: ^1.11.1
-    typedoc: ^0.17.1
-    typedoc-plugin-external-module-name: ^3.0.0
-    typescript: ^3.8.3
-  peerDependencies:
-    "@proc7ts/a-iterable": ^2.5.1
-    "@proc7ts/call-thru": ^3.0.0
-    "@proc7ts/fun-events": ^9.0.0
-  peerDependenciesMeta:
-    "@proc7ts/fun-events":
-      optional: true
-  languageName: unknown
-  linkType: soft
 
 "convert-source-map@npm:^1.4.0, convert-source-map@npm:^1.6.0, convert-source-map@npm:^1.7.0":
   version: 1.7.0
