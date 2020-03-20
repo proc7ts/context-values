@@ -1,5 +1,5 @@
 {
-  "name": "context-values",
+  "name": "@proc7ts/context-values",
   "version": "2.4.0",
   "description": "IoC context values provider",
   "keywords": [
