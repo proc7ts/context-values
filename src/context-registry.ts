@@ -1,8 +1,8 @@
 /**
  * @packageDocumentation
- * @module context-values
+ * @module @proc7ts/context-values
  */
-import { noop } from 'call-thru';
+import { noop } from '@proc7ts/call-thru';
 import { ContextKey, ContextKey__symbol, ContextSeedKey, ContextValueOpts } from './context-key';
 import { ContextKeyError } from './context-key-error';
 import { ContextRef, ContextRequest } from './context-ref';

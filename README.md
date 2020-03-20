@@ -11,16 +11,16 @@ This library allows to construct an [IoC] context, other components can request 
 
 An [IoC] context is an object with `get()` method implemented. This method returns a context value by its key.
 
-[npm-image]: https://img.shields.io/npm/v/context-values.svg?logo=npm
-[npm-url]: https://www.npmjs.com/package/context-values
-[ci-image]: https://img.shields.io/circleci/build/github/surol/context-values?logo=circleci
-[ci-url]: https://circleci.com/gh/surol/context-values
-[codecov-image]: https://codecov.io/gh/surol/context-values/branch/master/graph/badge.svg
-[codecov-url]: https://codecov.io/gh/surol/context-values
+[npm-image]: https://img.shields.io/npm/v/@proc7ts/context-values.svg?logo=npm
+[npm-url]: https://www.npmjs.com/package/@proc7ts/context-values
+[ci-image]: https://img.shields.io/circleci/build/github/proc7ts/context-values?logo=circleci
+[ci-url]: https://circleci.com/gh/proc7ts/context-values
+[codecov-image]: https://codecov.io/gh/proc7ts/context-values/branch/master/graph/badge.svg
+[codecov-url]: https://codecov.io/gh/proc7ts/context-values
 [github-image]: https://img.shields.io/static/v1?logo=github&label=GitHub&message=project&color=informational
-[github-url]: https://github.com/surol/context-values
+[github-url]: https://github.com/proc7ts/context-values
 [api-docs-image]: https://img.shields.io/static/v1?logo=typescript&label=API&message=docs&color=informational
-[api-docs-url]: https://surol.github.io/context-values/
+[api-docs-url]: https://proc7ts.github.io/context-values/
 [IoC]: https://en.wikipedia.org/wiki/Inversion_of_control
 
 
@@ -32,7 +32,7 @@ A context should implement a `ContextValues` interface. This interface declares 
 
 The following code returns a string value associated with `key`, or throws an exception if the value not found.
 ```typescript
-import { SingleContextKey } from 'context-values';
+import { SingleContextKey } from '@proc7ts/context-values';
 
 const key = new SingleContextKey<string>('my-key');
 
@@ -44,7 +44,7 @@ myContext.get(key)
 Normally, if the value associated with the given key can not be found, an exception is thrown. To avoid this, a fallback
 value can be provided. It will be returned if the value not found.
 ```typescript
-import { SingleContextKey } from 'context-values';
+import { SingleContextKey } from '@proc7ts/context-values';
 
 const key = new SingleContextKey<string>('my-key');
 
@@ -59,7 +59,7 @@ object with `key` property containing a `ContextKey` instance to find.
 
 This can be handy e.g. when requesting an instance of some known type:
 ```typescript
-import { ContextKey, SingleContextKey } from 'context-values';
+import { ContextKey, SingleContextKey } from '@proc7ts/context-values';
 
 class MyService {
   
@@ -80,7 +80,7 @@ Context values can be provided using `ContextRegistry`.
 Then the values can be requested from `ContextValues` instance constructed by the `newValues()` method of the registry. 
 
 ```typescript
-import { ContextRegistry, SingleContextKey } from 'context-values';
+import { ContextRegistry, SingleContextKey } from '@proc7ts/context-values';
 
 const key1 = new SingleContextKey<string>('key1');
 const key2 = new SingleContextKey<number>('key2');
@@ -107,7 +107,7 @@ object with `[ContextKey__symbol]` property containing a `ContextKey` to provide
 
 This can be handy e.g. when providing an instance of some known type:
 ```typescript
-import { ContextKey, ContextKey__symbol, ContextRegistry, SingleContextKey } from 'context-values';
+import { ContextKey, ContextKey__symbol, ContextRegistry, SingleContextKey } from '@proc7ts/context-values';
 
 class MyService {
   
@@ -158,7 +158,7 @@ They extend a `ContextKey` abstract class. The following implementations are ava
 - `MultiContextKey` that allows to associate multiple values with it.
 
 ```typescript
-import { ContextRegistry, SingleContextKey, MultiContextKey } from 'context-values';
+import { ContextRegistry, SingleContextKey, MultiContextKey } from '@proc7ts/context-values';
 
 const key1 = new SingleContextKey<string>('key1');
 const key2 = new MultiContextKey<number>('key2');
@@ -184,7 +184,7 @@ fallback value specified in the request.
 
 The default value is evaluated by the function accepting a `ContextValues` instance as its only argument.
 ```typescript
-import { ContextRegistry, SingleContextKey, MultiContextKey } from 'context-values';
+import { ContextRegistry, SingleContextKey, MultiContextKey } from '@proc7ts/context-values';
 
 const key1 = new SingleContextKey<string>('key1');
 const key2 = new SingleContextKey<number>('key2', { byDefault: ctx => ctx.get('key1').length });
@@ -241,7 +241,7 @@ import {
   ContextValueOpts,
   ContextValues,
   SimpleContextKey,
-} from 'context-values';
+} from '@proc7ts/context-values';
 
 class ConcatContextKey<Src> extends SimpleContextKey<string, Src> {
 
@@ -302,11 +302,11 @@ may be used, or `SingleContextUpKey` and `MultiContextUpKey` implementations.
 They provide an [AfterEvent] keeper of value. The receivers registered in this keeper would receive the actual value
 each time it changes. E.g. when new value source is provided in `ContextRegistry`.
 
-This functionality is implemented in `context-value/updatable` sub-module and depends on `fun-events`.
+This functionality is implemented in `@proc7ts/context-value/updatable` sub-module and depends on `@proc7ts/fun-events`.
 
 ```typescript
-import { ContextRegistry } from 'context-values'; 
-import { SingleContextUpKey } from 'context-values/updatable';
+import { ContextRegistry } from '@proc7ts/context-values'; 
+import { SingleContextUpKey } from '@proc7ts/context-values/updatable';
 
 const key = new SingleContextUpKey<string>('updatable-value');
 const registry = new ContextRegistry();

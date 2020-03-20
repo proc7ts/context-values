@@ -1,9 +1,9 @@
 /**
  * @packageDocumentation
- * @module context-values/updatable
+ * @module @proc7ts/context-values/updatable
  */
-import { noop } from 'call-thru';
-import { AfterEvent, afterThe, EventKeeper, nextAfterEvent } from 'fun-events';
+import { noop } from '@proc7ts/call-thru';
+import { AfterEvent, afterThe, EventKeeper, nextAfterEvent } from '@proc7ts/fun-events';
 import { ContextKeyDefault, ContextSeedKey, ContextValueOpts } from '../context-key';
 import { ContextKeyError } from '../context-key-error';
 import { ContextValues } from '../context-values';

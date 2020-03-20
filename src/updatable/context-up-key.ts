@@ -1,9 +1,9 @@
 /**
  * @packageDocumentation
- * @module context-values/updatable
+ * @module @proc7ts/context-values/updatable
  */
-import { flatMapIt, mapIt, overArray } from 'a-iterable';
-import { CallChain, nextArg, nextArgs, NextCall, noop } from 'call-thru';
+import { flatMapIt, mapIt, overArray } from '@proc7ts/a-iterable';
+import { CallChain, nextArg, nextArgs, NextCall, noop } from '@proc7ts/call-thru';
 import {
   afterEach,
   AfterEvent,
@@ -15,7 +15,7 @@ import {
   nextAfterEvent,
   trackValue,
   ValueTracker,
-} from 'fun-events';
+} from '@proc7ts/fun-events';
 import { ContextKey, ContextKey__symbol, ContextKeyDefault, ContextSeedKey, ContextValueOpts } from '../context-key';
 import { ContextKeyError } from '../context-key-error';
 import { ContextRef } from '../context-ref';

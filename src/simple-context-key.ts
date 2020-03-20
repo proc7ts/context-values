@@ -1,9 +1,9 @@
 /**
  * @packageDocumentation
- * @module context-values
+ * @module @proc7ts/context-values
  */
-import { AIterable, itsEmpty, itsLast, overArray, overNone } from 'a-iterable';
-import { asis, isPresent, noop, valuesProvider } from 'call-thru';
+import { AIterable, itsEmpty, itsLast, overArray, overNone } from '@proc7ts/a-iterable';
+import { asis, isPresent, noop, valuesProvider } from '@proc7ts/call-thru';
 import { ContextKey, ContextKeyDefault, ContextSeedKey, ContextValueOpts } from './context-key';
 import { ContextRef } from './context-ref';
 import { ContextSeeder } from './context-seeder';

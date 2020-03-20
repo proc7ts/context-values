@@ -24,7 +24,7 @@ module.exports = {
     [
       'jest-junit',
       {
-        suiteName: 'context-values',
+        suiteName: '@proc7ts/context-values',
         outputDirectory: './target/test-results',
         classNameTemplate: '{classname}: {title}',
         titleTemplate: '{classname}: {title}',

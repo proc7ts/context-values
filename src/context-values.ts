@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module context-values
+ * @module @proc7ts/context-values
  */
 import { ContextRequest } from './context-ref';
 

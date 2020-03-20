@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module context-values
+ * @module @proc7ts/context-values
  */
 import { ContextRef } from './context-ref';
 import { ContextSeeder } from './context-seeder';
