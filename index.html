@@ -65,11 +65,11 @@
 				<a href="#ioc-context-values-provider" id="ioc-context-values-provider" style="color: inherit; text-decoration: none;">
 					<h1>IoC Context Values Provider</h1>
 				</a>
-				<p><a href="https://www.npmjs.com/package/context-values"><img src="https://img.shields.io/npm/v/context-values.svg?logo=npm" alt="NPM"></a>
-					<a href="https://circleci.com/gh/surol/context-values"><img src="https://img.shields.io/circleci/build/github/surol/context-values?logo=circleci" alt="CircleCI"></a>
-					<a href="https://codecov.io/gh/surol/context-values"><img src="https://codecov.io/gh/surol/context-values/branch/master/graph/badge.svg" alt="codecov"></a>
-					<a href="https://github.com/surol/context-values"><img src="https://img.shields.io/static/v1?logo=github&label=GitHub&message=project&color=informational" alt="GitHub Project"></a>
-				<a href="https://surol.github.io/context-values/"><img src="https://img.shields.io/static/v1?logo=typescript&label=API&message=docs&color=informational" alt="API Documentation"></a></p>
+				<p><a href="https://www.npmjs.com/package/@proc7ts/context-values"><img src="https://img.shields.io/npm/v/@proc7ts/context-values.svg?logo=npm" alt="NPM"></a>
+					<a href="https://circleci.com/gh/proc7ts/context-values"><img src="https://img.shields.io/circleci/build/github/proc7ts/context-values?logo=circleci" alt="CircleCI"></a>
+					<a href="https://codecov.io/gh/proc7ts/context-values"><img src="https://codecov.io/gh/proc7ts/context-values/branch/master/graph/badge.svg" alt="codecov"></a>
+					<a href="https://github.com/proc7ts/context-values"><img src="https://img.shields.io/static/v1?logo=github&label=GitHub&message=project&color=informational" alt="GitHub Project"></a>
+				<a href="https://proc7ts.github.io/context-values/"><img src="https://img.shields.io/static/v1?logo=typescript&label=API&message=docs&color=informational" alt="API Documentation"></a></p>
 				<p>This library allows to construct an <a href="https://en.wikipedia.org/wiki/Inversion_of_control">IoC</a> context, other components can request values from.</p>
 				<p>An <a href="https://en.wikipedia.org/wiki/Inversion_of_control">IoC</a> context is an object with <code>get()</code> method implemented. This method returns a context value by its key.</p>
 				<a href="#accessing-context-values" id="accessing-context-values" style="color: inherit; text-decoration: none;">
@@ -78,7 +78,7 @@
 				<p>A context should implement a <code>ContextValues</code> interface. This interface declares a <code>get()</code> method accepting a
 				<code>ContextRequest</code> identifying the requested value (e.g. a <code>ContextKey</code> instance), and a non-mandatory options.</p>
 				<p>The following code returns a string value associated with <code>key</code>, or throws an exception if the value not found.</p>
-				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { SingleContextKey } <span class="hljs-keyword">from</span> <span class="hljs-string">'context-values'</span>;
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { SingleContextKey } <span class="hljs-keyword">from</span> <span class="hljs-string">'@proc7ts/context-values'</span>;
 
 <span class="hljs-keyword">const</span> key = <span class="hljs-keyword">new</span> SingleContextKey&lt;<span class="hljs-built_in">string</span>&gt;(<span class="hljs-string">'my-key'</span>);
 
@@ -88,7 +88,7 @@ myContext.get(key)</code></pre>
 				</a>
 				<p>Normally, if the value associated with the given key can not be found, an exception is thrown. To avoid this, a fallback
 				value can be provided. It will be returned if the value not found.</p>
-				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { SingleContextKey } <span class="hljs-keyword">from</span> <span class="hljs-string">'context-values'</span>;
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { SingleContextKey } <span class="hljs-keyword">from</span> <span class="hljs-string">'@proc7ts/context-values'</span>;
 
 <span class="hljs-keyword">const</span> key = <span class="hljs-keyword">new</span> SingleContextKey&lt;<span class="hljs-built_in">string</span>&gt;(<span class="hljs-string">'my-key'</span>);
 
@@ -99,7 +99,7 @@ myContext.get(key, { or: <span class="hljs-string">'empty'</span> });</code></pr
 				<p>The <code>get()</code> method accepts not only a <code>ContextKey</code> instance, but arbitrary <code>ContextRequest</code>. The latter is just an
 				object with <code>key</code> property containing a <code>ContextKey</code> instance to find.</p>
 				<p>This can be handy e.g. when requesting an instance of some known type:</p>
-				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { ContextKey, SingleContextKey } <span class="hljs-keyword">from</span> <span class="hljs-string">'context-values'</span>;
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { ContextKey, SingleContextKey } <span class="hljs-keyword">from</span> <span class="hljs-string">'@proc7ts/context-values'</span>;
 
 <span class="hljs-keyword">class</span> MyService {
 
@@ -115,7 +115,7 @@ myContext.get(MyService.key); <span class="hljs-comment">// The same as above.</
 				</a>
 				<p>Context values can be provided using <code>ContextRegistry</code>.
 				Then the values can be requested from <code>ContextValues</code> instance constructed by the <code>newValues()</code> method of the registry. </p>
-				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { ContextRegistry, SingleContextKey } <span class="hljs-keyword">from</span> <span class="hljs-string">'context-values'</span>;
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { ContextRegistry, SingleContextKey } <span class="hljs-keyword">from</span> <span class="hljs-string">'@proc7ts/context-values'</span>;
 
 <span class="hljs-keyword">const</span> key1 = <span class="hljs-keyword">new</span> SingleContextKey&lt;<span class="hljs-built_in">string</span>&gt;(<span class="hljs-string">'key1'</span>);
 <span class="hljs-keyword">const</span> key2 = <span class="hljs-keyword">new</span> SingleContextKey&lt;<span class="hljs-built_in">number</span>&gt;(<span class="hljs-string">'key2'</span>);
@@ -135,7 +135,7 @@ context.get(key2); <span class="hljs-comment">// 6</span></code></pre>
 				<p>The <code>provide()</code> method accepts not only a <code>ContextKey</code> instance, but arbitrary <code>ContextTarget</code>. The latter is just an
 				object with <code>[ContextKey__symbol]</code> property containing a <code>ContextKey</code> to provide.</p>
 				<p>This can be handy e.g. when providing an instance of some known type:</p>
-				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { ContextKey, ContextKey__symbol, ContextRegistry, SingleContextKey } <span class="hljs-keyword">from</span> <span class="hljs-string">'context-values'</span>;
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { ContextKey, ContextKey__symbol, ContextRegistry, SingleContextKey } <span class="hljs-keyword">from</span> <span class="hljs-string">'@proc7ts/context-values'</span>;
 
 <span class="hljs-keyword">class</span> MyService {
 
@@ -180,7 +180,7 @@ context.get(MyService); <span class="hljs-comment">// No need to specify `MyServ
 					<li><code>SingleContextKey</code> that allows associate a single value with it, and  </li>
 					<li><code>MultiContextKey</code> that allows to associate multiple values with it.</li>
 				</ul>
-				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { ContextRegistry, SingleContextKey, MultiContextKey } <span class="hljs-keyword">from</span> <span class="hljs-string">'context-values'</span>;
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { ContextRegistry, SingleContextKey, MultiContextKey } <span class="hljs-keyword">from</span> <span class="hljs-string">'@proc7ts/context-values'</span>;
 
 <span class="hljs-keyword">const</span> key1 = <span class="hljs-keyword">new</span> SingleContextKey&lt;<span class="hljs-built_in">string</span>&gt;(<span class="hljs-string">'key1'</span>);
 <span class="hljs-keyword">const</span> key2 = <span class="hljs-keyword">new</span> MultiContextKey&lt;<span class="hljs-built_in">number</span>&gt;(<span class="hljs-string">'key2'</span>);
@@ -202,7 +202,7 @@ context.get(key2); <span class="hljs-comment">// [1, 2] - MultiContextKey return
 				<p>Context value key may declare a default value. It will be evaluated and returned when the value is not found and no
 				fallback value specified in the request.</p>
 				<p>The default value is evaluated by the function accepting a <code>ContextValues</code> instance as its only argument.</p>
-				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { ContextRegistry, SingleContextKey, MultiContextKey } <span class="hljs-keyword">from</span> <span class="hljs-string">'context-values'</span>;
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { ContextRegistry, SingleContextKey, MultiContextKey } <span class="hljs-keyword">from</span> <span class="hljs-string">'@proc7ts/context-values'</span>;
 
 <span class="hljs-keyword">const</span> key1 = <span class="hljs-keyword">new</span> SingleContextKey&lt;<span class="hljs-built_in">string</span>&gt;(<span class="hljs-string">'key1'</span>);
 <span class="hljs-keyword">const</span> key2 = <span class="hljs-keyword">new</span> SingleContextKey&lt;<span class="hljs-built_in">number</span>&gt;(<span class="hljs-string">'key2'</span>, { byDefault: <span class="hljs-function"><span class="hljs-params">ctx</span> =&gt;</span> ctx.get(<span class="hljs-string">'key1'</span>).length });
@@ -244,7 +244,7 @@ context.get(key2); <span class="hljs-comment">// 999 - provided explicitly</span
   ContextValueOpts,
   ContextValues,
   SimpleContextKey,
-} <span class="hljs-keyword">from</span> <span class="hljs-string">'context-values'</span>;
+} <span class="hljs-keyword">from</span> <span class="hljs-string">'@proc7ts/context-values'</span>;
 
 <span class="hljs-keyword">class</span> ConcatContextKey&lt;Src&gt; <span class="hljs-keyword">extends</span> SimpleContextKey&lt;<span class="hljs-built_in">string</span>, Src&gt; {
 
@@ -297,9 +297,9 @@ context.get(key2, { or: <span class="hljs-literal">undefined</span> }); <span cl
 				may be used, or <code>SingleContextUpKey</code> and <code>MultiContextUpKey</code> implementations.</p>
 				<p>They provide an <a href="https://www.npmjs.com/package/fun-events">AfterEvent</a> keeper of value. The receivers registered in this keeper would receive the actual value
 				each time it changes. E.g. when new value source is provided in <code>ContextRegistry</code>.</p>
-				<p>This functionality is implemented in <code>context-value/updatable</code> sub-module and depends on <code>fun-events</code>.</p>
-				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { ContextRegistry } <span class="hljs-keyword">from</span> <span class="hljs-string">'context-values'</span>;
-<span class="hljs-keyword">import</span> { SingleContextUpKey } <span class="hljs-keyword">from</span> <span class="hljs-string">'context-values/updatable'</span>;
+				<p>This functionality is implemented in <code>@proc7ts/context-value/updatable</code> sub-module and depends on <code>@proc7ts/fun-events</code>.</p>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { ContextRegistry } <span class="hljs-keyword">from</span> <span class="hljs-string">'@proc7ts/context-values'</span>;
+<span class="hljs-keyword">import</span> { SingleContextUpKey } <span class="hljs-keyword">from</span> <span class="hljs-string">'@proc7ts/context-values/updatable'</span>;
 
 <span class="hljs-keyword">const</span> key = <span class="hljs-keyword">new</span> SingleContextUpKey&lt;<span class="hljs-built_in">string</span>&gt;(<span class="hljs-string">'updatable-value'</span>);
 <span class="hljs-keyword">const</span> registry = <span class="hljs-keyword">new</span> ContextRegistry();
@@ -319,11 +319,11 @@ registry.provide({ a: key, is: <span class="hljs-string">'updated'</span> }); <s
 					<li class="globals  ">
 						<a href="globals.html"><em>Globals</em></a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/context_values.html">context-<wbr>values</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/_proc7ts_context_values.html">@proc7ts/context-<wbr>values</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/context_values_updatable.html">context-<wbr>values/updatable</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/_proc7ts_context_values_updatable.html">@proc7ts/context-<wbr>values/updatable</a>
 					</li>
 				</ul>
 			</nav>
@@ -339,57 +339,16 @@ registry.provide({ a: key, is: <span class="hljs-string">'updated'</span> }); <s
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
-				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
 				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
-				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
-				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
-				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
 				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
-				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
-				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
-				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
 				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
-				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
 			</ul>
 		</div>
 	</div>
