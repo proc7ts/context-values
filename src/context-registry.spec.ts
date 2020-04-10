@@ -1,7 +1,7 @@
 import { AIterable } from '@proc7ts/a-iterable';
 import { ContextRegistry } from './context-registry';
 import { ContextValues } from './context-values';
-import { SingleContextKey } from './simple-context-key';
+import { SingleContextKey } from './single-context-key';
 import Mock = jest.Mock;
 
 describe('ContextRegistry', () => {

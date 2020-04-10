@@ -5,4 +5,6 @@ export * from './context-registry';
 export * from './context-seeder';
 export * from './context-value-spec';
 export * from './context-values';
+export * from './multi-context-key';
 export * from './simple-context-key';
+export * from './single-context-key';

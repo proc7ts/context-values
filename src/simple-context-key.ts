@@ -2,10 +2,9 @@
  * @packageDocumentation
  * @module @proc7ts/context-values
  */
-import { AIterable, itsEmpty, itsLast, overArray, overNone } from '@proc7ts/a-iterable';
-import { asis, isPresent, noop, valuesProvider } from '@proc7ts/call-thru';
-import { ContextKey, ContextKeyDefault, ContextSeedKey, ContextValueOpts } from './context-key';
-import { ContextRef } from './context-ref';
+import { AIterable, itsEmpty, overArray, overNone } from '@proc7ts/a-iterable';
+import { asis, isPresent } from '@proc7ts/call-thru';
+import { ContextKey, ContextSeedKey } from './context-key';
 import { ContextSeeder } from './context-seeder';
 import { ContextValueProvider } from './context-value-spec';
 import { ContextValues } from './context-values';
@@ -74,138 +73,6 @@ export abstract class SimpleContextKey<Value, Src = Value> extends ContextKey<Va
   constructor(name: string, seedKey?: ContextSeedKey<Src, AIterable<Src>>) {
     super(name);
     this.seedKey = seedKey || new SimpleSeedKey(this);
-  }
-
-}
-
-/**
- * Single context value reference.
- *
- * @typeparam Value  Context value type.
- */
-export type SingleContextRef<Value> = ContextRef<Value, Value>;
-
-/**
- * Single context value key.
- *
- * Treats the last source value as context one and ignores the rest of them.
- *
- * @typeparam Value  Context value type.
- */
-export class SingleContextKey<Value>
-    extends SimpleContextKey<Value>
-    implements SingleContextRef<Value> {
-
-  /**
-   * A provider of context value used when there is no value associated with this key.
-   */
-  readonly byDefault: ContextKeyDefault<Value, ContextKey<Value>>;
-
-  /**
-   * Constructs single context value key.
-   *
-   * @param name  Human-readable key name.
-   * @param seedKey  Value seed key. A new one will be constructed when omitted.
-   * @param byDefault  Optional default value provider. If unspecified or `undefined` the key has no default
-   * value.
-   */
-  constructor(
-      name: string,
-      {
-        seedKey,
-        byDefault = noop,
-      }: {
-        seedKey?: ContextSeedKey<Value, AIterable<Value>>;
-        byDefault?: ContextKeyDefault<Value, ContextKey<Value>>;
-      } = {},
-  ) {
-    super(name, seedKey);
-    this.byDefault = byDefault;
-  }
-
-  grow<Ctx extends ContextValues>(
-      opts: ContextValueOpts<Ctx, Value, Value, AIterable<Value>>,
-  ): Value | null | undefined {
-
-    const value = itsLast(opts.seed);
-
-    if (value != null) {
-      return value;
-    }
-
-    return opts.byDefault(() => this.byDefault(opts.context, this));
-  }
-
-}
-
-/**
- * Multiple context value reference.
- *
- * Represents context value as read-only array of source values.
- *
- * @typeparam Src  Value source type and context value item type.
- */
-export type MultiContextRef<Src> = ContextRef<readonly Src[], Src>;
-
-/**
- * Multiple context values key.
- *
- * Represents context value as read-only array of source values.
- *
- * Associated with empty array by default.
- *
- * @typeparam Src  Value source type and context value item type.
- */
-export class MultiContextKey<Src>
-    extends SimpleContextKey<readonly Src[], Src>
-    implements MultiContextRef<Src> {
-
-  /**
-   * A provider of context value used when there is no value associated with this key.
-   */
-  readonly byDefault: ContextKeyDefault<readonly Src[], ContextKey<readonly Src[], Src>>;
-
-  /**
-   * Constructs multiple context values key.
-   *
-   * @param name  Human-readable key name.
-   * @param seedKey  Value seed key. A new one will be constructed when omitted.
-   * @param byDefault  Optional default value provider. If unspecified then the default value is empty array.
-   */
-  constructor(
-      name: string,
-      {
-        seedKey,
-        byDefault = valuesProvider(),
-      }: {
-        seedKey?: ContextSeedKey<Src, AIterable<Src>>;
-        byDefault?: ContextKeyDefault<readonly Src[], ContextKey<readonly Src[], Src>>;
-      } = {},
-  ) {
-    super(name, seedKey);
-    this.byDefault = byDefault;
-  }
-
-  grow<Ctx extends ContextValues>(
-      opts: ContextValueOpts<Ctx, readonly Src[], Src, AIterable<Src>>,
-  ): readonly Src[] | null | undefined {
-
-    const result = Array.from(opts.seed);
-
-    if (result.length) {
-      return result;
-    }
-
-    return opts.byDefault(() => {
-
-      const defaultSources = this.byDefault(opts.context, this);
-
-      if (defaultSources) {
-        return Array.from(defaultSources);
-      }
-
-      return;
-    });
   }
 
 }
