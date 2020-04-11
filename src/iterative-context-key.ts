@@ -2,8 +2,8 @@
  * @packageDocumentation
  * @module @proc7ts/context-values
  */
-import { filterIt, flatMapIt, itsEmpty, mapIt, overArray, overNone } from '@proc7ts/a-iterable';
-import { isPresent } from '@proc7ts/call-thru';
+import { filterIt, flatMapIt, itsEmpty, mapIt, overNone } from '@proc7ts/a-iterable';
+import { isPresent, lazyValue } from '@proc7ts/call-thru';
 import { ContextKey, ContextSeedKey } from './context-key';
 import { ContextSeeder } from './context-seeder';
 import { ContextValueProvider } from './context-value-spec';
@@ -84,13 +84,6 @@ export abstract class IterativeContextKey<Value, Src = Value> extends ContextKey
 }
 
 /**
- * Context value provider and cached context value source.
- *
- * @internal
- */
-type SourceEntry<Ctx extends ContextValues, Src> = [ContextValueProvider<Ctx, Src>, (Src | null | undefined)?];
-
-/**
  * @internal
  */
 function iterativeSeed<Ctx extends ContextValues, Src>(
@@ -98,19 +91,9 @@ function iterativeSeed<Ctx extends ContextValues, Src>(
     providers: readonly ContextValueProvider<Ctx, Src>[],
 ): Iterable<Src> {
   return filterIt<Src | null | undefined, Src>(
-      mapIt<SourceEntry<Ctx, Src>, Src | null | undefined>(
-          overArray(providers.map<SourceEntry<Ctx, Src>>(provider => [provider])),
-          entry => {
-            if (entry.length > 1) {
-              return entry[1];
-            }
-
-            const source = entry[0](context);
-
-            entry.push(source);
-
-            return source;
-          },
+      mapIt(
+          providers.map(provider => lazyValue(provider.bind(undefined, context))), // lazily evaluated providers
+          provider => provider(),
       ),
       isPresent,
   );

@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @proc7ts/context-values
  */
-import { noop, valueProvider } from '@proc7ts/call-thru';
+import { lazyValue, noop } from '@proc7ts/call-thru';
 import { ContextKey, ContextSeedKey } from './context-key';
 import { ContextSeeder } from './context-seeder';
 import { ContextValueProvider } from './context-value-spec';
@@ -28,17 +28,26 @@ class SimpleContextSeeder<Ctx extends ContextValues, Src>
     };
   }
 
-  seed(context: Ctx, initial: SimpleContextKey.Seed<Src>): SimpleContextKey.Seed<Src> {
+  seed(context: Ctx, initial?: SimpleContextKey.Seed<Src>): SimpleContextKey.Seed<Src> {
 
-    let seeds = this._providers.map(provider => simpleSeedByProvider(context, provider));
+    const { length } = this._providers;
+
+    if (!length) {
+      return initial || noop;
+    }
+
+    const makeSeed = (provider: ContextValueProvider<Ctx, Src>): SimpleContextKey.Seed<Src> => lazyValue(
+        provider.bind(undefined, context),
+    );
+
+    if (!initial && length === 1) {
+      return makeSeed(this._providers[0]);
+    }
+
+    const seeds: SimpleContextKey.Seed<Src>[] = this._providers.map(makeSeed);
 
     if (initial) {
-      if (!this._providers.length) {
-        return initial;
-      }
-      seeds = [...seeds, initial];
-    } else if (seeds.length < 2) {
-      return seeds.length ? seeds[0] : noop;
+      seeds.push(initial);
     }
 
     return combineSimpleSeeds(seeds);
@@ -61,23 +70,6 @@ class SimpleContextSeeder<Ctx extends ContextValues, Src>
     return combineSimpleSeeds([second, first]);
   }
 
-
-}
-
-/**
- * @internal
- */
-function simpleSeedByProvider<Ctx extends ContextValues, Src>(
-    context: Ctx,
-    provider: ContextValueProvider<Ctx, Src>,
-): SimpleContextKey.Seed<Src> {
-
-  let get = (): Src | null | undefined => {
-    get = valueProvider(provider(context));
-    return get();
-  };
-
-  return () => get();
 }
 
 /**
@@ -86,7 +78,7 @@ function simpleSeedByProvider<Ctx extends ContextValues, Src>(
 function combineSimpleSeeds<Src>(
     seeds: readonly SimpleContextKey.Seed<Src>[],
 ): SimpleContextKey.Seed<Src> {
-  return () => {
+  return lazyValue(() => {
     for (const seed of seeds) {
 
       const value = seed();
@@ -96,7 +88,7 @@ function combineSimpleSeeds<Src>(
       }
     }
     return;
-  };
+  });
 }
 
 /**
