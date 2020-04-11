@@ -7,7 +7,7 @@ import { noop } from '@proc7ts/call-thru';
 import { ContextKey, ContextKeyDefault, ContextSeedKey, ContextValueOpts } from './context-key';
 import { ContextRef } from './context-ref';
 import { ContextValues } from './context-values';
-import { SimpleContextKey } from './simple-context-key';
+import { IterativeContextKey } from './iterative-context-key';
 
 /**
  * Single context value reference.
@@ -24,7 +24,7 @@ export type SingleContextRef<Value> = ContextRef<Value, Value>;
  * @typeparam Value  Context value type.
  */
 export class SingleContextKey<Value>
-    extends SimpleContextKey<Value>
+    extends IterativeContextKey<Value>
     implements SingleContextRef<Value> {
 
   /**

@@ -7,7 +7,7 @@ import { valuesProvider } from '@proc7ts/call-thru';
 import { ContextKey, ContextKeyDefault, ContextSeedKey, ContextValueOpts } from './context-key';
 import { ContextRef } from './context-ref';
 import { ContextValues } from './context-values';
-import { SimpleContextKey } from './simple-context-key';
+import { IterativeContextKey } from './iterative-context-key';
 
 /**
  * Multiple context value reference.
@@ -28,7 +28,7 @@ export type MultiContextRef<Src> = ContextRef<readonly Src[], Src>;
  * @typeparam Src  Value source type and context value item type.
  */
 export class MultiContextKey<Src>
-    extends SimpleContextKey<readonly Src[], Src>
+    extends IterativeContextKey<readonly Src[], Src>
     implements MultiContextRef<Src> {
 
   /**

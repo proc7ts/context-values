@@ -9,7 +9,10 @@ import { ContextSeeder } from './context-seeder';
 import { ContextValueProvider } from './context-value-spec';
 import { ContextValues } from './context-values';
 
-class SimpleContextSeeder<Ctx extends ContextValues, Src> implements ContextSeeder<Ctx, Src, AIterable<Src>> {
+/**
+ * @internal
+ */
+class IterativeContextSeeder<Ctx extends ContextValues, Src> implements ContextSeeder<Ctx, Src, AIterable<Src>> {
 
   private readonly _providers: ContextValueProvider<Ctx, Src>[] = [];
 
@@ -42,25 +45,28 @@ class SimpleContextSeeder<Ctx extends ContextValues, Src> implements ContextSeed
 
 }
 
-class SimpleSeedKey<Src> extends ContextSeedKey<Src, AIterable<Src>> {
+/**
+ * @internal
+ */
+class IterativeSeedKey<Src> extends ContextSeedKey<Src, AIterable<Src>> {
 
-  seeder<Ctx extends ContextValues>(): SimpleContextSeeder<Ctx, Src> {
-    return new SimpleContextSeeder();
+  seeder<Ctx extends ContextValues>(): IterativeContextSeeder<Ctx, Src> {
+    return new IterativeContextSeeder();
   }
 
 }
 
 /**
- * Simple context value key implementation.
+ * Iterative context value key implementation.
  *
- * Collects value sources into iterable instance.
+ * Collects value sources as iterable instance.
  *
  * A context value associated with this key is never changes once constructed.
  *
  * @typeparam Value  Context value type.
  * @typeparam Src  Source value type.
  */
-export abstract class SimpleContextKey<Value, Src = Value> extends ContextKey<Value, Src, AIterable<Src>> {
+export abstract class IterativeContextKey<Value, Src = Value> extends ContextKey<Value, Src, AIterable<Src>> {
 
   readonly seedKey: ContextSeedKey<Src, AIterable<Src>>;
 
@@ -72,7 +78,7 @@ export abstract class SimpleContextKey<Value, Src = Value> extends ContextKey<Va
    */
   constructor(name: string, seedKey?: ContextSeedKey<Src, AIterable<Src>>) {
     super(name);
-    this.seedKey = seedKey || new SimpleSeedKey(this);
+    this.seedKey = seedKey || new IterativeSeedKey(this);
   }
 
 }
