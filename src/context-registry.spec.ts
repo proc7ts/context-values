@@ -1,4 +1,3 @@
-import { AIterable } from '@proc7ts/a-iterable';
 import { valueProvider } from '@proc7ts/call-thru';
 import { ContextRegistry } from './context-registry';
 import { ContextValues } from './context-values';
@@ -29,7 +28,7 @@ describe('ContextRegistry', () => {
     });
     it('respects seed fallback', () => {
       expect(values.get(key.seedKey, { or: valueProvider('default') })()).toBe('default');
-      expect([...values.get(multiKey.seedKey, { or: AIterable.from(['default']) })]).toEqual(['default']);
+      expect([...values.get(multiKey.seedKey, { or: ['default'] })]).toEqual(['default']);
     });
     it('prefers explicit seed', () => {
 
@@ -38,7 +37,7 @@ describe('ContextRegistry', () => {
       mockProvider.mockReturnValue(value);
 
       expect(values.get(key.seedKey, { or: valueProvider('default') })()).toBe(value);
-      expect([...values.get(multiKey.seedKey, { or: AIterable.from(['default']) })]).toEqual([value]);
+      expect([...values.get(multiKey.seedKey, { or: ['default'] })]).toEqual([value]);
     });
     it('caches value seed', () => {
 

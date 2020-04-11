@@ -2,8 +2,8 @@
  * @packageDocumentation
  * @module @proc7ts/context-values
  */
-import { AIterable, itsEmpty, overArray, overNone } from '@proc7ts/a-iterable';
-import { asis, isPresent } from '@proc7ts/call-thru';
+import { filterIt, flatMapIt, itsEmpty, mapIt, overArray, overNone } from '@proc7ts/a-iterable';
+import { isPresent } from '@proc7ts/call-thru';
 import { ContextKey, ContextSeedKey } from './context-key';
 import { ContextSeeder } from './context-seeder';
 import { ContextValueProvider } from './context-value-spec';
@@ -12,7 +12,7 @@ import { ContextValues } from './context-values';
 /**
  * @internal
  */
-class IterativeContextSeeder<Ctx extends ContextValues, Src> implements ContextSeeder<Ctx, Src, AIterable<Src>> {
+class IterativeContextSeeder<Ctx extends ContextValues, Src> implements ContextSeeder<Ctx, Src, Iterable<Src>> {
 
   private readonly _providers: ContextValueProvider<Ctx, Src>[] = [];
 
@@ -28,19 +28,19 @@ class IterativeContextSeeder<Ctx extends ContextValues, Src> implements ContextS
     };
   }
 
-  seed(context: Ctx, initial: AIterable<Src> = AIterable.from(overNone())): AIterable<Src> {
-    return AIterable.from([
+  seed(context: Ctx, initial: Iterable<Src> = overNone()): Iterable<Src> {
+    return flatMapIt([
       initial,
       iterativeSeed(context, this._providers),
-    ]).flatMap(asis);
+    ]);
   }
 
-  isEmpty(seed: AIterable<Src>): boolean {
+  isEmpty(seed: Iterable<Src>): boolean {
     return itsEmpty(seed);
   }
 
-  combine(first: AIterable<Src>, second: AIterable<Src>): AIterable<Src> {
-    return AIterable.from([first, second]).flatMap(asis);
+  combine(first: Iterable<Src>, second: Iterable<Src>): Iterable<Src> {
+    return flatMapIt([first, second]);
   }
 
 }
@@ -48,7 +48,7 @@ class IterativeContextSeeder<Ctx extends ContextValues, Src> implements ContextS
 /**
  * @internal
  */
-class IterativeSeedKey<Src> extends ContextSeedKey<Src, AIterable<Src>> {
+class IterativeSeedKey<Src> extends ContextSeedKey<Src, Iterable<Src>> {
 
   seeder<Ctx extends ContextValues>(): IterativeContextSeeder<Ctx, Src> {
     return new IterativeContextSeeder();
@@ -66,9 +66,9 @@ class IterativeSeedKey<Src> extends ContextSeedKey<Src, AIterable<Src>> {
  * @typeparam Value  Context value type.
  * @typeparam Src  Source value type.
  */
-export abstract class IterativeContextKey<Value, Src = Value> extends ContextKey<Value, Src, AIterable<Src>> {
+export abstract class IterativeContextKey<Value, Src = Value> extends ContextKey<Value, Src, Iterable<Src>> {
 
-  readonly seedKey: ContextSeedKey<Src, AIterable<Src>>;
+  readonly seedKey: ContextSeedKey<Src, Iterable<Src>>;
 
   /**
    * Constructs iterative context value key.
@@ -76,7 +76,7 @@ export abstract class IterativeContextKey<Value, Src = Value> extends ContextKey
    * @param name  Human-readable key name.
    * @param seedKey  Value seed key. A new one will be constructed when omitted.
    */
-  constructor(name: string, seedKey?: ContextSeedKey<Src, AIterable<Src>>) {
+  constructor(name: string, seedKey?: ContextSeedKey<Src, Iterable<Src>>) {
     super(name);
     this.seedKey = seedKey || new IterativeSeedKey(this);
   }
@@ -96,18 +96,22 @@ type SourceEntry<Ctx extends ContextValues, Src> = [ContextValueProvider<Ctx, Sr
 function iterativeSeed<Ctx extends ContextValues, Src>(
     context: Ctx,
     providers: readonly ContextValueProvider<Ctx, Src>[],
-): AIterable<Src> {
-  return AIterable.from(overArray(providers.map<SourceEntry<Ctx, Src>>(provider => [provider])))
-      .map(entry => {
-        if (entry.length > 1) {
-          return entry[1];
-        }
+): Iterable<Src> {
+  return filterIt<Src | null | undefined, Src>(
+      mapIt<SourceEntry<Ctx, Src>, Src | null | undefined>(
+          overArray(providers.map<SourceEntry<Ctx, Src>>(provider => [provider])),
+          entry => {
+            if (entry.length > 1) {
+              return entry[1];
+            }
 
-        const source = entry[0](context);
+            const source = entry[0](context);
 
-        entry.push(source);
+            entry.push(source);
 
-        return source;
-      })
-      .filter<Src>(isPresent);
+            return source;
+          },
+      ),
+      isPresent,
+  );
 }
