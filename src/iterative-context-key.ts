@@ -31,7 +31,7 @@ class IterativeContextSeeder<Ctx extends ContextValues, Src> implements ContextS
   seed(context: Ctx, initial: AIterable<Src> = AIterable.from(overNone())): AIterable<Src> {
     return AIterable.from([
       initial,
-      sourceValues(context, this._providers),
+      iterativeSeed(context, this._providers),
     ]).flatMap(asis);
   }
 
@@ -71,7 +71,7 @@ export abstract class IterativeContextKey<Value, Src = Value> extends ContextKey
   readonly seedKey: ContextSeedKey<Src, AIterable<Src>>;
 
   /**
-   * Constructs simple context value key.
+   * Constructs iterative context value key.
    *
    * @param name  Human-readable key name.
    * @param seedKey  Value seed key. A new one will be constructed when omitted.
@@ -93,9 +93,9 @@ type SourceEntry<Ctx extends ContextValues, Src> = [ContextValueProvider<Ctx, Sr
 /**
  * @internal
  */
-function sourceValues<Ctx extends ContextValues, Src>(
+function iterativeSeed<Ctx extends ContextValues, Src>(
     context: Ctx,
-    providers: ContextValueProvider<Ctx, Src>[],
+    providers: readonly ContextValueProvider<Ctx, Src>[],
 ): AIterable<Src> {
   return AIterable.from(overArray(providers.map<SourceEntry<Ctx, Src>>(provider => [provider])))
       .map(entry => {
