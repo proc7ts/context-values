@@ -72,7 +72,7 @@
 					<div class="lead">
 						<p>Simple context value key implementation.</p>
 					</div>
-					<p>Collects value sources into iterable instance.</p>
+					<p>Collects the most recent source value.</p>
 					<p>A context value associated with this key is never changes once constructed.</p>
 				</div>
 			</section>
@@ -101,16 +101,13 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="@proc7ts_context-values.ContextKey.html" class="tsd-signature-type">ContextKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">AIterable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>
+						<a href="@proc7ts_context-values.ContextKey.html" class="tsd-signature-type">ContextKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">, </span><a href="@proc7ts_context-values.SimpleContextKey.html#Seed" class="tsd-signature-type">Seed</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>
 						<ul class="tsd-hierarchy">
 							<li>
 								<span class="target">SimpleContextKey</span>
 								<ul class="tsd-hierarchy">
 									<li>
 										<a href="@proc7ts_context-values.SingleContextKey.html" class="tsd-signature-type">SingleContextKey</a>
-									</li>
-									<li>
-										<a href="@proc7ts_context-values.MultiContextKey.html" class="tsd-signature-type">MultiContextKey</a>
 									</li>
 								</ul>
 							</li>
@@ -128,6 +125,12 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Type aliases</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-type-alias tsd-parent-kind-class tsd-has-type-parameter tsd-is-static"><a href="@proc7ts_context-values.SimpleContextKey.html#Seed" class="tsd-kind-icon">Seed</a></li>
+							</ul>
+						</section>
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
@@ -158,19 +161,72 @@
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Type aliases</h2>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
+					<a name="Seed" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> Seed</h3>
+					<div class="tsd-signature tsd-kind-icon">Seed&lt;Src&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/ff7f131/src/simple-context-key.ts#L147">proc7ts/context-values/src/simple-context-key.ts:147</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A seed of <a href="@proc7ts_context-values.SimpleContextKey.html">simple context key</a>.</p>
+						</div>
+					</div>
+					<h4 class="tsd-type-parameters-title">Type parameters</h4>
+					<ul class="tsd-type-parameters">
+						<li>
+							<h4>Src</h4>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Source vale type.</p>
+								</div>
+							</div>
+						</li>
+					</ul>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-signature">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<div class="tsd-comment tsd-typography">
+										</div>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>this: <span class="tsd-signature-type">void</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h4>
+										<p>Either source value, or <code>null</code>/<code>undefined</code> when when absent.</p>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Constructors</h2>
 				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Simple<wbr>Context<wbr>Key<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, seedKey<span class="tsd-signature-symbol">?: </span><a href="@proc7ts_context-values.ContextSeedKey.html" class="tsd-signature-type">ContextSeedKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">AIterable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="@proc7ts_context-values.SimpleContextKey.html" class="tsd-signature-type">SimpleContextKey</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Simple<wbr>Context<wbr>Key<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, seedKey<span class="tsd-signature-symbol">?: </span><a href="@proc7ts_context-values.ContextSeedKey.html" class="tsd-signature-type">ContextSeedKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">, </span><a href="@proc7ts_context-values.SimpleContextKey.html#Seed" class="tsd-signature-type">Seed</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="@proc7ts_context-values.SimpleContextKey.html" class="tsd-signature-type">SimpleContextKey</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Overrides <a href="@proc7ts_context-values.ContextKey.html">ContextKey</a>.<a href="@proc7ts_context-values.ContextKey.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/b97b9bc/src/simple-context-key.ts#L66">proc7ts/context-values/src/simple-context-key.ts:66</a></li>
+									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/ff7f131/src/simple-context-key.ts#L125">proc7ts/context-values/src/simple-context-key.ts:125</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -189,7 +245,7 @@
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> seedKey: <a href="@proc7ts_context-values.ContextSeedKey.html" class="tsd-signature-type">ContextSeedKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">AIterable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> seedKey: <a href="@proc7ts_context-values.ContextSeedKey.html" class="tsd-signature-type">ContextSeedKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">, </span><a href="@proc7ts_context-values.SimpleContextKey.html#Seed" class="tsd-signature-type">Seed</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
 											<p>Value seed key. A new one will be constructed when omitted.</p>
@@ -211,7 +267,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="@proc7ts_context-values.ContextKey.html">ContextKey</a>.<a href="@proc7ts_context-values.ContextKey.html#name">name</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/b97b9bc/src/context-key.ts#L33">proc7ts/context-values/src/context-key.ts:33</a></li>
+							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/ff7f131/src/context-key.ts#L33">proc7ts/context-values/src/context-key.ts:33</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -224,11 +280,11 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
 					<a name="seedKey" class="tsd-anchor"></a>
 					<h3>seed<wbr>Key</h3>
-					<div class="tsd-signature tsd-kind-icon">seed<wbr>Key<span class="tsd-signature-symbol">:</span> <a href="@proc7ts_context-values.ContextSeedKey.html" class="tsd-signature-type">ContextSeedKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">AIterable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">seed<wbr>Key<span class="tsd-signature-symbol">:</span> <a href="@proc7ts_context-values.ContextSeedKey.html" class="tsd-signature-type">ContextSeedKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">, </span><a href="@proc7ts_context-values.SimpleContextKey.html#Seed" class="tsd-signature-type">Seed</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<p>Overrides <a href="@proc7ts_context-values.ContextKey.html">ContextKey</a>.<a href="@proc7ts_context-values.ContextKey.html#seedKey">seedKey</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/b97b9bc/src/simple-context-key.ts#L66">proc7ts/context-values/src/simple-context-key.ts:66</a></li>
+							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/ff7f131/src/simple-context-key.ts#L125">proc7ts/context-values/src/simple-context-key.ts:125</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -246,7 +302,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="@proc7ts_context-values.ContextKey.html">ContextKey</a>.<a href="@proc7ts_context-values.ContextKey.html#_ContextKey__symbol_">[ContextKey__symbol]</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/b97b9bc/src/context-key.ts#L56">proc7ts/context-values/src/context-key.ts:56</a></li>
+									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/ff7f131/src/context-key.ts#L56">proc7ts/context-values/src/context-key.ts:56</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -266,14 +322,14 @@
 					<a name="grow" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> grow</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">grow&lt;Ctx&gt;<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/@proc7ts_context-values.ContextValueOpts.html" class="tsd-signature-type">ContextValueOpts</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Ctx</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">AIterable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
+						<li class="tsd-signature tsd-kind-icon">grow&lt;Ctx&gt;<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/@proc7ts_context-values.ContextValueOpts.html" class="tsd-signature-type">ContextValueOpts</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Ctx</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">, </span><a href="@proc7ts_context-values.SimpleContextKey.html#Seed" class="tsd-signature-type">Seed</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="@proc7ts_context-values.ContextKey.html">ContextKey</a>.<a href="@proc7ts_context-values.ContextKey.html#grow">grow</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/b97b9bc/src/context-key.ts#L68">proc7ts/context-values/src/context-key.ts:68</a></li>
+									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/ff7f131/src/context-key.ts#L68">proc7ts/context-values/src/context-key.ts:68</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -293,7 +349,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>opts: <a href="../interfaces/@proc7ts_context-values.ContextValueOpts.html" class="tsd-signature-type">ContextValueOpts</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Ctx</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">AIterable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>opts: <a href="../interfaces/@proc7ts_context-values.ContextValueOpts.html" class="tsd-signature-type">ContextValueOpts</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Ctx</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">, </span><a href="@proc7ts_context-values.SimpleContextKey.html#Seed" class="tsd-signature-type">Seed</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>Context value growth options.</p>
 									</div>
@@ -315,7 +371,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="@proc7ts_context-values.ContextKey.html">ContextKey</a>.<a href="@proc7ts_context-values.ContextKey.html#toString">toString</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/b97b9bc/src/context-key.ts#L70">proc7ts/context-values/src/context-key.ts:70</a></li>
+									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/ff7f131/src/context-key.ts#L70">proc7ts/context-values/src/context-key.ts:70</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -356,6 +412,9 @@
 						<a href="@proc7ts_context-values.ContextValues.html" class="tsd-kind-icon">Context<wbr>Values</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="@proc7ts_context-values.IterativeContextKey.html" class="tsd-kind-icon">Iterative<wbr>Context<wbr>Key</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="@proc7ts_context-values.MultiContextKey.html" class="tsd-kind-icon">Multi<wbr>Context<wbr>Key</a>
 					</li>
 				</ul>
@@ -363,6 +422,9 @@
 					<li class="current tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="@proc7ts_context-values.SimpleContextKey.html" class="tsd-kind-icon">Simple<wbr>Context<wbr>Key</a>
 						<ul>
+							<li class=" tsd-kind-type-alias tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
+								<a href="@proc7ts_context-values.SimpleContextKey.html#Seed" class="tsd-kind-icon">Seed</a>
+							</li>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
 								<a href="@proc7ts_context-values.SimpleContextKey.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
