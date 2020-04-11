@@ -2,22 +2,25 @@
  * @packageDocumentation
  * @module @proc7ts/context-values
  */
-import { AIterable, itsEmpty, overArray, overNone } from '@proc7ts/a-iterable';
-import { asis, isPresent } from '@proc7ts/call-thru';
+import { noop, valueProvider } from '@proc7ts/call-thru';
 import { ContextKey, ContextSeedKey } from './context-key';
 import { ContextSeeder } from './context-seeder';
 import { ContextValueProvider } from './context-value-spec';
 import { ContextValues } from './context-values';
 
-class SimpleContextSeeder<Ctx extends ContextValues, Src> implements ContextSeeder<Ctx, Src, AIterable<Src>> {
+/**
+ * @internal
+ */
+class SimpleContextSeeder<Ctx extends ContextValues, Src>
+    implements ContextSeeder<Ctx, Src, SimpleContextKey.Seed<Src>> {
 
   private readonly _providers: ContextValueProvider<Ctx, Src>[] = [];
 
   provide(provider: ContextValueProvider<Ctx, Src>): () => void {
-    this._providers.push(provider);
+    this._providers.unshift(provider);
     return () => {
 
-      const found = this._providers.indexOf(provider);
+      const found = this._providers.lastIndexOf(provider);
 
       if (found >= 0) {
         this._providers.splice(found, 1);
@@ -25,24 +28,81 @@ class SimpleContextSeeder<Ctx extends ContextValues, Src> implements ContextSeed
     };
   }
 
-  seed(context: Ctx, initial: AIterable<Src> = AIterable.from(overNone())): AIterable<Src> {
-    return AIterable.from([
-      initial,
-      sourceValues(context, this._providers),
-    ]).flatMap(asis);
+  seed(context: Ctx, initial: SimpleContextKey.Seed<Src>): SimpleContextKey.Seed<Src> {
+
+    let seeds = this._providers.map(provider => simpleSeedByProvider(context, provider));
+
+    if (initial) {
+      if (!this._providers.length) {
+        return initial;
+      }
+      seeds = [...seeds, initial];
+    } else if (seeds.length < 2) {
+      return seeds.length ? seeds[0] : noop;
+    }
+
+    return combineSimpleSeeds(seeds);
   }
 
-  isEmpty(seed: AIterable<Src>): boolean {
-    return itsEmpty(seed);
+  isEmpty(seed: SimpleContextKey.Seed<Src>): boolean {
+    return seed() == null;
   }
 
-  combine(first: AIterable<Src>, second: AIterable<Src>): AIterable<Src> {
-    return AIterable.from([first, second]).flatMap(asis);
+  combine(
+      first: SimpleContextKey.Seed<Src>,
+      second: SimpleContextKey.Seed<Src>,
+  ): SimpleContextKey.Seed<Src> {
+    if (first === noop) {
+      return second;
+    }
+    if (second === noop) {
+      return first;
+    }
+    return combineSimpleSeeds([second, first]);
   }
+
 
 }
 
-class SimpleSeedKey<Src> extends ContextSeedKey<Src, AIterable<Src>> {
+/**
+ * @internal
+ */
+function simpleSeedByProvider<Ctx extends ContextValues, Src>(
+    context: Ctx,
+    provider: ContextValueProvider<Ctx, Src>,
+): SimpleContextKey.Seed<Src> {
+
+  let get = (): Src | null | undefined => {
+    get = valueProvider(provider(context));
+    return get();
+  };
+
+  return () => get();
+}
+
+/**
+ * @internal
+ */
+function combineSimpleSeeds<Src>(
+    seeds: readonly SimpleContextKey.Seed<Src>[],
+): SimpleContextKey.Seed<Src> {
+  return () => {
+    for (const seed of seeds) {
+
+      const value = seed();
+
+      if (value != null) {
+        return value;
+      }
+    }
+    return;
+  };
+}
+
+/**
+ * @internal
+ */
+class SimpleSeedKey<Src> extends ContextSeedKey<Src, SimpleContextKey.Seed<Src>> {
 
   seeder<Ctx extends ContextValues>(): SimpleContextSeeder<Ctx, Src> {
     return new SimpleContextSeeder();
@@ -53,16 +113,16 @@ class SimpleSeedKey<Src> extends ContextSeedKey<Src, AIterable<Src>> {
 /**
  * Simple context value key implementation.
  *
- * Collects value sources into iterable instance.
+ * Collects the most recent source value.
  *
  * A context value associated with this key is never changes once constructed.
  *
  * @typeparam Value  Context value type.
  * @typeparam Src  Source value type.
  */
-export abstract class SimpleContextKey<Value, Src = Value> extends ContextKey<Value, Src, AIterable<Src>> {
+export abstract class SimpleContextKey<Value, Src = Value> extends ContextKey<Value, Src, SimpleContextKey.Seed<Src>> {
 
-  readonly seedKey: ContextSeedKey<Src, AIterable<Src>>;
+  readonly seedKey: ContextSeedKey<Src, SimpleContextKey.Seed<Src>>;
 
   /**
    * Constructs simple context value key.
@@ -70,38 +130,24 @@ export abstract class SimpleContextKey<Value, Src = Value> extends ContextKey<Va
    * @param name  Human-readable key name.
    * @param seedKey  Value seed key. A new one will be constructed when omitted.
    */
-  constructor(name: string, seedKey?: ContextSeedKey<Src, AIterable<Src>>) {
+  constructor(name: string, seedKey?: ContextSeedKey<Src, SimpleContextKey.Seed<Src>>) {
     super(name);
     this.seedKey = seedKey || new SimpleSeedKey(this);
   }
 
 }
 
-/**
- * Context value provider and cached context value source.
- *
- * @internal
- */
-type SourceEntry<Ctx extends ContextValues, Src> = [ContextValueProvider<Ctx, Src>, (Src | null | undefined)?];
+export namespace SimpleContextKey {
 
-/**
- * @internal
- */
-function sourceValues<Ctx extends ContextValues, Src>(
-    context: Ctx,
-    providers: ContextValueProvider<Ctx, Src>[],
-): AIterable<Src> {
-  return AIterable.from(overArray(providers.map<SourceEntry<Ctx, Src>>(provider => [provider])))
-      .map(entry => {
-        if (entry.length > 1) {
-          return entry[1];
-        }
+  /**
+   * A seed of {@link SimpleContextKey simple context key}.
+   *
+   * @typeparam Src  Source vale type.
+   */
+  export type Seed<Src> =
+  /**
+   * @returns Either source value, or `null`/`undefined` when when absent.
+   */
+      (this: void) => Src | null | undefined;
 
-        const source = entry[0](context);
-
-        entry.push(source);
-
-        return source;
-      })
-      .filter<Src>(isPresent);
 }

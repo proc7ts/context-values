@@ -18,23 +18,23 @@ describe('MultiContextKey', () => {
     key = new MultiContextKey('values');
   });
 
-  it('is associated with empty array by default', () => {
+  it('provides empty array by default', () => {
     expect(values.get(key)).toEqual([]);
   });
-  it('is associated with empty array if providers did not return any values', () => {
+  it('provides array if providers did not return any values', () => {
     registry.provide({ a: key, is: null });
     registry.provide({ a: key, is: undefined });
 
     expect(values.get(key)).toEqual([]);
   });
-  it('is associated with default value if there is no provider', () => {
+  it('provider default value if there is no provider', () => {
 
     const defaultValue = ['default'];
     const keyWithDefaults = new MultiContextKey('key', { byDefault: () => defaultValue });
 
     expect(values.get(keyWithDefaults)).toEqual(defaultValue);
   });
-  it('is associated with default value if providers did not return any values', () => {
+  it('provides default value if providers did not return any values', () => {
 
     const defaultValue = ['default'];
     const byDefault = jest.fn(() => defaultValue);
@@ -46,19 +46,44 @@ describe('MultiContextKey', () => {
     expect(values.get(keyWithDefaults)).toEqual(defaultValue);
     expect(byDefault).toHaveBeenCalledWith(values, keyWithDefaults);
   });
-  it('is associated with provided values array', () => {
+  it('provides multiple values', () => {
     registry.provide({ a: key, is: 'a' });
     registry.provide({ a: key, is: undefined });
     registry.provide({ a: key, is: 'c' });
 
-    expect(values.get(key)).toEqual(['a', 'c']);
+    expect([...values.get(key)]).toEqual(['a', 'c']);
   });
-  it('is associated with value', () => {
+  it('provides single value', () => {
     registry.provide({ a: key, is: 'value' });
 
-    expect(values.get(key)).toEqual(['value']);
+    expect([...values.get(key)]).toEqual(['value']);
   });
-  it('is associated with fallback value if there is no value provided', () => {
+  it('removes the value specifier', () => {
+
+    const value1 = 'value1';
+    const value2 = 'value2';
+
+    registry.provide({ a: key, is: value1 });
+    registry.provide({ a: key, is: value2 })();
+
+    expect([...values.get(key)]).toEqual([value1]);
+  });
+  it('retains the constructed value when specifier removed', () => {
+
+    const value1 = 'value1';
+    const value2 = 'value2';
+
+    registry.provide({ a: key, is: value1 });
+
+    const remove = registry.provide({ a: key, is: value2 });
+
+    expect([...values.get(key)]).toEqual(['value1', 'value2']);
+
+    remove();
+    remove();
+    expect([...values.get(key)]).toEqual(['value1', 'value2']);
+  });
+  it('provides fallback value if there is no value provided', () => {
     expect(values.get(key, { or: ['fallback'] })).toEqual(['fallback']);
   });
   it('throws if there is no default value', () => {
@@ -91,5 +116,39 @@ describe('MultiContextKey', () => {
             { or: undefined },
         ),
     ).toBeUndefined();
+  });
+
+  describe('combination', () => {
+
+    let registry2: ContextRegistry;
+    let combined: ContextRegistry;
+    let context: ContextValues;
+
+    beforeEach(() => {
+      registry2 = new ContextRegistry();
+      combined = registry.append(registry2);
+      context = { name: 'context', get: combined.newValues().get } as any;
+    });
+
+    it('contains all sources', () => {
+      registry.provide({ a: key, is: '1' });
+      registry2.provide({ a: key, is: '2' });
+      registry2.provide({ a: key, is: '3' });
+
+      expect([...combined.seed(context, key.seedKey)]).toEqual(['1', '2', '3']);
+    });
+    it('accesses sources only once', () => {
+
+      const provider = jest.fn(() => '1');
+
+      registry.provide({ a: key, by: provider });
+
+      const provider2 = jest.fn(() => '2').mockName('provider2');
+
+      registry2.provide({ a: key, by: provider2 });
+      expect([...context.get(key.seedKey)]).toEqual(['1', '2']);
+      expect(provider).toHaveBeenCalledTimes(1);
+      expect(provider2).toHaveBeenCalledTimes(1);
+    });
   });
 });

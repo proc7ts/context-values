@@ -2,7 +2,6 @@
  * @packageDocumentation
  * @module @proc7ts/context-values
  */
-import { AIterable, itsLast } from '@proc7ts/a-iterable';
 import { noop } from '@proc7ts/call-thru';
 import { ContextKey, ContextKeyDefault, ContextSeedKey, ContextValueOpts } from './context-key';
 import { ContextRef } from './context-ref';
@@ -46,7 +45,7 @@ export class SingleContextKey<Value>
         seedKey,
         byDefault = noop,
       }: {
-        seedKey?: ContextSeedKey<Value, AIterable<Value>>;
+        seedKey?: ContextSeedKey<Value, SimpleContextKey.Seed<Value>>;
         byDefault?: ContextKeyDefault<Value, ContextKey<Value>>;
       } = {},
   ) {
@@ -55,10 +54,10 @@ export class SingleContextKey<Value>
   }
 
   grow<Ctx extends ContextValues>(
-      opts: ContextValueOpts<Ctx, Value, Value, AIterable<Value>>,
+      opts: ContextValueOpts<Ctx, Value, Value, SimpleContextKey.Seed<Value>>,
   ): Value | null | undefined {
 
-    const value = itsLast(opts.seed);
+    const value = opts.seed();
 
     if (value != null) {
       return value;

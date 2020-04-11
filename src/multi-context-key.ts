@@ -2,12 +2,11 @@
  * @packageDocumentation
  * @module @proc7ts/context-values
  */
-import { AIterable } from '@proc7ts/a-iterable';
 import { valuesProvider } from '@proc7ts/call-thru';
 import { ContextKey, ContextKeyDefault, ContextSeedKey, ContextValueOpts } from './context-key';
 import { ContextRef } from './context-ref';
 import { ContextValues } from './context-values';
-import { SimpleContextKey } from './simple-context-key';
+import { IterativeContextKey } from './iterative-context-key';
 
 /**
  * Multiple context value reference.
@@ -28,7 +27,7 @@ export type MultiContextRef<Src> = ContextRef<readonly Src[], Src>;
  * @typeparam Src  Value source type and context value item type.
  */
 export class MultiContextKey<Src>
-    extends SimpleContextKey<readonly Src[], Src>
+    extends IterativeContextKey<readonly Src[], Src>
     implements MultiContextRef<Src> {
 
   /**
@@ -49,7 +48,7 @@ export class MultiContextKey<Src>
         seedKey,
         byDefault = valuesProvider(),
       }: {
-        seedKey?: ContextSeedKey<Src, AIterable<Src>>;
+        seedKey?: ContextSeedKey<Src, Iterable<Src>>;
         byDefault?: ContextKeyDefault<readonly Src[], ContextKey<readonly Src[], Src>>;
       } = {},
   ) {
@@ -58,7 +57,7 @@ export class MultiContextKey<Src>
   }
 
   grow<Ctx extends ContextValues>(
-      opts: ContextValueOpts<Ctx, readonly Src[], Src, AIterable<Src>>,
+      opts: ContextValueOpts<Ctx, readonly Src[], Src, Iterable<Src>>,
   ): readonly Src[] | null | undefined {
 
     const result = Array.from(opts.seed);

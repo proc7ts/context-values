@@ -146,4 +146,51 @@ describe('SingleContextKey', () => {
 
     expect(mockProvider).toHaveBeenCalledTimes(2);
   });
+
+  describe('combination seed key', () => {
+
+    let registry2: ContextRegistry;
+    let combined: ContextRegistry;
+    let context: ContextValues;
+
+    beforeEach(() => {
+      registry2 = new ContextRegistry();
+      combined = registry.append(registry2);
+      context = { name: 'context', get: combined.newValues().get } as any;
+    });
+
+    it('contains the most recent source', () => {
+      registry.provide({ a: key, is: '1' });
+      registry2.provide({ a: key, is: '2' });
+      registry2.provide({ a: key, is: '3' });
+
+      expect(combined.seed(context, key.seedKey)()).toBe('3');
+    });
+    it('accesses only the most recent source', () => {
+
+      const provider1 = jest.fn(() => '1');
+
+      registry.provide({ a: key, by: provider1 });
+
+      const provider2 = jest.fn(() => '2').mockName('provider2');
+
+      registry2.provide({ a: key, by: provider2 });
+      expect(context.get(key.seedKey)()).toBe('2');
+      expect(provider1).not.toHaveBeenCalled();
+      expect(provider2).toHaveBeenCalledTimes(1);
+    });
+    it('contains the first source if the second one is absent', () => {
+      registry.provide({ a: key, is: '1' });
+      expect(context.get(key.seedKey)()).toBe('1');
+    });
+    it('contains the second source if the first one is absent', () => {
+      registry2.provide({ a: key, is: '2' });
+      expect(context.get(key.seedKey)()).toBe('2');
+    });
+    it('contains nothing when sources are empty', () => {
+      registry.provide({ a: key, is: null });
+      registry2.provide({ a: key, is: null });
+      expect(context.get(key.seedKey)()).toBeUndefined();
+    });
+  });
 });
