@@ -310,7 +310,7 @@ export function contextValueSpec<Ctx extends ContextValues, Value, Deps extends 
     };
   }
 
-  throw new TypeError(`Malformed context value specifier: ${spec}`);
+  throw new TypeError(`Malformed context value specifier: ${JSON.stringify(spec)}`);
 }
 
 /**
