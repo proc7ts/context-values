@@ -184,7 +184,7 @@ export abstract class ContextUpKey<Value, Src>
    *
    * It is expected to report any updates to this key's value.
    *
-   * The value of updates key is constructed by [[growUp]] function out of the same seed.
+   * The value of updates key is constructed by [[grow]] function out of the same seed.
    */
   abstract readonly upKey: ContextUpKey.UpKey<Value, Src>;
 
