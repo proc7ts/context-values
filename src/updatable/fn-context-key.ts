@@ -7,6 +7,7 @@ import { AfterEvent, afterThe, EventKeeper, nextAfterEvent } from '@proc7ts/fun-
 import { ContextKeyDefault, ContextSeedKey, ContextValueOpts } from '../context-key';
 import { ContextKeyError } from '../context-key-error';
 import { ContextValues } from '../context-values';
+import { contextDestroyed } from './context-destroyed';
 import { ContextUpKey, ContextUpRef } from './context-up-key';
 
 /**
@@ -93,14 +94,18 @@ export class FnContextKey<Args extends any[], Ret = void>
           AfterEvent<((this: void, ...args: Args) => Ret)[]>>,
   ): (this: void, ...args: Args) => Ret {
 
-    let delegated!: (this: void, ...args: Args) => Ret;
+    let delegated: ((this: void, ...args: Args) => Ret) | undefined;
 
     opts.context.get(
         this.upKey,
         'or' in opts ? { or: opts.or != null ? afterThe(opts.or) : opts.or } : undefined,
-    )!.to(fn => delegated = fn);
+    )!.to(
+        fn => delegated = fn,
+    ).whenOff(
+        reason => delegated = contextDestroyed(reason),
+    );
 
-    return (...args) => delegated(...args);
+    return (...args) => delegated!(...args);
   }
 
 }
