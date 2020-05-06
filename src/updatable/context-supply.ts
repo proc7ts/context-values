@@ -31,6 +31,7 @@ class ContextSupplyKey extends SimpleContextKey<ContextSupply> {
       opts: ContextValueOpts<Ctx, ContextSupply, ContextSupply, SimpleContextKey.Seed<ContextSupply>>,
   ): ContextSupply | null | undefined {
     return opts.seed()
+        || opts.or
         || (opts.context as Partial<EventSupplyPeer>)[EventSupply__symbol]
         || opts.byDefault(noop);
   }
