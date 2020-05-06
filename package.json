@@ -19,8 +19,6 @@
   "module": "dist/context-values.mjs",
   "typings": "index.d.ts",
   "peerDependencies": {
-    "@proc7ts/a-iterable": "^2.5.1",
-    "@proc7ts/call-thru": "^3.0.1",
     "@proc7ts/fun-events": "^9.0.0"
   },
   "peerDependenciesMeta": {
@@ -28,9 +26,11 @@
       "optional": true
     }
   },
-  "devDependencies": {
+  "dependencies": {
     "@proc7ts/a-iterable": "^2.5.1",
-    "@proc7ts/call-thru": "^3.0.1",
+    "@proc7ts/call-thru": "^3.0.1"
+  },
+  "devDependencies": {
     "@proc7ts/eslint-config": "^1.0.4",
     "@proc7ts/fun-events": "^9.0.0",
     "@rollup/plugin-commonjs": "^11.1.0",
