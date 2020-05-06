@@ -86,9 +86,22 @@
 						<section class="tsd-index-section ">
 							<h3>Type aliases</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="@proc7ts_context-values_updatable.html#ContextSupply" class="tsd-kind-icon">Context<wbr>Supply</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"><a href="@proc7ts_context-values_updatable.html#FnContextRef" class="tsd-kind-icon">Fn<wbr>Context<wbr>Ref</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"><a href="@proc7ts_context-values_updatable.html#MultiContextUpRef" class="tsd-kind-icon">Multi<wbr>Context<wbr>UpRef</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"><a href="@proc7ts_context-values_updatable.html#SingleContextUpRef" class="tsd-kind-icon">Single<wbr>Context<wbr>UpRef</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Variables</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="@proc7ts_context-values_updatable.html#ContextSupply-1" class="tsd-kind-icon">Context<wbr>Supply</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Functions</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="@proc7ts_context-values_updatable.html#contextDestroyed" class="tsd-kind-icon">context<wbr>Destroyed</a></li>
 							</ul>
 						</section>
 					</div>
@@ -96,13 +109,30 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Type aliases</h2>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="ContextSupply" class="tsd-anchor"></a>
+					<h3>Context<wbr>Supply</h3>
+					<div class="tsd-signature tsd-kind-icon">Context<wbr>Supply<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">EventSupply</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/7c2db5e/src/updatable/context-supply.ts#L19">proc7ts/context-values/src/updatable/context-supply.ts:19</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Context values supply.</p>
+						</div>
+						<p>When available as context value, it is used to indicate the context is no longer used (e.g. destroyed).</p>
+						<p>A context value provider can destroy the value it provides when this supply is cut off.</p>
+					</div>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 					<a name="FnContextRef" class="tsd-anchor"></a>
 					<h3>Fn<wbr>Context<wbr>Ref</h3>
 					<div class="tsd-signature tsd-kind-icon">Fn<wbr>Context<wbr>Ref&lt;Args, Ret&gt;<span class="tsd-signature-symbol">:</span> <a href="../interfaces/@proc7ts_context-values_updatable.ContextUpRef.html" class="tsd-signature-type">ContextUpRef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, <span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Args</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Ret</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, <span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Args</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Ret</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/ef9df7e/src/updatable/fn-context-key.ts#L18">proc7ts/context-values/src/updatable/fn-context-key.ts:18</a></li>
+							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/7c2db5e/src/updatable/fn-context-key.ts#L19">proc7ts/context-values/src/updatable/fn-context-key.ts:19</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -136,7 +166,7 @@
 					<div class="tsd-signature tsd-kind-icon">Multi<wbr>Context<wbr>UpRef&lt;Src&gt;<span class="tsd-signature-symbol">:</span> <a href="../interfaces/@proc7ts_context-values_updatable.ContextUpRef.html" class="tsd-signature-type">ContextUpRef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/ef9df7e/src/updatable/multi-context-up-key.ts#L17">proc7ts/context-values/src/updatable/multi-context-up-key.ts:17</a></li>
+							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/7c2db5e/src/updatable/multi-context-up-key.ts#L18">proc7ts/context-values/src/updatable/multi-context-up-key.ts:18</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -162,7 +192,7 @@
 					<div class="tsd-signature tsd-kind-icon">Single<wbr>Context<wbr>UpRef&lt;Value&gt;<span class="tsd-signature-symbol">:</span> <a href="../interfaces/@proc7ts_context-values_updatable.ContextUpRef.html" class="tsd-signature-type">ContextUpRef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/ef9df7e/src/updatable/single-context-up-key.ts#L17">proc7ts/context-values/src/updatable/single-context-up-key.ts:17</a></li>
+							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/7c2db5e/src/updatable/single-context-up-key.ts#L18">proc7ts/context-values/src/updatable/single-context-up-key.ts:18</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -179,6 +209,73 @@
 									<p>Context value type.</p>
 								</div>
 							</div>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Variables</h2>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
+					<a name="ContextSupply-1" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> Context<wbr>Supply</h3>
+					<div class="tsd-signature tsd-kind-icon">Context<wbr>Supply<span class="tsd-signature-symbol">:</span> <a href="../interfaces/@proc7ts_context-values.ContextRef.html" class="tsd-signature-type">ContextRef</a><span class="tsd-signature-symbol">&lt;</span><a href="@proc7ts_context-values_updatable.html#ContextSupply" class="tsd-signature-type">ContextSupply</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = (/*#__PURE__*/ new ContextSupplyKey())</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/7c2db5e/src/updatable/context-supply.ts#L48">proc7ts/context-values/src/updatable/context-supply.ts:48</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A key of context value containing a <a href="@proc7ts_context-values_updatable.html#ContextSupply">context values supply</a>.</p>
+						</div>
+						<p>It is not guaranteed to present.</p>
+						<p>Predefined to the supply of the context if the latter implements <code>EventSupplyPeer</code> interface.</p>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="contextDestroyed" class="tsd-anchor"></a>
+					<h3>context<wbr>Destroyed</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">context<wbr>Destroyed<span class="tsd-signature-symbol">(</span>reason<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">never</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/7c2db5e/src/updatable/context-destroyed.ts#L12">proc7ts/context-values/src/updatable/context-destroyed.ts:12</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Creates a function that throws a context destruction reason.</p>
+								</div>
+								<p>This may be handy when <a href="@proc7ts_context-values_updatable.html#ContextSupply">context supply</a> is cut off.</p>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> reason: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Context destruction reason.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">never</span></h4>
+							<ul class="tsd-parameters">
+								<li class="tsd-parameter-signature">
+									<ul class="tsd-signatures tsd-kind-type-literal">
+										<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">never</span></li>
+									</ul>
+									<ul class="tsd-descriptions">
+										<li class="tsd-description">
+											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">never</span></h4>
+										</li>
+									</ul>
+								</li>
+							</ul>
 						</li>
 					</ul>
 				</section>
@@ -215,6 +312,9 @@
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="../interfaces/@proc7ts_context-values_updatable.ContextUpRef.html" class="tsd-kind-icon">Context<wbr>UpRef</a>
 					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="@proc7ts_context-values_updatable.html#ContextSupply" class="tsd-kind-icon">Context<wbr>Supply</a>
+					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="@proc7ts_context-values_updatable.html#FnContextRef" class="tsd-kind-icon">Fn<wbr>Context<wbr>Ref</a>
 					</li>
@@ -223,6 +323,12 @@
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="@proc7ts_context-values_updatable.html#SingleContextUpRef" class="tsd-kind-icon">Single<wbr>Context<wbr>UpRef</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
+						<a href="@proc7ts_context-values_updatable.html#ContextSupply-1" class="tsd-kind-icon">Context<wbr>Supply</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="@proc7ts_context-values_updatable.html#contextDestroyed" class="tsd-kind-icon">context<wbr>Destroyed</a>
 					</li>
 				</ul>
 			</nav>
@@ -235,7 +341,9 @@
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
 				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
 				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
