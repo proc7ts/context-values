@@ -1,7 +1,8 @@
-import { AfterEvent, afterThe } from '@proc7ts/fun-events';
+import { AfterEvent, afterThe, eventSupply } from '@proc7ts/fun-events';
 import { ContextKeyError } from '../context-key-error';
 import { ContextRegistry } from '../context-registry';
 import { ContextValues } from '../context-values';
+import { ContextSupply } from './context-supply';
 import { SingleContextUpKey } from './single-context-up-key';
 
 describe('SingleContextUpKey', () => {
@@ -53,6 +54,25 @@ describe('SingleContextUpKey', () => {
     registry.provide({ a: key, is: value2 })();
 
     expect(readValue(values.get(key))).toBe(value1);
+  });
+  it('cuts off the value supply after context destruction', () => {
+
+    const value = 'test value';
+    const contextSupply = eventSupply();
+
+    registry.provide({ a: ContextSupply, is: contextSupply });
+    registry.provide({ a: key, is: value });
+
+    const receiver = jest.fn();
+    const whenOff = jest.fn();
+
+    values.get(key).to(receiver).whenOff(whenOff);
+    expect(receiver).toHaveBeenCalledWith(value);
+
+    const reason = new Error('reason');
+
+    contextSupply.off(reason);
+    expect(whenOff).toHaveBeenCalledWith(reason);
   });
   it('updates the value when specifier removed', () => {
 

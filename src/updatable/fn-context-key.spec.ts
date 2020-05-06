@@ -1,6 +1,8 @@
+import { eventSupply } from '@proc7ts/fun-events';
 import { ContextKeyError } from '../context-key-error';
 import { ContextRegistry } from '../context-registry';
 import { ContextValues } from '../context-values';
+import { ContextSupply } from './context-supply';
 import { FnContextKey } from './fn-context-key';
 
 describe('FnContextKey', () => {
@@ -24,6 +26,36 @@ describe('FnContextKey', () => {
     expect(values.get(key)('some')).toEqual(4);
     registry.provide({ a: key, is: value => value.length + 100 });
     expect(values.get(key)('some')).toEqual(104);
+  });
+  it('throws when context destroyed', () => {
+
+    const contextSupply = eventSupply();
+
+    registry.provide({ a: ContextSupply, is: contextSupply });
+    registry.provide({ a: key, is: value => value.length });
+
+    const fn = values.get(key);
+
+    expect(fn('some')).toEqual(4);
+
+    const reason = new Error('reason');
+
+    contextSupply.off(reason);
+    expect(() => fn('other')).toThrow(reason);
+  });
+  it('throws when context destroyed without reason', () => {
+
+    const contextSupply = eventSupply();
+
+    registry.provide({ a: ContextSupply, is: contextSupply });
+    registry.provide({ a: key, is: value => value.length });
+
+    const fn = values.get(key);
+
+    expect(fn('some')).toEqual(4);
+
+    contextSupply.off();
+    expect(() => fn('other')).toThrow('Context destroyed');
   });
   it('delegates to fallback function when absent', () => {
     expect(values.get(key, { or: value => value.length })('some')).toEqual(4);

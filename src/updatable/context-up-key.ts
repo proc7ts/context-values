@@ -20,6 +20,7 @@ import { ContextRef } from '../context-ref';
 import { ContextSeeder } from '../context-seeder';
 import { ContextValueProvider } from '../context-value-spec';
 import { ContextValues } from '../context-values';
+import { ContextSupply } from './context-supply';
 
 /**
  * @internal
@@ -136,17 +137,28 @@ export interface ContextUpRef<Value, Src> extends ContextRef<Value, Src | EventK
 class ContextUpKeyUpKey<Value, Src>
     extends ContextKey<ContextUpKey.Up<Value>, Src | EventKeeper<Src[]>, AfterEvent<Src[]>> {
 
+  readonly grow: <Ctx extends ContextValues>(
+      opts: ContextValueOpts<Ctx, ContextUpKey.Up<Value>, EventKeeper<Src[]> | Src, AfterEvent<Src[]>>,
+  ) => ContextUpKey.Up<Value>;
+
   get seedKey(): ContextSeedKey<Src | EventKeeper<Src[]>, AfterEvent<Src[]>> {
     return this._key.seedKey;
   }
 
   constructor(
       private readonly _key: ContextUpKey<Value, Src>,
-      readonly grow: <Ctx extends ContextValues>(
+      grow: <Ctx extends ContextValues>(
           opts: ContextValueOpts<Ctx, ContextUpKey.Up<Value>, EventKeeper<Src[]> | Src, AfterEvent<Src[]>>,
       ) => ContextUpKey.Up<Value>,
   ) {
     super(_key.name + ':up');
+    this.grow = opts => {
+
+      const value = grow(opts);
+      const supply = opts.context.get(ContextSupply, { or: null });
+
+      return supply ? value.tillOff(supply) as ContextUpKey.Up<Value> : value;
+    };
   }
 
 }
