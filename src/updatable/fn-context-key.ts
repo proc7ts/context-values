@@ -4,7 +4,7 @@
  */
 import { noop } from '@proc7ts/call-thru';
 import { AfterEvent, afterThe, EventKeeper, nextAfterEvent } from '@proc7ts/fun-events';
-import { ContextKeyDefault, ContextSeedKey, ContextValueOpts } from '../context-key';
+import { ContextKeyDefault, ContextValueOpts } from '../context-key';
 import { ContextKeyError } from '../context-key-error';
 import { ContextValues } from '../context-values';
 import { contextDestroyed } from './context-destroyed';
@@ -60,9 +60,7 @@ export class FnContextKey<Args extends any[], Ret = void>
         seedKey,
         byDefault = noop,
       }: {
-        seedKey?: ContextSeedKey<
-            ((this: void, ...args: Args) => Ret) | EventKeeper<((this: void, ...args: Args) => Ret)[]>,
-            AfterEvent<((this: void, ...args: Args) => Ret)[]>>;
+        seedKey?: ContextUpKey.SeedKey<((this: void, ...args: Args) => Ret)>;
         byDefault?: ContextKeyDefault<(this: void, ...args: Args) => Ret, FnContextKey<Args, Ret>>;
       } = {},
   ) {

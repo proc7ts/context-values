@@ -4,7 +4,7 @@
  */
 import { nextArgs, noop } from '@proc7ts/call-thru';
 import { AfterEvent, afterEventBy, afterThe, EventKeeper, nextAfterEvent } from '@proc7ts/fun-events';
-import { ContextKeyDefault, ContextSeedKey, ContextValueOpts } from '../context-key';
+import { ContextKeyDefault, ContextValueOpts } from '../context-key';
 import { ContextKeyError } from '../context-key-error';
 import { ContextValues } from '../context-values';
 import { ContextSupply } from './context-supply';
@@ -55,7 +55,7 @@ export class MultiContextUpKey<Src>
         seedKey,
         byDefault = noop,
       }: {
-        seedKey?: ContextSeedKey<Src | EventKeeper<Src[]>, AfterEvent<Src[]>>;
+        seedKey?: ContextUpKey.SeedKey<Src>;
         byDefault?: ContextKeyDefault<readonly Src[], ContextUpKey<AfterEvent<Src[]>, Src>>;
       } = {},
   ) {

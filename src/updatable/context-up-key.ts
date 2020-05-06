@@ -111,7 +111,13 @@ function flatUpSources<Src>(...sources: Src[][]): NextCall<CallChain, Src[]> {
 /**
  * @internal
  */
-class ContextSeedUpKey<Src> extends ContextSeedKey<Src | EventKeeper<Src[]>, AfterEvent<Src[]>> {
+class ContextSeedUpKey<Src>
+    extends ContextSeedKey<Src | EventKeeper<Src[]>, AfterEvent<Src[]>>
+    implements ContextUpKey.SeedKey<Src> {
+
+  get upKey(): this {
+    return this;
+  }
 
   seeder<Ctx extends ContextValues>(): ContextSeeder<Ctx, Src | EventKeeper<Src[]>, AfterEvent<Src[]>> {
     return new ContextUpSeeder();
@@ -177,7 +183,7 @@ export abstract class ContextUpKey<Value, Src>
     extends ContextKey<Value, Src | EventKeeper<Src[]>, AfterEvent<Src[]>>
     implements ContextUpRef<Value, Src> {
 
-  readonly seedKey: ContextSeedKey<Src | EventKeeper<Src[]>, AfterEvent<Src[]>>;
+  readonly seedKey: ContextUpKey.SeedKey<Src>;
 
   /**
    * A key of context value containing an {@link ContextUpKey.Up updates keeper} of this key value.
@@ -194,9 +200,9 @@ export abstract class ContextUpKey<Value, Src>
    * @param name  Human-readable key name.
    * @param seedKey  Value seed key. A new one will be constructed when omitted.
    */
-  constructor(name: string, seedKey?: ContextSeedKey<Src | EventKeeper<Src[]>, AfterEvent<Src[]>>) {
+  constructor(name: string, seedKey?: ContextUpKey.SeedKey<Src>) {
     super(name);
-    this.seedKey = seedKey || new ContextSeedUpKey(this);
+    this.seedKey = seedKey || new ContextSeedUpKey<Src>(this);
   }
 
   /**
@@ -239,5 +245,19 @@ export namespace ContextUpKey {
    * @typeparam Src  Source value type.
    */
   export type UpKey<Value, Src> = ContextKey<ContextUpKey.Up<Value>, Src>;
+
+  /**
+   * Updatable context value seed key.
+   *
+   * @typeparam Src  Source value type.
+   */
+  export interface SeedKey<Src> extends ContextSeedKey<Src | EventKeeper<Src[]>, AfterEvent<Src[]>> {
+
+    /**
+     * A key of context value containing an {@link Up updates keeper} of the seed. Always equal to this key.
+     */
+    readonly upKey: this;
+
+  }
 
 }

@@ -120,6 +120,14 @@ describe('SingleContextUpKey', () => {
     });
   });
 
+  describe('seedKey', () => {
+    describe('upKey', () => {
+      it('is a seed key itself', () => {
+        expect(key.seedKey.upKey).toBe(key.seedKey);
+      });
+    });
+  });
+
   function readValue<Value>(from: AfterEvent<[Value]>): Value {
 
     let received: Value = undefined!;
