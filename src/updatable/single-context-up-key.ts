@@ -7,6 +7,7 @@ import { AfterEvent, afterEventBy, afterThe, EventKeeper, nextAfterEvent } from 
 import { ContextKeyDefault, ContextSeedKey, ContextValueOpts } from '../context-key';
 import { ContextKeyError } from '../context-key-error';
 import { ContextValues } from '../context-values';
+import { ContextSupply } from './context-supply';
 import { ContextUpKey, ContextUpRef } from './context-up-key';
 
 /**
@@ -65,7 +66,8 @@ export class SingleContextUpKey<Value>
   grow<Ctx extends ContextValues>(
       opts: ContextValueOpts<Ctx, AfterEvent<[Value]>, EventKeeper<Value[]> | Value, AfterEvent<Value[]>>,
   ): AfterEvent<[Value]> {
-    return opts.seed.keepThru((...sources: Value[]) => {
+
+    const value = opts.seed.keepThru((...sources: Value[]) => {
       if (sources.length) {
         // Sources present. Take the last one.
         return nextArg(sources[sources.length - 1]);
@@ -88,6 +90,10 @@ export class SingleContextUpKey<Value>
         throw new ContextKeyError(this);
       }));
     });
+
+    const supply = opts.context.get(ContextSupply, { or: null });
+
+    return supply ? value.tillOff(supply) : value;
   }
 
 }
