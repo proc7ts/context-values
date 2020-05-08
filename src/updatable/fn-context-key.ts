@@ -92,7 +92,7 @@ export class FnContextKey<Args extends any[], Ret = void>
           AfterEvent<((this: void, ...args: Args) => Ret)[]>>,
   ): (this: void, ...args: Args) => Ret {
 
-    let delegated: ((this: void, ...args: Args) => Ret) | undefined;
+    let delegated: (this: void, ...args: Args) => Ret;
 
     opts.context.get(
         this.upKey,
@@ -103,7 +103,7 @@ export class FnContextKey<Args extends any[], Ret = void>
         reason => delegated = contextDestroyed(reason),
     );
 
-    return (...args) => delegated!(...args);
+    return (...args) => delegated(...args);
   }
 
 }
