@@ -3,9 +3,8 @@
  * @module @proc7ts/context-values
  */
 import { noop } from '@proc7ts/call-thru';
-import { ContextKey, ContextKeyDefault, ContextSeedKey, ContextValueOpts } from './context-key';
+import { ContextKey, ContextKeyDefault, ContextSeedKey, ContextValueSlot } from './context-key';
 import { ContextRef } from './context-ref';
-import { ContextValues } from './context-values';
 import { SimpleContextKey } from './simple-context-key';
 
 /**
@@ -49,21 +48,21 @@ export class SingleContextKey<Value>
         byDefault?: ContextKeyDefault<Value, ContextKey<Value>>;
       } = {},
   ) {
-    super(name, seedKey);
+    super(name, { seedKey });
     this.byDefault = byDefault;
   }
 
-  grow<Ctx extends ContextValues>(
-      opts: ContextValueOpts<Ctx, Value, Value, SimpleContextKey.Seed<Value>>,
-  ): Value | null | undefined {
+  grow(
+      slot: ContextValueSlot<Value, Value, SimpleContextKey.Seed<Value>>,
+  ): void {
 
-    const value = opts.seed();
+    const value = slot.seed();
 
     if (value != null) {
-      return value;
+      slot.insert(value);
+    } else if (!slot.hasFallback) {
+      slot.insert(this.byDefault(slot.context, this));
     }
-
-    return opts.byDefault(() => this.byDefault(opts.context, this));
   }
 
 }

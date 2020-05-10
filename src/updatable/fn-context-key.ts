@@ -4,7 +4,7 @@
  */
 import { noop } from '@proc7ts/call-thru';
 import { AfterEvent, afterThe, EventKeeper, nextAfterEvent } from '@proc7ts/fun-events';
-import { ContextKeyDefault, ContextValueOpts } from '../context-key';
+import { ContextKeyDefault, ContextValueSlot } from '../context-key';
 import { ContextKeyError } from '../context-key-error';
 import { ContextValues } from '../context-values';
 import { contextDestroyed } from './context-destroyed';
@@ -67,43 +67,43 @@ export class FnContextKey<Args extends any[], Ret = void>
     super(name, seedKey);
     this.byDefault = (context, key) => byDefault(context, key) || (() => { throw new ContextKeyError(this); });
     this.upKey = this.createUpKey(
-        opts => opts.seed.keepThru(
-            (...fns) => {
-              if (fns.length) {
-                return fns[fns.length - 1];
-              }
+        slot => {
+          slot.insert(slot.seed.keepThru(
+              (...fns) => {
+                if (fns.length) {
+                  return fns[fns.length - 1];
+                }
 
-              const defaultProvider = (): AfterEvent<[(this: void, ...args: Args) => Ret]> => afterThe(this.byDefault(
-                  opts.context,
-                  this,
-              ));
+                if (slot.hasFallback && slot.or) {
+                  return nextAfterEvent(slot.or);
+                }
 
-              return nextAfterEvent(opts.byDefault(defaultProvider) || defaultProvider());
-            },
-        ),
+                return nextAfterEvent(afterThe(this.byDefault(slot.context, this)));
+              },
+          ));
+        },
     );
   }
 
-  grow<Ctx extends ContextValues>(
-      opts: ContextValueOpts<
-          Ctx,
+  grow(
+      slot: ContextValueSlot<
           (this: void, ...args: Args) => Ret,
           EventKeeper<((this: void, ...args: Args) => Ret)[]> | ((this: void, ...args: Args) => Ret),
           AfterEvent<((this: void, ...args: Args) => Ret)[]>>,
-  ): (this: void, ...args: Args) => Ret {
+  ): void {
 
     let delegated: (this: void, ...args: Args) => Ret;
 
-    opts.context.get(
+    slot.context.get(
         this.upKey,
-        'or' in opts ? { or: opts.or != null ? afterThe(opts.or) : opts.or } : undefined,
+        slot.hasFallback ? { or: slot.or != null ? afterThe(slot.or) : slot.or } : undefined,
     )!.to(
         fn => delegated = fn,
     ).whenOff(
         reason => delegated = contextDestroyed(reason),
     );
 
-    return (...args) => delegated(...args);
+    slot.insert((...args) => delegated(...args));
   }
 
 }

@@ -3,9 +3,8 @@
  * @module @proc7ts/context-values
  */
 import { valuesProvider } from '@proc7ts/call-thru';
-import { ContextKey, ContextKeyDefault, ContextSeedKey, ContextValueOpts } from './context-key';
+import { ContextKey, ContextKeyDefault, ContextSeedKey, ContextValueSlot } from './context-key';
 import { ContextRef } from './context-ref';
-import { ContextValues } from './context-values';
 import { IterativeContextKey } from './iterative-context-key';
 
 /**
@@ -56,26 +55,22 @@ export class MultiContextKey<Src>
     this.byDefault = byDefault;
   }
 
-  grow<Ctx extends ContextValues>(
-      opts: ContextValueOpts<Ctx, readonly Src[], Src, Iterable<Src>>,
-  ): readonly Src[] | null | undefined {
+  grow(
+      slot: ContextValueSlot<readonly Src[], Src, Iterable<Src>>,
+  ): void {
 
-    const result = Array.from(opts.seed);
+    const result = Array.from(slot.seed);
 
     if (result.length) {
-      return result;
-    }
+      slot.insert(result);
+    } else if (!slot.hasFallback) {
 
-    return opts.byDefault(() => {
-
-      const defaultSources = this.byDefault(opts.context, this);
+      const defaultSources = this.byDefault(slot.context, this);
 
       if (defaultSources) {
-        return Array.from(defaultSources);
+        slot.insert(Array.from(defaultSources));
       }
-
-      return;
-    });
+    }
   }
 
 }

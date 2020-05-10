@@ -3,6 +3,7 @@
  * @module @proc7ts/context-values
  */
 import { ContextRef } from './context-ref';
+import { ContextRegistry } from './context-registry';
 import { ContextSeeder } from './context-seeder';
 import { ContextValues } from './context-values';
 
@@ -60,12 +61,9 @@ export abstract class ContextKey<Value, Src = Value, Seed = unknown> implements 
   /**
    * Grows context value out of its seed.
    *
-   * @typeparam Ctx  Context type.
-   * @param opts  Context value growth options.
-   *
-   * @returns Single context value, or `undefined` if there is no default value.
+   * @param slot  Context value slot to insert the value to.
    */
-  abstract grow<Ctx extends ContextValues>(opts: ContextValueOpts<Ctx, Value, Src, Seed>): Value | null | undefined;
+  abstract grow(slot: ContextValueSlot<Value, Src, Seed>): void;
 
   toString(): string {
     return `ContextKey(${this.name})`;
@@ -74,50 +72,169 @@ export abstract class ContextKey<Value, Src = Value, Seed = unknown> implements 
 }
 
 /**
- * Context value growth options.
+ * Context value slot to put the grown value into.
  *
- * An instance of these options is passed to [[ContextKey.grow]] method to provide the necessary value growth context.
+ * An instance of the value slot is passed to [[ContextKey.grow]] method to provide the necessary context and optionally
+ * accept a new value.
  *
- * @typeparam Ctx  Context type.
  * @typeparam Value  Context value type.
  * @typeparam Src  Source value type.
  * @typeparam Seed  Value seed type.
  */
-export interface ContextValueOpts<Ctx extends ContextValues, Value, Src, Seed> {
+export type ContextValueSlot<Value, Src, Seed> =
+    | ContextValueSlot.WithFallback<Value, Src, Seed>
+    | ContextValueSlot.WithoutFallback<Value, Src, Seed>;
+
+export namespace ContextValueSlot {
 
   /**
-   * Target context.
-   */
-  readonly context: Ctx;
-
-  /**
-   * Context value seeder.
-   */
-  readonly seeder: ContextSeeder<Ctx, Src, Seed>;
-
-  /**
-   * Context value seed.
-   */
-  readonly seed: Seed;
-
-  /**
-   * A fallback value to use if there is no value associated with the given key.
+   * Base context value slot interface.
    *
-   * Can be `null` or `undefined`.
+   * @typeparam Value  Context value type.
+   * @typeparam Src  Source value type.
+   * @typeparam Seed  Value seed type.
    */
-  readonly or?: Value | null;
+  export interface Base<Value, Src, Seed> {
+
+    /**
+     * Target context.
+     */
+    readonly context: ContextValues;
+
+    /**
+     * A key to associated value with.
+     */
+    readonly key: ContextKey<Value, Src, Seed>;
+
+    /**
+     * Context value seeder.
+     */
+    readonly seeder: ContextSeeder<ContextValues, Src, Seed>;
+
+    /**
+     * Context value seed.
+     */
+    readonly seed: Seed;
+
+    /**
+     * Whether a {@link ContextRequest.Opts.or fallback} value has been specified.
+     */
+    readonly hasFallback: boolean;
+
+    /**
+     * A {@link ContextRequest.Opts.or fallback} value that will be used unless another one {@link insert inserted} into
+     * this slot.
+     *
+     * Can be `null` or `undefined`.
+     *
+     * Always `undefined` when {@link hasFallback there is no fallback}.
+     */
+    readonly or: Value | null | undefined;
+
+    /**
+     * Insert the value into the slot.
+     *
+     * The value will be associated with key after [[ContextKey.grow]] method exit.
+     *
+     * Supersedes a previously inserted value.
+     *
+     * @param value  A value to associate with the key, or `null`/`undefined` to not associate any value.
+     */
+    insert(value: Value | null | undefined): void;
+
+    /**
+     * Fills this slot by the given function.
+     *
+     * @param grow  A function accepting a value slot as its only parameter.
+     *
+     * @returns A value associated with target key by the given function, or `null`/`undefined` when no value
+     * associated.
+     */
+    fillBy(grow: (this: void, slot: ContextValueSlot<Value, Src, Seed>) => void): Value | null | undefined;
+
+    /**
+     * Registers a setup procedure issued when context value associated with target key.
+     *
+     * Setup will be issued at most once per context. Setup won't be issued if no value {@link insert inserted}.
+     *
+     * @param setup  Context value setup procedure.
+     */
+    setup(setup: ContextValueSetup<Value, Src, Seed>): void;
+
+  }
 
   /**
-   * Handles missing context value.
+   * Base context value slot with fallback value.
    *
-   * It can be called to prefer a fallback value over the default one specified in the value key.
-   *
-   * @param defaultProvider  Default value provider. It is called unless a fallback value is specified.
-   * If it returns a non-null/non-undefined value, then the returned value will be associated with the context key.
+   * @typeparam Value  Context value type.
+   * @typeparam Src  Source value type.
+   * @typeparam Seed  Value seed type.
    */
-  byDefault(defaultProvider: () => Value | null | undefined): Value | null | undefined;
+  export interface WithFallback<Value, Src, Seed> extends Base<Value, Src, Seed> {
+
+    /**
+     * Whether a {@link ContextRequest.Opts.or fallback} value has been specified.
+     *
+     * Always `true`
+     */
+    readonly hasFallback: true;
+
+    /**
+     * A {@link ContextRequest.Opts.or fallback} value that will be used unless another one {@link insert inserted} into
+     * this slot.
+     *
+     * Can be `null` or `undefined`.
+     */
+    readonly or: Value | null | undefined;
+
+  }
+
+  export interface WithoutFallback<Value, Src, Seed> extends Base<Value, Src, Seed> {
+
+    /**
+     * Whether a {@link ContextRequest.Opts.or fallback} value has been specified.
+     *
+     * Always `false`
+     */
+    readonly hasFallback: false;
+
+    /**
+     * A {@link ContextRequest.Opts.or fallback} value that will be used unless another one {@link insert inserted} into
+     * this slot.
+     *
+     * Always `undefined`.
+     */
+    readonly or: undefined;
+
+  }
 
 }
+
+/**
+ * Context value setup procedure signature.
+ *
+ * A function with this signature can be passed to {@link ContextValueSlot.Base.setup} method to be issued when
+ * the value associated with target key.
+ */
+export type ContextValueSetup<Value, Src, Seed> =
+/**
+ * @param key  A key the value associated with.
+ * @param context  Target context the value associated with.
+ * @param registry  A registry of context value providers. This context is shared among all contexts
+ * {@link ContextRegistry.newValues created} by it.
+ */
+    (
+        this: void,
+        {
+          key,
+          context,
+          registry,
+        }: {
+          key: ContextKey<Value, Src, Seed>;
+          context: ContextValues;
+          registry: ContextRegistry;
+        }
+    ) => void;
 
 /**
  * A provider of default value of context key.
@@ -170,11 +287,15 @@ export abstract class ContextSeedKey<Src, Seed> extends ContextKey<Seed, Src, Se
    */
   abstract seeder<Ctx extends ContextValues>(): ContextSeeder<Ctx, Src, Seed>;
 
-  grow<Ctx extends ContextValues>(opts: ContextValueOpts<Ctx, Seed, Src, Seed>): Seed | null | undefined {
+  grow(opts: ContextValueSlot<Seed, Src, Seed>): void {
 
     const { seeder, seed } = opts;
 
-    return seeder.isEmpty(seed) ? opts.byDefault(() => seed) : seed;
+    if (!seeder.isEmpty(seed)) {
+      opts.insert(seed);
+    } else if (!opts.hasFallback) {
+      opts.insert(seed);
+    }
   }
 
 }

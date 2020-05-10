@@ -3,7 +3,7 @@
  * @module @proc7ts/context-values
  */
 import { noop } from '@proc7ts/call-thru';
-import { ContextKey, ContextKey__symbol, ContextSeedKey, ContextValueOpts } from './context-key';
+import { ContextKey, ContextKey__symbol, ContextSeedKey, ContextValueSetup, ContextValueSlot } from './context-key';
 import { ContextKeyError } from './context-key-error';
 import { ContextRef, ContextRequest } from './context-ref';
 import { ContextSeeder, ContextSeeds } from './context-seeder';
@@ -149,10 +149,15 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
           return cached;
         }
 
-        const [constructed, defaultUsed] = growValue(context, key, opts);
+        const [constructed, setup] = growValue(context, key, opts);
 
-        if (cache && !defaultUsed) {
+        if (cache && setup) {
           values.set(key, constructed);
+          setup({
+            key,
+            context: this,
+            registry: registry as ContextRegistry<any>,
+          });
         }
 
         return constructed;
@@ -169,43 +174,49 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
     function growValue<Value, Src, Seed>(
         context: Ctx,
         key: ContextKey<Value, Src, Seed>,
-        opts: ContextRequest.Opts<Value> | undefined,
-    ): [Value | null | undefined, boolean] {
+        opts: ContextRequest.Opts<Value> = {},
+    ): [Value | null | undefined, ContextValueSetup<Value, Src, Seed>?] {
 
       const [seeder, seed] = findSeed<Src, Seed>(context, key);
-      let defaultUsed = false;
-
-      const valueOpts: {
-        -readonly [K in keyof ContextValueOpts<Ctx, Value, Src, Seed>]: ContextValueOpts<Ctx, Value, Src, Seed>[K];
-      } = {
+      let constructed: Value | null | undefined;
+      const hasFallback = 'or' in opts;
+      let setupValue: ContextValueSetup<Value, Src, Seed> = noop;
+      const slot: ContextValueSlot.Base<Value, Src, Seed> = {
         context,
+        key,
         seeder,
         seed,
-        byDefault: (opts && 'or' in opts)
-            ? () => {
-              defaultUsed = true;
-              return opts.or;
-            }
-            : defaultProvider => {
+        hasFallback,
+        get or() {
+          return opts.or;
+        },
+        insert(value) {
+          constructed = value;
+        },
+        fillBy(grow) {
+          grow(slot as ContextValueSlot<Value, Src, Seed>);
+          return constructed;
+        },
+        setup(setup) {
 
-              const defaultValue = defaultProvider();
+          const prevSetup = setupValue;
 
-              if (defaultValue == null) {
-                throw new ContextKeyError(key);
-              }
-
-              return defaultValue;
-            },
+          setupValue = opts => {
+            prevSetup(opts);
+            setup(opts);
+          };
+        },
       };
+      key.grow(slot as ContextValueSlot<Value, Src, Seed>);
 
-      if (opts && 'or' in opts) {
-        valueOpts.or = opts.or;
+      if (constructed != null) {
+        return [constructed, setupValue];
+      }
+      if (!hasFallback) {
+        throw new ContextKeyError(key);
       }
 
-      return [
-        key.grow(valueOpts),
-        defaultUsed,
-      ];
+      return [opts.or];
     }
 
     function findSeed<Src, Seed>(

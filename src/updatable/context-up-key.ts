@@ -15,7 +15,7 @@ import {
   trackValue,
   ValueTracker,
 } from '@proc7ts/fun-events';
-import { ContextKey, ContextKey__symbol, ContextSeedKey, ContextValueOpts } from '../context-key';
+import { ContextKey, ContextKey__symbol, ContextSeedKey, ContextValueSlot } from '../context-key';
 import { ContextRef } from '../context-ref';
 import { ContextSeeder } from '../context-seeder';
 import { ContextValueProvider } from '../context-value-spec';
@@ -143,9 +143,9 @@ export interface ContextUpRef<Value, Src> extends ContextRef<Value, Src | EventK
 class ContextUpKeyUpKey<Value, Src>
     extends ContextKey<ContextUpKey.Up<Value>, Src | EventKeeper<Src[]>, AfterEvent<Src[]>> {
 
-  readonly grow: <Ctx extends ContextValues>(
-      opts: ContextValueOpts<Ctx, ContextUpKey.Up<Value>, EventKeeper<Src[]> | Src, AfterEvent<Src[]>>,
-  ) => ContextUpKey.Up<Value>;
+  readonly grow: (
+      slot: ContextValueSlot<ContextUpKey.Up<Value>, EventKeeper<Src[]> | Src, AfterEvent<Src[]>>,
+  ) => void;
 
   get seedKey(): ContextSeedKey<Src | EventKeeper<Src[]>, AfterEvent<Src[]>> {
     return this._key.seedKey;
@@ -153,17 +153,23 @@ class ContextUpKeyUpKey<Value, Src>
 
   constructor(
       private readonly _key: ContextUpKey<Value, Src>,
-      grow: <Ctx extends ContextValues>(
-          opts: ContextValueOpts<Ctx, ContextUpKey.Up<Value>, EventKeeper<Src[]> | Src, AfterEvent<Src[]>>,
-      ) => ContextUpKey.Up<Value>,
+      grow: (
+          slot: ContextValueSlot<ContextUpKey.Up<Value>, EventKeeper<Src[]> | Src, AfterEvent<Src[]>>,
+      ) => void,
   ) {
     super(_key.name + ':up');
-    this.grow = opts => {
+    this.grow = slot => {
 
-      const value = grow(opts);
-      const supply = opts.context.get(ContextSupply, { or: null });
+      const value = slot.fillBy(grow);
 
-      return supply ? value.tillOff(supply) as ContextUpKey.Up<Value> : value;
+      if (value) {
+
+        const supply = slot.context.get(ContextSupply, { or: null });
+
+        if (supply) {
+          slot.insert(value.tillOff(supply) as ContextUpKey.Up<Value>);
+        }
+      }
     };
   }
 
@@ -200,7 +206,14 @@ export abstract class ContextUpKey<Value, Src>
    * @param name  Human-readable key name.
    * @param seedKey  Value seed key. A new one will be constructed when omitted.
    */
-  constructor(name: string, seedKey?: ContextUpKey.SeedKey<Src>) {
+  constructor(
+      name: string,
+      {
+        seedKey,
+      }: {
+        seedKey?: ContextUpKey.SeedKey<Src>;
+      } = {},
+  ) {
     super(name);
     this.seedKey = seedKey || new ContextSeedUpKey<Src>(this);
   }
@@ -213,9 +226,9 @@ export abstract class ContextUpKey<Value, Src>
    * @returns New updates keeper key.
    */
   protected createUpKey(
-      grow: <Ctx extends ContextValues>(
-          opts: ContextValueOpts<Ctx, ContextUpKey.Up<Value>, EventKeeper<Src[]> | Src, AfterEvent<Src[]>>,
-      ) => ContextUpKey.Up<Value>,
+      grow: (
+          slot: ContextValueSlot<ContextUpKey.Up<Value>, EventKeeper<Src[]> | Src, AfterEvent<Src[]>>,
+      ) => void,
   ): ContextUpKey.UpKey<Value, Src> {
     return new ContextUpKeyUpKey(this, grow);
   }
