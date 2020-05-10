@@ -3,6 +3,7 @@
  * @module @proc7ts/context-values
  */
 import { ContextRef } from './context-ref';
+import { ContextRegistry } from './context-registry';
 import { ContextSeeder } from './context-seeder';
 import { ContextValues } from './context-values';
 
@@ -151,6 +152,15 @@ export namespace ContextValueSlot {
      */
     fillBy(grow: (this: void, slot: ContextValueSlot<Value, Src, Seed>) => void): Value | null | undefined;
 
+    /**
+     * Registers a setup procedure issued when context value associated with target key.
+     *
+     * Setup will be issued at most once per context. Setup won't be issued if no value {@link insert inserted}.
+     *
+     * @param setup  Context value setup procedure.
+     */
+    setup(setup: ContextValueSetup<Value, Src, Seed>): void;
+
   }
 
   /**
@@ -199,6 +209,32 @@ export namespace ContextValueSlot {
   }
 
 }
+
+/**
+ * Context value setup procedure signature.
+ *
+ * A function with this signature can be passed to {@link ContextValueSlot.Base.setup} method to be issued when
+ * the value associated with target key.
+ */
+export type ContextValueSetup<Value, Src, Seed> =
+/**
+ * @param key  A key the value associated with.
+ * @param context  Target context the value associated with.
+ * @param registry  A registry of context value providers. This context is shared among all contexts
+ * {@link ContextRegistry.newValues created} by it.
+ */
+    (
+        this: void,
+        {
+          key,
+          context,
+          registry,
+        }: {
+          key: ContextKey<Value, Src, Seed>;
+          context: ContextValues;
+          registry: ContextRegistry;
+        }
+    ) => void;
 
 /**
  * A provider of default value of context key.

@@ -1,7 +1,10 @@
 import { valueProvider } from '@proc7ts/call-thru';
+import { ContextKey, ContextValueSetup, ContextValueSlot } from './context-key';
+import { ContextKeyError } from './context-key-error';
 import { ContextRegistry } from './context-registry';
 import { ContextValues } from './context-values';
 import { MultiContextKey } from './multi-context-key';
+import { SimpleContextKey } from './simple-context-key';
 import { SingleContextKey } from './single-context-key';
 import Mock = jest.Mock;
 
@@ -142,6 +145,56 @@ describe('ContextRegistry', () => {
     it('does not preserve caching instances', () => {
       expect(registry.newValues()).not.toBe(registry.newValues(false));
       expect(registry.newValues()).not.toBe(registry.newValues());
+    });
+  });
+
+  describe('key setup', () => {
+
+    let keyWithSetup: ContextKey<string>;
+    let byDefault: jest.Mock<string | null | undefined, []>;
+    let setup: jest.Mock<void, Parameters<ContextValueSetup<string, string, SimpleContextKey.Seed<string>>>>;
+
+    beforeEach(() => {
+
+      class TestKeyWithSetup extends SingleContextKey<string> {
+
+        constructor() {
+          super('test-key', { byDefault });
+        }
+
+        grow(slot: ContextValueSlot<string, string, SimpleContextKey.Seed<string>>): void {
+          super.grow(slot);
+          slot.setup(setup);
+        }
+
+      }
+
+      byDefault = jest.fn();
+      setup = jest.fn();
+      keyWithSetup = new TestKeyWithSetup();
+    });
+
+    it('sets up the key for provided value only once', () => {
+      registry.provide({ a: keyWithSetup, is: 'provided' });
+      expect(values.get(keyWithSetup)).toBe('provided');
+      expect(values.get(keyWithSetup)).toBe('provided');
+      expect(setup).toHaveBeenCalledWith({ key: keyWithSetup, context: values, registry });
+      expect(setup).toHaveBeenCalledTimes(1);
+    });
+    it('sets up the key for default value', () => {
+      byDefault.mockImplementation(() => 'default');
+      expect(values.get(keyWithSetup)).toBe('default');
+      expect(values.get(keyWithSetup)).toBe('default');
+      expect(setup).toHaveBeenCalledWith({ key: keyWithSetup, context: values, registry });
+      expect(setup).toHaveBeenCalledTimes(1);
+    });
+    it('does not set up the key for fallback value', () => {
+      expect(values.get(keyWithSetup, { or: null })).toBeNull();
+      expect(setup).not.toHaveBeenCalled();
+    });
+    it('does not set up the key for absent value', () => {
+      expect(() => values.get(keyWithSetup)).toThrow(ContextKeyError);
+      expect(setup).not.toHaveBeenCalled();
     });
   });
 });

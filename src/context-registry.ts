@@ -3,7 +3,7 @@
  * @module @proc7ts/context-values
  */
 import { noop } from '@proc7ts/call-thru';
-import { ContextKey, ContextKey__symbol, ContextSeedKey, ContextValueSlot } from './context-key';
+import { ContextKey, ContextKey__symbol, ContextSeedKey, ContextValueSetup, ContextValueSlot } from './context-key';
 import { ContextKeyError } from './context-key-error';
 import { ContextRef, ContextRequest } from './context-ref';
 import { ContextSeeder, ContextSeeds } from './context-seeder';
@@ -149,10 +149,15 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
           return cached;
         }
 
-        const [constructed, isFallback] = growValue(context, key, opts);
+        const [constructed, setup] = growValue(context, key, opts);
 
-        if (cache && !isFallback) {
+        if (cache && setup) {
           values.set(key, constructed);
+          setup({
+            key,
+            context: this,
+            registry: registry as ContextRegistry<any>,
+          });
         }
 
         return constructed;
@@ -170,11 +175,12 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
         context: Ctx,
         key: ContextKey<Value, Src, Seed>,
         opts: ContextRequest.Opts<Value> = {},
-    ): [Value | null | undefined, boolean?] {
+    ): [Value | null | undefined, ContextValueSetup<Value, Src, Seed>?] {
 
       const [seeder, seed] = findSeed<Src, Seed>(context, key);
       let constructed: Value | null | undefined;
       const hasFallback = 'or' in opts;
+      let setupValue: ContextValueSetup<Value, Src, Seed> = noop;
       const slot: ContextValueSlot.Base<Value, Src, Seed> = {
         context,
         key,
@@ -191,17 +197,26 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
           grow(slot as ContextValueSlot<Value, Src, Seed>);
           return constructed;
         },
+        setup(setup) {
+
+          const prevSetup = setupValue;
+
+          setupValue = opts => {
+            prevSetup(opts);
+            setup(opts);
+          };
+        },
       };
       key.grow(slot as ContextValueSlot<Value, Src, Seed>);
 
       if (constructed != null) {
-        return [constructed];
+        return [constructed, setupValue];
       }
       if (!hasFallback) {
         throw new ContextKeyError(key);
       }
 
-      return [opts.or, true];
+      return [opts.or];
     }
 
     function findSeed<Src, Seed>(
