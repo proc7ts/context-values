@@ -5,7 +5,6 @@
 import { valuesProvider } from '@proc7ts/call-thru';
 import { ContextKey, ContextKeyDefault, ContextSeedKey, ContextValueOpts } from './context-key';
 import { ContextRef } from './context-ref';
-import { ContextValues } from './context-values';
 import { IterativeContextKey } from './iterative-context-key';
 
 /**
@@ -56,8 +55,8 @@ export class MultiContextKey<Src>
     this.byDefault = byDefault;
   }
 
-  grow<Ctx extends ContextValues>(
-      opts: ContextValueOpts<Ctx, readonly Src[], Src, Iterable<Src>>,
+  grow(
+      opts: ContextValueOpts<readonly Src[], Src, Iterable<Src>>,
   ): readonly Src[] | null | undefined {
 
     const result = Array.from(opts.seed);

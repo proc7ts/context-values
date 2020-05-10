@@ -6,7 +6,6 @@ import { nextArg, noop } from '@proc7ts/call-thru';
 import { AfterEvent, afterEventBy, afterThe, EventKeeper, nextAfterEvent } from '@proc7ts/fun-events';
 import { ContextKeyDefault, ContextValueOpts } from '../context-key';
 import { ContextKeyError } from '../context-key-error';
-import { ContextValues } from '../context-values';
 import { ContextSupply } from './context-supply';
 import { ContextUpKey, ContextUpRef } from './context-up-key';
 
@@ -63,8 +62,8 @@ export class SingleContextUpKey<Value>
     this.byDefault = byDefault;
   }
 
-  grow<Ctx extends ContextValues>(
-      opts: ContextValueOpts<Ctx, AfterEvent<[Value]>, EventKeeper<Value[]> | Value, AfterEvent<Value[]>>,
+  grow(
+      opts: ContextValueOpts<AfterEvent<[Value]>, EventKeeper<Value[]> | Value, AfterEvent<Value[]>>,
   ): AfterEvent<[Value]> {
 
     const value = opts.seed.keepThru((...sources: Value[]) => {

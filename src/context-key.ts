@@ -65,7 +65,7 @@ export abstract class ContextKey<Value, Src = Value, Seed = unknown> implements 
    *
    * @returns Single context value, or `undefined` if there is no default value.
    */
-  abstract grow<Ctx extends ContextValues>(opts: ContextValueOpts<Ctx, Value, Src, Seed>): Value | null | undefined;
+  abstract grow(opts: ContextValueOpts<Value, Src, Seed>): Value | null | undefined;
 
   toString(): string {
     return `ContextKey(${this.name})`;
@@ -78,22 +78,21 @@ export abstract class ContextKey<Value, Src = Value, Seed = unknown> implements 
  *
  * An instance of these options is passed to [[ContextKey.grow]] method to provide the necessary value growth context.
  *
- * @typeparam Ctx  Context type.
  * @typeparam Value  Context value type.
  * @typeparam Src  Source value type.
  * @typeparam Seed  Value seed type.
  */
-export interface ContextValueOpts<Ctx extends ContextValues, Value, Src, Seed> {
+export interface ContextValueOpts<Value, Src, Seed> {
 
   /**
    * Target context.
    */
-  readonly context: Ctx;
+  readonly context: ContextValues;
 
   /**
    * Context value seeder.
    */
-  readonly seeder: ContextSeeder<Ctx, Src, Seed>;
+  readonly seeder: ContextSeeder<ContextValues, Src, Seed>;
 
   /**
    * Context value seed.
@@ -170,7 +169,7 @@ export abstract class ContextSeedKey<Src, Seed> extends ContextKey<Seed, Src, Se
    */
   abstract seeder<Ctx extends ContextValues>(): ContextSeeder<Ctx, Src, Seed>;
 
-  grow<Ctx extends ContextValues>(opts: ContextValueOpts<Ctx, Seed, Src, Seed>): Seed | null | undefined {
+  grow(opts: ContextValueOpts<Seed, Src, Seed>): Seed | null | undefined {
 
     const { seeder, seed } = opts;
 

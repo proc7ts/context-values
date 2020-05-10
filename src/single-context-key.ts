@@ -5,7 +5,6 @@
 import { noop } from '@proc7ts/call-thru';
 import { ContextKey, ContextKeyDefault, ContextSeedKey, ContextValueOpts } from './context-key';
 import { ContextRef } from './context-ref';
-import { ContextValues } from './context-values';
 import { SimpleContextKey } from './simple-context-key';
 
 /**
@@ -53,8 +52,8 @@ export class SingleContextKey<Value>
     this.byDefault = byDefault;
   }
 
-  grow<Ctx extends ContextValues>(
-      opts: ContextValueOpts<Ctx, Value, Value, SimpleContextKey.Seed<Value>>,
+  grow(
+      opts: ContextValueOpts<Value, Value, SimpleContextKey.Seed<Value>>,
   ): Value | null | undefined {
 
     const value = opts.seed();

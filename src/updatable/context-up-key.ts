@@ -143,8 +143,8 @@ export interface ContextUpRef<Value, Src> extends ContextRef<Value, Src | EventK
 class ContextUpKeyUpKey<Value, Src>
     extends ContextKey<ContextUpKey.Up<Value>, Src | EventKeeper<Src[]>, AfterEvent<Src[]>> {
 
-  readonly grow: <Ctx extends ContextValues>(
-      opts: ContextValueOpts<Ctx, ContextUpKey.Up<Value>, EventKeeper<Src[]> | Src, AfterEvent<Src[]>>,
+  readonly grow: (
+      opts: ContextValueOpts<ContextUpKey.Up<Value>, EventKeeper<Src[]> | Src, AfterEvent<Src[]>>,
   ) => ContextUpKey.Up<Value>;
 
   get seedKey(): ContextSeedKey<Src | EventKeeper<Src[]>, AfterEvent<Src[]>> {
@@ -153,8 +153,8 @@ class ContextUpKeyUpKey<Value, Src>
 
   constructor(
       private readonly _key: ContextUpKey<Value, Src>,
-      grow: <Ctx extends ContextValues>(
-          opts: ContextValueOpts<Ctx, ContextUpKey.Up<Value>, EventKeeper<Src[]> | Src, AfterEvent<Src[]>>,
+      grow: (
+          opts: ContextValueOpts<ContextUpKey.Up<Value>, EventKeeper<Src[]> | Src, AfterEvent<Src[]>>,
       ) => ContextUpKey.Up<Value>,
   ) {
     super(_key.name + ':up');
@@ -213,8 +213,8 @@ export abstract class ContextUpKey<Value, Src>
    * @returns New updates keeper key.
    */
   protected createUpKey(
-      grow: <Ctx extends ContextValues>(
-          opts: ContextValueOpts<Ctx, ContextUpKey.Up<Value>, EventKeeper<Src[]> | Src, AfterEvent<Src[]>>,
+      grow: (
+          opts: ContextValueOpts<ContextUpKey.Up<Value>, EventKeeper<Src[]> | Src, AfterEvent<Src[]>>,
       ) => ContextUpKey.Up<Value>,
   ): ContextUpKey.UpKey<Value, Src> {
     return new ContextUpKeyUpKey(this, grow);

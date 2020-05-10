@@ -84,9 +84,8 @@ export class FnContextKey<Args extends any[], Ret = void>
     );
   }
 
-  grow<Ctx extends ContextValues>(
+  grow(
       opts: ContextValueOpts<
-          Ctx,
           (this: void, ...args: Args) => Ret,
           EventKeeper<((this: void, ...args: Args) => Ret)[]> | ((this: void, ...args: Args) => Ret),
           AfterEvent<((this: void, ...args: Args) => Ret)[]>>,

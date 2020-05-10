@@ -6,7 +6,6 @@ import { noop } from '@proc7ts/call-thru';
 import { EventSupply, EventSupply__symbol, EventSupplyPeer } from '@proc7ts/fun-events';
 import { ContextValueOpts } from '../context-key';
 import { ContextRef } from '../context-ref';
-import { ContextValues } from '../context-values';
 import { SimpleContextKey } from '../simple-context-key';
 
 /**
@@ -27,8 +26,8 @@ class ContextSupplyKey extends SimpleContextKey<ContextSupply> {
     super('context-supply');
   }
 
-  grow<Ctx extends ContextValues>(
-      opts: ContextValueOpts<Ctx, ContextSupply, ContextSupply, SimpleContextKey.Seed<ContextSupply>>,
+  grow(
+      opts: ContextValueOpts<ContextSupply, ContextSupply, SimpleContextKey.Seed<ContextSupply>>,
   ): ContextSupply | null | undefined {
     return opts.seed()
         || opts.or

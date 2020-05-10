@@ -176,7 +176,7 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
       let defaultUsed = false;
 
       const valueOpts: {
-        -readonly [K in keyof ContextValueOpts<Ctx, Value, Src, Seed>]: ContextValueOpts<Ctx, Value, Src, Seed>[K];
+        -readonly [K in keyof ContextValueOpts<Value, Src, Seed>]: ContextValueOpts<Value, Src, Seed>[K];
       } = {
         context,
         seeder,
