@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>OrNull | Context Values</title>
+	<title>ContextValueSlot | Context Values</title>
 	<meta name="description" content="Documentation for Context Values">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,40 +54,54 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/@proc7ts_context-values.html">@proc7ts/context-values</a>
+					<a href="@proc7ts_context-values.html">@proc7ts/context-values</a>
 				</li>
 				<li>
-					<a href="../modules/@proc7ts_context-values.ContextRequest.html">ContextRequest</a>
-				</li>
-				<li>
-					<a href="@proc7ts_context-values.ContextRequest.OrNull.html">OrNull</a>
+					<a href="@proc7ts_context-values.ContextValueSlot.html">ContextValueSlot</a>
 				</li>
 			</ul>
-			<h1>Interface OrNull&lt;Value&gt;</h1>
+			<h1>Namespace ContextValueSlot&lt;Value, Src, Seed&gt;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Context value slot to put the grown value into.</p>
+					</div>
+					<p>An instance of the value slot is passed to <a href="../classes/@proc7ts_context-values.ContextKey.html#grow">ContextKey.grow</a> method to provide the necessary context and optionally
+					accept a new value.</p>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-type-parameters">
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
 					<li>
 						<h4>Value</h4>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Context value type.</p>
+							</div>
+						</div>
 					</li>
-				</ul>
-			</section>
-			<section class="tsd-panel tsd-hierarchy">
-				<h3>Hierarchy</h3>
-				<ul class="tsd-hierarchy">
 					<li>
-						<a href="@proc7ts_context-values.ContextTarget.Opts.html" class="tsd-signature-type">Opts</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">&gt;</span>
-						<ul class="tsd-hierarchy">
-							<li>
-								<span class="target">OrNull</span>
-							</li>
-						</ul>
+						<h4>Src</h4>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Source value type.</p>
+							</div>
+						</div>
+					</li>
+					<li>
+						<h4>Seed</h4>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Value seed type.</p>
+							</div>
+						</div>
 					</li>
 				</ul>
 			</section>
@@ -96,26 +110,14 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Properties</h3>
+							<h3>Interfaces</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite"><a href="@proc7ts_context-values.ContextRequest.OrNull.html#or" class="tsd-kind-icon">or</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter"><a href="../interfaces/@proc7ts_context-values.ContextValueSlot.Base.html" class="tsd-kind-icon">Base</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter"><a href="../interfaces/@proc7ts_context-values.ContextValueSlot.WithFallback.html" class="tsd-kind-icon">With<wbr>Fallback</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter"><a href="../interfaces/@proc7ts_context-values.ContextValueSlot.WithoutFallback.html" class="tsd-kind-icon">Without<wbr>Fallback</a></li>
 							</ul>
 						</section>
 					</div>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
-					<a name="or" class="tsd-anchor"></a>
-					<h3>or</h3>
-					<div class="tsd-signature tsd-kind-icon">or<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">null</span></div>
-					<aside class="tsd-sources">
-						<p>Overrides <a href="@proc7ts_context-values.ContextTarget.Opts.html">Opts</a>.<a href="@proc7ts_context-values.ContextTarget.Opts.html#or">or</a></p>
-						<ul>
-							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/5cfd6c2/src/context-ref.ts#L53">proc7ts/context-values/src/context-ref.ts:53</a></li>
-						</ul>
-					</aside>
 				</section>
 			</section>
 		</div>
@@ -130,28 +132,13 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="@proc7ts_context-values.ContextRequest.Opts.html" class="tsd-kind-icon">Opts</a>
+						<a href="../interfaces/@proc7ts_context-values.ContextValueSlot.Base.html" class="tsd-kind-icon">Base</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="@proc7ts_context-values.ContextRequest.OrFallback.html" class="tsd-kind-icon">Or<wbr>Fallback</a>
+						<a href="../interfaces/@proc7ts_context-values.ContextValueSlot.WithFallback.html" class="tsd-kind-icon">With<wbr>Fallback</a>
 					</li>
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="@proc7ts_context-values.ContextRequest.OrNull.html" class="tsd-kind-icon">Or<wbr>Null</a>
-						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
-								<a href="@proc7ts_context-values.ContextRequest.OrNull.html#or" class="tsd-kind-icon">or</a>
-							</li>
-						</ul>
-					</li>
-				</ul>
-				<ul class="after-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="@proc7ts_context-values.ContextRequest.OrUndefined.html" class="tsd-kind-icon">Or<wbr>Undefined</a>
-					</li>
-					<li class=" tsd-kind-property tsd-parent-kind-namespace">
-						<a href="../modules/@proc7ts_context-values.ContextRequest.html#_ContextKey__symbol_" class="tsd-kind-icon">[<wbr>Context<wbr>Key__symbol]</a>
+						<a href="../interfaces/@proc7ts_context-values.ContextValueSlot.WithoutFallback.html" class="tsd-kind-icon">Without<wbr>Fallback</a>
 					</li>
 				</ul>
 			</nav>
@@ -170,12 +157,11 @@
 				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-			</ul>
-			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
 				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
 			</ul>
 		</div>
 	</div>
