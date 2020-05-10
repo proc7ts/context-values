@@ -76,7 +76,14 @@ export abstract class IterativeContextKey<Value, Src = Value> extends ContextKey
    * @param name  Human-readable key name.
    * @param seedKey  Value seed key. A new one will be constructed when omitted.
    */
-  constructor(name: string, seedKey?: ContextSeedKey<Src, Iterable<Src>>) {
+  constructor(
+      name: string,
+      {
+        seedKey,
+      }: {
+        seedKey?: ContextSeedKey<Src, Iterable<Src>>;
+      } = {},
+  ) {
     super(name);
     this.seedKey = seedKey || new IterativeSeedKey(this);
   }

@@ -4,7 +4,7 @@
  */
 import { nextArgs, noop } from '@proc7ts/call-thru';
 import { AfterEvent, afterEventBy, afterThe, EventKeeper, nextAfterEvent } from '@proc7ts/fun-events';
-import { ContextKeyDefault, ContextValueOpts } from '../context-key';
+import { ContextKeyDefault, ContextValueSlot } from '../context-key';
 import { ContextKeyError } from '../context-key-error';
 import { ContextSupply } from './context-supply';
 import { ContextUpKey, ContextUpRef } from './context-up-key';
@@ -63,23 +63,26 @@ export class MultiContextUpKey<Src>
   }
 
   grow(
-      opts: ContextValueOpts<AfterEvent<Src[]>, EventKeeper<Src[]> | Src, AfterEvent<Src[]>>,
-  ): AfterEvent<Src[]> {
+      slot: ContextValueSlot<AfterEvent<Src[]>, EventKeeper<Src[]> | Src, AfterEvent<Src[]>>,
+  ): void {
 
-    const value = opts.seed.keepThru((...sources) => {
+    const value = slot.seed.keepThru((...sources) => {
       if (sources.length) {
         // Sources present. Use them.
         return nextArgs(...sources);
       }
 
       // Sources absent. Attempt to detect the backup value.
-      const backup = opts.byDefault(() => {
+      let backup: AfterEvent<Src[]> | null | undefined;
 
-        const defaultValue = this.byDefault(opts.context, this);
+      if (slot.hasFallback) {
+        backup = slot.or;
+      } else {
 
-        return defaultValue ? afterThe(...defaultValue) : afterThe();
-      });
+        const defaultValue = this.byDefault(slot.context, this);
 
+        backup = defaultValue ? afterThe(...defaultValue) : afterThe();
+      }
       if (backup != null) {
         return nextAfterEvent(backup); // Backup value found.
       }
@@ -90,9 +93,9 @@ export class MultiContextUpKey<Src>
       }));
     });
 
-    const supply = opts.context.get(ContextSupply, { or: null });
+    const supply = slot.context.get(ContextSupply, { or: null });
 
-    return supply ? value.tillOff(supply) : value;
+    slot.insert(supply ? value.tillOff(supply) : value);
   }
 
 }

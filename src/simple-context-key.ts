@@ -122,7 +122,14 @@ export abstract class SimpleContextKey<Value, Src = Value> extends ContextKey<Va
    * @param name  Human-readable key name.
    * @param seedKey  Value seed key. A new one will be constructed when omitted.
    */
-  constructor(name: string, seedKey?: ContextSeedKey<Src, SimpleContextKey.Seed<Src>>) {
+  constructor(
+      name: string,
+      {
+        seedKey,
+      }: {
+        seedKey?: ContextSeedKey<Src, SimpleContextKey.Seed<Src>>;
+      } = {},
+  ) {
     super(name);
     this.seedKey = seedKey || new SimpleSeedKey(this);
   }

@@ -2,9 +2,8 @@
  * @packageDocumentation
  * @module @proc7ts/context-values/updatable
  */
-import { noop } from '@proc7ts/call-thru';
 import { EventSupply, EventSupply__symbol, EventSupplyPeer } from '@proc7ts/fun-events';
-import { ContextValueOpts } from '../context-key';
+import { ContextValueSlot } from '../context-key';
 import { ContextRef } from '../context-ref';
 import { SimpleContextKey } from '../simple-context-key';
 
@@ -27,12 +26,13 @@ class ContextSupplyKey extends SimpleContextKey<ContextSupply> {
   }
 
   grow(
-      opts: ContextValueOpts<ContextSupply, ContextSupply, SimpleContextKey.Seed<ContextSupply>>,
-  ): ContextSupply | null | undefined {
-    return opts.seed()
-        || opts.or
-        || (opts.context as Partial<EventSupplyPeer>)[EventSupply__symbol]
-        || opts.byDefault(noop);
+      slot: ContextValueSlot<ContextSupply, ContextSupply, SimpleContextKey.Seed<ContextSupply>>,
+  ): void {
+    slot.insert(
+        slot.seed()
+        || (slot.hasFallback ? slot.or : null)
+        || (slot.context as Partial<EventSupplyPeer>)[EventSupply__symbol],
+    );
   }
 
 }

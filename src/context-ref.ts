@@ -35,9 +35,11 @@ export namespace ContextRequest {
   export interface Opts<Value> {
 
     /**
-     * A fallback value that will be returned if there is no value associated with the given key.
+     * A fallback value that will be returned if there is no value associated with target key.
      *
      * Can be `null` or `undefined`.
+     *
+     * This property will be accessed only if there is no value associated with target key.
      */
     or?: Value | null;
 

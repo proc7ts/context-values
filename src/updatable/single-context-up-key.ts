@@ -4,7 +4,7 @@
  */
 import { nextArg, noop } from '@proc7ts/call-thru';
 import { AfterEvent, afterEventBy, afterThe, EventKeeper, nextAfterEvent } from '@proc7ts/fun-events';
-import { ContextKeyDefault, ContextValueOpts } from '../context-key';
+import { ContextKeyDefault, ContextValueSlot } from '../context-key';
 import { ContextKeyError } from '../context-key-error';
 import { ContextSupply } from './context-supply';
 import { ContextUpKey, ContextUpRef } from './context-up-key';
@@ -63,23 +63,26 @@ export class SingleContextUpKey<Value>
   }
 
   grow(
-      opts: ContextValueOpts<AfterEvent<[Value]>, EventKeeper<Value[]> | Value, AfterEvent<Value[]>>,
-  ): AfterEvent<[Value]> {
+      slot: ContextValueSlot<AfterEvent<[Value]>, EventKeeper<Value[]> | Value, AfterEvent<Value[]>>,
+  ): void {
 
-    const value = opts.seed.keepThru((...sources: Value[]) => {
+    const value = slot.seed.keepThru((...sources: Value[]) => {
       if (sources.length) {
         // Sources present. Take the last one.
         return nextArg(sources[sources.length - 1]);
       }
 
-      // Sources absent. Attempt to detect the backup value.
-      const backup = opts.byDefault(() => {
+      // Sources absent. Attempt to detect a backup value.
+      let backup: AfterEvent<[Value]> | null | undefined;
 
-        const defaultValue = this.byDefault(opts.context, this);
+      if (slot.hasFallback) {
+        backup = slot.or;
+      } else {
 
-        return defaultValue && afterThe(defaultValue);
-      });
+        const defaultValue = this.byDefault(slot.context, this);
 
+        backup = defaultValue && afterThe(defaultValue);
+      }
       if (backup != null) {
         return nextAfterEvent(backup); // Backup value found.
       }
@@ -90,9 +93,9 @@ export class SingleContextUpKey<Value>
       }));
     });
 
-    const supply = opts.context.get(ContextSupply, { or: null });
+    const supply = slot.context.get(ContextSupply, { or: null });
 
-    return supply ? value.tillOff(supply) : value;
+    slot.insert(supply ? value.tillOff(supply) : value);
   }
 
 }
