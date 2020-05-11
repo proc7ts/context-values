@@ -55,21 +55,21 @@ myContext.get(key, { or: 'empty' });
 ### Context Value Request
 
 The `get()` method accepts not only a `ContextKey` instance, but arbitrary `ContextRequest`. The latter is just an
-object with `key` property containing a `ContextKey` instance to find.
+object with `[ContextKey__symbol]` property containing a `ContextKey` instance to find.
 
 This can be handy e.g. when requesting an instance of some known type:
 ```typescript
-import { ContextKey, SingleContextKey } from '@proc7ts/context-values';
+import { ContextKey, ContextKey__symbol, SingleContextKey } from '@proc7ts/context-values';
 
 class MyService {
   
   // MyService class (not instance) implements a `ContextRequest`
-  static readonly key: ContextKey<MyService> = new SingleContextKey('my-service');
+  static readonly [ContextKey__symbol]: ContextKey<MyService> = new SingleContextKey('my-service');
   
 }
 
-myContext.get(MyService); // No need to specify `MyService.key` here
-myContext.get(MyService.key); // The same as above.
+myContext.get(MyService); // No need to specify `MyService[ContextKey__symbol]` here
+myContext.get(MyService[ContextKey__symbol]); // The same as above.
 ```
 
 
@@ -122,7 +122,7 @@ registry.provide({ a: MyService, is: new MyService() });
 
 const context = registry.newValues();
 
-context.get(MyService); // No need to specify `MyService.key` here
+context.get(MyService); // No need to specify `MyService[ContextKey__symbol]` here
 ```
 
 
@@ -154,8 +154,8 @@ Context value keys identify context values.
 
 They extend a `ContextKey` abstract class. The following implementations are available:
 
-- `SingleContextKey` that allows associate a single value with it, and  
-- `MultiContextKey` that allows to associate multiple values with it.
+- `SingleContextKey` that allows associating a single value with it, and  
+- `MultiContextKey` that allows associating multiple values with it.
 
 ```typescript
 import { ContextRegistry, SingleContextKey, MultiContextKey } from '@proc7ts/context-values';
@@ -179,8 +179,8 @@ context.get(key2); // [1, 2] - MultiContextKey returns all provided values as an
 
 ### Default Value
 
-Context value key may declare a default value. It will be evaluated and returned when the value is not found and no
-fallback value specified in the request.
+Context value key may declare a default value. It will be evaluated and returned when the value not found and no
+fallback one specified in the request.
 
 The default value is evaluated by the function accepting a `ContextValues` instance as its only argument.
 ```typescript
@@ -216,8 +216,7 @@ It is possible to implement a custom `ContextKey`.
 For that extend e.g. a `SimpleContextKey` that implements the boilerplate. The only method left to implement then is a
 `grow()` one.
 
-The `grow()` method takes a single `ContextValueOpts` parameter containing the value construction options and returns
-a context value constructed out of the provided value sources.
+The `grow()` method takes a single `ContextValueSlot` parameter to insert the constructed value to.
 
 
 #### Value Sources and Seeds
@@ -227,40 +226,39 @@ a context value constructed out of the provided value sources.
 Instead of the value itself, the registry allows to provide its sources. Those are combined into _value seed_.
 That is passed to [ContextKey.grow()] method to construct the value (or grow it from the seed).
 
-There could be multiple sources per single value. And they could be of different type.
+There could be multiple sources per single value. They could be of a different type.
 
-For example, the seed of `SimpleValueKey` and `MultiValueKey` is an [AIterable] instance. The latter is enhanced
-`Iterable` with Array-like API, including `map()`, `flatMap()`, `forEach()`, and other methods.
-
-[AIterable]: https://www.npmjs.com/package/a-iterable
+For example, the seed of `MultiContextKey` is an `Iterable` instance of value sources.
 
 ```typescript
-import { AIterable } from 'a-iterable';
 import { 
   ContextRegistry,
-  ContextValueOpts,
-  ContextValues,
-  SimpleContextKey,
+  ContextValueSlot,
+  IterativeContextKey,
 } from '@proc7ts/context-values';
 
-class ConcatContextKey<Src> extends SimpleContextKey<string, Src> {
+class ConcatContextKey<Src> extends IterativeContextKey<string, Src> {
 
   constructor(name: string) {
     super(name);  
   }
 
-  grow<Ctx extends ContextValues>(
-    opts: ContextValueOpts<Ctx, string, Src, AIterable<Src>>,
-  ): string | null | undefined {
+  grow(
+    slot: ContextValueSlot<string, Src, Iterable<Src>>,
+  ): void {
     
-    const result = opts.seed.reduce((p, s) => p != null ? `${p}, ${s}` : `${s}`, null);
+    const result = slot.seed.reduce((p, s) => p != null ? `${p}, ${s}` : `${s}`, null);
     
     if (result != null) {
-      return result;
+      // Insert the result if there is at leas one source.
+      slot.insert(result);
+    } else if (slot.hasFallback) {
+        // No sources provided, but there is a fallback value. Insert the latter.
+        slot.insert(slot.or);    
+    } else {
+        // No sources provided, and there is no a fallback value. Insert an empty string.    
+        slot.insert('');
     }
-
-    // No sources provided. Returning empty string, unless a fallback value provided.    
-    return opts.byDefault(() => '');
   }
 
 }
@@ -284,7 +282,7 @@ context.get(key2, { or: undefined }); // undefined - fallback value
 A context value for particular key is constructed at most once. Thus, the `grow()` method is called at most once per
 key.
 
-A [context value specifier](#context-value-specifier) is consulted at most once per key. And only when the `grow()`
+A [context value specifier](#context-value-specifier) is consulted at most once per key. Only when the `grow()`
 method requested the source value. So, for example, if multiple sources specified for the same `SingleContextKey`, only
 the last one will be constructed and used as a context value. The rest of them won't be constructed at all.
 
@@ -292,9 +290,9 @@ the last one will be constructed and used as a context value. The rest of them w
 Updatable Context Values
 ------------------------
 
-A `SimpleContextKey`, and thus `SingleContextKey` and `MultiContextKey` extending it, imply that once the associated
-context value constructed, it no longer changes. I.e. event though more sources provided for the same key in
-`ContextRegistry`, they won't affect the already constructed value. 
+`SingleContextKey` and `MultiContextKey`, imply that once the associated context value constructed, it no longer
+changes. I.e. even though more sources provided for the same key in `ContextRegistry` they won't affect the already
+constructed value. 
 
 However, it is possible to update context values. For that a `ContextUpKey` abstract context value key implementation
 may be used, or `SingleContextUpKey` and `MultiContextUpKey` implementations.
@@ -317,7 +315,7 @@ const values = registry.newValues();
 
 values.get(key)(value => console.log(value)); // Log: 'initial'
 
-registry.provide({ a: key, is: 'updated' }); // Log: 'updated'
+registry.provide({ a: key, is: 'updated' });  // Log: 'updated'
 ```
 
-[AfterEvent]: https://www.npmjs.com/package/fun-events
+[AfterEvent]: https://www.npmjs.com/package/@proc7ts/fun-events
