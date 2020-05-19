@@ -97,19 +97,19 @@ myContext.get(key, { or: <span class="hljs-string">'empty'</span> });</code></pr
 					<h3>Context Value Request</h3>
 				</a>
 				<p>The <code>get()</code> method accepts not only a <code>ContextKey</code> instance, but arbitrary <code>ContextRequest</code>. The latter is just an
-				object with <code>key</code> property containing a <code>ContextKey</code> instance to find.</p>
+				object with <code>[ContextKey__symbol]</code> property containing a <code>ContextKey</code> instance to find.</p>
 				<p>This can be handy e.g. when requesting an instance of some known type:</p>
-				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { ContextKey, SingleContextKey } <span class="hljs-keyword">from</span> <span class="hljs-string">'@proc7ts/context-values'</span>;
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { ContextKey, ContextKey__symbol, SingleContextKey } <span class="hljs-keyword">from</span> <span class="hljs-string">'@proc7ts/context-values'</span>;
 
 <span class="hljs-keyword">class</span> MyService {
 
   <span class="hljs-comment">// MyService class (not instance) implements a `ContextRequest`</span>
-  <span class="hljs-keyword">static</span> readonly key: ContextKey&lt;MyService&gt; = <span class="hljs-keyword">new</span> SingleContextKey(<span class="hljs-string">'my-service'</span>);
+  <span class="hljs-keyword">static</span> readonly [ContextKey__symbol]: ContextKey&lt;MyService&gt; = <span class="hljs-keyword">new</span> SingleContextKey(<span class="hljs-string">'my-service'</span>);
 
 }
 
-myContext.get(MyService); <span class="hljs-comment">// No need to specify `MyService.key` here</span>
-myContext.get(MyService.key); <span class="hljs-comment">// The same as above.</span></code></pre>
+myContext.get(MyService); <span class="hljs-comment">// No need to specify `MyService[ContextKey__symbol]` here</span>
+myContext.get(MyService[ContextKey__symbol]); <span class="hljs-comment">// The same as above.</span></code></pre>
 				<a href="#providing-context-values" id="providing-context-values" style="color: inherit; text-decoration: none;">
 					<h2>Providing Context Values</h2>
 				</a>
@@ -150,7 +150,7 @@ registry.provide({ a: MyService, is: <span class="hljs-keyword">new</span> MySer
 
 <span class="hljs-keyword">const</span> context = registry.newValues();
 
-context.get(MyService); <span class="hljs-comment">// No need to specify `MyService.key` here</span></code></pre>
+context.get(MyService); <span class="hljs-comment">// No need to specify `MyService[ContextKey__symbol]` here</span></code></pre>
 				<a href="#context-value-specifier" id="context-value-specifier" style="color: inherit; text-decoration: none;">
 					<h3>Context Value Specifier</h3>
 				</a>
@@ -177,8 +177,8 @@ context.get(MyService); <span class="hljs-comment">// No need to specify `MyServ
 				<p>Context value keys identify context values.</p>
 				<p>They extend a <code>ContextKey</code> abstract class. The following implementations are available:</p>
 				<ul>
-					<li><code>SingleContextKey</code> that allows associate a single value with it, and  </li>
-					<li><code>MultiContextKey</code> that allows to associate multiple values with it.</li>
+					<li><code>SingleContextKey</code> that allows associating a single value with it, and  </li>
+					<li><code>MultiContextKey</code> that allows associating multiple values with it.</li>
 				</ul>
 				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { ContextRegistry, SingleContextKey, MultiContextKey } <span class="hljs-keyword">from</span> <span class="hljs-string">'@proc7ts/context-values'</span>;
 
@@ -199,8 +199,8 @@ context.get(key2); <span class="hljs-comment">// [1, 2] - MultiContextKey return
 				<a href="#default-value" id="default-value" style="color: inherit; text-decoration: none;">
 					<h3>Default Value</h3>
 				</a>
-				<p>Context value key may declare a default value. It will be evaluated and returned when the value is not found and no
-				fallback value specified in the request.</p>
+				<p>Context value key may declare a default value. It will be evaluated and returned when the value not found and no
+				fallback one specified in the request.</p>
 				<p>The default value is evaluated by the function accepting a <code>ContextValues</code> instance as its only argument.</p>
 				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { ContextRegistry, SingleContextKey, MultiContextKey } <span class="hljs-keyword">from</span> <span class="hljs-string">'@proc7ts/context-values'</span>;
 
@@ -228,42 +228,42 @@ context.get(key2); <span class="hljs-comment">// 999 - provided explicitly</span
 				<p>It is possible to implement a custom <code>ContextKey</code>.</p>
 				<p>For that extend e.g. a <code>SimpleContextKey</code> that implements the boilerplate. The only method left to implement then is a
 				<code>grow()</code> one.</p>
-				<p>The <code>grow()</code> method takes a single <code>ContextValueOpts</code> parameter containing the value construction options and returns
-				a context value constructed out of the provided value sources.</p>
+				<p>The <code>grow()</code> method takes a single <code>ContextValueSlot</code> parameter to insert the constructed value to.</p>
 				<a href="#value-sources-and-seeds" id="value-sources-and-seeds" style="color: inherit; text-decoration: none;">
 					<h4>Value Sources and Seeds</h4>
 				</a>
 				<p>Instead of the value itself, the registry allows to provide its sources. Those are combined into <em>value seed</em>.
 				That is passed to <a href="#custom-context-key">ContextKey.grow()</a> method to construct the value (or grow it from the seed).</p>
-				<p>There could be multiple sources per single value. And they could be of different type.</p>
-				<p>For example, the seed of <code>SimpleValueKey</code> and <code>MultiValueKey</code> is an <a href="https://www.npmjs.com/package/a-iterable">AIterable</a> instance. The latter is enhanced
-				<code>Iterable</code> with Array-like API, including <code>map()</code>, <code>flatMap()</code>, <code>forEach()</code>, and other methods.</p>
-				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { AIterable } <span class="hljs-keyword">from</span> <span class="hljs-string">'a-iterable'</span>;
-<span class="hljs-keyword">import</span> { 
+				<p>There could be multiple sources per single value. They could be of a different type.</p>
+				<p>For example, the seed of <code>MultiContextKey</code> is an <code>Iterable</code> instance of value sources.</p>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> {
   ContextRegistry,
-  ContextValueOpts,
-  ContextValues,
-  SimpleContextKey,
+  ContextValueSlot,
+  IterativeContextKey,
 } <span class="hljs-keyword">from</span> <span class="hljs-string">'@proc7ts/context-values'</span>;
 
-<span class="hljs-keyword">class</span> ConcatContextKey&lt;Src&gt; <span class="hljs-keyword">extends</span> SimpleContextKey&lt;<span class="hljs-built_in">string</span>, Src&gt; {
+<span class="hljs-keyword">class</span> ConcatContextKey&lt;Src&gt; <span class="hljs-keyword">extends</span> IterativeContextKey&lt;<span class="hljs-built_in">string</span>, Src&gt; {
 
   <span class="hljs-keyword">constructor</span>(<span class="hljs-params">name: <span class="hljs-built_in">string</span></span>) {
     <span class="hljs-keyword">super</span>(name);  
   }
 
-  grow&lt;Ctx <span class="hljs-keyword">extends</span> ContextValues&gt;(
-    opts: ContextValueOpts&lt;Ctx, <span class="hljs-built_in">string</span>, Src, AIterable&lt;Src&gt;&gt;,
-  ): <span class="hljs-built_in">string</span> | <span class="hljs-literal">null</span> | <span class="hljs-literal">undefined</span> {
+  grow(
+    slot: ContextValueSlot&lt;<span class="hljs-built_in">string</span>, Src, Iterable&lt;Src&gt;&gt;,
+  ): <span class="hljs-built_in">void</span> {
 
-    <span class="hljs-keyword">const</span> result = opts.seed.reduce(<span class="hljs-function">(<span class="hljs-params">p, s</span>) =&gt;</span> p != <span class="hljs-literal">null</span> ? <span class="hljs-string">`<span class="hljs-subst">${p}</span>, <span class="hljs-subst">${s}</span>`</span> : <span class="hljs-string">`<span class="hljs-subst">${s}</span>`</span>, <span class="hljs-literal">null</span>);
+    <span class="hljs-keyword">const</span> result = slot.seed.reduce(<span class="hljs-function">(<span class="hljs-params">p, s</span>) =&gt;</span> p != <span class="hljs-literal">null</span> ? <span class="hljs-string">`<span class="hljs-subst">${p}</span>, <span class="hljs-subst">${s}</span>`</span> : <span class="hljs-string">`<span class="hljs-subst">${s}</span>`</span>, <span class="hljs-literal">null</span>);
 
     <span class="hljs-keyword">if</span> (result != <span class="hljs-literal">null</span>) {
-      <span class="hljs-keyword">return</span> result;
+      <span class="hljs-comment">// Insert the result if there is at leas one source.</span>
+      slot.insert(result);
+    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (slot.hasFallback) {
+        <span class="hljs-comment">// No sources provided, but there is a fallback value. Insert the latter.</span>
+        slot.insert(slot.or);    
+    } <span class="hljs-keyword">else</span> {
+        <span class="hljs-comment">// No sources provided, and there is no a fallback value. Insert an empty string.    </span>
+        slot.insert(<span class="hljs-string">''</span>);
     }
-
-    <span class="hljs-comment">// No sources provided. Returning empty string, unless a fallback value provided.    </span>
-    <span class="hljs-keyword">return</span> opts.byDefault(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-string">''</span>);
   }
 
 }
@@ -284,18 +284,18 @@ context.get(key2); <span class="hljs-comment">// '' - empty string by default </
 context.get(key2, { or: <span class="hljs-literal">undefined</span> }); <span class="hljs-comment">// undefined - fallback value </span></code></pre>
 				<p>A context value for particular key is constructed at most once. Thus, the <code>grow()</code> method is called at most once per
 				key.</p>
-				<p>A <a href="#context-value-specifier">context value specifier</a> is consulted at most once per key. And only when the <code>grow()</code>
+				<p>A <a href="#context-value-specifier">context value specifier</a> is consulted at most once per key. Only when the <code>grow()</code>
 					method requested the source value. So, for example, if multiple sources specified for the same <code>SingleContextKey</code>, only
 				the last one will be constructed and used as a context value. The rest of them won&#39;t be constructed at all.</p>
 				<a href="#updatable-context-values" id="updatable-context-values" style="color: inherit; text-decoration: none;">
 					<h2>Updatable Context Values</h2>
 				</a>
-				<p>A <code>SimpleContextKey</code>, and thus <code>SingleContextKey</code> and <code>MultiContextKey</code> extending it, imply that once the associated
-					context value constructed, it no longer changes. I.e. event though more sources provided for the same key in
-				<code>ContextRegistry</code>, they won&#39;t affect the already constructed value. </p>
+				<p><code>SingleContextKey</code> and <code>MultiContextKey</code>, imply that once the associated context value constructed, it no longer
+					changes. I.e. even though more sources provided for the same key in <code>ContextRegistry</code> they won&#39;t affect the already
+				constructed value. </p>
 				<p>However, it is possible to update context values. For that a <code>ContextUpKey</code> abstract context value key implementation
 				may be used, or <code>SingleContextUpKey</code> and <code>MultiContextUpKey</code> implementations.</p>
-				<p>They provide an <a href="https://www.npmjs.com/package/fun-events">AfterEvent</a> keeper of value. The receivers registered in this keeper would receive the actual value
+				<p>They provide an <a href="https://www.npmjs.com/package/@proc7ts/fun-events">AfterEvent</a> keeper of value. The receivers registered in this keeper would receive the actual value
 				each time it changes. E.g. when new value source is provided in <code>ContextRegistry</code>.</p>
 				<p>This functionality is implemented in <code>@proc7ts/context-value/updatable</code> sub-module and depends on <code>@proc7ts/fun-events</code>.</p>
 				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { ContextRegistry } <span class="hljs-keyword">from</span> <span class="hljs-string">'@proc7ts/context-values'</span>;
@@ -310,7 +310,7 @@ registry.provide({ a: key, is: <span class="hljs-string">'initial'</span> });
 
 values.get(key)(<span class="hljs-function"><span class="hljs-params">value</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(value)); <span class="hljs-comment">// Log: 'initial'</span>
 
-registry.provide({ a: key, is: <span class="hljs-string">'updated'</span> }); <span class="hljs-comment">// Log: 'updated'</span></code></pre>
+registry.provide({ a: key, is: <span class="hljs-string">'updated'</span> });  <span class="hljs-comment">// Log: 'updated'</span></code></pre>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
