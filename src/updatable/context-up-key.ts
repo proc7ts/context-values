@@ -98,7 +98,7 @@ function toUpSrcKeeper<Src>(src: null | undefined | Src | EventKeeper<Src[]>): A
  * @internal
  */
 function isUpSrcKeeper<Src>(src: Src | EventKeeper<Src[]>): src is EventKeeper<Src[]> {
-  return (typeof src === 'object' || typeof src === 'function') && isEventKeeper(src as (object | Function));
+  return (typeof src === 'object' || typeof src === 'function') && isEventKeeper(src as object);
 }
 
 /**

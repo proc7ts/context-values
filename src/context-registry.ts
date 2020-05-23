@@ -143,6 +143,7 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
       ): Value | null | undefined {
 
         const context = this;
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const cached: Value | undefined = values.get(key);
 
         if (cached != null) {
@@ -156,7 +157,7 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
           setup({
             key,
             context: this,
-            registry: registry as ContextRegistry<any>,
+            registry: registry as ContextRegistry<any> as ContextRegistry,
           });
         }
 

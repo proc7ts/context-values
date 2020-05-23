@@ -260,7 +260,7 @@ export function contextValueSpec<Ctx extends ContextValues, Value, Deps extends 
     return {
       a,
       by(this: void, context: Ctx) {
-        return by(...deps.map(dep => context.get(dep)) as Deps);
+        return by(...deps.map(<T>(dep: ContextRequest<T>) => context.get(dep)) as Deps);
       },
     };
   }
@@ -305,7 +305,7 @@ export function contextValueSpec<Ctx extends ContextValues, Value, Deps extends 
     return {
       a: spec.a,
       by(this: void, context: Ctx) {
-        return new DepType(...deps.map(dep => context.get(dep)) as Deps);
+        return new DepType(...deps.map(<T>(dep: ContextRequest<T>) => context.get(dep)) as Deps);
       },
     };
   }
