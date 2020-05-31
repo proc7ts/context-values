@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>AsInstanceWithDeps | Context Values</title>
+	<title>ByProvider | Context Values</title>
 	<meta name="description" content="Documentation for Context Values">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,16 +54,19 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/@proc7ts_context-values.html">@proc7ts/context-values</a>
+					<a href="../modules/reflection-788.html"></a>
 				</li>
 				<li>
-					<a href="../modules/@proc7ts_context-values.ContextValueSpec.html">ContextValueSpec</a>
+					<a href="../modules/reflection-788.reflection-789.html"></a>
 				</li>
 				<li>
-					<a href="@proc7ts_context-values.ContextValueSpec.AsInstanceWithDeps.html">AsInstanceWithDeps</a>
+					<a href="../modules/reflection-788.reflection-789.reflection-2.html"></a>
+				</li>
+				<li>
+					<a href="reflection-788.reflection-789.reflection-2.ByProvider.html">ByProvider</a>
 				</li>
 			</ul>
-			<h1>Interface AsInstanceWithDeps&lt;Deps, Src, Seed&gt;</h1>
+			<h1>Interface ByProvider&lt;Ctx, Src, Seed&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -73,7 +76,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>A specifier of context value defined as instance of some class with constructor depending on other context values.</p>
+						<p>A specifier of context value defined by provider function.</p>
 					</div>
 				</div>
 			</section>
@@ -81,10 +84,10 @@
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
 					<li>
-						<h4>Deps<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h4>
+						<h4>Ctx<span class="tsd-signature-symbol">: </span><a href="../classes/@proc7ts_context-values.ContextValues.html" class="tsd-signature-type">ContextValues</a></h4>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
-								<p>Dependencies tuple type.</p>
+								<p>Context type.</p>
 							</div>
 						</div>
 					</li>
@@ -110,7 +113,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">AsInstanceWithDeps</span>
+						<span class="target">ByProvider</span>
 					</li>
 				</ul>
 			</section>
@@ -121,9 +124,8 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="@proc7ts_context-values.ContextValueSpec.AsInstanceWithDeps.html#a" class="tsd-kind-icon">a</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="@proc7ts_context-values.ContextValueSpec.AsInstanceWithDeps.html#as" class="tsd-kind-icon">as</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="@proc7ts_context-values.ContextValueSpec.AsInstanceWithDeps.html#with" class="tsd-kind-icon">with</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="reflection-788.reflection-789.reflection-2.ByProvider.html#a" class="tsd-kind-icon">a</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="reflection-788.reflection-789.reflection-2.ByProvider.html#by" class="tsd-kind-icon">by</a></li>
 							</ul>
 						</section>
 					</div>
@@ -137,7 +139,7 @@
 					<div class="tsd-signature tsd-kind-icon">a<span class="tsd-signature-symbol">:</span> <a href="@proc7ts_context-values.ContextTarget.html" class="tsd-signature-type">ContextTarget</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Seed</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/a0a2f9c/src/context-value-spec.ts#L188">proc7ts/context-values/src/context-value-spec.ts:188</a></li>
+							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/3c14286/src/context-value-spec.ts#L104">proc7ts/context-values/src/context-value-spec.ts:104</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -147,37 +149,17 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="as" class="tsd-anchor"></a>
-					<h3>as</h3>
-					<div class="tsd-signature tsd-kind-icon">as<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{}</span></div>
+					<a name="by" class="tsd-anchor"></a>
+					<h3>by</h3>
+					<div class="tsd-signature tsd-kind-icon">by<span class="tsd-signature-symbol">:</span> <a href="../modules/@proc7ts_context-values.html#ContextValueProvider" class="tsd-signature-type">ContextValueProvider</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Ctx</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/a0a2f9c/src/context-value-spec.ts#L193">proc7ts/context-values/src/context-value-spec.ts:193</a></li>
+							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/3c14286/src/context-value-spec.ts#L109">proc7ts/context-values/src/context-value-spec.ts:109</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Context value class constructor.</p>
-						</div>
-					</div>
-					<div class="tsd-type-declaration">
-						<h4>Type declaration</h4>
-						<ul class="tsd-parameters">
-						</ul>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="with" class="tsd-anchor"></a>
-					<h3>with</h3>
-					<div class="tsd-signature tsd-kind-icon">with<span class="tsd-signature-symbol">:</span> <a href="../modules/@proc7ts_context-values.ContextValueSpec.html#DepsRequests" class="tsd-signature-type">DepsRequests</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Deps</span><span class="tsd-signature-symbol">&gt;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/a0a2f9c/src/context-value-spec.ts#L198">proc7ts/context-values/src/context-value-spec.ts:198</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Context value requests for corresponding constructor arguments.</p>
+							<p>Context value provider.</p>
 						</div>
 					</div>
 				</section>
@@ -194,46 +176,67 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="@proc7ts_context-values.ContextValueSpec.AsInstance.html" class="tsd-kind-icon">As<wbr>Instance</a>
+						<a href="reflection-788.reflection-789.reflection-2.AsInstance.html" class="tsd-kind-icon">As<wbr>Instance</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
+						<a href="reflection-788.reflection-789.reflection-2.AsInstanceWithDeps.html" class="tsd-kind-icon">As<wbr>Instance<wbr>With<wbr>Deps</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
+						<a href="reflection-788.reflection-789.reflection-2.Base.html" class="tsd-kind-icon">Base</a>
 					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="@proc7ts_context-values.ContextValueSpec.AsInstanceWithDeps.html" class="tsd-kind-icon">As<wbr>Instance<wbr>With<wbr>Deps</a>
+						<a href="reflection-788.reflection-789.reflection-2.ByProvider.html" class="tsd-kind-icon">By<wbr>Provider</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="@proc7ts_context-values.ContextValueSpec.AsInstanceWithDeps.html#a" class="tsd-kind-icon">a</a>
+								<a href="reflection-788.reflection-789.reflection-2.ByProvider.html#a" class="tsd-kind-icon">a</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="@proc7ts_context-values.ContextValueSpec.AsInstanceWithDeps.html#as" class="tsd-kind-icon">as</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="@proc7ts_context-values.ContextValueSpec.AsInstanceWithDeps.html#with" class="tsd-kind-icon">with</a>
+								<a href="reflection-788.reflection-789.reflection-2.ByProvider.html#by" class="tsd-kind-icon">by</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="@proc7ts_context-values.ContextValueSpec.ByProvider.html" class="tsd-kind-icon">By<wbr>Provider</a>
+						<a href="reflection-788.reflection-789.reflection-2.ByProviderWithDeps.html" class="tsd-kind-icon">By<wbr>Provider<wbr>With<wbr>Deps</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="@proc7ts_context-values.ContextValueSpec.ByProviderWithDeps.html" class="tsd-kind-icon">By<wbr>Provider<wbr>With<wbr>Deps</a>
+						<a href="reflection-788.reflection-789.reflection-2.IsConstant.html" class="tsd-kind-icon">Is<wbr>Constant</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="@proc7ts_context-values.ContextValueSpec.IsConstant.html" class="tsd-kind-icon">Is<wbr>Constant</a>
+						<a href="reflection-788.reflection-789.reflection-2.Opts.html" class="tsd-kind-icon">Opts</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="@proc7ts_context-values.ContextValueSpec.SelfInstance.html" class="tsd-kind-icon">Self<wbr>Instance</a>
+						<a href="reflection-788.reflection-789.reflection-2.OrFallback.html" class="tsd-kind-icon">Or<wbr>Fallback</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="@proc7ts_context-values.ContextValueSpec.SelfInstanceWithDeps.html" class="tsd-kind-icon">Self<wbr>Instance<wbr>With<wbr>Deps</a>
+						<a href="reflection-788.reflection-789.reflection-2.OrNull.html" class="tsd-kind-icon">Or<wbr>Null</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="@proc7ts_context-values.ContextValueSpec.ViaAlias.html" class="tsd-kind-icon">Via<wbr>Alias</a>
+						<a href="reflection-788.reflection-789.reflection-2.OrUndefined.html" class="tsd-kind-icon">Or<wbr>Undefined</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
+						<a href="reflection-788.reflection-789.reflection-2.SelfInstance.html" class="tsd-kind-icon">Self<wbr>Instance</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
+						<a href="reflection-788.reflection-789.reflection-2.SelfInstanceWithDeps.html" class="tsd-kind-icon">Self<wbr>Instance<wbr>With<wbr>Deps</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
+						<a href="reflection-788.reflection-789.reflection-2.ViaAlias.html" class="tsd-kind-icon">Via<wbr>Alias</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
+						<a href="reflection-788.reflection-789.reflection-2.WithFallback.html" class="tsd-kind-icon">With<wbr>Fallback</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
+						<a href="reflection-788.reflection-789.reflection-2.WithoutFallback.html" class="tsd-kind-icon">Without<wbr>Fallback</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="../modules/@proc7ts_context-values.ContextValueSpec.html#DepsRequests" class="tsd-kind-icon">Deps<wbr>Requests</a>
+						<a href="../modules/reflection-788.reflection-789.reflection-2.html#DepsRequests" class="tsd-kind-icon">Deps<wbr>Requests</a>
+					</li>
+					<li class=" tsd-kind-property tsd-parent-kind-namespace">
+						<a href="../modules/reflection-788.reflection-789.reflection-2.html#_ContextKey__symbol_" class="tsd-kind-icon">[<wbr>Context<wbr>Key__symbol]</a>
 					</li>
 				</ul>
 			</nav>
