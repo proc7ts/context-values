@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @proc7ts/context-values
  */
-import { valueProvider } from '@proc7ts/call-thru';
+import { valueProvider } from '@proc7ts/primitives';
 import { ContextRequest, ContextTarget } from './context-ref';
 import { ContextValues } from './context-values';
 

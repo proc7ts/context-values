@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @proc7ts/context-values
  */
-import { lazyValue, noop } from '@proc7ts/call-thru';
+import { lazyValue, noop } from '@proc7ts/primitives';
 import { ContextKey, ContextSeedKey } from './context-key';
 import { ContextSeeder } from './context-seeder';
 import { ContextValueProvider } from './context-value-spec';

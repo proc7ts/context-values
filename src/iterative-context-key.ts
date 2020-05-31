@@ -3,7 +3,7 @@
  * @module @proc7ts/context-values
  */
 import { filterIt, flatMapIt, itsEmpty, mapIt, overNone } from '@proc7ts/a-iterable';
-import { isPresent, lazyValue } from '@proc7ts/call-thru';
+import { isPresent, lazyValue } from '@proc7ts/primitives';
 import { ContextKey, ContextSeedKey } from './context-key';
 import { ContextSeeder } from './context-seeder';
 import { ContextValueProvider } from './context-value-spec';

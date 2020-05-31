@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @proc7ts/context-values
  */
-import { valuesProvider } from '@proc7ts/call-thru';
+import { valuesProvider } from '@proc7ts/primitives';
 import { ContextKey, ContextKeyDefault, ContextSeedKey, ContextValueSlot } from './context-key';
 import { ContextRef } from './context-ref';
 import { IterativeContextKey } from './iterative-context-key';

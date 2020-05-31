@@ -1,4 +1,4 @@
-import { valueProvider } from '@proc7ts/call-thru';
+import { valueProvider } from '@proc7ts/primitives';
 import { ContextKey, ContextValueSetup, ContextValueSlot } from './context-key';
 import { ContextKeyError } from './context-key-error';
 import { ContextRegistry } from './context-registry';
