@@ -29,7 +29,7 @@
   "dependencies": {
     "@proc7ts/a-iterable": "^2.7.0",
     "@proc7ts/call-thru": "^4.0.0",
-    "@proc7ts/primitives": "^1.0.0"
+    "@proc7ts/primitives": "^1.0.3"
   },
   "devDependencies": {
     "@proc7ts/eslint-config": "^2.0.0",
