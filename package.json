@@ -17,7 +17,7 @@
   },
   "main": "dist/context-values.js",
   "module": "dist/context-values.mjs",
-  "typings": "index.d.ts",
+  "types": "index.d.ts",
   "peerDependencies": {
     "@proc7ts/fun-events": "^9.2.0"
   },
