@@ -18,8 +18,18 @@
   "main": "dist/context-values.js",
   "module": "dist/context-values.mjs",
   "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/context-values.js",
+      "import": "./dist/context-values.mjs"
+    },
+    "./updatable": {
+      "require": "./dist/context-values.updatable.js",
+      "import": "./dist/context-values.updatable.mjs"
+    }
+  },
   "peerDependencies": {
-    "@proc7ts/fun-events": "^9.2.0"
+    "@proc7ts/fun-events": "^9.3.0"
   },
   "peerDependenciesMeta": {
     "@proc7ts/fun-events": {
@@ -27,13 +37,13 @@
     }
   },
   "dependencies": {
-    "@proc7ts/a-iterable": "^2.7.0",
-    "@proc7ts/call-thru": "^4.0.0",
-    "@proc7ts/primitives": "^1.1.0"
+    "@proc7ts/a-iterable": "^2.8.0",
+    "@proc7ts/call-thru": "^4.1.0",
+    "@proc7ts/primitives": "^1.2.0"
   },
   "devDependencies": {
     "@proc7ts/eslint-config": "^2.0.4",
-    "@proc7ts/fun-events": "^9.2.0",
+    "@proc7ts/fun-events": "^9.3.0",
     "@proc7ts/rollup-helpers": "^1.0.0",
     "@rollup/plugin-commonjs": "^15.0.0",
     "@rollup/plugin-node-resolve": "^9.0.0",
