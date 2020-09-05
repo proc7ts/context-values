@@ -90,53 +90,45 @@ describe('ContextRegistry', () => {
     });
   });
 
-  function testChained(title: string, createChained: () => ContextRegistry): void {
-    describe(title, () => {
+  describe.each([
+    ['Registry chained with bound seeds', () => new ContextRegistry(registry.seedIn({ name: 'context' } as any))],
+    ['Registry chained with context values', () => new ContextRegistry(values)],
+  ])('%s', (_title: string, createChained: () => ContextRegistry): void => {
 
-      let chained: ContextRegistry;
-      let chainedValues: ContextValues;
-      let provider2Spy: Mock;
+    let chained: ContextRegistry;
+    let chainedValues: ContextValues;
+    let provider2Spy: Mock;
 
-      beforeEach(() => {
-        chained = createChained();
-        chainedValues = chained.newValues();
-        provider2Spy = jest.fn();
-      });
-
-      it('prefers explicit value', () => {
-
-        const value1 = 'initial value';
-        const value2 = 'actual value';
-
-        mockProvider.mockReturnValue(value1);
-
-        chained.provide({ a: key, by: provider2Spy });
-        provider2Spy.mockReturnValue(value2);
-
-        expect(chainedValues.get(key)).toBe(value2);
-      });
-      it('falls back to initial value', () => {
-
-        const value1 = 'initial value';
-
-        mockProvider.mockReturnValue(value1);
-
-        chained.provide({ a: key, by: provider2Spy });
-        provider2Spy.mockReturnValue(null);
-
-        expect(chainedValues.get(key)).toBe(value1);
-      });
+    beforeEach(() => {
+      chained = createChained();
+      chainedValues = chained.newValues();
+      provider2Spy = jest.fn();
     });
-  }
 
-  testChained(
-      'Registry chained with bound seeds',
-      () => new ContextRegistry(registry.seedIn({ name: 'context' } as any)),
-  );
-  testChained(
-      'Registry chained with context values',
-      () => new ContextRegistry(values),
-  );
+    it('prefers explicit value', () => {
+
+      const value1 = 'initial value';
+      const value2 = 'actual value';
+
+      mockProvider.mockReturnValue(value1);
+
+      chained.provide({ a: key, by: provider2Spy });
+      provider2Spy.mockReturnValue(value2);
+
+      expect(chainedValues.get(key)).toBe(value2);
+    });
+    it('falls back to initial value', () => {
+
+      const value1 = 'initial value';
+
+      mockProvider.mockReturnValue(value1);
+
+      chained.provide({ a: key, by: provider2Spy });
+      provider2Spy.mockReturnValue(null);
+
+      expect(chainedValues.get(key)).toBe(value1);
+    });
+  });
 
   describe('newValues', () => {
     it('preserves non-caching instance', () => {
