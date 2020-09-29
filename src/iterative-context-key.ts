@@ -2,8 +2,8 @@
  * @packageDocumentation
  * @module @proc7ts/context-values
  */
-import { filterIt, flatMapIt, itsEmpty, mapIt, overNone } from '@proc7ts/a-iterable';
 import { isPresent, lazyValue } from '@proc7ts/primitives';
+import { filterIt, itsEmpty, mapIt, overElementsOf, overNone, PushIterable } from '@proc7ts/push-iterator';
 import { ContextKey, ContextSeedKey } from './context-key';
 import { ContextSeeder } from './context-seeder';
 import { ContextValueProvider } from './context-value-spec';
@@ -12,7 +12,7 @@ import { ContextValues } from './context-values';
 /**
  * @internal
  */
-class IterativeContextSeeder<Ctx extends ContextValues, Src> implements ContextSeeder<Ctx, Src, Iterable<Src>> {
+class IterativeContextSeeder<Ctx extends ContextValues, Src> implements ContextSeeder<Ctx, Src, PushIterable<Src>> {
 
   private readonly _providers: ContextValueProvider<Ctx, Src>[] = [];
 
@@ -28,19 +28,19 @@ class IterativeContextSeeder<Ctx extends ContextValues, Src> implements ContextS
     };
   }
 
-  seed(context: Ctx, initial: Iterable<Src> = overNone()): Iterable<Src> {
-    return flatMapIt([
+  seed(context: Ctx, initial: Iterable<Src> = overNone()): PushIterable<Src> {
+    return overElementsOf(
       initial,
       iterativeSeed(context, this._providers),
-    ]);
+    );
   }
 
   isEmpty(seed: Iterable<Src>): boolean {
     return itsEmpty(seed);
   }
 
-  combine(first: Iterable<Src>, second: Iterable<Src>): Iterable<Src> {
-    return flatMapIt([first, second]);
+  combine(first: Iterable<Src>, second: Iterable<Src>): PushIterable<Src> {
+    return overElementsOf(first, second);
   }
 
 }
@@ -48,7 +48,7 @@ class IterativeContextSeeder<Ctx extends ContextValues, Src> implements ContextS
 /**
  * @internal
  */
-class IterativeSeedKey<Src> extends ContextSeedKey<Src, Iterable<Src>> {
+class IterativeSeedKey<Src> extends ContextSeedKey<Src, PushIterable<Src>> {
 
   seeder<Ctx extends ContextValues>(): IterativeContextSeeder<Ctx, Src> {
     return new IterativeContextSeeder();
@@ -96,7 +96,7 @@ export abstract class IterativeContextKey<Value, Src = Value> extends ContextKey
 function iterativeSeed<Ctx extends ContextValues, Src>(
     context: Ctx,
     providers: readonly ContextValueProvider<Ctx, Src>[],
-): Iterable<Src> {
+): PushIterable<Src> {
   return filterIt<Src | null | undefined, Src>(
       mapIt(
           providers.map(provider => lazyValue(provider.bind(undefined, context))), // lazily evaluated providers

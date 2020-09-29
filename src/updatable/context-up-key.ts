@@ -2,7 +2,6 @@
  * @packageDocumentation
  * @module @proc7ts/context-values/updatable
  */
-import { flatMapIt, mapIt, overArray } from '@proc7ts/a-iterable';
 import { CallChain, nextArgs, NextCall } from '@proc7ts/call-thru';
 import {
   afterEach,
@@ -15,6 +14,7 @@ import {
   trackValue,
   ValueTracker,
 } from '@proc7ts/fun-events';
+import { mapIt, overArray, overElementsOf } from '@proc7ts/push-iterator';
 import { ContextKey, ContextKey__symbol, ContextSeedKey, ContextValueSlot } from '../context-key';
 import { ContextRef } from '../context-ref';
 import { ContextSeeder } from '../context-seeder';
@@ -105,7 +105,7 @@ function isUpSrcKeeper<Src>(src: Src | EventKeeper<Src[]>): src is EventKeeper<S
  * @internal
  */
 function flatUpSources<Src>(...sources: Src[][]): NextCall<CallChain, Src[]> {
-  return nextArgs<Src[]>(...flatMapIt<Src>(sources));
+  return nextArgs(...overElementsOf(...sources));
 }
 
 /**
