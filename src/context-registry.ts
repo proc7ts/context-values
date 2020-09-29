@@ -132,6 +132,7 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
     }
 
     const values = new Map<ContextKey<any>, any>();
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const registry = this;
 
     class Values extends ContextValues {
@@ -142,15 +143,13 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
           opts?: ContextRequest.Opts<Value>,
       ): Value | null | undefined {
 
-        const context = this;
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const cached: Value | undefined = values.get(key);
 
         if (cached != null) {
           return cached;
         }
 
-        const [constructed, setup] = growValue(context, key, opts);
+        const [constructed, setup] = growValue(this, key, opts);
 
         if (cache && setup) {
           values.set(key, constructed);
