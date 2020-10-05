@@ -39,7 +39,7 @@
   "dependencies": {
     "@proc7ts/call-thru": "^4.1.0",
     "@proc7ts/primitives": "^1.2.0",
-    "@proc7ts/push-iterator": "^1.0.0"
+    "@proc7ts/push-iterator": "^1.1.0"
   },
   "devDependencies": {
     "@proc7ts/eslint-config": "^2.0.5",
