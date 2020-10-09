@@ -3,6 +3,7 @@
  * @module @proc7ts/context-values
  */
 import { valuesProvider } from '@proc7ts/primitives';
+import { itsElements } from '@proc7ts/push-iterator';
 import { ContextKey, ContextKeyDefault, ContextSeedKey, ContextValueSlot } from './context-key';
 import { ContextRef } from './context-ref';
 import { IterativeContextKey } from './iterative-context-key';
@@ -59,7 +60,7 @@ export class MultiContextKey<Src>
       slot: ContextValueSlot<readonly Src[], Src, Iterable<Src>>,
   ): void {
 
-    const result = Array.from(slot.seed);
+    const result = itsElements(slot.seed);
 
     if (result.length) {
       slot.insert(result);

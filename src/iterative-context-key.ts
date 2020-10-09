@@ -97,11 +97,12 @@ function iterativeSeed<Ctx extends ContextValues, Src>(
     context: Ctx,
     providers: readonly ContextValueProvider<Ctx, Src>[],
 ): PushIterable<Src> {
+
+  // Lazily evaluated providers
+  const lazyProviders = providers.map(provider => lazyValue(provider.bind(undefined, context)));
+
   return filterIt<Src | null | undefined, Src>(
-      mapIt(
-          providers.map(provider => lazyValue(provider.bind(undefined, context))), // lazily evaluated providers
-          provider => provider(),
-      ),
+      mapIt(lazyProviders, provider => provider()),
       isPresent,
   );
 }
