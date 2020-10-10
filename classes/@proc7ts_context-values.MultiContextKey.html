@@ -60,7 +60,7 @@
 					<a href="@proc7ts_context-values.MultiContextKey.html">MultiContextKey</a>
 				</li>
 			</ul>
-			<h1>Class MultiContextKey&lt;Src&gt;</h1>
+			<h1>Class MultiContextKey&lt;TSrc&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -80,10 +80,10 @@
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
 					<li>
-						<h4>Src</h4>
+						<h4>TSrc</h4>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
-								<p>Value source type and context value item type.</p>
+								<p>TValue source type and context value item type.</p>
 							</div>
 						</div>
 					</li>
@@ -93,7 +93,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="@proc7ts_context-values.IterativeContextKey.html" class="tsd-signature-type">IterativeContextKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">readonly </span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">&gt;</span>
+						<a href="@proc7ts_context-values.IterativeContextKey.html" class="tsd-signature-type">IterativeContextKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">readonly </span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">&gt;</span>
 						<ul class="tsd-hierarchy">
 							<li>
 								<span class="target">MultiContextKey</span>
@@ -105,8 +105,8 @@
 			<section class="tsd-panel">
 				<h3>Implements</h3>
 				<ul class="tsd-hierarchy">
-					<li><a href="../interfaces/@proc7ts_context-values.ContextRef.html" class="tsd-signature-type">ContextRef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">readonly </span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">&gt;</span></li>
-					<li><a href="../interfaces/@proc7ts_context-values.ContextRef.html" class="tsd-signature-type">ContextRef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">&gt;</span></li>
+					<li><a href="../interfaces/@proc7ts_context-values.ContextRef.html" class="tsd-signature-type">ContextRef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">readonly </span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">&gt;</span></li>
+					<li><a href="../interfaces/@proc7ts_context-values.ContextRef.html" class="tsd-signature-type">ContextRef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">&gt;</span></li>
 				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -149,14 +149,14 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Multi<wbr>Context<wbr>Key<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, __namedParameters<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">{ </span>byDefault<span class="tsd-signature-symbol">: </span><a href="../modules/@proc7ts_context-values.html#ContextKeyDefault" class="tsd-signature-type">ContextKeyDefault</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="@proc7ts_context-values.ContextKey.html" class="tsd-signature-type">ContextKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>seedKey<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="@proc7ts_context-values.ContextSeedKey.html" class="tsd-signature-type">ContextSeedKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Iterable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="@proc7ts_context-values.MultiContextKey.html" class="tsd-signature-type">MultiContextKey</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Multi<wbr>Context<wbr>Key<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, __namedParameters<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">{ </span>byDefault<span class="tsd-signature-symbol">: </span><a href="../modules/@proc7ts_context-values.html#ContextKeyDefault" class="tsd-signature-type">ContextKeyDefault</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="@proc7ts_context-values.ContextKey.html" class="tsd-signature-type">ContextKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>seedKey<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="@proc7ts_context-values.ContextSeedKey.html" class="tsd-signature-type">ContextSeedKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Iterable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="@proc7ts_context-values.MultiContextKey.html" class="tsd-signature-type">MultiContextKey</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Overrides <a href="@proc7ts_context-values.IterativeContextKey.html">IterativeContextKey</a>.<a href="@proc7ts_context-values.IterativeContextKey.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/deda170/src/multi-context-key.ts#L36">proc7ts/context-values/src/multi-context-key.ts:36</a></li>
+									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/7e63558/src/multi-context-key.ts#L36">proc7ts/context-values/src/multi-context-key.ts:36</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -175,16 +175,16 @@
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> __namedParameters: <span class="tsd-signature-symbol">{ </span>byDefault<span class="tsd-signature-symbol">: </span><a href="../modules/@proc7ts_context-values.html#ContextKeyDefault" class="tsd-signature-type">ContextKeyDefault</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="@proc7ts_context-values.ContextKey.html" class="tsd-signature-type">ContextKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>seedKey<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="@proc7ts_context-values.ContextSeedKey.html" class="tsd-signature-type">ContextSeedKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Iterable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = {}</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> __namedParameters: <span class="tsd-signature-symbol">{ </span>byDefault<span class="tsd-signature-symbol">: </span><a href="../modules/@proc7ts_context-values.html#ContextKeyDefault" class="tsd-signature-type">ContextKeyDefault</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="@proc7ts_context-values.ContextKey.html" class="tsd-signature-type">ContextKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>seedKey<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="@proc7ts_context-values.ContextSeedKey.html" class="tsd-signature-type">ContextSeedKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Iterable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = {}</span></h5>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter">
-											<h5>by<wbr>Default<span class="tsd-signature-symbol">: </span><a href="../modules/@proc7ts_context-values.html#ContextKeyDefault" class="tsd-signature-type">ContextKeyDefault</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="@proc7ts_context-values.ContextKey.html" class="tsd-signature-type">ContextKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+											<h5>by<wbr>Default<span class="tsd-signature-symbol">: </span><a href="../modules/@proc7ts_context-values.html#ContextKeyDefault" class="tsd-signature-type">ContextKeyDefault</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="@proc7ts_context-values.ContextKey.html" class="tsd-signature-type">ContextKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 											<div class="tsd-comment tsd-typography">
 												<p>Optional default value provider. If unspecified then the default value is empty array.</p>
 											</div>
 										</li>
 										<li class="tsd-parameter">
-											<h5>seed<wbr>Key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="@proc7ts_context-values.ContextSeedKey.html" class="tsd-signature-type">ContextSeedKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Iterable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+											<h5>seed<wbr>Key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="@proc7ts_context-values.ContextSeedKey.html" class="tsd-signature-type">ContextSeedKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Iterable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 											<div class="tsd-comment tsd-typography">
 												<p>Value seed key. A new one will be constructed when omitted.</p>
 											</div>
@@ -202,10 +202,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="byDefault" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> by<wbr>Default</h3>
-					<div class="tsd-signature tsd-kind-icon">by<wbr>Default<span class="tsd-signature-symbol">:</span> <a href="../modules/@proc7ts_context-values.html#ContextKeyDefault" class="tsd-signature-type">ContextKeyDefault</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">readonly </span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">, </span><a href="@proc7ts_context-values.ContextKey.html" class="tsd-signature-type">ContextKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">readonly </span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">by<wbr>Default<span class="tsd-signature-symbol">:</span> <a href="../modules/@proc7ts_context-values.html#ContextKeyDefault" class="tsd-signature-type">ContextKeyDefault</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">readonly </span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">, </span><a href="@proc7ts_context-values.ContextKey.html" class="tsd-signature-type">ContextKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">readonly </span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/deda170/src/multi-context-key.ts#L36">proc7ts/context-values/src/multi-context-key.ts:36</a></li>
+							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/7e63558/src/multi-context-key.ts#L36">proc7ts/context-values/src/multi-context-key.ts:36</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -221,7 +221,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="@proc7ts_context-values.ContextKey.html">ContextKey</a>.<a href="@proc7ts_context-values.ContextKey.html#name">name</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/deda170/src/context-key.ts#L34">proc7ts/context-values/src/context-key.ts:34</a></li>
+							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/7e63558/src/context-key.ts#L34">proc7ts/context-values/src/context-key.ts:34</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -234,12 +234,12 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
 					<a name="seedKey" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> seed<wbr>Key</h3>
-					<div class="tsd-signature tsd-kind-icon">seed<wbr>Key<span class="tsd-signature-symbol">:</span> <a href="@proc7ts_context-values.ContextSeedKey.html" class="tsd-signature-type">ContextSeedKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Iterable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">seed<wbr>Key<span class="tsd-signature-symbol">:</span> <a href="@proc7ts_context-values.ContextSeedKey.html" class="tsd-signature-type">ContextSeedKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Iterable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="@proc7ts_context-values.IterativeContextKey.html">IterativeContextKey</a>.<a href="@proc7ts_context-values.IterativeContextKey.html#seedKey">seedKey</a></p>
 						<p>Overrides <a href="@proc7ts_context-values.ContextKey.html">ContextKey</a>.<a href="@proc7ts_context-values.ContextKey.html#seedKey">seedKey</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/deda170/src/iterative-context-key.ts#L71">proc7ts/context-values/src/iterative-context-key.ts:71</a></li>
+							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/7e63558/src/iterative-context-key.ts#L72">proc7ts/context-values/src/iterative-context-key.ts:72</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -257,7 +257,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="@proc7ts_context-values.ContextKey.html">ContextKey</a>.<a href="@proc7ts_context-values.ContextKey.html#_ContextKey__symbol_">[ContextKey__symbol]</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/deda170/src/context-key.ts#L57">proc7ts/context-values/src/context-key.ts:57</a></li>
+									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/7e63558/src/context-key.ts#L57">proc7ts/context-values/src/context-key.ts:57</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -277,20 +277,20 @@
 					<a name="grow" class="tsd-anchor"></a>
 					<h3>grow</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">grow<span class="tsd-signature-symbol">(</span>slot<span class="tsd-signature-symbol">: </span><a href="../modules/@proc7ts_context-values.ContextValueSlot.html" class="tsd-signature-type">ContextValueSlot</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">readonly </span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Iterable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">grow<span class="tsd-signature-symbol">(</span>slot<span class="tsd-signature-symbol">: </span><a href="../modules/@proc7ts_context-values.ContextValueSlot.html" class="tsd-signature-type">ContextValueSlot</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">readonly </span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Iterable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Overrides <a href="@proc7ts_context-values.ContextKey.html">ContextKey</a>.<a href="@proc7ts_context-values.ContextKey.html#grow">grow</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/deda170/src/multi-context-key.ts#L59">proc7ts/context-values/src/multi-context-key.ts:59</a></li>
+									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/7e63558/src/multi-context-key.ts#L59">proc7ts/context-values/src/multi-context-key.ts:59</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>slot: <a href="../modules/@proc7ts_context-values.ContextValueSlot.html" class="tsd-signature-type">ContextValueSlot</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">readonly </span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Iterable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>slot: <a href="../modules/@proc7ts_context-values.ContextValueSlot.html" class="tsd-signature-type">ContextValueSlot</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">readonly </span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Iterable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -308,7 +308,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="@proc7ts_context-values.ContextKey.html">ContextKey</a>.<a href="@proc7ts_context-values.ContextKey.html#toString">toString</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/deda170/src/context-key.ts#L68">proc7ts/context-values/src/context-key.ts:68</a></li>
+									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/7e63558/src/context-key.ts#L68">proc7ts/context-values/src/context-key.ts:68</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -398,9 +398,6 @@
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="../modules/@proc7ts_context-values.html#ContextKeyDefault" class="tsd-kind-icon">Context<wbr>Key<wbr>Default</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/@proc7ts_context-values.html#ContextSeeds" class="tsd-kind-icon">Context<wbr>Seeds</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="../modules/@proc7ts_context-values.html#ContextValueProvider" class="tsd-kind-icon">Context<wbr>Value<wbr>Provider</a>

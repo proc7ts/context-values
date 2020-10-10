@@ -60,7 +60,7 @@
 					<a href="@proc7ts_context-values.ContextSeeder.html">ContextSeeder</a>
 				</li>
 			</ul>
-			<h1>Interface ContextSeeder&lt;Ctx, Src, Seed&gt;</h1>
+			<h1>Interface ContextSeeder&lt;TCtx, TSrc, TSeed&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -74,18 +74,13 @@
 					</div>
 					<p>Contains context value providers for particular key.</p>
 					<p>Created by <a href="../classes/@proc7ts_context-values.ContextSeedKey.html#seeder">ContextSeedKey.seeder</a> method.</p>
-					<dl class="tsd-comment-tags">
-						<dt>typeparam</dt>
-						<dd><p>This type.</p>
-						</dd>
-					</dl>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-type-parameters">
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
 					<li>
-						<h4>Ctx<span class="tsd-signature-symbol">: </span><a href="../classes/@proc7ts_context-values.ContextValues.html" class="tsd-signature-type">ContextValues</a></h4>
+						<h4>TCtx<span class="tsd-signature-symbol">: </span><a href="../classes/@proc7ts_context-values.ContextValues.html" class="tsd-signature-type">ContextValues</a></h4>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Context type.</p>
@@ -93,7 +88,7 @@
 						</div>
 					</li>
 					<li>
-						<h4>Src</h4>
+						<h4>TSrc</h4>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Source value type.</p>
@@ -101,7 +96,7 @@
 						</div>
 					</li>
 					<li>
-						<h4>Seed</h4>
+						<h4>TSeed</h4>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Context value seed type.</p>
@@ -140,13 +135,13 @@
 					<a name="combine" class="tsd-anchor"></a>
 					<h3>combine</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">combine<span class="tsd-signature-symbol">(</span>first<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Seed</span>, second<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Seed</span>, context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Ctx</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Seed</span></li>
+						<li class="tsd-signature tsd-kind-icon">combine<span class="tsd-signature-symbol">(</span>first<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TSeed</span>, second<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TSeed</span>, context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TCtx</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TSeed</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/deda170/src/context-seeder.ts#L60">proc7ts/context-values/src/context-seeder.ts:60</a></li>
+									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/7e63558/src/context-seeder.ts#L59">proc7ts/context-values/src/context-seeder.ts:59</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -157,25 +152,25 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>first: <span class="tsd-signature-type">Seed</span></h5>
+									<h5>first: <span class="tsd-signature-type">TSeed</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>First seed to combine.</p>
 									</div>
 								</li>
 								<li>
-									<h5>second: <span class="tsd-signature-type">Seed</span></h5>
+									<h5>second: <span class="tsd-signature-type">TSeed</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>Second seed to combine.</p>
 									</div>
 								</li>
 								<li>
-									<h5>context: <span class="tsd-signature-type">Ctx</span></h5>
+									<h5>context: <span class="tsd-signature-type">TCtx</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>Target context.</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Seed</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">TSeed</span></h4>
 							<p>Context value seed combining value sources from both seeds.</p>
 						</li>
 					</ul>
@@ -184,13 +179,13 @@
 					<a name="isEmpty" class="tsd-anchor"></a>
 					<h3>is<wbr>Empty</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">is<wbr>Empty<span class="tsd-signature-symbol">(</span>seed<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Seed</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Empty<span class="tsd-signature-symbol">(</span>seed<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TSeed</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/deda170/src/context-seeder.ts#L49">proc7ts/context-values/src/context-seeder.ts:49</a></li>
+									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/7e63558/src/context-seeder.ts#L48">proc7ts/context-values/src/context-seeder.ts:48</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -201,7 +196,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>seed: <span class="tsd-signature-type">Seed</span></h5>
+									<h5>seed: <span class="tsd-signature-type">TSeed</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>Context value seed to check.</p>
 									</div>
@@ -216,13 +211,13 @@
 					<a name="provide" class="tsd-anchor"></a>
 					<h3>provide</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">provide<span class="tsd-signature-symbol">(</span>provider<span class="tsd-signature-symbol">: </span><a href="../modules/@proc7ts_context-values.html#ContextValueProvider" class="tsd-signature-type">ContextValueProvider</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Ctx</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">provide<span class="tsd-signature-symbol">(</span>provider<span class="tsd-signature-symbol">: </span><a href="../modules/@proc7ts_context-values.html#ContextValueProvider" class="tsd-signature-type">ContextValueProvider</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TCtx</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/deda170/src/context-seeder.ts#L30">proc7ts/context-values/src/context-seeder.ts:30</a></li>
+									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/7e63558/src/context-seeder.ts#L29">proc7ts/context-values/src/context-seeder.ts:29</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -233,7 +228,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>provider: <a href="../modules/@proc7ts_context-values.html#ContextValueProvider" class="tsd-signature-type">ContextValueProvider</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Ctx</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>provider: <a href="../modules/@proc7ts_context-values.html#ContextValueProvider" class="tsd-signature-type">ContextValueProvider</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TCtx</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>Context value provider.</p>
 									</div>
@@ -260,13 +255,13 @@
 					<a name="seed" class="tsd-anchor"></a>
 					<h3>seed</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">seed<span class="tsd-signature-symbol">(</span>context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Ctx</span>, initial<span class="tsd-signature-symbol">?: </span><a href="" class="tsd-signature-type">Seed</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Seed</span></li>
+						<li class="tsd-signature tsd-kind-icon">seed<span class="tsd-signature-symbol">(</span>context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TCtx</span>, initial<span class="tsd-signature-symbol">?: </span><a href="" class="tsd-signature-type">TSeed</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TSeed</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/deda170/src/context-seeder.ts#L40">proc7ts/context-values/src/context-seeder.ts:40</a></li>
+									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/7e63558/src/context-seeder.ts#L39">proc7ts/context-values/src/context-seeder.ts:39</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -277,19 +272,19 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>context: <span class="tsd-signature-type">Ctx</span></h5>
+									<h5>context: <span class="tsd-signature-type">TCtx</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>Target context.</p>
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> initial: <a href="" class="tsd-signature-type">Seed</a></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> initial: <a href="" class="tsd-signature-type">TSeed</a></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>Initial seed the constructed one should derive values from.</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Seed</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">TSeed</span></h4>
 							<p>New context value seed.</p>
 						</li>
 					</ul>
@@ -368,9 +363,6 @@
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="../modules/@proc7ts_context-values.html#ContextKeyDefault" class="tsd-kind-icon">Context<wbr>Key<wbr>Default</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/@proc7ts_context-values.html#ContextSeeds" class="tsd-kind-icon">Context<wbr>Seeds</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="../modules/@proc7ts_context-values.html#ContextValueProvider" class="tsd-kind-icon">Context<wbr>Value<wbr>Provider</a>

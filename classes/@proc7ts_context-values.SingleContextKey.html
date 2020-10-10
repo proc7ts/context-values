@@ -60,7 +60,7 @@
 					<a href="@proc7ts_context-values.SingleContextKey.html">SingleContextKey</a>
 				</li>
 			</ul>
-			<h1>Class SingleContextKey&lt;Value&gt;</h1>
+			<h1>Class SingleContextKey&lt;TValue&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -79,7 +79,7 @@
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
 					<li>
-						<h4>Value</h4>
+						<h4>TValue</h4>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Context value type.</p>
@@ -92,7 +92,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="@proc7ts_context-values.SimpleContextKey.html" class="tsd-signature-type">SimpleContextKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">&gt;</span>
+						<a href="@proc7ts_context-values.SimpleContextKey.html" class="tsd-signature-type">SimpleContextKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span>
 						<ul class="tsd-hierarchy">
 							<li>
 								<span class="target">SingleContextKey</span>
@@ -104,8 +104,8 @@
 			<section class="tsd-panel">
 				<h3>Implements</h3>
 				<ul class="tsd-hierarchy">
-					<li><a href="../interfaces/@proc7ts_context-values.ContextRef.html" class="tsd-signature-type">ContextRef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">&gt;</span></li>
-					<li><a href="../interfaces/@proc7ts_context-values.ContextRef.html" class="tsd-signature-type">ContextRef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">&gt;</span></li>
+					<li><a href="../interfaces/@proc7ts_context-values.ContextRef.html" class="tsd-signature-type">ContextRef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span></li>
+					<li><a href="../interfaces/@proc7ts_context-values.ContextRef.html" class="tsd-signature-type">ContextRef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span></li>
 				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -153,10 +153,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
 					<a name="Seed" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> Seed</h3>
-					<div class="tsd-signature tsd-kind-icon">Seed&lt;Src&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></div>
+					<div class="tsd-signature tsd-kind-icon">Seed&lt;TSrc&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/deda170/src/simple-context-key.ts#L146">proc7ts/context-values/src/simple-context-key.ts:146</a></li>
+							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/7e63558/src/simple-context-key.ts#L147">proc7ts/context-values/src/simple-context-key.ts:147</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -167,7 +167,7 @@
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
 					<ul class="tsd-type-parameters">
 						<li>
-							<h4>Src</h4>
+							<h4>TSrc</h4>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Source vale type.</p>
@@ -180,7 +180,7 @@
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter-signature">
 								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
 									<li class="tsd-description">
@@ -192,7 +192,7 @@
 												<h5>this: <span class="tsd-signature-type">void</span></h5>
 											</li>
 										</ul>
-										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h4>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h4>
 										<p>Either source value, or <code>null</code>/<code>undefined</code> when when absent.</p>
 									</li>
 								</ul>
@@ -207,14 +207,14 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Single<wbr>Context<wbr>Key<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, __namedParameters<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">{ </span>byDefault<span class="tsd-signature-symbol">: </span><a href="../modules/@proc7ts_context-values.html#ContextKeyDefault" class="tsd-signature-type">ContextKeyDefault</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">, </span><a href="@proc7ts_context-values.ContextKey.html" class="tsd-signature-type">ContextKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>seedKey<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="@proc7ts_context-values.ContextSeedKey.html" class="tsd-signature-type">ContextSeedKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">, </span><a href="@proc7ts_context-values.SingleContextKey.html#Seed" class="tsd-signature-type">Seed</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="@proc7ts_context-values.SingleContextKey.html" class="tsd-signature-type">SingleContextKey</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Single<wbr>Context<wbr>Key<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, __namedParameters<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">{ </span>byDefault<span class="tsd-signature-symbol">: </span><a href="../modules/@proc7ts_context-values.html#ContextKeyDefault" class="tsd-signature-type">ContextKeyDefault</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><a href="@proc7ts_context-values.ContextKey.html" class="tsd-signature-type">ContextKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>seedKey<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="@proc7ts_context-values.ContextSeedKey.html" class="tsd-signature-type">ContextSeedKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><a href="@proc7ts_context-values.SingleContextKey.html#Seed" class="tsd-signature-type">Seed</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="@proc7ts_context-values.SingleContextKey.html" class="tsd-signature-type">SingleContextKey</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Overrides <a href="@proc7ts_context-values.SimpleContextKey.html">SimpleContextKey</a>.<a href="@proc7ts_context-values.SimpleContextKey.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/deda170/src/single-context-key.ts#L31">proc7ts/context-values/src/single-context-key.ts:31</a></li>
+									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/7e63558/src/single-context-key.ts#L31">proc7ts/context-values/src/single-context-key.ts:31</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -233,17 +233,17 @@
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> __namedParameters: <span class="tsd-signature-symbol">{ </span>byDefault<span class="tsd-signature-symbol">: </span><a href="../modules/@proc7ts_context-values.html#ContextKeyDefault" class="tsd-signature-type">ContextKeyDefault</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">, </span><a href="@proc7ts_context-values.ContextKey.html" class="tsd-signature-type">ContextKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>seedKey<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="@proc7ts_context-values.ContextSeedKey.html" class="tsd-signature-type">ContextSeedKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">, </span><a href="@proc7ts_context-values.SingleContextKey.html#Seed" class="tsd-signature-type">Seed</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = {}</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> __namedParameters: <span class="tsd-signature-symbol">{ </span>byDefault<span class="tsd-signature-symbol">: </span><a href="../modules/@proc7ts_context-values.html#ContextKeyDefault" class="tsd-signature-type">ContextKeyDefault</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><a href="@proc7ts_context-values.ContextKey.html" class="tsd-signature-type">ContextKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>seedKey<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="@proc7ts_context-values.ContextSeedKey.html" class="tsd-signature-type">ContextSeedKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><a href="@proc7ts_context-values.SingleContextKey.html#Seed" class="tsd-signature-type">Seed</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = {}</span></h5>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter">
-											<h5>by<wbr>Default<span class="tsd-signature-symbol">: </span><a href="../modules/@proc7ts_context-values.html#ContextKeyDefault" class="tsd-signature-type">ContextKeyDefault</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">, </span><a href="@proc7ts_context-values.ContextKey.html" class="tsd-signature-type">ContextKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+											<h5>by<wbr>Default<span class="tsd-signature-symbol">: </span><a href="../modules/@proc7ts_context-values.html#ContextKeyDefault" class="tsd-signature-type">ContextKeyDefault</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><a href="@proc7ts_context-values.ContextKey.html" class="tsd-signature-type">ContextKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 											<div class="tsd-comment tsd-typography">
 												<p>Optional default value provider. If unspecified or <code>undefined</code> the key has no default
 												value.</p>
 											</div>
 										</li>
 										<li class="tsd-parameter">
-											<h5>seed<wbr>Key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="@proc7ts_context-values.ContextSeedKey.html" class="tsd-signature-type">ContextSeedKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">, </span><a href="@proc7ts_context-values.SingleContextKey.html#Seed" class="tsd-signature-type">Seed</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+											<h5>seed<wbr>Key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="@proc7ts_context-values.ContextSeedKey.html" class="tsd-signature-type">ContextSeedKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><a href="@proc7ts_context-values.SingleContextKey.html#Seed" class="tsd-signature-type">Seed</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 											<div class="tsd-comment tsd-typography">
 												<p>Value seed key. A new one will be constructed when omitted.</p>
 											</div>
@@ -261,10 +261,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="byDefault" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> by<wbr>Default</h3>
-					<div class="tsd-signature tsd-kind-icon">by<wbr>Default<span class="tsd-signature-symbol">:</span> <a href="../modules/@proc7ts_context-values.html#ContextKeyDefault" class="tsd-signature-type">ContextKeyDefault</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">, </span><a href="@proc7ts_context-values.ContextKey.html" class="tsd-signature-type">ContextKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">by<wbr>Default<span class="tsd-signature-symbol">:</span> <a href="../modules/@proc7ts_context-values.html#ContextKeyDefault" class="tsd-signature-type">ContextKeyDefault</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><a href="@proc7ts_context-values.ContextKey.html" class="tsd-signature-type">ContextKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/deda170/src/single-context-key.ts#L31">proc7ts/context-values/src/single-context-key.ts:31</a></li>
+							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/7e63558/src/single-context-key.ts#L31">proc7ts/context-values/src/single-context-key.ts:31</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -280,7 +280,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="@proc7ts_context-values.ContextKey.html">ContextKey</a>.<a href="@proc7ts_context-values.ContextKey.html#name">name</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/deda170/src/context-key.ts#L34">proc7ts/context-values/src/context-key.ts:34</a></li>
+							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/7e63558/src/context-key.ts#L34">proc7ts/context-values/src/context-key.ts:34</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -293,12 +293,12 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
 					<a name="seedKey" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> seed<wbr>Key</h3>
-					<div class="tsd-signature tsd-kind-icon">seed<wbr>Key<span class="tsd-signature-symbol">:</span> <a href="@proc7ts_context-values.ContextSeedKey.html" class="tsd-signature-type">ContextSeedKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">, </span><a href="@proc7ts_context-values.SimpleContextKey.html#Seed" class="tsd-signature-type">Seed</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">seed<wbr>Key<span class="tsd-signature-symbol">:</span> <a href="@proc7ts_context-values.ContextSeedKey.html" class="tsd-signature-type">ContextSeedKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><a href="@proc7ts_context-values.SimpleContextKey.html#Seed" class="tsd-signature-type">Seed</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="@proc7ts_context-values.SimpleContextKey.html">SimpleContextKey</a>.<a href="@proc7ts_context-values.SimpleContextKey.html#seedKey">seedKey</a></p>
 						<p>Overrides <a href="@proc7ts_context-values.ContextKey.html">ContextKey</a>.<a href="@proc7ts_context-values.ContextKey.html#seedKey">seedKey</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/deda170/src/simple-context-key.ts#L117">proc7ts/context-values/src/simple-context-key.ts:117</a></li>
+							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/7e63558/src/simple-context-key.ts#L118">proc7ts/context-values/src/simple-context-key.ts:118</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -316,7 +316,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="@proc7ts_context-values.ContextKey.html">ContextKey</a>.<a href="@proc7ts_context-values.ContextKey.html#_ContextKey__symbol_">[ContextKey__symbol]</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/deda170/src/context-key.ts#L57">proc7ts/context-values/src/context-key.ts:57</a></li>
+									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/7e63558/src/context-key.ts#L57">proc7ts/context-values/src/context-key.ts:57</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -336,20 +336,20 @@
 					<a name="grow" class="tsd-anchor"></a>
 					<h3>grow</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">grow<span class="tsd-signature-symbol">(</span>slot<span class="tsd-signature-symbol">: </span><a href="../modules/@proc7ts_context-values.ContextValueSlot.html" class="tsd-signature-type">ContextValueSlot</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">, </span><a href="@proc7ts_context-values.SimpleContextKey.html#Seed" class="tsd-signature-type">Seed</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">grow<span class="tsd-signature-symbol">(</span>slot<span class="tsd-signature-symbol">: </span><a href="../modules/@proc7ts_context-values.ContextValueSlot.html" class="tsd-signature-type">ContextValueSlot</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><a href="@proc7ts_context-values.SimpleContextKey.html#Seed" class="tsd-signature-type">Seed</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Overrides <a href="@proc7ts_context-values.ContextKey.html">ContextKey</a>.<a href="@proc7ts_context-values.ContextKey.html#grow">grow</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/deda170/src/single-context-key.ts#L55">proc7ts/context-values/src/single-context-key.ts:55</a></li>
+									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/7e63558/src/single-context-key.ts#L55">proc7ts/context-values/src/single-context-key.ts:55</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>slot: <a href="../modules/@proc7ts_context-values.ContextValueSlot.html" class="tsd-signature-type">ContextValueSlot</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">, </span><a href="@proc7ts_context-values.SimpleContextKey.html#Seed" class="tsd-signature-type">Seed</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>slot: <a href="../modules/@proc7ts_context-values.ContextValueSlot.html" class="tsd-signature-type">ContextValueSlot</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><a href="@proc7ts_context-values.SimpleContextKey.html#Seed" class="tsd-signature-type">Seed</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -367,7 +367,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="@proc7ts_context-values.ContextKey.html">ContextKey</a>.<a href="@proc7ts_context-values.ContextKey.html#toString">toString</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/deda170/src/context-key.ts#L68">proc7ts/context-values/src/context-key.ts:68</a></li>
+									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/7e63558/src/context-key.ts#L68">proc7ts/context-values/src/context-key.ts:68</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -460,9 +460,6 @@
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="../modules/@proc7ts_context-values.html#ContextKeyDefault" class="tsd-kind-icon">Context<wbr>Key<wbr>Default</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/@proc7ts_context-values.html#ContextSeeds" class="tsd-kind-icon">Context<wbr>Seeds</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="../modules/@proc7ts_context-values.html#ContextValueProvider" class="tsd-kind-icon">Context<wbr>Value<wbr>Provider</a>

@@ -63,7 +63,7 @@
 					<a href="@proc7ts_context-values.ContextValueSpec.ByProviderWithDeps.html">ByProviderWithDeps</a>
 				</li>
 			</ul>
-			<h1>Interface ByProviderWithDeps&lt;Deps, Src, Seed&gt;</h1>
+			<h1>Interface ByProviderWithDeps&lt;TDeps, TSrc, TSeed&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -81,7 +81,7 @@
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
 					<li>
-						<h4>Deps<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h4>
+						<h4>TDeps<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h4>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Dependencies tuple type.</p>
@@ -89,7 +89,7 @@
 						</div>
 					</li>
 					<li>
-						<h4>Src</h4>
+						<h4>TSrc</h4>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Source value type.</p>
@@ -97,7 +97,7 @@
 						</div>
 					</li>
 					<li>
-						<h4>Seed = <span class="tsd-signature-type">unknown</span></h4>
+						<h4>TSeed = <span class="tsd-signature-type">unknown</span></h4>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Value seed type.</p>
@@ -134,10 +134,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="a" class="tsd-anchor"></a>
 					<h3>a</h3>
-					<div class="tsd-signature tsd-kind-icon">a<span class="tsd-signature-symbol">:</span> <a href="@proc7ts_context-values.ContextTarget.html" class="tsd-signature-type">ContextTarget</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Seed</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">a<span class="tsd-signature-symbol">:</span> <a href="@proc7ts_context-values.ContextTarget.html" class="tsd-signature-type">ContextTarget</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TSeed</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/deda170/src/context-value-spec.ts#L125">proc7ts/context-values/src/context-value-spec.ts:125</a></li>
+							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/7e63558/src/context-value-spec.ts#L125">proc7ts/context-values/src/context-value-spec.ts:125</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -149,10 +149,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="by" class="tsd-anchor"></a>
 					<h3>by</h3>
-					<div class="tsd-signature tsd-kind-icon">by<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, <span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Deps</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></div>
+					<div class="tsd-signature tsd-kind-icon">by<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, <span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TDeps</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/deda170/src/context-value-spec.ts#L130">proc7ts/context-values/src/context-value-spec.ts:130</a></li>
+							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/7e63558/src/context-value-spec.ts#L130">proc7ts/context-values/src/context-value-spec.ts:130</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -165,7 +165,7 @@
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter-signature">
 								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-property">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, <span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Deps</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, <span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TDeps</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
 									<li class="tsd-description">
@@ -175,10 +175,10 @@
 												<h5>this: <span class="tsd-signature-type">void</span></h5>
 											</li>
 											<li>
-												<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>args: <span class="tsd-signature-type">Deps</span></h5>
+												<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>args: <span class="tsd-signature-type">TDeps</span></h5>
 											</li>
 										</ul>
-										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Src</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h4>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h4>
 									</li>
 								</ul>
 							</li>
@@ -188,10 +188,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="with" class="tsd-anchor"></a>
 					<h3>with</h3>
-					<div class="tsd-signature tsd-kind-icon">with<span class="tsd-signature-symbol">:</span> <a href="../modules/@proc7ts_context-values.ContextValueSpec.html#DepsRequests" class="tsd-signature-type">DepsRequests</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Deps</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">with<span class="tsd-signature-symbol">:</span> <a href="../modules/@proc7ts_context-values.ContextValueSpec.html#DepsRequests" class="tsd-signature-type">DepsRequests</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TDeps</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/deda170/src/context-value-spec.ts#L135">proc7ts/context-values/src/context-value-spec.ts:135</a></li>
+							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/7e63558/src/context-value-spec.ts#L135">proc7ts/context-values/src/context-value-spec.ts:135</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
