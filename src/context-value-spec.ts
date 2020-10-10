@@ -317,7 +317,7 @@ export function contextValueSpec<TCtx extends ContextValues, TValue, TDeps exten
  * @internal
  */
 function byProvider<TCtx extends ContextValues, TDeps extends any[], TSrc, TSeed>(
-    spec: ContextValueSpec<TCtx, any, TDeps, TSrc, TSeed>,
+    spec: ContextValueSpec<TCtx, unknown, TDeps, TSrc, TSeed>,
 ): spec is
     | ContextValueSpec.ByProvider<TCtx, TSrc, TSeed>
     | ContextValueSpec.ByProviderWithDeps<TDeps, TSrc, TSeed> {
@@ -328,7 +328,7 @@ function byProvider<TCtx extends ContextValues, TDeps extends any[], TSrc, TSeed
  * @internal
  */
 function asInstance<TCtx extends ContextValues, TDeps extends any[], TSrc, TSeed>(
-    spec: ContextValueSpec<TCtx, any, TDeps, TSrc, TSeed>,
+    spec: ContextValueSpec<TCtx, unknown, TDeps, TSrc, TSeed>,
 ): spec is
     | ContextValueSpec.AsInstance<TCtx, TSrc, TSeed>
     | ContextValueSpec.AsInstanceWithDeps<TDeps, TSrc, TSeed> {
@@ -339,7 +339,7 @@ function asInstance<TCtx extends ContextValues, TDeps extends any[], TSrc, TSeed
  * @internal
  */
 function selfInstance<TCtx extends ContextValues, TDeps extends any[], TSrc, TSeed>(
-    spec: ContextValueSpec<TCtx, any, TDeps, TSrc, TSeed>,
+    spec: ContextValueSpec<TCtx, unknown, TDeps, TSrc, TSeed>,
 ): spec is
     | ContextValueSpec.SelfInstance<TCtx, TSrc, TSeed>
     | ContextValueSpec.SelfInstanceWithDeps<TDeps, TSrc, TSeed> {
@@ -362,7 +362,7 @@ function toAsInstance<TCtx extends ContextValues, TDeps extends any[], TSrc, TSe
  * @internal
  */
 function isConstant<TSrc, TSeed>(
-    spec: ContextValueSpec<any, any, any, TSrc, TSeed>,
+    spec: ContextValueSpec<any, unknown, any, TSrc, TSeed>,
 ): spec is ContextValueSpec.IsConstant<TSrc, TSeed> {
   return 'is' in spec;
 }
@@ -371,7 +371,7 @@ function isConstant<TSrc, TSeed>(
  * @internal
  */
 function viaAlias<TSrc, TSeed>(
-    spec: ContextValueSpec<any, any, any, TSrc, TSeed>,
+    spec: ContextValueSpec<any, unknown, any, TSrc, TSeed>,
 ): spec is ContextValueSpec.ViaAlias<TSrc, TSeed> {
   return 'via' in spec;
 }
@@ -394,7 +394,7 @@ function withDeps<TCtx extends ContextValues, TDeps extends any[], TSrc, TSeed>(
  * @internal
  */
 function withDeps<TCtx extends ContextValues, TDeps extends any[], TSrc, TSeed>(
-    spec: ContextValueSpec<TCtx, any, TDeps, TSrc, TSeed>,
+    spec: ContextValueSpec<TCtx, unknown, TDeps, TSrc, TSeed>,
 ): boolean {
   return 'with' in spec;
 }

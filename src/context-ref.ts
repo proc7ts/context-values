@@ -19,7 +19,7 @@ export interface ContextRequest<TValue, TSeed = unknown> {
   /**
    * A key of context value to request.
    */
-  readonly [ContextKey__symbol]: ContextKey<TValue, any, TSeed>;
+  readonly [ContextKey__symbol]: ContextKey<TValue, unknown, TSeed>;
 
 }
 
@@ -67,12 +67,12 @@ export namespace ContextRequest {
  * @typeParam TSrc  A type of declared context value sources.
  * @typeParam TSeed  Declared value seed type.
  */
-export interface ContextTarget<TSrc, TSeed = unknown> extends ContextRequest<any, TSeed> {
+export interface ContextTarget<TSrc, TSeed = unknown> extends ContextRequest<unknown, TSeed> {
 
   /**
    * A key of context value to provide.
    */
-  readonly [ContextKey__symbol]: ContextKey<any, TSrc, TSeed>;
+  readonly [ContextKey__symbol]: ContextKey<unknown, TSrc, TSeed>;
 
 }
 

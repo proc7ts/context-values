@@ -52,7 +52,7 @@ export class ContextRegistry<TCtx extends ContextValues = ContextValues> {
    *
    * @returns A function that removes the given context value specifier when called.
    */
-  provide<TDeps extends any[], TSrc, TSeed>(spec: ContextValueSpec<TCtx, any, TDeps, TSrc, TSeed>): () => void {
+  provide<TDeps extends any[], TSrc, TSeed>(spec: ContextValueSpec<TCtx, unknown, TDeps, TSrc, TSeed>): () => void {
 
     const { a: { [ContextKey__symbol]: { seedKey } }, by } = contextValueSpec(spec);
     const [seeder] = this._seeds.seedData<TSrc, TSeed>(seedKey);

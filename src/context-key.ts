@@ -245,7 +245,7 @@ export type ContextValueSetup<TValue, TSrc, TSeed> =
  * @typeParam TValue  Context value type.
  * @typeParam TKey  Context key type.
  */
-export type ContextKeyDefault<TValue, TKey extends ContextKey<any, any, any>> =
+export type ContextKeyDefault<TValue, TKey extends ContextKey<unknown, unknown>> =
 /**
  * @param context  Target context.
  * @param key  Context value key the default value is provided for.
@@ -267,7 +267,7 @@ export abstract class ContextSeedKey<TSrc, TSeed> extends ContextKey<TSeed, TSrc
    *
    * @param key  A key of context value having its sources associated with this key.
    */
-  constructor(key: ContextKey<any, TSrc>) {
+  constructor(key: ContextKey<unknown, TSrc>) {
     super(`${key.name}:seed`);
   }
 
