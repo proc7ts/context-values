@@ -130,16 +130,6 @@ describe('ContextRegistry', () => {
     });
   });
 
-  describe('newValues', () => {
-    it('preserves non-caching instance', () => {
-      expect(registry.newValues(false)).toBe(registry.newValues(false));
-    });
-    it('does not preserve caching instances', () => {
-      expect(registry.newValues()).not.toBe(registry.newValues(false));
-      expect(registry.newValues()).not.toBe(registry.newValues());
-    });
-  });
-
   describe('key setup', () => {
 
     let keyWithSetup: ContextKey<string>;

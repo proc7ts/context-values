@@ -77,3 +77,24 @@ export type ContextSeeds<Ctx extends ContextValues> =
  * @returns Context value seed associated with the given `key` provided for target `context`.
  */
     <Src, Seed>(this: void, key: ContextSeedKey<Src, Seed>, context: Ctx) => Seed | undefined;
+
+export namespace ContextSeeds {
+
+  /**
+   * Headless context seeds provider.
+   *
+   * Such provider does not depend on context.
+   */
+  export type Headless =
+  /**
+   * @typeparam Src  Source value type.
+   * @typeparam Seed  Value seed type.
+   *
+   * @param key  Context value seed key.
+   * @param context  Target context.
+   *
+   * @returns Context value seed associated with the given `key` provided for target `context`.
+   */
+      <Src, Seed>(this: void, key: ContextSeedKey<Src, Seed>) => Seed | undefined;
+
+}
