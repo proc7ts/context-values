@@ -13,9 +13,9 @@ import { ContextUpKey, ContextUpRef } from './context-up-key';
 /**
  * Single updatable context value reference.
  *
- * @typeparam Value  Context value type.
+ * @typeParam TValue  Context value type.
  */
-export type SingleContextUpRef<Value> = ContextUpRef<AfterEvent<[Value]>, Value>;
+export type SingleContextUpRef<TValue> = ContextUpRef<AfterEvent<[TValue]>, TValue>;
 
 /**
  * Single updatable context value key.
@@ -26,16 +26,16 @@ export type SingleContextUpRef<Value> = ContextUpRef<AfterEvent<[Value]>, Value>
  * It is an error to provide a `null` or `undefined` {@link ContextRequest.Opts.or fallback value} when requesting
  * an associated value. Use an `afterThe()` result as a fallback instead.
  *
- * @typeparam Value  Context value type.
+ * @typeParam TValue  Context value type.
  */
-export class SingleContextUpKey<Value>
-    extends ContextUpKey<AfterEvent<[Value]>, Value>
-    implements SingleContextUpRef<Value> {
+export class SingleContextUpKey<TValue>
+    extends ContextUpKey<AfterEvent<[TValue]>, TValue>
+    implements SingleContextUpRef<TValue> {
 
   /**
    * A provider of context value used when there is no value associated with this key.
    */
-  readonly byDefault: ContextKeyDefault<Value, ContextUpKey<AfterEvent<[Value]>, Value>>;
+  readonly byDefault: ContextKeyDefault<TValue, ContextUpKey<AfterEvent<[TValue]>, TValue>>;
 
   get upKey(): this {
     return this;
@@ -55,8 +55,8 @@ export class SingleContextUpKey<Value>
         seedKey,
         byDefault = noop,
       }: {
-        seedKey?: ContextUpKey.SeedKey<Value>;
-        byDefault?: ContextKeyDefault<Value, ContextUpKey<AfterEvent<[Value]>, Value>>;
+        seedKey?: ContextUpKey.SeedKey<TValue>;
+        byDefault?: ContextKeyDefault<TValue, ContextUpKey<AfterEvent<[TValue]>, TValue>>;
       } = {},
   ) {
     super(name, seedKey);
@@ -64,17 +64,17 @@ export class SingleContextUpKey<Value>
   }
 
   grow(
-      slot: ContextValueSlot<AfterEvent<[Value]>, EventKeeper<Value[]> | Value, AfterEvent<Value[]>>,
+      slot: ContextValueSlot<AfterEvent<[TValue]>, EventKeeper<TValue[]> | TValue, AfterEvent<TValue[]>>,
   ): void {
 
-    const value = slot.seed.keepThru((...sources: Value[]) => {
+    const value = slot.seed.keepThru((...sources: TValue[]) => {
       if (sources.length) {
         // Sources present. Take the last one.
         return nextArg(sources[sources.length - 1]);
       }
 
       // Sources absent. Attempt to detect a backup value.
-      let backup: AfterEvent<[Value]> | null | undefined;
+      let backup: AfterEvent<[TValue]> | null | undefined;
 
       if (slot.hasFallback) {
         backup = slot.or;
@@ -89,7 +89,7 @@ export class SingleContextUpKey<Value>
       }
 
       // Backup value is absent. Construct an error response.
-      return nextAfterEvent(afterEventBy<[Value]>(() => {
+      return nextAfterEvent(afterEventBy<[TValue]>(() => {
         throw new ContextKeyError(this);
       }));
     });

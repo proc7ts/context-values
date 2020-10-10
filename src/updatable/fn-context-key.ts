@@ -13,11 +13,11 @@ import { ContextUpKey, ContextUpRef } from './context-up-key';
 /**
  * A reference to updatable context function value.
  *
- * @typeparam Args  Function arguments tuple type.
- * @typeparam Ret  Function return value type.
+ * @typeParam TArgs  Function arguments tuple type.
+ * @typeParam TRet  Function return value type.
  */
-export type FnContextRef<Args extends any[], Ret = void> =
-    ContextUpRef<(this: void, ...args: Args) => Ret, (this: void, ...args: Args) => Ret>;
+export type FnContextRef<TArgs extends any[], TRet = void> =
+    ContextUpRef<(this: void, ...args: TArgs) => TRet, (this: void, ...args: TArgs) => TRet>;
 
 /**
  * A key of updatable context function value.
@@ -31,20 +31,20 @@ export type FnContextRef<Args extends any[], Ret = void> =
  * It is an error to provide a `null` or `undefined` {@link ContextRequest.Opts.or fallback value} when requesting
  * an associated value. Use an `afterThe()` result as a fallback instead.
  *
- * @typeparam Args  Function arguments tuple type.
- * @typeparam Ret  Function return value type.
+ * @typeParam TArgs  Function arguments tuple type.
+ * @typeParam TRet  Function return value type.
  */
-export class FnContextKey<Args extends any[], Ret = void>
-    extends ContextUpKey<(this: void, ...args: Args) => Ret, (this: void, ...args: Args) => Ret>
-    implements FnContextRef<Args, Ret> {
+export class FnContextKey<TArgs extends any[], TRet = void>
+    extends ContextUpKey<(this: void, ...args: TArgs) => TRet, (this: void, ...args: TArgs) => TRet>
+    implements FnContextRef<TArgs, TRet> {
 
   /**
    * Constructs a function that will be called unless fallback provided.
    */
-  readonly byDefault: (this: void, context: ContextValues, key: FnContextKey<Args, Ret>) =>
-      (this: void, ...args: Args) => Ret;
+  readonly byDefault: (this: void, context: ContextValues, key: FnContextKey<TArgs, TRet>) =>
+      (this: void, ...args: TArgs) => TRet;
 
-  readonly upKey: ContextUpKey.UpKey<(this: void, ...args: Args) => Ret, (this: void, ...args: Args) => Ret>;
+  readonly upKey: ContextUpKey.UpKey<(this: void, ...args: TArgs) => TRet, (this: void, ...args: TArgs) => TRet>;
 
   /**
    * Constructs updatable context function key.
@@ -60,8 +60,8 @@ export class FnContextKey<Args extends any[], Ret = void>
         seedKey,
         byDefault = noop,
       }: {
-        seedKey?: ContextUpKey.SeedKey<((this: void, ...args: Args) => Ret)>;
-        byDefault?: ContextKeyDefault<(this: void, ...args: Args) => Ret, FnContextKey<Args, Ret>>;
+        seedKey?: ContextUpKey.SeedKey<((this: void, ...args: TArgs) => TRet)>;
+        byDefault?: ContextKeyDefault<(this: void, ...args: TArgs) => TRet, FnContextKey<TArgs, TRet>>;
       } = {},
   ) {
     super(name, seedKey);
@@ -87,12 +87,12 @@ export class FnContextKey<Args extends any[], Ret = void>
 
   grow(
       slot: ContextValueSlot<
-          (this: void, ...args: Args) => Ret,
-          EventKeeper<((this: void, ...args: Args) => Ret)[]> | ((this: void, ...args: Args) => Ret),
-          AfterEvent<((this: void, ...args: Args) => Ret)[]>>,
+          (this: void, ...args: TArgs) => TRet,
+          EventKeeper<((this: void, ...args: TArgs) => TRet)[]> | ((this: void, ...args: TArgs) => TRet),
+          AfterEvent<((this: void, ...args: TArgs) => TRet)[]>>,
   ): void {
 
-    let delegated: (this: void, ...args: Args) => Ret;
+    let delegated: (this: void, ...args: TArgs) => TRet;
 
     slot.context.get(
         this.upKey,

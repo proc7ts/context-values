@@ -8,9 +8,9 @@ import { ContextSeeder } from './context-seeder';
 import { ContextValues } from './context-values';
 
 /**
- * A symbol of the property containing a [[ContextKey]] instance.
+ * A symbol of the property containing a [ContextKey] instance.
  */
-export const ContextKey__symbol = /*#__PURE__*/ Symbol('context-key');
+export const ContextKey__symbol = (/*#__PURE__*/ Symbol('context-key'));
 
 /**
  * Context value key.
@@ -20,11 +20,11 @@ export const ContextKey__symbol = /*#__PURE__*/ Symbol('context-key');
  * Multiple source values pay be provided per per value key. They all grouped into single seed.
  * The value is grown from this seed by [[ContextKey.grow]] method.
  *
- * @typeparam Value  Context value type.
- * @typeparam Src  Source value type.
- * @typeparam Seed  Value seed type.
+ * @typeParam TValue  Context value type.
+ * @typeParam TSrc  Source value type.
+ * @typeParam TSeed  Value seed type.
  */
-export abstract class ContextKey<Value, Src = Value, Seed = unknown> implements ContextRef<Value, Src> {
+export abstract class ContextKey<TValue, TSrc = TValue, TSeed = unknown> implements ContextRef<TValue, TSrc> {
 
   /**
    * Human-readable key name.
@@ -38,7 +38,7 @@ export abstract class ContextKey<Value, Src = Value, Seed = unknown> implements 
    *
    * Different context value keys may have the same [[seedKey]] to grow them from the same seed.
    */
-  abstract readonly seedKey: ContextSeedKey<Src, Seed>;
+  abstract readonly seedKey: ContextSeedKey<TSrc, TSeed>;
 
   /**
    * Constructs context value key.
@@ -63,7 +63,7 @@ export abstract class ContextKey<Value, Src = Value, Seed = unknown> implements 
    *
    * @param slot  Context value slot to insert the value to.
    */
-  abstract grow(slot: ContextValueSlot<Value, Src, Seed>): void;
+  abstract grow(slot: ContextValueSlot<TValue, TSrc, TSeed>): void;
 
   toString(): string {
     return `ContextKey(${this.name})`;
@@ -77,24 +77,24 @@ export abstract class ContextKey<Value, Src = Value, Seed = unknown> implements 
  * An instance of the value slot is passed to [[ContextKey.grow]] method to provide the necessary context and optionally
  * accept a new value.
  *
- * @typeparam Value  Context value type.
- * @typeparam Src  Source value type.
- * @typeparam Seed  Value seed type.
+ * @typeParam TValue  Context value type.
+ * @typeParam TSrc  Source value type.
+ * @typeParam TSeed  Value seed type.
  */
-export type ContextValueSlot<Value, Src, Seed> =
-    | ContextValueSlot.WithFallback<Value, Src, Seed>
-    | ContextValueSlot.WithoutFallback<Value, Src, Seed>;
+export type ContextValueSlot<TValue, TSrc, TSeed> =
+    | ContextValueSlot.WithFallback<TValue, TSrc, TSeed>
+    | ContextValueSlot.WithoutFallback<TValue, TSrc, TSeed>;
 
 export namespace ContextValueSlot {
 
   /**
    * Base context value slot interface.
    *
-   * @typeparam Value  Context value type.
-   * @typeparam Src  Source value type.
-   * @typeparam Seed  Value seed type.
+   * @typeParam TValue  Context value type.
+   * @typeParam TSrc  Source value type.
+   * @typeParam TSeed  Value seed type.
    */
-  export interface Base<Value, Src, Seed> {
+  export interface Base<TValue, TSrc, TSeed> {
 
     /**
      * Target context.
@@ -104,17 +104,17 @@ export namespace ContextValueSlot {
     /**
      * A key to associated value with.
      */
-    readonly key: ContextKey<Value, Src, Seed>;
+    readonly key: ContextKey<TValue, TSrc, TSeed>;
 
     /**
      * Context value seeder.
      */
-    readonly seeder: ContextSeeder<ContextValues, Src, Seed>;
+    readonly seeder: ContextSeeder<ContextValues, TSrc, TSeed>;
 
     /**
      * Context value seed.
      */
-    readonly seed: Seed;
+    readonly seed: TSeed;
 
     /**
      * Whether a {@link ContextRequest.Opts.or fallback} value has been specified.
@@ -129,7 +129,7 @@ export namespace ContextValueSlot {
      *
      * Always `undefined` when {@link hasFallback there is no fallback}.
      */
-    readonly or: Value | null | undefined;
+    readonly or: TValue | null | undefined;
 
     /**
      * Insert the value into the slot.
@@ -140,7 +140,7 @@ export namespace ContextValueSlot {
      *
      * @param value  A value to associate with the key, or `null`/`undefined` to not associate any value.
      */
-    insert(value: Value | null | undefined): void;
+    insert(value: TValue | null | undefined): void;
 
     /**
      * Fills this slot by the given function.
@@ -150,7 +150,7 @@ export namespace ContextValueSlot {
      * @returns A value associated with target key by the given function, or `null`/`undefined` when no value
      * associated.
      */
-    fillBy(grow: (this: void, slot: ContextValueSlot<Value, Src, Seed>) => void): Value | null | undefined;
+    fillBy(grow: (this: void, slot: ContextValueSlot<TValue, TSrc, TSeed>) => void): TValue | null | undefined;
 
     /**
      * Registers a setup procedure issued when context value associated with target key.
@@ -159,18 +159,18 @@ export namespace ContextValueSlot {
      *
      * @param setup  Context value setup procedure.
      */
-    setup(setup: ContextValueSetup<Value, Src, Seed>): void;
+    setup(setup: ContextValueSetup<TValue, TSrc, TSeed>): void;
 
   }
 
   /**
    * Base context value slot with fallback value.
    *
-   * @typeparam Value  Context value type.
-   * @typeparam Src  Source value type.
-   * @typeparam Seed  Value seed type.
+   * @typeParam TValue  Context value type.
+   * @typeParam TSrc  Source value type.
+   * @typeParam TSeed  Value seed type.
    */
-  export interface WithFallback<Value, Src, Seed> extends Base<Value, Src, Seed> {
+  export interface WithFallback<TValue, TSrc, TSeed> extends Base<TValue, TSrc, TSeed> {
 
     /**
      * Whether a {@link ContextRequest.Opts.or fallback} value has been specified.
@@ -185,11 +185,11 @@ export namespace ContextValueSlot {
      *
      * Can be `null` or `undefined`.
      */
-    readonly or: Value | null | undefined;
+    readonly or: TValue | null | undefined;
 
   }
 
-  export interface WithoutFallback<Value, Src, Seed> extends Base<Value, Src, Seed> {
+  export interface WithoutFallback<TValue, TSrc, TSeed> extends Base<TValue, TSrc, TSeed> {
 
     /**
      * Whether a {@link ContextRequest.Opts.or fallback} value has been specified.
@@ -216,7 +216,7 @@ export namespace ContextValueSlot {
  * A function with this signature can be passed to {@link ContextValueSlot.Base.setup} method to be issued when
  * the value associated with target key.
  */
-export type ContextValueSetup<Value, Src, Seed> =
+export type ContextValueSetup<TValue, TSrc, TSeed> =
 /**
  * @param key  A key the value associated with.
  * @param context  Target context the value associated with.
@@ -230,7 +230,7 @@ export type ContextValueSetup<Value, Src, Seed> =
           context,
           registry,
         }: {
-          key: ContextKey<Value, Src, Seed>;
+          key: ContextKey<TValue, TSrc, TSeed>;
           context: ContextValues;
           registry: ContextRegistry;
         }
@@ -241,33 +241,33 @@ export type ContextValueSetup<Value, Src, Seed> =
  *
  * This is typically passed as `byDefault` option to context value key constructor.
  *
- * @typeparam Ctx  Context type.
- * @typeparam Value  Context value type.
- * @typeparam Key  Context key type.
+ * @typeParam TCtx  Context type.
+ * @typeParam TValue  Context value type.
+ * @typeParam TKey  Context key type.
  */
-export type ContextKeyDefault<Value, Key extends ContextKey<any, any, any>> =
+export type ContextKeyDefault<TValue, TKey extends ContextKey<unknown, unknown>> =
 /**
  * @param context  Target context.
  * @param key  Context value key the default value is provided for.
  *
  * @return Either constructed value, or `null`/`undefined` if unknown.
  */
-    (this: void, context: ContextValues, key: Key) => Value | null | undefined;
+    (this: void, context: ContextValues, key: TKey) => TValue | null | undefined;
 
 /**
  * A key of context value holding a seed of context value.
  *
- * @typeparam Src  Source value type.
- * @typeparam Seed  Value seed type.
+ * @typeParam TSrc  Source value type.
+ * @typeParam TSeed  Value seed type.
  */
-export abstract class ContextSeedKey<Src, Seed> extends ContextKey<Seed, Src, Seed> {
+export abstract class ContextSeedKey<TSrc, TSeed> extends ContextKey<TSeed, TSrc, TSeed> {
 
   /**
    * Constructs context value sources key.
    *
    * @param key  A key of context value having its sources associated with this key.
    */
-  constructor(key: ContextKey<any, Src>) {
+  constructor(key: ContextKey<unknown, TSrc>) {
     super(`${key.name}:seed`);
   }
 
@@ -281,13 +281,13 @@ export abstract class ContextSeedKey<Src, Seed> extends ContextKey<Seed, Src, Se
   /**
    * Creates a seeder for values associated with this key.
    *
-   * @typeparam Ctx  Context type.
+   * @typeParam TCtx  Context type.
    *
    * @returns New value seeder instance.
    */
-  abstract seeder<Ctx extends ContextValues>(): ContextSeeder<Ctx, Src, Seed>;
+  abstract seeder<TCtx extends ContextValues>(): ContextSeeder<TCtx, TSrc, TSeed>;
 
-  grow(opts: ContextValueSlot<Seed, Src, Seed>): void {
+  grow(opts: ContextValueSlot<TSeed, TSrc, TSeed>): void {
 
     const { seeder, seed } = opts;
 

@@ -3,38 +3,21 @@
  * @module @proc7ts/context-values
  */
 import { noop } from '@proc7ts/primitives';
-import { ContextKey, ContextKey__symbol, ContextSeedKey, ContextValueSetup, ContextValueSlot } from './context-key';
-import { ContextKeyError } from './context-key-error';
-import { ContextRef, ContextRequest } from './context-ref';
-import { ContextSeeder, ContextSeeds } from './context-seeder';
+import { ContextKey__symbol, ContextSeedKey } from './context-key';
+import { ContextSeedRegistry, newContextValues } from './context-seed-registry.impl';
+import { ContextSeeds } from './context-seeder';
 import { contextValueSpec, ContextValueSpec } from './context-value-spec';
 import { ContextValues } from './context-values';
 
 /**
- * @internal
- */
-type SeedFactory<Ctx extends ContextValues, Seed> = (this: void, context: Ctx) => Seed;
-
-/**
- * @internal
- */
-type Seeding<Ctx extends ContextValues, Src, Seed> = [ContextSeeder<Ctx, Src, Seed>, SeedFactory<Ctx, Seed>];
-
-/**
  * A registry of context value providers.
  *
- * @typeparam Ctx  Context type.
+ * @typeParam TCtx  Context type.
  */
-export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
+export class ContextRegistry<TCtx extends ContextValues = ContextValues> {
 
   /** @internal */
-  private readonly _initial: ContextSeeds<Ctx>;
-
-  /** @internal */
-  private readonly _seeds = new Map<ContextSeedKey<any, any>, Seeding<Ctx, any, any>>();
-
-  /** @internal */
-  private _nonCachedValues?: ContextValues;
+  private readonly _seeds: ContextSeedRegistry<TCtx>;
 
   /**
    * Constructs a registry for context value providers.
@@ -44,52 +27,37 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
    * @param initial  An optional source of initially known context values. This can be either a function, or
    * `ContextValues` instance.
    */
-  constructor(initial?: ContextSeeds<Ctx> | ContextValues) {
+  constructor(initial?: ContextSeeds<TCtx> | ContextValues) {
+
+    let initialSeeds: ContextSeeds<TCtx>;
+
     if (initial == null) {
-      this._initial = noop;
+      initialSeeds = noop;
     } else if (typeof initial === 'function') {
-      this._initial = initial;
+      initialSeeds = initial;
     } else {
-      this._initial = seedKey => initial.get(seedKey);
+      initialSeeds = seedKey => initial.get(seedKey);
     }
+
+    this._seeds = new ContextSeedRegistry<TCtx>(initialSeeds);
   }
 
   /**
    * Provides context value.
    *
-   * @typeparam Deps  Dependencies tuple type.
-   * @typeparam Src  Source value type.
-   * @typeparam Seed  Value seed type.
+   * @typeParam TDeps  Dependencies tuple type.
+   * @typeParam TSrc  Source value type.
+   * @typeParam TSeed  Value seed type.
    * @param spec  Context value specifier.
    *
    * @returns A function that removes the given context value specifier when called.
    */
-  provide<Deps extends any[], Src, Seed>(spec: ContextValueSpec<Ctx, any, Deps, Src, Seed>): () => void {
+  provide<TDeps extends any[], TSrc, TSeed>(spec: ContextValueSpec<TCtx, unknown, TDeps, TSrc, TSeed>): () => void {
 
     const { a: { [ContextKey__symbol]: { seedKey } }, by } = contextValueSpec(spec);
-    const [seeder] = this._seeding<Src, Seed>(seedKey);
+    const [seeder] = this._seeds.seedData<TSrc, TSeed>(seedKey);
 
     return seeder.provide(by);
-  }
-
-  /**
-   * @internal
-   */
-  private _seeding<Src, Seed>(seedKey: ContextSeedKey<Src, Seed>): Seeding<Ctx, Src, Seed> {
-
-    const found: Seeding<Ctx, Src, Seed> | undefined = this._seeds.get(seedKey);
-
-    if (found) {
-      return found;
-    }
-
-    const seeder: ContextSeeder<Ctx, Src, Seed> = seedKey.seeder();
-    const factory: SeedFactory<Ctx, Seed> = context => seeder.seed(context, this._initial(seedKey, context));
-    const seeding: Seeding<Ctx, Src, Seed> = [seeder, factory];
-
-    this._seeds.set(seedKey, seeding);
-
-    return seeding;
   }
 
   /**
@@ -100,9 +68,9 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
    *
    * @returns New context value seed.
    */
-  seed<Src, Seed>(context: Ctx, key: ContextSeedKey<Src, Seed>): Seed {
+  seed<TSrc, TSeed>(context: TCtx, key: ContextSeedKey<TSrc, TSeed>): TSeed {
 
-    const [, factory] = this._seeding(key);
+    const [, factory] = this._seeds.seedData(key);
 
     return factory(context);
   }
@@ -111,130 +79,20 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
    * Builds context seeds provider that binds seeds to target `context`.
    *
    * @param context  Target value context.
-   * @param cache  Whether to cache context values. When `false` the value providers may be called multiple times.
    *
    * @returns A provider of context value seeds bound to the given `context`.
    */
-  seedIn(context: Ctx, cache?: boolean): <Src, Seed>(this: void, key: ContextSeedKey<Src, Seed>) => Seed | undefined {
-    return this.newValues(cache).get.bind(context);
+  seedIn(context: TCtx): ContextSeeds.Headless {
+    return this.newValues().get.bind(context);
   }
 
   /**
    * Creates new context values instance consulting this registry for value providers.
    *
-   * @param cache  Whether to cache context values. When `false` the value providers may be called multiple times.
-   *
    * @returns New context values instance which methods expect `this` instance to be a context the values provided for.
    */
-  newValues(cache = true): ContextValues & ThisType<Ctx> {
-    if (!cache && this._nonCachedValues) {
-      return this._nonCachedValues;
-    }
-
-    const values = new Map<ContextKey<any>, any>();
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const registry = this;
-
-    class Values extends ContextValues {
-
-      get<Value, Src>(
-          this: Ctx,
-          { [ContextKey__symbol]: key }: ContextRef<Value, Src>,
-          opts?: ContextRequest.Opts<Value>,
-      ): Value | null | undefined {
-
-        const cached: Value | undefined = values.get(key);
-
-        if (cached != null) {
-          return cached;
-        }
-
-        const [constructed, setup] = growValue(this, key, opts);
-
-        if (cache && setup) {
-          values.set(key, constructed);
-          setup({
-            key,
-            context: this,
-            registry: registry as ContextRegistry<any> as ContextRegistry,
-          });
-        }
-
-        return constructed;
-      }
-
-    }
-
-    if (!cache) {
-      return this._nonCachedValues = new Values();
-    }
-
-    return new Values();
-
-    function growValue<Value, Src, Seed>(
-        context: Ctx,
-        key: ContextKey<Value, Src, Seed>,
-        opts: ContextRequest.Opts<Value> = {},
-    ): [Value | null | undefined, ContextValueSetup<Value, Src, Seed>?] {
-
-      const [seeder, seed] = findSeed<Src, Seed>(context, key);
-      let constructed: Value | null | undefined;
-      const hasFallback = 'or' in opts;
-      let setupValue: ContextValueSetup<Value, Src, Seed> = noop;
-      const slot: ContextValueSlot.Base<Value, Src, Seed> = {
-        context,
-        key,
-        seeder,
-        seed,
-        hasFallback,
-        get or() {
-          return opts.or;
-        },
-        insert(value) {
-          constructed = value;
-        },
-        fillBy(grow) {
-          grow(slot as ContextValueSlot<Value, Src, Seed>);
-          return constructed;
-        },
-        setup(setup) {
-
-          const prevSetup = setupValue;
-
-          setupValue = opts => {
-            prevSetup(opts);
-            setup(opts);
-          };
-        },
-      };
-      key.grow(slot as ContextValueSlot<Value, Src, Seed>);
-
-      if (constructed != null) {
-        return [constructed, setupValue];
-      }
-      if (!hasFallback) {
-        throw new ContextKeyError(key);
-      }
-
-      return [opts.or];
-    }
-
-    function findSeed<Src, Seed>(
-        context: Ctx,
-        key: ContextKey<any, Src, Seed>,
-    ): [ContextSeeder<Ctx, Src, Seed>, Seed] {
-
-      const { seedKey } = key;
-      const [seeder, factory] = registry._seeding(seedKey);
-
-      if (seedKey !== key as any) {
-        // This is not a seed key
-        // Retrieve the seed by seed key
-        return [seeder, context.get(seedKey)];
-      }
-
-      return [seeder, factory(context)];
-    }
+  newValues(): ContextValues {
+    return newContextValues(this, this._seeds);
   }
 
   /**
@@ -244,13 +102,14 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
    *
    * @return New context value registry which values provided by both registries.
    */
-  append(other: ContextRegistry<Ctx>): ContextRegistry<Ctx> {
-    return new ContextRegistry(<Src, Seed>(key: ContextSeedKey<Src, Seed>, context: Ctx) => {
+  append(other: ContextRegistry<TCtx>): ContextRegistry<TCtx> {
+    return new ContextRegistry(<TSrc, TSeed>(key: ContextSeedKey<TSrc, TSeed>, context: TCtx) => {
 
-      const [seeder, factory] = this._seeding(key);
+      const [seeder, factory] = this._seeds.seedData(key);
 
       return seeder.combine(factory(context), other.seed(context, key), context);
     });
   }
 
 }
+

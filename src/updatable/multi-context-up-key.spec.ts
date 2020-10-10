@@ -101,9 +101,9 @@ describe('MultiContextUpKey', () => {
     });
   });
 
-  function readValue<Src>(from: AfterEvent<Src[]>): Src[] {
+  function readValue<TSrc>(from: AfterEvent<TSrc[]>): TSrc[] {
 
-    let received: Src[] = undefined!;
+    let received: TSrc[] = undefined!;
 
     from.once((...value) => received = value);
 

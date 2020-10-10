@@ -10,25 +10,25 @@ import { SimpleContextKey } from './simple-context-key';
 /**
  * Single context value reference.
  *
- * @typeparam Value  Context value type.
+ * @typeParam TValue  Context value type.
  */
-export type SingleContextRef<Value> = ContextRef<Value, Value>;
+export type SingleContextRef<TValue> = ContextRef<TValue, TValue>;
 
 /**
  * Single context value key.
  *
  * Treats the last source value as context one and ignores the rest of them.
  *
- * @typeparam Value  Context value type.
+ * @typeParam TValue  Context value type.
  */
-export class SingleContextKey<Value>
-    extends SimpleContextKey<Value>
-    implements SingleContextRef<Value> {
+export class SingleContextKey<TValue>
+    extends SimpleContextKey<TValue>
+    implements SingleContextRef<TValue> {
 
   /**
    * A provider of context value used when there is no value associated with this key.
    */
-  readonly byDefault: ContextKeyDefault<Value, ContextKey<Value>>;
+  readonly byDefault: ContextKeyDefault<TValue, ContextKey<TValue>>;
 
   /**
    * Constructs single context value key.
@@ -44,8 +44,8 @@ export class SingleContextKey<Value>
         seedKey,
         byDefault = noop,
       }: {
-        seedKey?: ContextSeedKey<Value, SimpleContextKey.Seed<Value>>;
-        byDefault?: ContextKeyDefault<Value, ContextKey<Value>>;
+        seedKey?: ContextSeedKey<TValue, SimpleContextKey.Seed<TValue>>;
+        byDefault?: ContextKeyDefault<TValue, ContextKey<TValue>>;
       } = {},
   ) {
     super(name, { seedKey });
@@ -53,7 +53,7 @@ export class SingleContextKey<Value>
   }
 
   grow(
-      slot: ContextValueSlot<Value, Value, SimpleContextKey.Seed<Value>>,
+      slot: ContextValueSlot<TValue, TValue, SimpleContextKey.Seed<TValue>>,
   ): void {
 
     const value = slot.seed();

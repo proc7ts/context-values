@@ -13,9 +13,9 @@ import { ContextUpKey, ContextUpRef } from './context-up-key';
 /**
  * Multiple updatable context values reference.
  *
- * @typeparam Src  Source value type.
+ * @typeParam TSrc  Source value type.
  */
-export type MultiContextUpRef<Src> = ContextUpRef<AfterEvent<Src[]>, Src>;
+export type MultiContextUpRef<TSrc> = ContextUpRef<AfterEvent<TSrc[]>, TSrc>;
 
 /**
  * Multiple updatable context values key.
@@ -26,16 +26,16 @@ export type MultiContextUpRef<Src> = ContextUpRef<AfterEvent<Src[]>, Src>;
  * It is an error to provide a `null` or `undefined` {@link ContextRequest.Opts.or fallback value} when requesting
  * an associated value. Use an `afterThe()` result as a fallback instead.
  *
- * @typeparam Src  Source value type.
+ * @typeParam TSrc  Source value type.
  */
-export class MultiContextUpKey<Src>
-    extends ContextUpKey<AfterEvent<Src[]>, Src>
-    implements MultiContextUpRef<Src> {
+export class MultiContextUpKey<TSrc>
+    extends ContextUpKey<AfterEvent<TSrc[]>, TSrc>
+    implements MultiContextUpRef<TSrc> {
 
   /**
    * A provider of context value used when there is no value associated with this key.
    */
-  readonly byDefault: ContextKeyDefault<readonly Src[], ContextUpKey<AfterEvent<Src[]>, Src>>;
+  readonly byDefault: ContextKeyDefault<readonly TSrc[], ContextUpKey<AfterEvent<TSrc[]>, TSrc>>;
 
   get upKey(): this {
     return this;
@@ -55,8 +55,8 @@ export class MultiContextUpKey<Src>
         seedKey,
         byDefault = noop,
       }: {
-        seedKey?: ContextUpKey.SeedKey<Src>;
-        byDefault?: ContextKeyDefault<readonly Src[], ContextUpKey<AfterEvent<Src[]>, Src>>;
+        seedKey?: ContextUpKey.SeedKey<TSrc>;
+        byDefault?: ContextKeyDefault<readonly TSrc[], ContextUpKey<AfterEvent<TSrc[]>, TSrc>>;
       } = {},
   ) {
     super(name, seedKey);
@@ -64,7 +64,7 @@ export class MultiContextUpKey<Src>
   }
 
   grow(
-      slot: ContextValueSlot<AfterEvent<Src[]>, EventKeeper<Src[]> | Src, AfterEvent<Src[]>>,
+      slot: ContextValueSlot<AfterEvent<TSrc[]>, EventKeeper<TSrc[]> | TSrc, AfterEvent<TSrc[]>>,
   ): void {
 
     const value = slot.seed.keepThru((...sources) => {
@@ -74,7 +74,7 @@ export class MultiContextUpKey<Src>
       }
 
       // Sources absent. Attempt to detect the backup value.
-      let backup: AfterEvent<Src[]> | null | undefined;
+      let backup: AfterEvent<TSrc[]> | null | undefined;
 
       if (slot.hasFallback) {
         backup = slot.or;
@@ -89,7 +89,7 @@ export class MultiContextUpKey<Src>
       }
 
       // Backup value is absent. Construct an error response.
-      return nextAfterEvent(afterEventBy<Src[]>(() => {
+      return nextAfterEvent(afterEventBy<TSrc[]>(() => {
         throw new ContextKeyError(this);
       }));
     });

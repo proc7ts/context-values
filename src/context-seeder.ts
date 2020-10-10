@@ -13,12 +13,11 @@ import { ContextValues } from './context-values';
  *
  * Created by [[ContextSeedKey.seeder]] method.
  *
- * @typeparam Ctx  Context type.
- * @typeparam Src  Source value type.
- * @typeparam Seed  Context value seed type.
- * @typeparam Self  This type.
+ * @typeParam TCtx  Context type.
+ * @typeParam TSrc  Source value type.
+ * @typeParam TSeed  Context value seed type.
  */
-export interface ContextSeeder<Ctx extends ContextValues, Src, Seed> {
+export interface ContextSeeder<TCtx extends ContextValues, TSrc, TSeed> {
 
   /**
    * Provides context value.
@@ -27,7 +26,7 @@ export interface ContextSeeder<Ctx extends ContextValues, Src, Seed> {
    *
    * @returns A function that removes the given context value `provider` when called.
    */
-  provide(provider: ContextValueProvider<Ctx, Src>): () => void;
+  provide(provider: ContextValueProvider<TCtx, TSrc>): () => void;
 
   /**
    * Creates context value seed for target `context`.
@@ -37,7 +36,7 @@ export interface ContextSeeder<Ctx extends ContextValues, Src, Seed> {
    *
    * @returns New context value seed.
    */
-  seed(context: Ctx, initial?: Seed): Seed;
+  seed(context: TCtx, initial?: TSeed): TSeed;
 
   /**
    * Checks whether the given context value `seed` is empty.
@@ -46,7 +45,7 @@ export interface ContextSeeder<Ctx extends ContextValues, Src, Seed> {
    *
    * @returns `true` is the given seed does not contain any source values, or `false` otherwise.
    */
-  isEmpty(seed: Seed): boolean;
+  isEmpty(seed: TSeed): boolean;
 
   /**
    * Combines two seeds into one in target `context`.
@@ -57,23 +56,44 @@ export interface ContextSeeder<Ctx extends ContextValues, Src, Seed> {
    *
    * @returns Context value seed combining value sources from both seeds.
    */
-  combine(first: Seed, second: Seed, context: Ctx): Seed;
+  combine(first: TSeed, second: TSeed, context: TCtx): TSeed;
 
 }
 
 /**
  * Context seeds provider.
  *
- * @typeparam Ctx  Context type.
+ * @typeParam TCtx  Context type.
  */
-export type ContextSeeds<Ctx extends ContextValues> =
+export type ContextSeeds<TCtx extends ContextValues> =
 /**
- * @typeparam Src  Source value type.
- * @typeparam Seed  Value seed type.
+ * @typeParam TSrc  Source value type.
+ * @typeParam TSeed  Value seed type.
  *
  * @param key  Context value seed key.
  * @param context  Target context.
  *
  * @returns Context value seed associated with the given `key` provided for target `context`.
  */
-    <Src, Seed>(this: void, key: ContextSeedKey<Src, Seed>, context: Ctx) => Seed | undefined;
+    <TSrc, TSeed>(this: void, key: ContextSeedKey<TSrc, TSeed>, context: TCtx) => TSeed | undefined;
+
+export namespace ContextSeeds {
+
+  /**
+   * Headless context seeds provider.
+   *
+   * Such provider does not depend on context.
+   */
+  export type Headless =
+  /**
+   * @typeParam TSrc  Source value type.
+   * @typeParam TSeed  Value seed type.
+   *
+   * @param key  Context value seed key.
+   * @param context  Target context.
+   *
+   * @returns Context value seed associated with the given `key` provided for target `context`.
+   */
+      <TSrc, TSeed>(this: void, key: ContextSeedKey<TSrc, TSeed>) => TSeed | undefined;
+
+}
