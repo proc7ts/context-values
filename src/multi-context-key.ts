@@ -13,9 +13,9 @@ import { IterativeContextKey } from './iterative-context-key';
  *
  * Represents context value as read-only array of source values.
  *
- * @typeparam Src  Value source type and context value item type.
+ * @typeParam TSrc  TValue source type and context value item type.
  */
-export type MultiContextRef<Src> = ContextRef<readonly Src[], Src>;
+export type MultiContextRef<TSrc> = ContextRef<readonly TSrc[], TSrc>;
 
 /**
  * Multiple context values key.
@@ -24,16 +24,16 @@ export type MultiContextRef<Src> = ContextRef<readonly Src[], Src>;
  *
  * Associated with empty array by default.
  *
- * @typeparam Src  Value source type and context value item type.
+ * @typeParam TSrc  TValue source type and context value item type.
  */
-export class MultiContextKey<Src>
-    extends IterativeContextKey<readonly Src[], Src>
-    implements MultiContextRef<Src> {
+export class MultiContextKey<TSrc>
+    extends IterativeContextKey<readonly TSrc[], TSrc>
+    implements MultiContextRef<TSrc> {
 
   /**
    * A provider of context value used when there is no value associated with this key.
    */
-  readonly byDefault: ContextKeyDefault<readonly Src[], ContextKey<readonly Src[], Src>>;
+  readonly byDefault: ContextKeyDefault<readonly TSrc[], ContextKey<readonly TSrc[], TSrc>>;
 
   /**
    * Constructs multiple context values key.
@@ -48,8 +48,8 @@ export class MultiContextKey<Src>
         seedKey,
         byDefault = valuesProvider(),
       }: {
-        seedKey?: ContextSeedKey<Src, Iterable<Src>>;
-        byDefault?: ContextKeyDefault<readonly Src[], ContextKey<readonly Src[], Src>>;
+        seedKey?: ContextSeedKey<TSrc, Iterable<TSrc>>;
+        byDefault?: ContextKeyDefault<readonly TSrc[], ContextKey<readonly TSrc[], TSrc>>;
       } = {},
   ) {
     super(name, seedKey);
@@ -57,7 +57,7 @@ export class MultiContextKey<Src>
   }
 
   grow(
-      slot: ContextValueSlot<readonly Src[], Src, Iterable<Src>>,
+      slot: ContextValueSlot<readonly TSrc[], TSrc, Iterable<TSrc>>,
   ): void {
 
     const result = itsElements(slot.seed);

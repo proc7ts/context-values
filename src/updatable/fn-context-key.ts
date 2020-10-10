@@ -13,8 +13,8 @@ import { ContextUpKey, ContextUpRef } from './context-up-key';
 /**
  * A reference to updatable context function value.
  *
- * @typeparam Args  Function arguments tuple type.
- * @typeparam Ret  Function return value type.
+ * @typeParam Args  Function arguments tuple type.
+ * @typeParam Ret  Function return value type.
  */
 export type FnContextRef<Args extends any[], Ret = void> =
     ContextUpRef<(this: void, ...args: Args) => Ret, (this: void, ...args: Args) => Ret>;
@@ -31,8 +31,8 @@ export type FnContextRef<Args extends any[], Ret = void> =
  * It is an error to provide a `null` or `undefined` {@link ContextRequest.Opts.or fallback value} when requesting
  * an associated value. Use an `afterThe()` result as a fallback instead.
  *
- * @typeparam Args  Function arguments tuple type.
- * @typeparam Ret  Function return value type.
+ * @typeParam Args  Function arguments tuple type.
+ * @typeParam Ret  Function return value type.
  */
 export class FnContextKey<Args extends any[], Ret = void>
     extends ContextUpKey<(this: void, ...args: Args) => Ret, (this: void, ...args: Args) => Ret>

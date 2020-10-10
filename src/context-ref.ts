@@ -11,15 +11,15 @@ import { ContextKey, ContextKey__symbol } from './context-key';
  *
  * This is typically a context value key. But may also be any object with `key` property containing such key.
  *
- * @typeparam Value  A type of requested context value.
- * @typeparam Seed  Requested value seed type.
+ * @typeParam TValue  A type of requested context value.
+ * @typeParam TSeed  Requested value seed type.
  */
-export interface ContextRequest<Value, Seed = unknown> {
+export interface ContextRequest<TValue, TSeed = unknown> {
 
   /**
    * A key of context value to request.
    */
-  readonly [ContextKey__symbol]: ContextKey<Value, any, Seed>;
+  readonly [ContextKey__symbol]: ContextKey<TValue, any, TSeed>;
 
 }
 
@@ -30,9 +30,9 @@ export namespace ContextRequest {
    *
    * This can be passed to [[ContextValues.get]] method as a second parameter.
    *
-   * @typeparam Value  A type of requested context value.
+   * @typeParam TValue  A type of requested context value.
    */
-  export interface Opts<Value> {
+  export interface Opts<TValue> {
 
     /**
      * A fallback value that will be returned if there is no value associated with target key.
@@ -41,19 +41,19 @@ export namespace ContextRequest {
      *
      * This property will be accessed only if there is no value associated with target key.
      */
-    or?: Value | null;
+    or?: TValue | null;
 
   }
 
-  export interface OrFallback<Value> extends Opts<Value> {
-    or: Value;
+  export interface OrFallback<TValue> extends Opts<TValue> {
+    or: TValue;
   }
 
-  export interface OrNull<Value> extends Opts<Value> {
+  export interface OrNull<TValue> extends Opts<TValue> {
     or: null;
   }
 
-  export interface OrUndefined<Value> extends Opts<Value> {
+  export interface OrUndefined<TValue> extends Opts<TValue> {
     or?: undefined;
   }
 
@@ -64,27 +64,27 @@ export namespace ContextRequest {
  *
  * Designates a declared declaring context value.
  *
- * @typeparam Src  A type of declared context value sources.
- * @typeparam Seed  Declared value seed type.
+ * @typeParam TSrc  A type of declared context value sources.
+ * @typeParam TSeed  Declared value seed type.
  */
-export interface ContextTarget<Src, Seed = unknown> extends ContextRequest<any, Seed> {
+export interface ContextTarget<TSrc, TSeed = unknown> extends ContextRequest<any, TSeed> {
 
   /**
    * A key of context value to provide.
    */
-  readonly [ContextKey__symbol]: ContextKey<any, Src, Seed>;
+  readonly [ContextKey__symbol]: ContextKey<any, TSrc, TSeed>;
 
 }
 
 /**
  * Context value reference that can serve both as [[ContextRequest]] and as [[ContextTarget]].
  *
- * @typeparam Value  Context value type.
- * @typeparam Src  Source value type.
+ * @typeParam TValue  Context value type.
+ * @typeParam TSrc  Source value type.
  */
-export interface ContextRef<Value, Src = Value>
-    extends ContextRequest<Value>, ContextTarget<Src> {
+export interface ContextRef<TValue, TSrc = TValue>
+    extends ContextRequest<TValue>, ContextTarget<TSrc> {
 
-  readonly [ContextKey__symbol]: ContextKey<Value, Src>;
+  readonly [ContextKey__symbol]: ContextKey<TValue, TSrc>;
 
 }

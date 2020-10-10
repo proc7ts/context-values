@@ -12,12 +12,12 @@ import { ContextValues } from './context-values';
 /**
  * A registry of context value providers.
  *
- * @typeparam Ctx  Context type.
+ * @typeParam TCtx  Context type.
  */
-export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
+export class ContextRegistry<TCtx extends ContextValues = ContextValues> {
 
   /** @internal */
-  private readonly _seeds: ContextSeedRegistry<Ctx>;
+  private readonly _seeds: ContextSeedRegistry<TCtx>;
 
   /**
    * Constructs a registry for context value providers.
@@ -27,9 +27,9 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
    * @param initial  An optional source of initially known context values. This can be either a function, or
    * `ContextValues` instance.
    */
-  constructor(initial?: ContextSeeds<Ctx> | ContextValues) {
+  constructor(initial?: ContextSeeds<TCtx> | ContextValues) {
 
-    let initialSeeds: ContextSeeds<Ctx>;
+    let initialSeeds: ContextSeeds<TCtx>;
 
     if (initial == null) {
       initialSeeds = noop;
@@ -39,23 +39,23 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
       initialSeeds = seedKey => initial.get(seedKey);
     }
 
-    this._seeds = new ContextSeedRegistry<Ctx>(initialSeeds);
+    this._seeds = new ContextSeedRegistry<TCtx>(initialSeeds);
   }
 
   /**
    * Provides context value.
    *
-   * @typeparam Deps  Dependencies tuple type.
-   * @typeparam Src  Source value type.
-   * @typeparam Seed  Value seed type.
+   * @typeParam TDeps  Dependencies tuple type.
+   * @typeParam TSrc  Source value type.
+   * @typeParam TSeed  Value seed type.
    * @param spec  Context value specifier.
    *
    * @returns A function that removes the given context value specifier when called.
    */
-  provide<Deps extends any[], Src, Seed>(spec: ContextValueSpec<Ctx, any, Deps, Src, Seed>): () => void {
+  provide<TDeps extends any[], TSrc, TSeed>(spec: ContextValueSpec<TCtx, any, TDeps, TSrc, TSeed>): () => void {
 
     const { a: { [ContextKey__symbol]: { seedKey } }, by } = contextValueSpec(spec);
-    const [seeder] = this._seeds.seedData<Src, Seed>(seedKey);
+    const [seeder] = this._seeds.seedData<TSrc, TSeed>(seedKey);
 
     return seeder.provide(by);
   }
@@ -68,7 +68,7 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
    *
    * @returns New context value seed.
    */
-  seed<Src, Seed>(context: Ctx, key: ContextSeedKey<Src, Seed>): Seed {
+  seed<TSrc, TSeed>(context: TCtx, key: ContextSeedKey<TSrc, TSeed>): TSeed {
 
     const [, factory] = this._seeds.seedData(key);
 
@@ -82,7 +82,7 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
    *
    * @returns A provider of context value seeds bound to the given `context`.
    */
-  seedIn(context: Ctx): ContextSeeds.Headless {
+  seedIn(context: TCtx): ContextSeeds.Headless {
     return this.newValues().get.bind(context);
   }
 
@@ -102,8 +102,8 @@ export class ContextRegistry<Ctx extends ContextValues = ContextValues> {
    *
    * @return New context value registry which values provided by both registries.
    */
-  append(other: ContextRegistry<Ctx>): ContextRegistry<Ctx> {
-    return new ContextRegistry(<Src, Seed>(key: ContextSeedKey<Src, Seed>, context: Ctx) => {
+  append(other: ContextRegistry<TCtx>): ContextRegistry<TCtx> {
+    return new ContextRegistry(<TSrc, TSeed>(key: ContextSeedKey<TSrc, TSeed>, context: TCtx) => {
 
       const [seeder, factory] = this._seeds.seedData(key);
 

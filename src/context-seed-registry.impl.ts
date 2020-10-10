@@ -9,37 +9,37 @@ import { ContextValues } from './context-values';
 /**
  * @internal
  */
-export type SeedFactory<Ctx extends ContextValues, Seed> = (this: void, context: Ctx) => Seed;
+export type SeedFactory<TCtx extends ContextValues, TSeed> = (this: void, context: TCtx) => TSeed;
 
 /**
  * @internal
  */
-export type SeedData<Ctx extends ContextValues, Src, Seed> = readonly [
-    seeder: ContextSeeder<Ctx, Src, Seed>,
-    factory: SeedFactory<Ctx, Seed>,
+export type SeedData<TCtx extends ContextValues, TSrc, TSeed> = readonly [
+    seeder: ContextSeeder<TCtx, TSrc, TSeed>,
+    factory: SeedFactory<TCtx, TSeed>,
 ];
 
 /**
  * @internal
  */
-export class ContextSeedRegistry<Ctx extends ContextValues> {
+export class ContextSeedRegistry<TCtx extends ContextValues> {
 
-  private readonly _byKey = new Map<ContextSeedKey<any, any>, SeedData<Ctx, any, any>>();
+  private readonly _byKey = new Map<ContextSeedKey<any, any>, SeedData<TCtx, any, any>>();
 
-  constructor(private readonly _initial: ContextSeeds<Ctx>) {
+  constructor(private readonly _initial: ContextSeeds<TCtx>) {
   }
 
-  seedData<Src, Seed>(seedKey: ContextSeedKey<Src, Seed>): SeedData<Ctx, Src, Seed> {
+  seedData<TSrc, TSeed>(seedKey: ContextSeedKey<TSrc, TSeed>): SeedData<TCtx, TSrc, TSeed> {
 
-    const found: SeedData<Ctx, Src, Seed> | undefined = this._byKey.get(seedKey);
+    const found: SeedData<TCtx, TSrc, TSeed> | undefined = this._byKey.get(seedKey);
 
     if (found) {
       return found;
     }
 
-    const seeder: ContextSeeder<Ctx, Src, Seed> = seedKey.seeder();
-    const factory: SeedFactory<Ctx, Seed> = context => seeder.seed(context, this._initial(seedKey, context));
-    const seedData: SeedData<Ctx, Src, Seed> = [seeder, factory];
+    const seeder: ContextSeeder<TCtx, TSrc, TSeed> = seedKey.seeder();
+    const factory: SeedFactory<TCtx, TSeed> = context => seeder.seed(context, this._initial(seedKey, context));
+    const seedData: SeedData<TCtx, TSrc, TSeed> = [seeder, factory];
 
     this._byKey.set(seedKey, seedData);
 
@@ -49,10 +49,10 @@ export class ContextSeedRegistry<Ctx extends ContextValues> {
   /**
    * @internal
    */
-  findSeed<Src, Seed>(
-      context: Ctx,
-      key: ContextKey<any, Src, Seed>,
-  ): readonly [seeder: ContextSeeder<Ctx, Src, Seed>, seed: Seed] {
+  findSeed<TSrc, TSeed>(
+      context: TCtx,
+      key: ContextKey<any, TSrc, TSeed>,
+  ): readonly [seeder: ContextSeeder<TCtx, TSrc, TSeed>, seed: TSeed] {
 
     const { seedKey } = key;
     const [seeder, factory] = this.seedData(seedKey);
@@ -71,20 +71,20 @@ export class ContextSeedRegistry<Ctx extends ContextValues> {
 /**
  * @internal
  */
-export function newContextValues<Ctx extends ContextValues>(
-    registry: ContextRegistry<Ctx>,
-    seedRegistry: ContextSeedRegistry<Ctx>,
+export function newContextValues<TCtx extends ContextValues>(
+    registry: ContextRegistry<TCtx>,
+    seedRegistry: ContextSeedRegistry<TCtx>,
 ): ContextValues {
 
     const values = new Map<ContextKey<any>, any>();
 
     class Values extends ContextValues {
 
-        get<Value, Src>(
-            this: Ctx,
-            { [ContextKey__symbol]: key }: ContextRef<Value, Src>,
-            opts?: ContextRequest.Opts<Value>,
-        ): Value | null | undefined {
+        get<TValue, TSrc>(
+            this: TCtx,
+            { [ContextKey__symbol]: key }: ContextRef<TValue, TSrc>,
+            opts?: ContextRequest.Opts<TValue>,
+        ): TValue | null | undefined {
 
             const cached = values.get(key);
 
@@ -114,43 +114,43 @@ export function newContextValues<Ctx extends ContextValues>(
 /**
  * @internal
  */
-class ContextValueSlot$<Ctx extends ContextValues, Value, Src, Seed>
-    implements ContextValueSlot.Base<Value, Src, Seed> {
+class ContextValueSlot$<TCtx extends ContextValues, TValue, TSrc, TSeed>
+    implements ContextValueSlot.Base<TValue, TSrc, TSeed> {
 
     readonly hasFallback: boolean;
-    readonly seeder: ContextSeeder<Ctx, Src, Seed>;
-    readonly seed: Seed;
-    private _constructed: Value | null | undefined = null;
-    private _setup: ContextValueSetup<Value, Src, Seed> = noop;
+    readonly seeder: ContextSeeder<TCtx, TSrc, TSeed>;
+    readonly seed: TSeed;
+    private _constructed: TValue | null | undefined = null;
+    private _setup: ContextValueSetup<TValue, TSrc, TSeed> = noop;
 
     constructor(
-        registry: ContextSeedRegistry<Ctx>,
-        readonly context: Ctx,
-        readonly key: ContextKey<Value, Src, Seed>,
-        private readonly _opts: ContextRequest.Opts<Value> = {},
+        registry: ContextSeedRegistry<TCtx>,
+        readonly context: TCtx,
+        readonly key: ContextKey<TValue, TSrc, TSeed>,
+        private readonly _opts: ContextRequest.Opts<TValue> = {},
     ) {
 
-        const [seeder, seed] = registry.findSeed<Src, Seed>(context, key);
+        const [seeder, seed] = registry.findSeed<TSrc, TSeed>(context, key);
 
         this.seeder = seeder;
         this.seed = seed;
         this.hasFallback = 'or' in _opts;
     }
 
-    get or(): Value | null | undefined {
+    get or(): TValue | null | undefined {
         return this._opts.or;
     }
 
-    insert(value: Value | null | undefined): void {
+    insert(value: TValue | null | undefined): void {
         this._constructed = value;
     }
 
-    fillBy(grow: (this: void, slot: ContextValueSlot<Value, Src, Seed>) => void): Value | null | undefined {
-        grow(this as ContextValueSlot<Value, Src, Seed>);
+    fillBy(grow: (this: void, slot: ContextValueSlot<TValue, TSrc, TSeed>) => void): TValue | null | undefined {
+        grow(this as ContextValueSlot<TValue, TSrc, TSeed>);
         return this._constructed;
     }
 
-    setup(setup: ContextValueSetup<Value, Src, Seed>): void {
+    setup(setup: ContextValueSetup<TValue, TSrc, TSeed>): void {
 
         const prevSetup = this._setup;
 
@@ -160,8 +160,8 @@ class ContextValueSlot$<Ctx extends ContextValues, Value, Src, Seed>
         };
     }
 
-    _grow(): readonly [value: Value | null | undefined, setup?: ContextValueSetup<Value, Src, Seed>] {
-        this.key.grow(this as ContextValueSlot<Value, Src, Seed>);
+    _grow(): readonly [value: TValue | null | undefined, setup?: ContextValueSetup<TValue, TSrc, TSeed>] {
+        this.key.grow(this as ContextValueSlot<TValue, TSrc, TSeed>);
 
         if (this._constructed != null) {
             return [this._constructed, this._setup];

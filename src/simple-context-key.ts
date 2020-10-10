@@ -11,12 +11,12 @@ import { ContextValues } from './context-values';
 /**
  * @internal
  */
-class SimpleContextSeeder<Ctx extends ContextValues, Src>
-    implements ContextSeeder<Ctx, Src, SimpleContextKey.Seed<Src>> {
+class SimpleContextSeeder<TCtx extends ContextValues, TSrc>
+    implements ContextSeeder<TCtx, TSrc, SimpleContextKey.Seed<TSrc>> {
 
-  private readonly _providers: ContextValueProvider<Ctx, Src>[] = [];
+  private readonly _providers: ContextValueProvider<TCtx, TSrc>[] = [];
 
-  provide(provider: ContextValueProvider<Ctx, Src>): () => void {
+  provide(provider: ContextValueProvider<TCtx, TSrc>): () => void {
     this._providers.unshift(provider);
     return () => {
 
@@ -28,7 +28,7 @@ class SimpleContextSeeder<Ctx extends ContextValues, Src>
     };
   }
 
-  seed(context: Ctx, initial?: SimpleContextKey.Seed<Src>): SimpleContextKey.Seed<Src> {
+  seed(context: TCtx, initial?: SimpleContextKey.Seed<TSrc>): SimpleContextKey.Seed<TSrc> {
 
     const { length } = this._providers;
 
@@ -36,7 +36,7 @@ class SimpleContextSeeder<Ctx extends ContextValues, Src>
       return initial || noop;
     }
 
-    const makeSeed = (provider: ContextValueProvider<Ctx, Src>): SimpleContextKey.Seed<Src> => lazyValue(
+    const makeSeed = (provider: ContextValueProvider<TCtx, TSrc>): SimpleContextKey.Seed<TSrc> => lazyValue(
         provider.bind(undefined, context),
     );
 
@@ -44,7 +44,7 @@ class SimpleContextSeeder<Ctx extends ContextValues, Src>
       return makeSeed(this._providers[0]);
     }
 
-    const seeds: SimpleContextKey.Seed<Src>[] = this._providers.map(makeSeed);
+    const seeds: SimpleContextKey.Seed<TSrc>[] = this._providers.map(makeSeed);
 
     if (initial) {
       seeds.push(initial);
@@ -53,14 +53,14 @@ class SimpleContextSeeder<Ctx extends ContextValues, Src>
     return combineSimpleSeeds(seeds);
   }
 
-  isEmpty(seed: SimpleContextKey.Seed<Src>): boolean {
+  isEmpty(seed: SimpleContextKey.Seed<TSrc>): boolean {
     return seed() == null;
   }
 
   combine(
-      first: SimpleContextKey.Seed<Src>,
-      second: SimpleContextKey.Seed<Src>,
-  ): SimpleContextKey.Seed<Src> {
+      first: SimpleContextKey.Seed<TSrc>,
+      second: SimpleContextKey.Seed<TSrc>,
+  ): SimpleContextKey.Seed<TSrc> {
     if (first === noop) {
       return second;
     }
@@ -75,9 +75,9 @@ class SimpleContextSeeder<Ctx extends ContextValues, Src>
 /**
  * @internal
  */
-function combineSimpleSeeds<Src>(
-    seeds: readonly SimpleContextKey.Seed<Src>[],
-): SimpleContextKey.Seed<Src> {
+function combineSimpleSeeds<TSrc>(
+    seeds: readonly SimpleContextKey.Seed<TSrc>[],
+): SimpleContextKey.Seed<TSrc> {
   return lazyValue(() => {
     for (const seed of seeds) {
 
@@ -94,9 +94,9 @@ function combineSimpleSeeds<Src>(
 /**
  * @internal
  */
-class SimpleSeedKey<Src> extends ContextSeedKey<Src, SimpleContextKey.Seed<Src>> {
+class SimpleSeedKey<TSrc> extends ContextSeedKey<TSrc, SimpleContextKey.Seed<TSrc>> {
 
-  seeder<Ctx extends ContextValues>(): SimpleContextSeeder<Ctx, Src> {
+  seeder<TCtx extends ContextValues>(): SimpleContextSeeder<TCtx, TSrc> {
     return new SimpleContextSeeder();
   }
 
@@ -109,12 +109,13 @@ class SimpleSeedKey<Src> extends ContextSeedKey<Src, SimpleContextKey.Seed<Src>>
  *
  * A context value associated with this key is never changes once constructed.
  *
- * @typeparam Value  Context value type.
- * @typeparam Src  Source value type.
+ * @typeParam TValue  Context value type.
+ * @typeParam TSrc  Source value type.
  */
-export abstract class SimpleContextKey<Value, Src = Value> extends ContextKey<Value, Src, SimpleContextKey.Seed<Src>> {
+export abstract class SimpleContextKey<TValue, TSrc = TValue>
+    extends ContextKey<TValue, TSrc, SimpleContextKey.Seed<TSrc>> {
 
-  readonly seedKey: ContextSeedKey<Src, SimpleContextKey.Seed<Src>>;
+  readonly seedKey: ContextSeedKey<TSrc, SimpleContextKey.Seed<TSrc>>;
 
   /**
    * Constructs simple context value key.
@@ -127,7 +128,7 @@ export abstract class SimpleContextKey<Value, Src = Value> extends ContextKey<Va
       {
         seedKey,
       }: {
-        seedKey?: ContextSeedKey<Src, SimpleContextKey.Seed<Src>>;
+        seedKey?: ContextSeedKey<TSrc, SimpleContextKey.Seed<TSrc>>;
       } = {},
   ) {
     super(name);
@@ -141,12 +142,12 @@ export namespace SimpleContextKey {
   /**
    * A seed of {@link SimpleContextKey simple context key}.
    *
-   * @typeparam Src  Source vale type.
+   * @typeParam TSrc  Source vale type.
    */
-  export type Seed<Src> =
+  export type Seed<TSrc> =
   /**
    * @returns Either source value, or `null`/`undefined` when when absent.
    */
-      (this: void) => Src | null | undefined;
+      (this: void) => TSrc | null | undefined;
 
 }

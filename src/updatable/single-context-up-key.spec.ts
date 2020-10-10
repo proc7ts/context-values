@@ -128,9 +128,9 @@ describe('SingleContextUpKey', () => {
     });
   });
 
-  function readValue<Value>(from: AfterEvent<[Value]>): Value {
+  function readValue<TValue>(from: AfterEvent<[TValue]>): TValue {
 
-    let received: Value = undefined!;
+    let received: TValue = undefined!;
 
     from.once(value => received = value);
 
