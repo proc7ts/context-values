@@ -16,7 +16,6 @@ import { ContextValues } from './context-values';
  * @typeParam TCtx  Context type.
  * @typeParam TSrc  Source value type.
  * @typeParam TSeed  Context value seed type.
- * @typeParam Self  This type.
  */
 export interface ContextSeeder<TCtx extends ContextValues, TSrc, TSeed> {
 

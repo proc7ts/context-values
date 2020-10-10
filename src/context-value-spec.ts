@@ -72,7 +72,7 @@ export namespace ContextValueSpec {
   /**
    * A specifier defining a context value via another one (alias).
    *
-   * @typeParam Sec  Source value type.
+   * @typeParam TSrc  Source value type.
    * @typeParam TSeed  Value seed type.
    */
   export interface ViaAlias<TSrc, TSeed = unknown> {

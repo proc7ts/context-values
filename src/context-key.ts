@@ -8,9 +8,9 @@ import { ContextSeeder } from './context-seeder';
 import { ContextValues } from './context-values';
 
 /**
- * A symbol of the property containing a [[ContextKey]] instance.
+ * A symbol of the property containing a [ContextKey] instance.
  */
-export const ContextKey__symbol = /*#__PURE__*/ Symbol('context-key');
+export const ContextKey__symbol = (/*#__PURE__*/ Symbol('context-key'));
 
 /**
  * Context value key.
@@ -243,16 +243,16 @@ export type ContextValueSetup<TValue, TSrc, TSeed> =
  *
  * @typeParam TCtx  Context type.
  * @typeParam TValue  Context value type.
- * @typeParam Key  Context key type.
+ * @typeParam TKey  Context key type.
  */
-export type ContextKeyDefault<TValue, Key extends ContextKey<any, any, any>> =
+export type ContextKeyDefault<TValue, TKey extends ContextKey<any, any, any>> =
 /**
  * @param context  Target context.
  * @param key  Context value key the default value is provided for.
  *
  * @return Either constructed value, or `null`/`undefined` if unknown.
  */
-    (this: void, context: ContextValues, key: Key) => TValue | null | undefined;
+    (this: void, context: ContextValues, key: TKey) => TValue | null | undefined;
 
 /**
  * A key of context value holding a seed of context value.
