@@ -4,8 +4,8 @@
  */
 import { noop } from '@proc7ts/primitives';
 import { ContextKey__symbol, ContextSeedKey } from './context-key';
-import { ContextSeedRegistry } from './context-seed-registry.impl';
 import { ContextSeeds } from './context-seeder';
+import { ContextSeeders } from './context-seeders.impl';
 import { contextValueSpec, ContextValueSpec } from './context-value-spec';
 import { ContextValues } from './context-values';
 import { newContextValues } from './context-values.impl';
@@ -18,7 +18,7 @@ import { newContextValues } from './context-values.impl';
 export class ContextRegistry<TCtx extends ContextValues = ContextValues> {
 
   /** @internal */
-  private readonly _seeds: ContextSeedRegistry<TCtx>;
+  private readonly _seeders: ContextSeeders<TCtx>;
 
   /**
    * Constructs a registry for context value providers.
@@ -29,7 +29,7 @@ export class ContextRegistry<TCtx extends ContextValues = ContextValues> {
    * `ContextValues` instance.
    */
   constructor(initial?: ContextSeeds<TCtx> | ContextValues) {
-    this._seeds = new ContextSeedRegistry<TCtx>(
+    this._seeders = new ContextSeeders<TCtx>(
         initial
             ? (typeof initial === 'function' ? initial : (seedKey => initial.get(seedKey)))
             : noop,
@@ -49,7 +49,7 @@ export class ContextRegistry<TCtx extends ContextValues = ContextValues> {
   provide<TDeps extends any[], TSrc, TSeed>(spec: ContextValueSpec<TCtx, unknown, TDeps, TSrc, TSeed>): () => void {
 
     const { a: { [ContextKey__symbol]: { seedKey } }, by } = contextValueSpec(spec);
-    const [seeder] = this._seeds.seedData<TSrc, TSeed>(seedKey);
+    const [seeder] = this._seeders.issuer<TSrc, TSeed>(seedKey);
 
     return seeder.provide(by);
   }
@@ -64,7 +64,7 @@ export class ContextRegistry<TCtx extends ContextValues = ContextValues> {
    */
   seed<TSrc, TSeed>(context: TCtx, key: ContextSeedKey<TSrc, TSeed>): TSeed {
 
-    const [, factory] = this._seeds.seedData(key);
+    const [, factory] = this._seeders.issuer(key);
 
     return factory(context);
   }
@@ -95,7 +95,7 @@ export class ContextRegistry<TCtx extends ContextValues = ContextValues> {
    * @returns New context values instance which methods expect `this` instance to be a context the values provided for.
    */
   newValues(): ContextValues {
-    return newContextValues(this, this._seeds);
+    return newContextValues(this, this._seeders);
   }
 
   /**
@@ -112,7 +112,7 @@ export class ContextRegistry<TCtx extends ContextValues = ContextValues> {
     return new ContextRegistry(<TSrc, TSeed>(key: ContextSeedKey<TSrc, TSeed>, context: TCtx) => {
 
       const second = otherSeeds(key, context);
-      const [seeder, factory] = this._seeds.seedData(key);
+      const [seeder, factory] = this._seeders.issuer(key);
       const first = factory(context);
 
       return second ? seeder.combine(first, second, context) : first;

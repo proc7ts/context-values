@@ -3,8 +3,8 @@ import { ContextKey, ContextKey__symbol, ContextValueSetup, ContextValueSlot } f
 import { ContextKeyError } from './context-key-error';
 import { ContextRef, ContextRequest } from './context-ref';
 import { ContextRegistry } from './context-registry';
-import { ContextSeedRegistry } from './context-seed-registry.impl';
 import { ContextSeeder } from './context-seeder';
+import { ContextSeeders } from './context-seeders.impl';
 import { ContextValues } from './context-values';
 
 /**
@@ -12,7 +12,7 @@ import { ContextValues } from './context-values';
  */
 export function newContextValues<TCtx extends ContextValues>(
     registry: ContextRegistry<TCtx>,
-    seedRegistry: ContextSeedRegistry<TCtx>,
+    seedRegistry: ContextSeeders<TCtx>,
 ): ContextValues {
 
   const values = new Map<ContextKey<any>, any>();
@@ -38,7 +38,7 @@ export function newContextValues<TCtx extends ContextValues>(
         setup({
           key,
           context: this,
-          registry: registry as ContextRegistry<any> as ContextRegistry,
+          registry: registry as ContextRegistry<any>,
         });
       }
 
@@ -63,13 +63,13 @@ class ContextValueSlot$<TCtx extends ContextValues, TValue, TSrc, TSeed>
   private _setup: ContextValueSetup<TValue, TSrc, TSeed> = noop;
 
   constructor(
-      registry: ContextSeedRegistry<TCtx>,
+      registry: ContextSeeders<TCtx>,
       readonly context: TCtx,
       readonly key: ContextKey<TValue, TSrc, TSeed>,
       private readonly _opts: ContextRequest.Opts<TValue> = {},
   ) {
 
-    const [seeder, seed] = registry.findSeed<TSrc, TSeed>(context, key);
+    const [seeder, seed] = registry.newSeed<TSrc, TSeed>(context, key);
 
     this.seeder = seeder;
     this.seed = seed;
