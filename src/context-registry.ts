@@ -4,10 +4,11 @@
  */
 import { noop } from '@proc7ts/primitives';
 import { ContextKey__symbol, ContextSeedKey } from './context-key';
-import { ContextSeedRegistry, newContextValues } from './context-seed-registry.impl';
+import { ContextSeedRegistry } from './context-seed-registry.impl';
 import { ContextSeeds } from './context-seeder';
 import { contextValueSpec, ContextValueSpec } from './context-value-spec';
 import { ContextValues } from './context-values';
+import { newContextValues } from './context-values.impl';
 
 /**
  * A registry of context value providers.
