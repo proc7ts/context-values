@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @proc7ts/context-values
  */
-import { ContextKey } from './context-key';
+import type { ContextKey } from './context-key';
 
 /**
  * An error indicating the absence of context value with the given key.

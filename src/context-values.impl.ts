@@ -1,10 +1,10 @@
 import { noop } from '@proc7ts/primitives';
 import { ContextKey, ContextKey__symbol, ContextValueSetup, ContextValueSlot } from './context-key';
 import { ContextKeyError } from './context-key-error';
-import { ContextRef, ContextRequest } from './context-ref';
-import { ContextRegistry } from './context-registry';
-import { ContextSeeder } from './context-seeder';
-import { ContextSeeders } from './context-seeders.impl';
+import type { ContextRef, ContextRequest } from './context-ref';
+import type { ContextRegistry } from './context-registry';
+import type { ContextSeeder } from './context-seeder';
+import type { ContextSeeders } from './context-seeders.impl';
 import { ContextValues } from './context-values';
 
 /**

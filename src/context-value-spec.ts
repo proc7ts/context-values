@@ -3,8 +3,8 @@
  * @module @proc7ts/context-values
  */
 import { valueProvider } from '@proc7ts/primitives';
-import { ContextRequest, ContextTarget } from './context-ref';
-import { ContextValues } from './context-values';
+import type { ContextRequest, ContextTarget } from './context-ref';
+import type { ContextValues } from './context-values';
 
 /**
  * Context value provider.

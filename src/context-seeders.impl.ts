@@ -1,6 +1,6 @@
-import { ContextKey, ContextSeedKey } from './context-key';
-import { ContextSeeder, ContextSeeds } from './context-seeder';
-import { ContextValues } from './context-values';
+import type { ContextKey, ContextSeedKey } from './context-key';
+import type { ContextSeeder, ContextSeeds } from './context-seeder';
+import type { ContextValues } from './context-values';
 
 /**
  * @internal

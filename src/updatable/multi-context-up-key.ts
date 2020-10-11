@@ -5,7 +5,7 @@
 import { nextArgs } from '@proc7ts/call-thru';
 import { AfterEvent, afterEventBy, afterThe, EventKeeper, nextAfterEvent } from '@proc7ts/fun-events';
 import { noop } from '@proc7ts/primitives';
-import { ContextKeyDefault, ContextValueSlot } from '../context-key';
+import type { ContextKeyDefault, ContextValueSlot } from '../context-key';
 import { ContextKeyError } from '../context-key-error';
 import { ContextSupply } from './context-supply';
 import { ContextUpKey, ContextUpRef } from './context-up-key';

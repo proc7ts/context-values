@@ -5,9 +5,9 @@
 import { isPresent, lazyValue } from '@proc7ts/primitives';
 import { filterIt, itsEmpty, mapIt, overElementsOf, overNone, PushIterable } from '@proc7ts/push-iterator';
 import { ContextKey, ContextSeedKey } from './context-key';
-import { ContextSeeder } from './context-seeder';
-import { ContextValueProvider } from './context-value-spec';
-import { ContextValues } from './context-values';
+import type { ContextSeeder } from './context-seeder';
+import type { ContextValueProvider } from './context-value-spec';
+import type { ContextValues } from './context-values';
 
 /**
  * @internal

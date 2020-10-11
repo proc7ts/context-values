@@ -1,7 +1,7 @@
 import { ContextKey, ContextKey__symbol } from './context-key';
-import { ContextRequest } from './context-ref';
+import type { ContextRequest } from './context-ref';
 import { contextValueSpec, ContextValueSpec } from './context-value-spec';
-import { ContextValues } from './context-values';
+import type { ContextValues } from './context-values';
 import { SingleContextKey } from './single-context-key';
 import Mock = jest.Mock;
 

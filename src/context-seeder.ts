@@ -2,9 +2,9 @@
  * @packageDocumentation
  * @module @proc7ts/context-values
  */
-import { ContextSeedKey } from './context-key';
-import { ContextValueProvider } from './context-value-spec';
-import { ContextValues } from './context-values';
+import type { ContextSeedKey } from './context-key';
+import type { ContextValueProvider } from './context-value-spec';
+import type { ContextValues } from './context-values';
 
 /**
  * Context value seeder.

@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @proc7ts/context-values
  */
-import { ContextRequest } from './context-ref';
+import type { ContextRequest } from './context-ref';
 
 /**
  * The values available from context.

@@ -3,8 +3,8 @@
  * @module @proc7ts/context-values/updatable
  */
 import { EventSupply, EventSupply__symbol, EventSupplyPeer } from '@proc7ts/fun-events';
-import { ContextValueSlot } from '../context-key';
-import { ContextRef } from '../context-ref';
+import type { ContextValueSlot } from '../context-key';
+import type { ContextRef } from '../context-ref';
 import { SimpleContextKey } from '../simple-context-key';
 
 /**

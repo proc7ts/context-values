@@ -4,10 +4,10 @@
  */
 import { noop } from '@proc7ts/primitives';
 import { ContextKey__symbol, ContextSeedKey } from './context-key';
-import { ContextSeeds } from './context-seeder';
+import type { ContextSeeds } from './context-seeder';
 import { ContextSeeders } from './context-seeders.impl';
-import { contextValueSpec, ContextValueSpec } from './context-value-spec';
-import { ContextValues } from './context-values';
+import { ContextValueSpec, contextValueSpec } from './context-value-spec';
+import type { ContextValues } from './context-values';
 import { newContextValues } from './context-values.impl';
 
 /**

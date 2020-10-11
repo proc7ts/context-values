@@ -3,8 +3,8 @@
  * @module @proc7ts/context-values
  */
 import { noop } from '@proc7ts/primitives';
-import { ContextKey, ContextKeyDefault, ContextSeedKey, ContextValueSlot } from './context-key';
-import { ContextRef } from './context-ref';
+import type { ContextKey, ContextKeyDefault, ContextSeedKey, ContextValueSlot } from './context-key';
+import type { ContextRef } from './context-ref';
 import { SimpleContextKey } from './simple-context-key';
 
 /**

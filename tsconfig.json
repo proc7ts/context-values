@@ -1,19 +1,19 @@
 {
   "compilerOptions": {
     "moduleResolution": "node",
-    "module": "es2015",
-    "target": "es2018",
+    "module": "ES2015",
+    "target": "ES2018",
     "strict": true,
-    "experimentalDecorators": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "forceConsistentCasingInFileNames": true,
+    "importsNotUsedAsValues": "error",
     "importHelpers": true,
     "noEmitHelpers": true,
     "lib": [
-      "es2018"
+      "ES2018"
     ],
     "types": [
       "jest"

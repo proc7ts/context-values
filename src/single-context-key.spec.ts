@@ -1,7 +1,7 @@
 import { noop } from '@proc7ts/primitives';
 import { ContextKeyError } from './context-key-error';
 import { ContextRegistry } from './context-registry';
-import { ContextValues } from './context-values';
+import type { ContextValues } from './context-values';
 import { SingleContextKey } from './single-context-key';
 
 describe('SingleContextKey', () => {

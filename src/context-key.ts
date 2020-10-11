@@ -2,10 +2,10 @@
  * @packageDocumentation
  * @module @proc7ts/context-values
  */
-import { ContextRef } from './context-ref';
-import { ContextRegistry } from './context-registry';
-import { ContextSeeder } from './context-seeder';
-import { ContextValues } from './context-values';
+import type { ContextRef } from './context-ref';
+import type { ContextRegistry } from './context-registry';
+import type { ContextSeeder } from './context-seeder';
+import type { ContextValues } from './context-values';
 
 /**
  * A symbol of the property containing a [ContextKey] instance.

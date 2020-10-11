@@ -16,10 +16,10 @@ import {
 } from '@proc7ts/fun-events';
 import { mapIt, overArray, overElementsOf } from '@proc7ts/push-iterator';
 import { ContextKey, ContextKey__symbol, ContextSeedKey, ContextValueSlot } from '../context-key';
-import { ContextRef } from '../context-ref';
-import { ContextSeeder } from '../context-seeder';
-import { ContextValueProvider } from '../context-value-spec';
-import { ContextValues } from '../context-values';
+import type { ContextRef } from '../context-ref';
+import type { ContextSeeder } from '../context-seeder';
+import type { ContextValueProvider } from '../context-value-spec';
+import type { ContextValues } from '../context-values';
 import { ContextSupply } from './context-supply';
 
 /**
