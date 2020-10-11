@@ -29,18 +29,11 @@ export class ContextRegistry<TCtx extends ContextValues = ContextValues> {
    * `ContextValues` instance.
    */
   constructor(initial?: ContextSeeds<TCtx> | ContextValues) {
-
-    let initialSeeds: ContextSeeds<TCtx>;
-
-    if (initial == null) {
-      initialSeeds = noop;
-    } else if (typeof initial === 'function') {
-      initialSeeds = initial;
-    } else {
-      initialSeeds = seedKey => initial.get(seedKey);
-    }
-
-    this._seeds = new ContextSeedRegistry<TCtx>(initialSeeds);
+    this._seeds = new ContextSeedRegistry<TCtx>(
+        initial
+            ? (typeof initial === 'function' ? initial : (seedKey => initial.get(seedKey)))
+            : noop,
+    );
   }
 
   /**
@@ -77,6 +70,15 @@ export class ContextRegistry<TCtx extends ContextValues = ContextValues> {
   }
 
   /**
+   * Builds context seeds provider originated from this registry.
+   *
+   * @returns Mandatory context seeds provider.
+   */
+  seeds(): ContextSeeds.Mandatory<TCtx> {
+    return (seedKey, context) => this.seed(context, seedKey);
+  }
+
+  /**
    * Builds context seeds provider that binds seeds to target `context`.
    *
    * @param context  Target value context.
@@ -99,16 +101,21 @@ export class ContextRegistry<TCtx extends ContextValues = ContextValues> {
   /**
    * Appends values provided by another value registry to the ones provided by this one.
    *
-   * @param other  Another context value registry.
+   * @param other  Another context value registry or context seeds provider.
    *
    * @return New context value registry which values provided by both registries.
    */
-  append(other: ContextRegistry<TCtx>): ContextRegistry<TCtx> {
+  append(other: ContextRegistry<TCtx> | ContextSeeds<TCtx>): ContextRegistry<TCtx> {
+
+    const otherSeeds: ContextSeeds<TCtx> = typeof other === 'function' ? other : other.seeds();
+
     return new ContextRegistry(<TSrc, TSeed>(key: ContextSeedKey<TSrc, TSeed>, context: TCtx) => {
 
+      const second = otherSeeds(key, context);
       const [seeder, factory] = this._seeds.seedData(key);
+      const first = factory(context);
 
-      return seeder.combine(factory(context), other.seed(context, key), context);
+      return second ? seeder.combine(first, second, context) : first;
     });
   }
 

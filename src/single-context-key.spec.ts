@@ -1,3 +1,4 @@
+import { noop } from '@proc7ts/primitives';
 import { ContextKeyError } from './context-key-error';
 import { ContextRegistry } from './context-registry';
 import { ContextValues } from './context-values';
@@ -191,6 +192,16 @@ describe('SingleContextKey', () => {
       registry.provide({ a: key, is: null });
       registry2.provide({ a: key, is: null });
       expect(context.get(key.seedKey)()).toBeUndefined();
+    });
+
+    describe('when the second seed is absent', () => {
+      it('uses the first one', () => {
+        combined = registry.append(noop);
+        registry.provide({ a: key, is: '1' });
+        registry2.provide({ a: key, is: '2' });
+
+        expect(combined.seed(context, key.seedKey)()).toBe('1');
+      });
     });
   });
 });
