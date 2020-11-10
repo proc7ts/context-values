@@ -15,17 +15,18 @@
   "bugs": {
     "url": "https://github.com/proc7ts/context-values/issues"
   },
-  "main": "dist/context-values.js",
-  "module": "dist/context-values.mjs",
+  "type": "module",
+  "main": "dist/context-values.cjs",
+  "module": "dist/context-values.js",
   "types": "index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/context-values.js",
-      "import": "./dist/context-values.mjs"
+      "require": "./dist/context-values.cjs",
+      "import": "./dist/context-values.js"
     },
     "./updatable": {
-      "require": "./dist/context-values.updatable.js",
-      "import": "./dist/context-values.updatable.mjs"
+      "require": "./dist/context-values.updatable.cjs",
+      "import": "./dist/context-values.updatable.js"
     }
   },
   "peerDependencies": {
