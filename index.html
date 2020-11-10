@@ -92,7 +92,7 @@ myContext.get(key)</code></pre>
 
 <span class="hljs-keyword">const</span> key = <span class="hljs-keyword">new</span> SingleContextKey&lt;<span class="hljs-built_in">string</span>&gt;(<span class="hljs-string">&#x27;my-key&#x27;</span>);
 
-myContext.get(key, { or: <span class="hljs-string">&#x27;empty&#x27;</span> });</code></pre>
+myContext.get(key, { <span class="hljs-attr">or</span>: <span class="hljs-string">&#x27;empty&#x27;</span> });</code></pre>
 				<a href="#context-value-request" id="context-value-request" style="color: inherit; text-decoration: none;">
 					<h3>Context Value Request</h3>
 				</a>
@@ -101,7 +101,7 @@ myContext.get(key, { or: <span class="hljs-string">&#x27;empty&#x27;</span> });<
 				<p>This can be handy e.g. when requesting an instance of some known type:</p>
 				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { ContextKey, ContextKey__symbol, SingleContextKey } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@proc7ts/context-values&#x27;</span>;
 
-<span class="hljs-keyword">class</span> MyService {
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyService</span> </span>{
 
   <span class="hljs-comment">// MyService class (not instance) implements a `ContextRequest`</span>
   <span class="hljs-keyword">static</span> <span class="hljs-keyword">readonly</span> [ContextKey__symbol]: ContextKey&lt;MyService&gt; = <span class="hljs-keyword">new</span> SingleContextKey(<span class="hljs-string">&#x27;my-service&#x27;</span>);
@@ -122,8 +122,8 @@ myContext.get(MyService[ContextKey__symbol]); <span class="hljs-comment">// The 
 
 <span class="hljs-keyword">const</span> registry = <span class="hljs-keyword">new</span> ContextRegistry();
 
-registry.provide({ a: key1, is: <span class="hljs-string">&#x27;string&#x27;</span> });
-registry.provide({ a: key2, by: <span class="hljs-function"><span class="hljs-params">ctx</span> =&gt;</span> ctx.get(key1).length })
+registry.provide({ <span class="hljs-attr">a</span>: key1, <span class="hljs-attr">is</span>: <span class="hljs-string">&#x27;string&#x27;</span> });
+registry.provide({ <span class="hljs-attr">a</span>: key2, <span class="hljs-attr">by</span>: <span class="hljs-function"><span class="hljs-params">ctx</span> =&gt;</span> ctx.get(key1).length })
 
 <span class="hljs-keyword">const</span> context = registry.newValues();
 
@@ -137,7 +137,7 @@ context.get(key2); <span class="hljs-comment">// 6</span></code></pre>
 				<p>This can be handy e.g. when providing an instance of some known type:</p>
 				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { ContextKey, ContextKey__symbol, ContextRegistry, SingleContextKey } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@proc7ts/context-values&#x27;</span>;
 
-<span class="hljs-keyword">class</span> MyService {
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyService</span> </span>{
 
   <span class="hljs-comment">// MyService class (not instance) implements a `ContextRequest`</span>
   <span class="hljs-keyword">static</span> <span class="hljs-keyword">readonly</span> [ContextKey__symbol]: ContextKey&lt;MyService&gt; = <span class="hljs-keyword">new</span> SingleContextKey(<span class="hljs-string">&#x27;my-service&#x27;</span>);
@@ -146,7 +146,7 @@ context.get(key2); <span class="hljs-comment">// 6</span></code></pre>
 
 <span class="hljs-keyword">const</span> registry = <span class="hljs-keyword">new</span> ContextRegistry();
 
-registry.provide({ a: MyService, is: <span class="hljs-keyword">new</span> MyService() });
+registry.provide({ <span class="hljs-attr">a</span>: MyService, <span class="hljs-attr">is</span>: <span class="hljs-keyword">new</span> MyService() });
 
 <span class="hljs-keyword">const</span> context = registry.newValues();
 
@@ -187,10 +187,10 @@ context.get(MyService); <span class="hljs-comment">// No need to specify `MyServ
 
 <span class="hljs-keyword">const</span> registry = <span class="hljs-keyword">new</span> ContextRegistry();
 
-registry.provide({ a: key1, is: <span class="hljs-string">&#x27;value1&#x27;</span> });
-registry.provide({ a: key1, is: <span class="hljs-string">&#x27;value2&#x27;</span> });
-registry.provide({ a: key2, is: <span class="hljs-number">1</span> });
-registry.provide({ a: key2, is: <span class="hljs-number">2</span> });
+registry.provide({ <span class="hljs-attr">a</span>: key1, <span class="hljs-attr">is</span>: <span class="hljs-string">&#x27;value1&#x27;</span> });
+registry.provide({ <span class="hljs-attr">a</span>: key1, <span class="hljs-attr">is</span>: <span class="hljs-string">&#x27;value2&#x27;</span> });
+registry.provide({ <span class="hljs-attr">a</span>: key2, <span class="hljs-attr">is</span>: <span class="hljs-number">1</span> });
+registry.provide({ <span class="hljs-attr">a</span>: key2, <span class="hljs-attr">is</span>: <span class="hljs-number">2</span> });
 
 <span class="hljs-keyword">const</span> context = registry.newValues();
 
@@ -205,21 +205,21 @@ context.get(key2); <span class="hljs-comment">// [1, 2] - MultiContextKey return
 				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { ContextRegistry, SingleContextKey, MultiContextKey } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@proc7ts/context-values&#x27;</span>;
 
 <span class="hljs-keyword">const</span> key1 = <span class="hljs-keyword">new</span> SingleContextKey&lt;<span class="hljs-built_in">string</span>&gt;(<span class="hljs-string">&#x27;key1&#x27;</span>);
-<span class="hljs-keyword">const</span> key2 = <span class="hljs-keyword">new</span> SingleContextKey&lt;<span class="hljs-built_in">number</span>&gt;(<span class="hljs-string">&#x27;key2&#x27;</span>, { byDefault: <span class="hljs-function"><span class="hljs-params">ctx</span> =&gt;</span> ctx.get(<span class="hljs-string">&#x27;key1&#x27;</span>).length });
+<span class="hljs-keyword">const</span> key2 = <span class="hljs-keyword">new</span> SingleContextKey&lt;<span class="hljs-built_in">number</span>&gt;(<span class="hljs-string">&#x27;key2&#x27;</span>, { <span class="hljs-attr">byDefault</span>: <span class="hljs-function"><span class="hljs-params">ctx</span> =&gt;</span> ctx.get(<span class="hljs-string">&#x27;key1&#x27;</span>).length });
 <span class="hljs-keyword">const</span> key3 = <span class="hljs-keyword">new</span> MultiContextKey&lt;<span class="hljs-built_in">number</span>&gt;(<span class="hljs-string">&#x27;key3&#x27;</span>);
 
 <span class="hljs-keyword">const</span> registry = <span class="hljs-keyword">new</span> ContextRegistry();
 
-registry.provide({ a: key1, is: <span class="hljs-string">&#x27;value&#x27;</span> });
+registry.provide({ <span class="hljs-attr">a</span>: key1, <span class="hljs-attr">is</span>: <span class="hljs-string">&#x27;value&#x27;</span> });
 
 <span class="hljs-keyword">const</span> context = registry.newValues();
 
 context.get(key1); <span class="hljs-comment">// &#x27;value&#x27;</span>
 context.get(key2); <span class="hljs-comment">// 6 - evaluated, as it is not provided</span>
-context.get(key2, { or: <span class="hljs-literal">null</span> }); <span class="hljs-comment">// null - fallback value always takes precedence</span>
+context.get(key2, { <span class="hljs-attr">or</span>: <span class="hljs-literal">null</span> }); <span class="hljs-comment">// null - fallback value always takes precedence</span>
 context.get(key3); <span class="hljs-comment">// [] - MultiContextKey uses it as a default value, unless explicitly specified</span>
 
-registry.provide({ a: key2, value: <span class="hljs-number">999</span> });
+registry.provide({ <span class="hljs-attr">a</span>: key2, <span class="hljs-attr">value</span>: <span class="hljs-number">999</span> });
 
 context.get(key2); <span class="hljs-comment">// 999 - provided explicitly</span></code></pre>
 				<a href="#custom-context-key" id="custom-context-key" style="color: inherit; text-decoration: none;">
@@ -242,9 +242,9 @@ context.get(key2); <span class="hljs-comment">// 999 - provided explicitly</span
   IterativeContextKey,
 } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@proc7ts/context-values&#x27;</span>;
 
-<span class="hljs-keyword">class</span> ConcatContextKey&lt;Src&gt; <span class="hljs-keyword">extends</span> IterativeContextKey&lt;<span class="hljs-built_in">string</span>, Src&gt; {
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ConcatContextKey</span>&lt;<span class="hljs-title">Src</span>&gt; <span class="hljs-keyword">extends</span> <span class="hljs-title">IterativeContextKey</span>&lt;<span class="hljs-title">string</span>, <span class="hljs-title">Src</span>&gt; </span>{
 
-  <span class="hljs-keyword">constructor</span>(<span class="hljs-params">name: <span class="hljs-built_in">string</span></span>) {
+  <span class="hljs-function"><span class="hljs-title">constructor</span>(<span class="hljs-params">name: <span class="hljs-built_in">string</span></span>)</span> {
     <span class="hljs-built_in">super</span>(name);  
   }
 
@@ -273,15 +273,15 @@ context.get(key2); <span class="hljs-comment">// 999 - provided explicitly</span
 
 <span class="hljs-keyword">const</span> registry = <span class="hljs-keyword">new</span> ContextRegistry();
 
-registry.provide({ a: key1, is: <span class="hljs-number">1</span> });
-registry.provide({ a: key1, is: <span class="hljs-number">2</span> });
-registry.provide({ a: key1, is: <span class="hljs-number">3</span> });
+registry.provide({ <span class="hljs-attr">a</span>: key1, <span class="hljs-attr">is</span>: <span class="hljs-number">1</span> });
+registry.provide({ <span class="hljs-attr">a</span>: key1, <span class="hljs-attr">is</span>: <span class="hljs-number">2</span> });
+registry.provide({ <span class="hljs-attr">a</span>: key1, <span class="hljs-attr">is</span>: <span class="hljs-number">3</span> });
 
 <span class="hljs-keyword">const</span> context = registry.newValues();
 
 context.get(key1); <span class="hljs-comment">// &#x27;1, 2, 3&#x27; - concatenated value</span>
 context.get(key2); <span class="hljs-comment">// &#x27;&#x27; - empty string by default </span>
-context.get(key2, { or: <span class="hljs-literal">undefined</span> }); <span class="hljs-comment">// undefined - fallback value </span></code></pre>
+context.get(key2, { <span class="hljs-attr">or</span>: <span class="hljs-literal">undefined</span> }); <span class="hljs-comment">// undefined - fallback value </span></code></pre>
 				<p>A context value for particular key is constructed at most once. Thus, the <code>grow()</code> method is called at most once per
 				key.</p>
 				<p>A <a href="#context-value-specifier">context value specifier</a> is consulted at most once per key. Only when the <code>grow()</code>
@@ -304,13 +304,13 @@ context.get(key2, { or: <span class="hljs-literal">undefined</span> }); <span cl
 <span class="hljs-keyword">const</span> key = <span class="hljs-keyword">new</span> SingleContextUpKey&lt;<span class="hljs-built_in">string</span>&gt;(<span class="hljs-string">&#x27;updatable-value&#x27;</span>);
 <span class="hljs-keyword">const</span> registry = <span class="hljs-keyword">new</span> ContextRegistry();
 
-registry.provide({ a: key, is: <span class="hljs-string">&#x27;initial&#x27;</span> });
+registry.provide({ <span class="hljs-attr">a</span>: key, <span class="hljs-attr">is</span>: <span class="hljs-string">&#x27;initial&#x27;</span> });
 
 <span class="hljs-keyword">const</span> values = registry.newValues();
 
 values.get(key)(<span class="hljs-function"><span class="hljs-params">value</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(value)); <span class="hljs-comment">// Log: &#x27;initial&#x27;</span>
 
-registry.provide({ a: key, is: <span class="hljs-string">&#x27;updated&#x27;</span> });  <span class="hljs-comment">// Log: &#x27;updated&#x27;</span></code></pre>
+registry.provide({ <span class="hljs-attr">a</span>: key, <span class="hljs-attr">is</span>: <span class="hljs-string">&#x27;updated&#x27;</span> });  <span class="hljs-comment">// Log: &#x27;updated&#x27;</span></code></pre>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
