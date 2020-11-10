@@ -1,6 +1,6 @@
 {
   "name": "@proc7ts/context-values",
-  "version": "4.6.1",
+  "version": "4.7.0",
   "description": "IoC context values provider",
   "keywords": [
     "ioc"
