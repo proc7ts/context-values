@@ -1,4 +1,5 @@
 import { externalModules } from '@proc7ts/rollup-helpers';
+import flatDts from '@proc7ts/rollup-plugin-flat-dts';
 import commonjs from '@rollup/plugin-commonjs';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import path from 'path';
@@ -17,14 +18,13 @@ export default {
       typescript,
       tsconfig: 'tsconfig.main.json',
       cacheRoot: 'target/.rts2_cache',
-      useTsconfigDeclarationDir: true,
     }),
     nodeResolve(),
     sourcemaps(),
   ],
   external: externalModules(),
   manualChunks(id) {
-    if (id.startsWith(path.join(__dirname, 'src', 'updatable') + path.sep)) {
+    if (id.startsWith(path.resolve('src', 'updatable') + path.sep)) {
       return 'context-values.updatable';
     }
     return 'context-values';
@@ -35,16 +35,27 @@ export default {
       sourcemap: true,
       dir: './dist',
       entryFileNames: '[name].cjs',
-      chunkFileNames: `_[name].cjs`,
+      chunkFileNames: '_[name].cjs',
       hoistTransitiveImports: false,
     },
     {
       format: 'esm',
       sourcemap: true,
-      dir: './dist',
-      entryFileNames: '[name].js',
-      chunkFileNames: `_[name].js`,
+      dir: '.',
+      entryFileNames: 'dist/[name].js',
+      chunkFileNames: 'dist/_[name].js',
       hoistTransitiveImports: false,
+      plugins: [
+        flatDts({
+          tsconfig: 'tsconfig.main.json',
+          lib: true,
+          entries: {
+            updatable: {
+              file: 'updatable/index.d.ts',
+            },
+          },
+        }),
+      ],
     },
   ],
 };
