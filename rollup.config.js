@@ -48,7 +48,12 @@ export default {
       plugins: [
         flatDts({
           tsconfig: 'tsconfig.main.json',
-          entries: [{ name: 'updatable', file: 'updatable/index.d.ts' }],
+          lib: true,
+          entries: {
+            updatable: {
+              file: 'updatable/index.d.ts',
+            },
+          },
         }),
       ],
     },
