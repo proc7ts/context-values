@@ -43,7 +43,7 @@
     "@proc7ts/push-iterator": "^2.4.1"
   },
   "devDependencies": {
-    "@run-z/eslint-config": "^1.0.0",
+    "@run-z/eslint-config": "^1.0.1",
     "@proc7ts/fun-events": "^9.4.2",
     "@proc7ts/rollup-helpers": "^1.1.1",
     "@proc7ts/rollup-plugin-flat-dts": "^1.1.2",
