@@ -1,4 +1,5 @@
 import { noop } from '@proc7ts/primitives';
+import type { ContextKey } from './context-key';
 import { ContextKeyError } from './context-key-error';
 import { ContextRegistry } from './context-registry';
 import type { ContextValues } from './context-values';
@@ -73,7 +74,7 @@ describe('SingleContextKey', () => {
   it('provides default value if no value provided', () => {
 
     const defaultValue = 'default';
-    const byDefault = jest.fn(() => defaultValue);
+    const byDefault = jest.fn((_values: ContextValues, _key: ContextKey<string>) => defaultValue);
     const keyWithDefaults = new SingleContextKey(key.name, { byDefault });
 
     registry.provide({ a: keyWithDefaults, is: null });

@@ -1,3 +1,4 @@
+import type { ContextKey } from './context-key';
 import { ContextRegistry } from './context-registry';
 import type { ContextValues } from './context-values';
 import { MultiContextKey } from './multi-context-key';
@@ -37,7 +38,7 @@ describe('MultiContextKey', () => {
   it('provides default value if providers did not return any values', () => {
 
     const defaultValue = ['default'];
-    const byDefault = jest.fn(() => defaultValue);
+    const byDefault = jest.fn((_values: ContextValues, _key: ContextKey<readonly string[], string>) => defaultValue);
     const keyWithDefaults = new MultiContextKey('key', { byDefault });
 
     registry.provide({ a: keyWithDefaults, is: null });

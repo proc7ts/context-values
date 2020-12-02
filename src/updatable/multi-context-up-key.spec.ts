@@ -3,6 +3,7 @@ import { ContextKeyError } from '../context-key-error';
 import { ContextRegistry } from '../context-registry';
 import type { ContextValues } from '../context-values';
 import { ContextSupply } from './context-supply';
+import type { ContextUpKey } from './context-up-key';
 import { MultiContextUpKey } from './multi-context-up-key';
 
 describe('MultiContextUpKey', () => {
@@ -34,7 +35,9 @@ describe('MultiContextUpKey', () => {
   it('provides default value if providers did not return any values', () => {
 
     const defaultValue = ['default'];
-    const byDefault = jest.fn(() => defaultValue);
+    const byDefault = jest.fn(
+        (_values: ContextValues, _key: ContextUpKey<AfterEvent<string[]>, string>) => defaultValue,
+    );
     const keyWithDefaults = new MultiContextUpKey('key', { byDefault });
 
     registry.provide({ a: keyWithDefaults, is: null });

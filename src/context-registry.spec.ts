@@ -1,5 +1,5 @@
 import { valueProvider } from '@proc7ts/primitives';
-import type { ContextKey, ContextValueSetup, ContextValueSlot } from './context-key';
+import type { ContextValueSetup, ContextValueSlot } from './context-key';
 import { ContextKeyError } from './context-key-error';
 import { ContextRegistry } from './context-registry';
 import type { ContextValues } from './context-values';
@@ -132,7 +132,7 @@ describe('ContextRegistry', () => {
 
   describe('key setup', () => {
 
-    let keyWithSetup: ContextKey<string>;
+    let keyWithSetup: SingleContextKey<string>;
     let byDefault: jest.Mock<string | null | undefined, []>;
     let setup: jest.Mock<void, Parameters<ContextValueSetup<string, string, SimpleContextKey.Seed<string>>>>;
 
