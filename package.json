@@ -1,6 +1,6 @@
 {
   "name": "@proc7ts/context-values",
-  "version": "4.7.1",
+  "version": "5.0.0-dev.0",
   "description": "IoC context values provider",
   "keywords": [
     "ioc"
@@ -16,9 +16,9 @@
     "url": "https://github.com/proc7ts/context-values/issues"
   },
   "type": "module",
-  "main": "dist/context-values.cjs",
-  "module": "dist/context-values.js",
-  "types": "index.d.ts",
+  "main": "./dist/context-values.cjs",
+  "module": "./dist/context-values.js",
+  "types": "./index.d.ts",
   "exports": {
     ".": {
       "require": "./dist/context-values.cjs",
@@ -30,7 +30,7 @@
     }
   },
   "peerDependencies": {
-    "@proc7ts/fun-events": "^9.4.2"
+    "@proc7ts/fun-events": "^10.0.0-dev.1"
   },
   "peerDependenciesMeta": {
     "@proc7ts/fun-events": {
@@ -43,7 +43,7 @@
     "@proc7ts/push-iterator": "^2.5.0"
   },
   "devDependencies": {
-    "@proc7ts/fun-events": "^9.4.2",
+    "@proc7ts/fun-events": "^10.0.0-dev.1",
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-node-resolve": "^11.0.0",
     "@run-z/eslint-config": "^1.1.0",

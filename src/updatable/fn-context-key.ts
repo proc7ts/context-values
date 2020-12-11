@@ -2,7 +2,8 @@
  * @packageDocumentation
  * @module @proc7ts/context-values/updatable
  */
-import { AfterEvent, afterThe, EventKeeper, nextAfterEvent } from '@proc7ts/fun-events';
+import { AfterEvent, afterThe, EventKeeper } from '@proc7ts/fun-events';
+import { nextAfterEvent, thruAfter } from '@proc7ts/fun-events/call-thru';
 import { noop } from '@proc7ts/primitives';
 import type { ContextKeyDefault, ContextValueSlot } from '../context-key';
 import { ContextKeyError } from '../context-key-error';
@@ -65,10 +66,13 @@ export class FnContextKey<TArgs extends any[], TRet = void>
       } = {},
   ) {
     super(name, seedKey);
-    this.byDefault = (context, key) => byDefault(context, key) || (() => { throw new ContextKeyError(this); });
+    this.byDefault = (context, key) => byDefault(context, key)
+        || (() => {
+          throw new ContextKeyError(this);
+        });
     this.upKey = this.createUpKey(
         slot => {
-          slot.insert(slot.seed.keepThru(
+          slot.insert(slot.seed.do(thruAfter(
               (...fns) => {
                 if (fns.length) {
                   return fns[fns.length - 1];
@@ -80,7 +84,7 @@ export class FnContextKey<TArgs extends any[], TRet = void>
 
                 return nextAfterEvent(afterThe(this.byDefault(slot.context, this)));
               },
-          ));
+          )));
         },
     );
   }
@@ -97,7 +101,7 @@ export class FnContextKey<TArgs extends any[], TRet = void>
     slot.context.get(
         this.upKey,
         slot.hasFallback ? { or: slot.or != null ? afterThe(slot.or) : slot.or } : undefined,
-    )!.to(
+    )!(
         fn => delegated = fn,
     ).whenOff(
         reason => delegated = contextDestroyed(reason),

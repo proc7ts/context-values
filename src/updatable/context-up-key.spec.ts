@@ -1,5 +1,6 @@
 import { nextArgs } from '@proc7ts/call-thru';
-import { AfterEvent, afterEventBy, EventKeeper, nextAfterEvent } from '@proc7ts/fun-events';
+import { AfterEvent, afterEventBy, EventKeeper } from '@proc7ts/fun-events';
+import { nextAfterEvent, thruAfter } from '@proc7ts/fun-events/call-thru';
 import { noop } from '@proc7ts/primitives';
 import type { ContextValueSlot } from '../context-key';
 import { ContextKeyError } from '../context-key-error';
@@ -21,7 +22,7 @@ describe('ContextUpKey', () => {
 
         grow(slot: ContextValueSlot<AfterEvent<string[]>, EventKeeper<string[]> | string, AfterEvent<string[]>>): void {
 
-          const value = slot.seed.keepThru((...sources: string[]) => {
+          const value = slot.seed.do(thruAfter((...sources: string[]) => {
             if (sources.length) {
               // Sources present. Use them.
               return nextArgs(...sources);
@@ -34,7 +35,7 @@ describe('ContextUpKey', () => {
             return nextAfterEvent(afterEventBy<string[]>(() => {
               throw new ContextKeyError(this);
             }));
-          });
+          }));
 
           slot.insert(value);
         }
@@ -44,7 +45,7 @@ describe('ContextUpKey', () => {
       const key = new TestKey();
       const values = new ContextRegistry().newValues();
 
-      expect(() => values.get(key.upKey).to(noop)).toThrow(ContextKeyError);
+      expect(() => values.get(key.upKey)(noop)).toThrow(ContextKeyError);
     });
   });
 });

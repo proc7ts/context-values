@@ -1,4 +1,5 @@
-import { AfterEvent, afterThe, eventSupply } from '@proc7ts/fun-events';
+import { AfterEvent, afterThe, onceEvent } from '@proc7ts/fun-events';
+import { Supply } from '@proc7ts/primitives';
 import { ContextKeyError } from '../context-key-error';
 import { ContextRegistry } from '../context-registry';
 import type { ContextValues } from '../context-values';
@@ -59,7 +60,7 @@ describe('SingleContextUpKey', () => {
   it('cuts off the value supply after context destruction', () => {
 
     const value = 'test value';
-    const contextSupply = eventSupply();
+    const contextSupply = new Supply();
 
     registry.provide({ a: ContextSupply, is: contextSupply });
     registry.provide({ a: key, is: value });
@@ -67,7 +68,7 @@ describe('SingleContextUpKey', () => {
     const receiver = jest.fn();
     const whenOff = jest.fn();
 
-    values.get(key).to(receiver).whenOff(whenOff);
+    values.get(key)(receiver).whenOff(whenOff);
     expect(receiver).toHaveBeenCalledWith(value);
 
     const reason = new Error('reason');
@@ -135,7 +136,7 @@ describe('SingleContextUpKey', () => {
 
     let received: TValue = undefined!;
 
-    from.once(value => received = value);
+    from.do(onceEvent)(value => received = value);
 
     return received;
   }

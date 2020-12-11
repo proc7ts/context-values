@@ -1,4 +1,4 @@
-import { eventSupply } from '@proc7ts/fun-events';
+import { Supply } from '@proc7ts/primitives';
 import { ContextKeyError } from '../context-key-error';
 import { ContextRegistry } from '../context-registry';
 import type { ContextValues } from '../context-values';
@@ -29,7 +29,7 @@ describe('FnContextKey', () => {
   });
   it('throws when context destroyed', () => {
 
-    const contextSupply = eventSupply();
+    const contextSupply = new Supply();
 
     registry.provide({ a: ContextSupply, is: contextSupply });
     registry.provide({ a: key, is: value => value.length });
@@ -45,7 +45,7 @@ describe('FnContextKey', () => {
   });
   it('throws when context destroyed without reason', () => {
 
-    const contextSupply = eventSupply();
+    const contextSupply = new Supply();
 
     registry.provide({ a: ContextSupply, is: contextSupply });
     registry.provide({ a: key, is: value => value.length });
@@ -77,7 +77,7 @@ describe('FnContextKey', () => {
       let fn!: (arg: string) => number;
       const receiver = jest.fn(f => fn = f);
 
-      values.get(key.upKey).to(receiver);
+      values.get(key.upKey)(receiver);
       expect(receiver).toHaveBeenCalledTimes(1);
       expect(fn('some')).toEqual(4);
 

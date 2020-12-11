@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @proc7ts/context-values/updatable
  */
-import { EventSupply, EventSupply__symbol, EventSupplyPeer } from '@proc7ts/fun-events';
+import type { Supply, SupplyPeer } from '@proc7ts/primitives';
 import type { ContextValueSlot } from '../context-key';
 import type { ContextRef } from '../context-ref';
 import { SimpleContextKey } from '../simple-context-key';
@@ -14,7 +14,7 @@ import { SimpleContextKey } from '../simple-context-key';
  *
  * A context value provider can destroy the value it provides when this supply is cut off.
  */
-export type ContextSupply = EventSupply;
+export type ContextSupply = Supply;
 
 /**
  * @internal
@@ -31,7 +31,7 @@ class ContextSupplyKey extends SimpleContextKey<ContextSupply> {
     slot.insert(
         slot.seed()
         || (slot.hasFallback ? slot.or : null)
-        || (slot.context as Partial<EventSupplyPeer>)[EventSupply__symbol],
+        || (slot.context as Partial<SupplyPeer>).supply,
     );
   }
 

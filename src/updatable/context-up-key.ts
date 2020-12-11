@@ -10,10 +10,11 @@ import {
   afterThe,
   EventKeeper,
   isEventKeeper,
-  nextAfterEvent,
+  letInEvents,
   trackValue,
   ValueTracker,
 } from '@proc7ts/fun-events';
+import { nextAfterEvent, thruAfter } from '@proc7ts/fun-events/call-thru';
 import { mapIt, overArray, overElementsOf } from '@proc7ts/push-iterator';
 import { ContextKey, ContextKey__symbol, ContextSeedKey, ContextValueSlot } from '../context-key';
 import type { ContextRef } from '../context-ref';
@@ -52,12 +53,7 @@ class ContextUpSeeder<TCtx extends ContextValues, TSrc>
   }
 
   combine(first: AfterEvent<TSrc[]>, second: AfterEvent<TSrc[]>): AfterEvent<TSrc[]> {
-    return afterEach(
-        first,
-        second,
-    ).keepThru(
-        flatUpSources,
-    );
+    return afterEach(first, second).do(thruAfter(flatUpSources));
   }
 
 }
@@ -69,7 +65,7 @@ function upSrcKeepers<TCtx extends ContextValues, TSrc>(
     context: TCtx,
     providersTracker: ValueTracker<ContextValueProvider<TCtx, TSrc | EventKeeper<TSrc[]>>[]>,
 ): AfterEvent<TSrc[]> {
-  return providersTracker.read().keepThru(
+  return providersTracker.read.do(thruAfter(
       providers => !providers.length
           ? nextArgs()
           : nextAfterEvent(
@@ -84,7 +80,7 @@ function upSrcKeepers<TCtx extends ContextValues, TSrc>(
               ),
           ),
       flatUpSources,
-  );
+  ));
 }
 
 /**
@@ -160,14 +156,14 @@ class ContextUpKeyUpKey<TValue, TSrc>
     super(_key.name + ':up');
     this.grow = slot => {
 
-      const value = slot.fillBy(grow);
+      const value: AfterEvent<[TValue]> | null | undefined = slot.fillBy(grow);
 
       if (value) {
 
         const supply = slot.context.get(ContextSupply, { or: null });
 
         if (supply) {
-          slot.insert(value.tillOff(supply) as ContextUpKey.Up<TValue>);
+          slot.insert(value.do(letInEvents(supply)) as ContextUpKey.Up<TValue>);
         }
       }
     };
