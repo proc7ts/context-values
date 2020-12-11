@@ -2,8 +2,16 @@
  * @packageDocumentation
  * @module @proc7ts/context-values
  */
-import { isPresent, lazyValue } from '@proc7ts/primitives';
-import { filterIt, itsEmpty, mapIt, overElementsOf, overNone, PushIterable } from '@proc7ts/push-iterator';
+import { lazyValue, Supply } from '@proc7ts/primitives';
+import {
+  itsElements,
+  itsEmpty,
+  overElementsOf,
+  overIterator,
+  overNone,
+  PushIterable,
+  valueIt,
+} from '@proc7ts/push-iterator';
 import { ContextKey, ContextSeedKey } from './context-key';
 import type { ContextSeeder } from './context-seeder';
 import type { ContextValueProvider } from './context-value-spec';
@@ -15,24 +23,21 @@ import type { ContextValues } from './context-values';
 class IterativeContextSeeder<TCtx extends ContextValues, TSrc>
     implements ContextSeeder<TCtx, TSrc, PushIterable<TSrc>> {
 
-  private readonly _providers: ContextValueProvider<TCtx, TSrc>[] = [];
+  private readonly _providers = new Map<Supply, ContextValueProvider<TCtx, TSrc>>();
 
-  provide(provider: ContextValueProvider<TCtx, TSrc>): () => void {
-    this._providers.push(provider);
-    return () => {
+  provide(provider: ContextValueProvider<TCtx, TSrc>): Supply {
 
-      const found = this._providers.indexOf(provider);
+    const supply = new Supply();
 
-      if (found >= 0) {
-        this._providers.splice(found, 1);
-      }
-    };
+    this._providers.set(supply, provider);
+
+    return supply.whenOff(() => this._providers.delete(supply));
   }
 
   seed(context: TCtx, initial: Iterable<TSrc> = overNone()): PushIterable<TSrc> {
     return overElementsOf(
-      initial,
-      iterativeSeed(context, this._providers),
+        initial,
+        iterativeSeed(context, this._providers),
     );
   }
 
@@ -96,14 +101,14 @@ export abstract class IterativeContextKey<TValue, TSrc = TValue> extends Context
  */
 function iterativeSeed<TCtx extends ContextValues, TSrc>(
     context: TCtx,
-    providers: readonly ContextValueProvider<TCtx, TSrc>[],
+    providers: Map<Supply, ContextValueProvider<TCtx, TSrc>>,
 ): PushIterable<TSrc> {
 
   // Lazily evaluated providers
-  const lazyProviders = providers.map(provider => lazyValue(provider.bind(undefined, context)));
-
-  return filterIt<TSrc | null | undefined, TSrc>(
-      mapIt(lazyProviders, provider => provider()),
-      isPresent,
+  const lazyProviders = itsElements(
+      overIterator(() => providers.values()),
+      provider => lazyValue(provider.bind(undefined, context)),
   );
+
+  return valueIt(lazyProviders, provider => provider());
 }

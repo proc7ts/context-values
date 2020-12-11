@@ -15,7 +15,8 @@ import {
   ValueTracker,
 } from '@proc7ts/fun-events';
 import { nextAfterEvent, thruAfter } from '@proc7ts/fun-events/call-thru';
-import { mapIt, overArray, overElementsOf } from '@proc7ts/push-iterator';
+import { Supply } from '@proc7ts/primitives';
+import { mapIt, overElementsOf, overIterator } from '@proc7ts/push-iterator';
 import { ContextKey, ContextKey__symbol, ContextSeedKey, ContextValueSlot } from '../context-key';
 import type { ContextRef } from '../context-ref';
 import type { ContextSeeder } from '../context-seeder';
@@ -29,19 +30,26 @@ import { ContextSupply } from './context-supply';
 class ContextUpSeeder<TCtx extends ContextValues, TSrc>
     implements ContextSeeder<TCtx, TSrc | EventKeeper<TSrc[]>, AfterEvent<TSrc[]>> {
 
-  private readonly _providers: ValueTracker<ContextValueProvider<TCtx, TSrc | EventKeeper<TSrc[]>>[]> = trackValue([]);
+  private readonly _providers = trackValue<[Map<Supply, ContextValueProvider<TCtx, TSrc | EventKeeper<TSrc[]>>>]>(
+      [new Map()],
+  );
 
-  provide(provider: ContextValueProvider<TCtx, TSrc | EventKeeper<TSrc[]>>): () => void {
-    this._providers.it = [...this._providers.it, provider];
-    return () => {
+  provide(provider: ContextValueProvider<TCtx, TSrc | EventKeeper<TSrc[]>>): Supply {
 
-      const providers = this._providers.it;
-      const found = providers.indexOf(provider);
+    const [providers] = this._providers.it;
+    const supply = new Supply();
 
-      if (found >= 0) {
-        this._providers.it = providers.slice(0, found).concat(providers.slice(found + 1));
-      }
-    };
+    providers.set(supply, provider);
+    this._providers.it = [providers];
+
+    return supply.whenOff(() => {
+
+      const [providers] = this._providers.it;
+
+      providers.delete(supply);
+
+      this._providers.it = [providers];
+    });
   }
 
   seed(context: TCtx, initial: AfterEvent<TSrc[]> = afterThe<TSrc[]>()): AfterEvent<TSrc[]> {
@@ -63,16 +71,16 @@ class ContextUpSeeder<TCtx extends ContextValues, TSrc>
  */
 function upSrcKeepers<TCtx extends ContextValues, TSrc>(
     context: TCtx,
-    providersTracker: ValueTracker<ContextValueProvider<TCtx, TSrc | EventKeeper<TSrc[]>>[]>,
+    providersTracker: ValueTracker<[Map<Supply, ContextValueProvider<TCtx, TSrc | EventKeeper<TSrc[]>>>]>,
 ): AfterEvent<TSrc[]> {
   return providersTracker.read.do(thruAfter(
-      providers => !providers.length
+      ([providers]) => !providers.size
           ? nextArgs()
           : nextAfterEvent(
               afterEach(
                   ...mapIt(
                       mapIt(
-                          overArray(providers),
+                          overIterator(() => providers.values()),
                           prov => prov(context),
                       ),
                       toUpSrcKeeper,

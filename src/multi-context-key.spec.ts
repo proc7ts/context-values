@@ -65,7 +65,7 @@ describe('MultiContextKey', () => {
     const value2 = 'value2';
 
     registry.provide({ a: key, is: value1 });
-    registry.provide({ a: key, is: value2 })();
+    registry.provide({ a: key, is: value2 }).off();
 
     expect([...values.get(key)]).toEqual([value1]);
   });
@@ -76,12 +76,11 @@ describe('MultiContextKey', () => {
 
     registry.provide({ a: key, is: value1 });
 
-    const remove = registry.provide({ a: key, is: value2 });
+    const supply = registry.provide({ a: key, is: value2 });
 
     expect([...values.get(key)]).toEqual(['value1', 'value2']);
 
-    remove();
-    remove();
+    supply.off();
     expect([...values.get(key)]).toEqual(['value1', 'value2']);
   });
   it('provides fallback value if there is no value provided', () => {

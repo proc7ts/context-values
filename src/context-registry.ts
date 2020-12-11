@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @proc7ts/context-values
  */
-import { noop } from '@proc7ts/primitives';
+import { noop, Supply } from '@proc7ts/primitives';
 import { ContextKey__symbol, ContextSeedKey } from './context-key';
 import type { ContextSeeds } from './context-seeder';
 import { ContextSeeders } from './context-seeders.impl';
@@ -44,9 +44,9 @@ export class ContextRegistry<TCtx extends ContextValues = ContextValues> {
    * @typeParam TSeed  Value seed type.
    * @param spec  Context value specifier.
    *
-   * @returns A function that removes the given context value specifier when called.
+   * @returns Provider supply instance that removes just added context value provider once cut off.
    */
-  provide<TDeps extends any[], TSrc, TSeed>(spec: ContextValueSpec<TCtx, unknown, TDeps, TSrc, TSeed>): () => void {
+  provide<TDeps extends any[], TSrc, TSeed>(spec: ContextValueSpec<TCtx, unknown, TDeps, TSrc, TSeed>): Supply {
 
     const { a: { [ContextKey__symbol]: { seedKey } }, by } = contextValueSpec(spec);
     const [seeder] = this._seeders.issuer<TSrc, TSeed>(seedKey);
