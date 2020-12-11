@@ -1,4 +1,4 @@
-import { eventSupply, EventSupply__symbol, EventSupplyPeer } from '@proc7ts/fun-events';
+import { Supply, SupplyPeer } from '@proc7ts/primitives';
 import { ContextKeyError } from '../context-key-error';
 import { ContextRegistry } from '../context-registry';
 import type { ContextValues } from '../context-values';
@@ -16,10 +16,10 @@ describe('ContextSupply', () => {
   it('is equal to supply of context when context is a peer', () => {
 
     const values = new ContextRegistry().newValues();
-    const supply = eventSupply();
-    const context: ContextValues & EventSupplyPeer = {
+    const supply = new Supply();
+    const context: ContextValues & SupplyPeer = {
       get: values.get,
-      [EventSupply__symbol]: supply,
+      supply,
     };
 
     expect(context.get(ContextSupply, { or: null })).toBe(supply);
@@ -29,31 +29,31 @@ describe('ContextSupply', () => {
   it('is equal to fallback when context is a peer and no value provided', () => {
 
     const values = new ContextRegistry().newValues();
-    const supply = eventSupply();
-    const context: ContextValues & EventSupplyPeer = {
+    const supply = new Supply();
+    const context: ContextValues & SupplyPeer = {
       get: values.get,
-      [EventSupply__symbol]: supply,
+      supply,
     };
-    const fallback = eventSupply();
+    const fallback = new Supply();
 
     expect(context.get(ContextSupply, { or: fallback })).toBe(fallback);
   });
   it('is equal to provided value when context is a peer', () => {
 
     const registry = new ContextRegistry();
-    const provided = eventSupply();
+    const provided = new Supply();
 
     registry.provide({ a: ContextSupply, is: provided });
 
     const values = registry.newValues();
-    const supply = eventSupply();
-    const context: ContextValues & EventSupplyPeer = {
+    const supply = new Supply();
+    const context: ContextValues & SupplyPeer = {
       get: values.get,
-      [EventSupply__symbol]: supply,
+      supply,
     };
 
     expect(context.get(ContextSupply)).toBe(provided);
-    expect(context.get(ContextSupply, { or: eventSupply() })).toBe(provided);
+    expect(context.get(ContextSupply, { or: new Supply() })).toBe(provided);
     expect(context.get(ContextSupply, { or: null })).toBe(provided);
     expect(context.get(ContextSupply, { or: undefined })).toBe(provided);
   });

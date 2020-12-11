@@ -3,7 +3,8 @@
  * @module @proc7ts/context-values/updatable
  */
 import { nextArg } from '@proc7ts/call-thru';
-import { AfterEvent, afterEventBy, afterThe, EventKeeper, nextAfterEvent } from '@proc7ts/fun-events';
+import { AfterEvent, afterEventBy, afterThe, EventKeeper, letInEvents } from '@proc7ts/fun-events';
+import { nextAfterEvent, thruAfter } from '@proc7ts/fun-events/call-thru';
 import { noop } from '@proc7ts/primitives';
 import type { ContextKeyDefault, ContextValueSlot } from '../context-key';
 import { ContextKeyError } from '../context-key-error';
@@ -67,7 +68,7 @@ export class SingleContextUpKey<TValue>
       slot: ContextValueSlot<AfterEvent<[TValue]>, EventKeeper<TValue[]> | TValue, AfterEvent<TValue[]>>,
   ): void {
 
-    const value = slot.seed.keepThru((...sources: TValue[]) => {
+    const value = slot.seed.do(thruAfter((...sources: TValue[]) => {
       if (sources.length) {
         // Sources present. Take the last one.
         return nextArg(sources[sources.length - 1]);
@@ -92,11 +93,11 @@ export class SingleContextUpKey<TValue>
       return nextAfterEvent(afterEventBy<[TValue]>(() => {
         throw new ContextKeyError(this);
       }));
-    });
+    }));
 
     const supply = slot.context.get(ContextSupply, { or: null });
 
-    slot.insert(supply ? value.tillOff(supply) : value);
+    slot.insert(supply ? value.do<AfterEvent<TValue[]>>(letInEvents(supply)) : value);
   }
 
 }
