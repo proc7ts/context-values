@@ -38,7 +38,6 @@
     }
   },
   "dependencies": {
-    "@proc7ts/call-thru": "^4.3.1",
     "@proc7ts/primitives": "^1.6.0",
     "@proc7ts/push-iterator": "^2.5.0"
   },
