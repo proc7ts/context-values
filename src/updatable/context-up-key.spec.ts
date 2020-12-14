@@ -1,6 +1,4 @@
-import { nextArgs } from '@proc7ts/call-thru';
-import { AfterEvent, afterEventBy, EventKeeper } from '@proc7ts/fun-events';
-import { nextAfterEvent, thruAfter } from '@proc7ts/fun-events/call-thru';
+import { AfterEvent, afterEventBy, afterThe, digAfter, EventKeeper } from '@proc7ts/fun-events';
 import { noop } from '@proc7ts/primitives';
 import type { ContextValueSlot } from '../context-key';
 import { ContextKeyError } from '../context-key-error';
@@ -22,19 +20,19 @@ describe('ContextUpKey', () => {
 
         grow(slot: ContextValueSlot<AfterEvent<string[]>, EventKeeper<string[]> | string, AfterEvent<string[]>>): void {
 
-          const value = slot.seed.do(thruAfter((...sources: string[]) => {
+          const value = slot.seed.do(digAfter((...sources: string[]): AfterEvent<string[]> => {
             if (sources.length) {
               // Sources present. Use them.
-              return nextArgs(...sources);
+              return afterThe(...sources);
             }
             if (slot.hasFallback && slot.or) {
-              return nextAfterEvent(slot.or); // Backup value found.
+              return slot.or; // Backup value found.
             }
 
             // Backup value is absent. Construct an error response.
-            return nextAfterEvent(afterEventBy<string[]>(() => {
+            return afterEventBy<string[]>(() => {
               throw new ContextKeyError(this);
-            }));
+            });
           }));
 
           slot.insert(value);

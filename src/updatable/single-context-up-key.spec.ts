@@ -1,4 +1,4 @@
-import { AfterEvent, afterThe, onceEvent } from '@proc7ts/fun-events';
+import { AfterEvent, afterThe, firstEvent } from '@proc7ts/fun-events';
 import { Supply } from '@proc7ts/primitives';
 import { ContextKeyError } from '../context-key-error';
 import { ContextRegistry } from '../context-registry';
@@ -53,7 +53,7 @@ describe('SingleContextUpKey', () => {
     const value2 = 'value2';
 
     registry.provide({ a: key, is: value1 });
-    registry.provide({ a: key, is: value2 })();
+    registry.provide({ a: key, is: value2 }).off();
 
     expect(readValue(values.get(key))).toBe(value1);
   });
@@ -83,12 +83,11 @@ describe('SingleContextUpKey', () => {
 
     registry.provide({ a: key, is: value1 });
 
-    const remove = registry.provide({ a: key, is: value2 });
+    const supply = registry.provide({ a: key, is: value2 });
 
     expect(readValue(values.get(key))).toBe(value2);
 
-    remove();
-    remove();
+    supply.off();
     expect(readValue(values.get(key))).toBe(value1);
   });
   it('throws if there is neither default nor fallback value', () => {
@@ -136,7 +135,7 @@ describe('SingleContextUpKey', () => {
 
     let received: TValue = undefined!;
 
-    from.do(onceEvent)(value => received = value);
+    from.do(firstEvent)(value => received = value);
 
     return received;
   }

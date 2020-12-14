@@ -2,6 +2,7 @@
  * @packageDocumentation
  * @module @proc7ts/context-values
  */
+import type { Supply } from '@proc7ts/primitives';
 import type { ContextSeedKey } from './context-key';
 import type { ContextValueProvider } from './context-value-spec';
 import type { ContextValues } from './context-values';
@@ -11,7 +12,7 @@ import type { ContextValues } from './context-values';
  *
  * Contains context value providers for particular key.
  *
- * Created by [[ContextSeedKey.seeder]] method.
+ * Created by {@link ContextSeedKey.seeder} method.
  *
  * @typeParam TCtx  Context type.
  * @typeParam TSrc  Source value type.
@@ -24,9 +25,9 @@ export interface ContextSeeder<TCtx extends ContextValues, TSrc, TSeed> {
    *
    * @param provider  Context value provider.
    *
-   * @returns A function that removes the given context value `provider` when called.
+   * @returns Provider supply instance that removes just added context value provider once cut off.
    */
-  provide(provider: ContextValueProvider<TCtx, TSrc>): () => void;
+  provide(provider: ContextValueProvider<TCtx, TSrc>): Supply;
 
   /**
    * Creates context value seed for target `context`.

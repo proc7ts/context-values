@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @proc7ts/context-values
  */
-import { lazyValue, noop } from '@proc7ts/primitives';
+import { lazyValue, noop, Supply } from '@proc7ts/primitives';
 import { ContextKey, ContextSeedKey } from './context-key';
 import type { ContextSeeder } from './context-seeder';
 import type { ContextValueProvider } from './context-value-spec';
@@ -14,18 +14,16 @@ import type { ContextValues } from './context-values';
 class SimpleContextSeeder<TCtx extends ContextValues, TSrc>
     implements ContextSeeder<TCtx, TSrc, SimpleContextKey.Seed<TSrc>> {
 
-  private readonly _providers: ContextValueProvider<TCtx, TSrc>[] = [];
+  private readonly _providers: (readonly [ContextValueProvider<TCtx, TSrc>])[] = [];
 
-  provide(provider: ContextValueProvider<TCtx, TSrc>): () => void {
-    this._providers.unshift(provider);
-    return () => {
+  provide(provider: ContextValueProvider<TCtx, TSrc>): Supply {
 
-      const found = this._providers.lastIndexOf(provider);
+    // Ensure the same provider may be registered multiple times
+    const entry: readonly [ContextValueProvider<TCtx, TSrc>] = [provider];
 
-      if (found >= 0) {
-        this._providers.splice(found, 1);
-      }
-    };
+    this._providers.unshift(entry);
+
+    return new Supply(() => this._providers.splice(this._providers.lastIndexOf(entry), 1));
   }
 
   seed(context: TCtx, initial?: SimpleContextKey.Seed<TSrc>): SimpleContextKey.Seed<TSrc> {
@@ -36,7 +34,9 @@ class SimpleContextSeeder<TCtx extends ContextValues, TSrc>
       return initial || noop;
     }
 
-    const makeSeed = (provider: ContextValueProvider<TCtx, TSrc>): SimpleContextKey.Seed<TSrc> => lazyValue(
+    const makeSeed = (
+        [provider]: readonly [ContextValueProvider<TCtx, TSrc>],
+    ): SimpleContextKey.Seed<TSrc> => lazyValue(
         provider.bind(undefined, context),
     );
 
