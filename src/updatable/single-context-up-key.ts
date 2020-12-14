@@ -2,9 +2,7 @@
  * @packageDocumentation
  * @module @proc7ts/context-values/updatable
  */
-import { nextArg } from '@proc7ts/call-thru';
-import { AfterEvent, afterEventBy, afterThe, EventKeeper, letInEvents } from '@proc7ts/fun-events';
-import { nextAfterEvent, thruAfter } from '@proc7ts/fun-events/call-thru';
+import { AfterEvent, afterEventBy, afterThe, digAfter, EventKeeper, letInEvents } from '@proc7ts/fun-events';
 import { noop } from '@proc7ts/primitives';
 import type { ContextKeyDefault, ContextValueSlot } from '../context-key';
 import { ContextKeyError } from '../context-key-error';
@@ -68,10 +66,10 @@ export class SingleContextUpKey<TValue>
       slot: ContextValueSlot<AfterEvent<[TValue]>, EventKeeper<TValue[]> | TValue, AfterEvent<TValue[]>>,
   ): void {
 
-    const value = slot.seed.do(thruAfter((...sources: TValue[]) => {
+    const value = slot.seed.do(digAfter((...sources: TValue[]): AfterEvent<TValue[]> => {
       if (sources.length) {
         // Sources present. Take the last one.
-        return nextArg(sources[sources.length - 1]);
+        return afterThe(sources[sources.length - 1]);
       }
 
       // Sources absent. Attempt to detect a backup value.
@@ -86,13 +84,13 @@ export class SingleContextUpKey<TValue>
         backup = defaultValue && afterThe(defaultValue);
       }
       if (backup != null) {
-        return nextAfterEvent(backup); // Backup value found.
+        return backup; // Backup value found.
       }
 
       // Backup value is absent. Construct an error response.
-      return nextAfterEvent(afterEventBy<[TValue]>(() => {
+      return afterEventBy<[TValue]>(() => {
         throw new ContextKeyError(this);
-      }));
+      });
     }));
 
     const supply = slot.context.get(ContextSupply, { or: null });

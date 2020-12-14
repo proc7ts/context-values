@@ -2,9 +2,7 @@
  * @packageDocumentation
  * @module @proc7ts/context-values/updatable
  */
-import { nextArgs } from '@proc7ts/call-thru';
-import { AfterEvent, afterEventBy, afterThe, EventKeeper, letInEvents } from '@proc7ts/fun-events';
-import { nextAfterEvent, thruAfter } from '@proc7ts/fun-events/call-thru';
+import { AfterEvent, afterEventBy, afterThe, digAfter, EventKeeper, letInEvents } from '@proc7ts/fun-events';
 import { noop } from '@proc7ts/primitives';
 import type { ContextKeyDefault, ContextValueSlot } from '../context-key';
 import { ContextKeyError } from '../context-key-error';
@@ -68,10 +66,10 @@ export class MultiContextUpKey<TSrc>
       slot: ContextValueSlot<AfterEvent<TSrc[]>, EventKeeper<TSrc[]> | TSrc, AfterEvent<TSrc[]>>,
   ): void {
 
-    const value = slot.seed.do(thruAfter((...sources) => {
+    const value = slot.seed.do(digAfter((...sources: TSrc[]): AfterEvent<TSrc[]> => {
       if (sources.length) {
         // Sources present. Use them.
-        return nextArgs(...sources);
+        return afterThe(...sources);
       }
 
       // Sources absent. Attempt to detect the backup value.
@@ -86,13 +84,13 @@ export class MultiContextUpKey<TSrc>
         backup = defaultValue ? afterThe(...defaultValue) : afterThe();
       }
       if (backup != null) {
-        return nextAfterEvent(backup); // Backup value found.
+        return backup; // Backup value found.
       }
 
       // Backup value is absent. Construct an error response.
-      return nextAfterEvent(afterEventBy<TSrc[]>(() => {
+      return afterEventBy<TSrc[]>(() => {
         throw new ContextKeyError(this);
-      }));
+      });
     }));
 
     const supply = slot.context.get(ContextSupply, { or: null });

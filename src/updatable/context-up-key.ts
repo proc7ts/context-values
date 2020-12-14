@@ -2,27 +2,34 @@
  * @packageDocumentation
  * @module @proc7ts/context-values/updatable
  */
-import { CallChain, nextArgs, NextCall } from '@proc7ts/call-thru';
 import {
   afterEach,
   AfterEvent,
   afterSupplied,
   afterThe,
+  digAfter_,
   EventKeeper,
   isEventKeeper,
   letInEvents,
   trackValue,
+  translateAfter,
   ValueTracker,
 } from '@proc7ts/fun-events';
-import { nextAfterEvent, thruAfter } from '@proc7ts/fun-events/call-thru';
 import { Supply } from '@proc7ts/primitives';
-import { mapIt, overElementsOf, overIterator } from '@proc7ts/push-iterator';
+import { itsElements, mapIt, overElementsOf, overIterator } from '@proc7ts/push-iterator';
 import { ContextKey, ContextKey__symbol, ContextSeedKey, ContextValueSlot } from '../context-key';
 import type { ContextRef } from '../context-ref';
 import type { ContextSeeder } from '../context-seeder';
 import type { ContextValueProvider } from '../context-value-spec';
 import type { ContextValues } from '../context-values';
 import { ContextSupply } from './context-supply';
+
+/**
+ * @internal
+ */
+const flatUpSources: <TSrc>(this: void, input: AfterEvent<TSrc[][]>) => AfterEvent<TSrc[]> = translateAfter(
+    (send, ...sources) => send(...itsElements(overElementsOf(...sources))),
+);
 
 /**
  * @internal
@@ -61,7 +68,7 @@ class ContextUpSeeder<TCtx extends ContextValues, TSrc>
   }
 
   combine(first: AfterEvent<TSrc[]>, second: AfterEvent<TSrc[]>): AfterEvent<TSrc[]> {
-    return afterEach(first, second).do(thruAfter(flatUpSources));
+    return afterEach(first, second).do(flatUpSources);
   }
 
 }
@@ -73,11 +80,11 @@ function upSrcKeepers<TCtx extends ContextValues, TSrc>(
     context: TCtx,
     providersTracker: ValueTracker<[Map<Supply, ContextValueProvider<TCtx, TSrc | EventKeeper<TSrc[]>>>]>,
 ): AfterEvent<TSrc[]> {
-  return providersTracker.read.do(thruAfter(
-      ([providers]) => !providers.size
-          ? nextArgs()
-          : nextAfterEvent(
-              afterEach(
+  return providersTracker.read.do(
+      digAfter_(
+          ([providers]): AfterEvent<TSrc[][]> => !providers.size
+              ? afterThe()
+              : afterEach(
                   ...mapIt(
                       mapIt(
                           overIterator(() => providers.values()),
@@ -86,9 +93,9 @@ function upSrcKeepers<TCtx extends ContextValues, TSrc>(
                       toUpSrcKeeper,
                   ),
               ),
-          ),
+      ),
       flatUpSources,
-  ));
+  );
 }
 
 /**
@@ -103,13 +110,6 @@ function toUpSrcKeeper<TSrc>(src: null | undefined | TSrc | EventKeeper<TSrc[]>)
  */
 function isUpSrcKeeper<TSrc>(src: TSrc | EventKeeper<TSrc[]>): src is EventKeeper<TSrc[]> {
   return (typeof src === 'object' || typeof src === 'function') && isEventKeeper(src as object);
-}
-
-/**
- * @internal
- */
-function flatUpSources<TSrc>(...sources: TSrc[][]): NextCall<CallChain, TSrc[]> {
-  return nextArgs(...overElementsOf(...sources));
 }
 
 /**

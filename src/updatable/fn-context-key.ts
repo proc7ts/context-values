@@ -2,8 +2,7 @@
  * @packageDocumentation
  * @module @proc7ts/context-values/updatable
  */
-import { AfterEvent, afterThe, EventKeeper } from '@proc7ts/fun-events';
-import { nextAfterEvent, thruAfter } from '@proc7ts/fun-events/call-thru';
+import { AfterEvent, afterThe, digAfter, EventKeeper } from '@proc7ts/fun-events';
 import { noop } from '@proc7ts/primitives';
 import type { ContextKeyDefault, ContextValueSlot } from '../context-key';
 import { ContextKeyError } from '../context-key-error';
@@ -72,17 +71,17 @@ export class FnContextKey<TArgs extends any[], TRet = void>
         });
     this.upKey = this.createUpKey(
         slot => {
-          slot.insert(slot.seed.do(thruAfter(
-              (...fns) => {
+          slot.insert(slot.seed.do(digAfter(
+              (...fns): AfterEvent<[(this: void, ...args: TArgs) => TRet]> => {
                 if (fns.length) {
-                  return fns[fns.length - 1];
+                  return afterThe(fns[fns.length - 1]);
                 }
 
                 if (slot.hasFallback && slot.or) {
-                  return nextAfterEvent(slot.or);
+                  return slot.or;
                 }
 
-                return nextAfterEvent(afterThe(this.byDefault(slot.context, this)));
+                return afterThe(this.byDefault(slot.context, this));
               },
           )));
         },
