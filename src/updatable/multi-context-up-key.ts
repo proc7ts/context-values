@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @proc7ts/context-values/updatable
  */
-import { AfterEvent, afterEventBy, afterThe, digAfter, EventKeeper, letInEvents } from '@proc7ts/fun-events';
+import { AfterEvent, afterEventBy, afterThe, digAfter, EventKeeper, supplyAfter } from '@proc7ts/fun-events';
 import { noop } from '@proc7ts/primitives';
 import type { ContextKeyDefault, ContextValueSlot } from '../context-key';
 import { ContextKeyError } from '../context-key-error';
@@ -96,7 +96,7 @@ export class MultiContextUpKey<TSrc>
     const supply = slot.context.get(ContextSupply, { or: null });
 
     slot.insert(supply
-        ? value.do<AfterEvent<TSrc[]>>(letInEvents(supply))
+        ? value.do<AfterEvent<TSrc[]>>(supplyAfter(supply))
         : value);
   }
 

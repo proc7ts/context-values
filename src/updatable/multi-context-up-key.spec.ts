@@ -1,4 +1,4 @@
-import { AfterEvent, afterThe, firstEvent } from '@proc7ts/fun-events';
+import { AfterEvent, afterThe, onceAfter } from '@proc7ts/fun-events';
 import { Supply } from '@proc7ts/primitives';
 import { ContextKeyError } from '../context-key-error';
 import { ContextRegistry } from '../context-registry';
@@ -109,7 +109,7 @@ describe('MultiContextUpKey', () => {
 
     let received: TSrc[] = undefined!;
 
-    from.do(firstEvent)((...value) => received = value);
+    from.do(onceAfter)((...value) => received = value);
 
     return received;
   }

@@ -10,7 +10,7 @@ import {
   digAfter_,
   EventKeeper,
   isEventKeeper,
-  letInEvents,
+  supplyAfter,
   trackValue,
   translateAfter,
   ValueTracker,
@@ -171,7 +171,7 @@ class ContextUpKeyUpKey<TValue, TSrc>
         const supply = slot.context.get(ContextSupply, { or: null });
 
         if (supply) {
-          slot.insert(value.do(letInEvents(supply)) as ContextUpKey.Up<TValue>);
+          slot.insert(value.do(supplyAfter(supply)) as ContextUpKey.Up<TValue>);
         }
       }
     };
