@@ -20,9 +20,9 @@ import { itsElements, mapIt, overElementsOf, overIterator } from '@proc7ts/push-
 import { ContextKey, ContextKey__symbol, ContextSeedKey, ContextValueSlot } from '../context-key';
 import type { ContextRef } from '../context-ref';
 import type { ContextSeeder } from '../context-seeder';
+import { ContextSupply } from '../context-supply';
 import type { ContextValueProvider } from '../context-value-spec';
 import type { ContextValues } from '../context-values';
-import { ContextSupply } from './context-supply';
 
 /**
  * @internal

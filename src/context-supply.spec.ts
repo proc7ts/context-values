@@ -1,8 +1,8 @@
 import { Supply, SupplyPeer } from '@proc7ts/primitives';
-import { ContextKeyError } from '../context-key-error';
-import { ContextRegistry } from '../context-registry';
-import type { ContextValues } from '../context-values';
+import { ContextKeyError } from './context-key-error';
+import { ContextRegistry } from './context-registry';
 import { ContextSupply } from './context-supply';
+import type { ContextValues } from './context-values';
 
 describe('ContextSupply', () => {
   it('is not defined by default', () => {

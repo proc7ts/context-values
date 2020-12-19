@@ -1,11 +1,11 @@
 /**
  * @packageDocumentation
- * @module @proc7ts/context-values/updatable
+ * @module @proc7ts/context-values
  */
 import type { Supply, SupplyPeer } from '@proc7ts/primitives';
-import type { ContextValueSlot } from '../context-key';
-import type { ContextRef } from '../context-ref';
-import { SimpleContextKey } from '../simple-context-key';
+import type { ContextValueSlot } from './context-key';
+import type { ContextRef } from './context-ref';
+import { SimpleContextKey } from './simple-context-key';
 
 /**
  * Context values supply.
@@ -42,6 +42,6 @@ class ContextSupplyKey extends SimpleContextKey<ContextSupply> {
  *
  * It is not guaranteed to present.
  *
- * Predefined to the supply of the context if the latter implements `EventSupplyPeer` interface.
+ * Predefined to the supply of the context if the latter implements `SupplyPeer` interface.
  */
 export const ContextSupply: ContextRef<ContextSupply> = (/*#__PURE__*/ new ContextSupplyKey());
