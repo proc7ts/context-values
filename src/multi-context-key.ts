@@ -13,7 +13,7 @@ import { IterativeContextKey } from './iterative-context-key';
  *
  * Represents context value as read-only array of source values.
  *
- * @typeParam TSrc  TValue source type and context value item type.
+ * @typeParam TSrc - TValue source type and context value item type.
  */
 export type MultiContextRef<TSrc> = ContextRef<readonly TSrc[], TSrc>;
 
@@ -24,7 +24,7 @@ export type MultiContextRef<TSrc> = ContextRef<readonly TSrc[], TSrc>;
  *
  * Associated with empty array by default.
  *
- * @typeParam TSrc  TValue source type and context value item type.
+ * @typeParam TSrc - TValue source type and context value item type.
  */
 export class MultiContextKey<TSrc>
     extends IterativeContextKey<readonly TSrc[], TSrc>

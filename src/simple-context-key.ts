@@ -109,8 +109,8 @@ class SimpleSeedKey<TSrc> extends ContextSeedKey<TSrc, SimpleContextKey.Seed<TSr
  *
  * A context value associated with this key is never changes once constructed.
  *
- * @typeParam TValue  Context value type.
- * @typeParam TSrc  Source value type.
+ * @typeParam TValue - Context value type.
+ * @typeParam TSrc - Source value type.
  */
 export abstract class SimpleContextKey<TValue, TSrc = TValue>
     extends ContextKey<TValue, TSrc, SimpleContextKey.Seed<TSrc>> {
@@ -142,7 +142,7 @@ export namespace SimpleContextKey {
   /**
    * A seed of {@link SimpleContextKey simple context key}.
    *
-   * @typeParam TSrc  Source vale type.
+   * @typeParam TSrc - Source vale type.
    */
   export type Seed<TSrc> =
   /**

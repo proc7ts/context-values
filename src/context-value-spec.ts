@@ -12,8 +12,8 @@ import type { ContextValues } from './context-values';
  * It is responsible for constructing the values associated with particular key for the given context. Note that
  * provider generates source value, not the context values themselves.
  *
- * @typeParam TCtx  Context type.
- * @typeParam TSrc  Source value type.
+ * @typeParam TCtx - Context type.
+ * @typeParam TSrc - Source value type.
  */
 export type ContextValueProvider<TCtx extends ContextValues, TSrc> =
 /**
@@ -26,11 +26,11 @@ export type ContextValueProvider<TCtx extends ContextValues, TSrc> =
 /**
  * Context value specifier.
  *
- * @typeParam TCtx  Context type.
- * @typeParam TValue  Context value type.
- * @typeParam TDeps  Dependencies tuple type.
- * @typeParam TSrc  Source value type.
- * @typeParam TSeed  Value seed type.
+ * @typeParam TCtx - Context type.
+ * @typeParam TValue - Context value type.
+ * @typeParam TDeps - Dependencies tuple type.
+ * @typeParam TSrc - Source value type.
+ * @typeParam TSeed - Value seed type.
  */
 export type ContextValueSpec<
     TCtx extends ContextValues,
@@ -52,8 +52,8 @@ export namespace ContextValueSpec {
   /**
    * A specifier defining a context value is constant.
    *
-   * @typeParam TSrc  Source value type.
-   * @typeParam TSeed  Value seed type.
+   * @typeParam TSrc - Source value type.
+   * @typeParam TSeed - Value seed type.
    */
   export interface IsConstant<TSrc, TSeed = unknown> {
 
@@ -72,8 +72,8 @@ export namespace ContextValueSpec {
   /**
    * A specifier defining a context value via another one (alias).
    *
-   * @typeParam TSrc  Source value type.
-   * @typeParam TSeed  Value seed type.
+   * @typeParam TSrc - Source value type.
+   * @typeParam TSeed - Value seed type.
    */
   export interface ViaAlias<TSrc, TSeed = unknown> {
 
@@ -92,9 +92,9 @@ export namespace ContextValueSpec {
   /**
    * A specifier of context value defined by provider function.
    *
-   * @typeParam TCtx  Context type.
-   * @typeParam TSrc  Source value type.
-   * @typeParam TSeed  Value seed type.
+   * @typeParam TCtx - Context type.
+   * @typeParam TSrc - Source value type.
+   * @typeParam TSeed - Value seed type.
    */
   export interface ByProvider<TCtx extends ContextValues, TSrc, TSeed = unknown> {
 
@@ -113,9 +113,9 @@ export namespace ContextValueSpec {
   /**
    * A specifier of context value defined by provider function depending on other context values.
    *
-   * @typeParam TDeps  Dependencies tuple type.
-   * @typeParam TSrc  Source value type.
-   * @typeParam TSeed  Value seed type.
+   * @typeParam TDeps - Dependencies tuple type.
+   * @typeParam TSrc - Source value type.
+   * @typeParam TSeed - Value seed type.
    */
   export interface ByProviderWithDeps<TDeps extends any[], TSrc, TSeed = unknown> {
 
@@ -139,9 +139,9 @@ export namespace ContextValueSpec {
   /**
    * A specifier of context value defined as instance of some class.
    *
-   * @typeParam TCtx  Context type.
-   * @typeParam TSrc  Source value type.
-   * @typeParam TSeed  Value seed type.
+   * @typeParam TCtx - Context type.
+   * @typeParam TSrc - Source value type.
+   * @typeParam TSeed - Value seed type.
    */
   export interface AsInstance<TCtx extends ContextValues, TSrc, TSeed = unknown> {
 
@@ -160,9 +160,9 @@ export namespace ContextValueSpec {
   /**
    * A specifier of context value defined as instance of the same class as value.
    *
-   * @typeParam TCtx  Context type.
-   * @typeParam TSrc  Source value type.
-   * @typeParam TSeed  Value seed type.
+   * @typeParam TCtx - Context type.
+   * @typeParam TSrc - Source value type.
+   * @typeParam TSeed - Value seed type.
    */
   export interface SelfInstance<TCtx extends ContextValues, TSrc, TSeed = unknown> {
 
@@ -176,9 +176,9 @@ export namespace ContextValueSpec {
   /**
    * A specifier of context value defined as instance of some class with constructor depending on other context values.
    *
-   * @typeParam TDeps  Dependencies tuple type.
-   * @typeParam TSrc  Source value type.
-   * @typeParam TSeed  Value seed type.
+   * @typeParam TDeps - Dependencies tuple type.
+   * @typeParam TSrc - Source value type.
+   * @typeParam TSeed - Value seed type.
    */
   export interface AsInstanceWithDeps<TDeps extends any[], TSrc, TSeed = unknown> {
 
@@ -203,9 +203,9 @@ export namespace ContextValueSpec {
    * A specifier of context value defined as instance of the same class as value with constructor depending on other
    * context values.
    *
-   * @typeParam TDeps  Dependencies tuple type.
-   * @typeParam TSrc  Source value type.
-   * @typeParam TSeed  Value seed type.
+   * @typeParam TDeps - Dependencies tuple type.
+   * @typeParam TSrc - Source value type.
+   * @typeParam TSeed - Value seed type.
    */
   export interface SelfInstanceWithDeps<TDeps extends any[], TSrc, TSeed = unknown> {
 
@@ -226,7 +226,7 @@ export namespace ContextValueSpec {
    *
    * This is a tuple of context value requests, each of which corresponds to dependency.
    *
-   * @typeParam TDeps  Dependencies tuple type.
+   * @typeParam TDeps - Dependencies tuple type.
    */
   export type DepsRequests<TDeps extends any[]> = {
     [K in keyof TDeps]: ContextRequest<TDeps[K]>;
@@ -237,10 +237,10 @@ export namespace ContextValueSpec {
 /**
  * Constructs a specifier of context value defined by provider out of arbitrary one.
  *
- * @typeParam TCtx  Context type.
- * @typeParam TValue  Context value type.
- * @typeParam TDeps  Dependencies tuple type.
- * @typeParam TSrc  Source value type.
+ * @typeParam TCtx - Context type.
+ * @typeParam TValue - Context value type.
+ * @typeParam TDeps - Dependencies tuple type.
+ * @typeParam TSrc - Source value type.
  * @param spec - Context value specifier to convert.
  *
  * @returns A specifier of context value defined by provider function.

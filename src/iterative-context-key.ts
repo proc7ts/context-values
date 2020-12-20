@@ -69,8 +69,8 @@ class IterativeSeedKey<TSrc> extends ContextSeedKey<TSrc, PushIterable<TSrc>> {
  *
  * A context value associated with this key is never changes once constructed.
  *
- * @typeParam TValue  Context value type.
- * @typeParam TSrc  Source value type.
+ * @typeParam TValue - Context value type.
+ * @typeParam TSrc - Source value type.
  */
 export abstract class IterativeContextKey<TValue, TSrc = TValue> extends ContextKey<TValue, TSrc, Iterable<TSrc>> {
 

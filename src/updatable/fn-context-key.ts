@@ -13,8 +13,8 @@ import { ContextUpKey, ContextUpRef } from './context-up-key';
 /**
  * A reference to updatable context function value.
  *
- * @typeParam TArgs  Function arguments tuple type.
- * @typeParam TRet  Function return value type.
+ * @typeParam TArgs - Function arguments tuple type.
+ * @typeParam TRet - Function return value type.
  */
 export type FnContextRef<TArgs extends any[], TRet = void> =
     ContextUpRef<(this: void, ...args: TArgs) => TRet, (this: void, ...args: TArgs) => TRet>;
@@ -26,13 +26,13 @@ export type FnContextRef<TArgs extends any[], TRet = void> =
  * may be updated.
  *
  * The value is always present. But if the function to delegate is not provided, and no default/fallback function
- * provided, an attempt to call the delegate would throw an [[ContextKeyError]].
+ * provided, an attempt to call the delegate would throw an {@link ContextKeyError}.
  *
  * It is an error to provide a `null` or `undefined` {@link ContextRequest.Opts.or fallback value} when requesting
  * an associated value. Use an `afterThe()` result as a fallback instead.
  *
- * @typeParam TArgs  Function arguments tuple type.
- * @typeParam TRet  Function return value type.
+ * @typeParam TArgs - Function arguments tuple type.
+ * @typeParam TRet - Function return value type.
  */
 export class FnContextKey<TArgs extends any[], TRet = void>
     extends ContextUpKey<(this: void, ...args: TArgs) => TRet, (this: void, ...args: TArgs) => TRet>

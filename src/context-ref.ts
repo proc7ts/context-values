@@ -7,12 +7,12 @@ import { ContextKey, ContextKey__symbol } from './context-key';
 /**
  * A request for context value.
  *
- * This is passed to [[ContextValues.get]] methods in order to obtain a context value.
+ * This is passed to {@link ContextValues.get} methods in order to obtain a context value.
  *
  * This is typically a context value key. But may also be any object with `key` property containing such key.
  *
- * @typeParam TValue  A type of requested context value.
- * @typeParam TSeed  Requested value seed type.
+ * @typeParam TValue - A type of requested context value.
+ * @typeParam TSeed - Requested value seed type.
  */
 export interface ContextRequest<TValue, TSeed = unknown> {
 
@@ -28,9 +28,9 @@ export namespace ContextRequest {
   /**
    * Context request options.
    *
-   * This can be passed to [[ContextValues.get]] method as a second parameter.
+   * This can be passed to {@link ContextValues.get} method as a second parameter.
    *
-   * @typeParam TValue  A type of requested context value.
+   * @typeParam TValue - A type of requested context value.
    */
   export interface Opts<TValue> {
 
@@ -64,8 +64,8 @@ export namespace ContextRequest {
  *
  * Designates a declared declaring context value.
  *
- * @typeParam TSrc  A type of declared context value sources.
- * @typeParam TSeed  Declared value seed type.
+ * @typeParam TSrc - A type of declared context value sources.
+ * @typeParam TSeed - Declared value seed type.
  */
 export interface ContextTarget<TSrc, TSeed = unknown> extends ContextRequest<unknown, TSeed> {
 
@@ -77,10 +77,10 @@ export interface ContextTarget<TSrc, TSeed = unknown> extends ContextRequest<unk
 }
 
 /**
- * Context value reference that can serve both as [[ContextRequest]] and as [[ContextTarget]].
+ * Context value reference that can serve both as {@link ContextRequest} and as {@link ContextTarget}.
  *
- * @typeParam TValue  Context value type.
- * @typeParam TSrc  Source value type.
+ * @typeParam TValue - Context value type.
+ * @typeParam TSrc - Source value type.
  */
 export interface ContextRef<TValue, TSrc = TValue>
     extends ContextRequest<TValue>, ContextTarget<TSrc> {

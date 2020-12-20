@@ -13,7 +13,7 @@ import { newContextValues } from './context-values.impl';
 /**
  * A registry of context value providers.
  *
- * @typeParam TCtx  Context type.
+ * @typeParam TCtx - Context type.
  */
 export class ContextRegistry<TCtx extends ContextValues = ContextValues> {
 
@@ -39,9 +39,9 @@ export class ContextRegistry<TCtx extends ContextValues = ContextValues> {
   /**
    * Provides context value.
    *
-   * @typeParam TDeps  Dependencies tuple type.
-   * @typeParam TSrc  Source value type.
-   * @typeParam TSeed  Value seed type.
+   * @typeParam TDeps - Dependencies tuple type.
+   * @typeParam TSrc - Source value type.
+   * @typeParam TSeed - Value seed type.
    * @param spec - Context value specifier.
    *
    * @returns Provider supply instance that removes just added context value provider once cut off.

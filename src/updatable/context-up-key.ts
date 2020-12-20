@@ -132,8 +132,8 @@ class ContextSeedUpKey<TSrc>
 /**
  * Updatable context value reference.
  *
- * @typeParam TValue  Context value type.
- * @typeParam TSrc  Source value type.
+ * @typeParam TValue - Context value type.
+ * @typeParam TSrc - Source value type.
  */
 export interface ContextUpRef<TValue, TSrc> extends ContextRef<TValue, TSrc | EventKeeper<TSrc[]>> {
 
@@ -186,8 +186,8 @@ class ContextUpKeyUpKey<TValue, TSrc>
  *
  * Collects value sources into `AfterEvent` keeper of source values.
  *
- * @typeParam TValue  Context value type.
- * @typeParam TSrc  Source value type.
+ * @typeParam TValue - Context value type.
+ * @typeParam TSrc - Source value type.
  */
 export abstract class ContextUpKey<TValue, TSrc>
     extends ContextKey<TValue, TSrc | EventKeeper<TSrc[]>, AfterEvent<TSrc[]>>
@@ -200,7 +200,7 @@ export abstract class ContextUpKey<TValue, TSrc>
    *
    * It is expected to report any updates to this key's value.
    *
-   * The value of updates key is constructed by [[grow]] function out of the same seed.
+   * The value of updates key is constructed by {@link grow} function out of the same seed.
    */
   abstract readonly upKey: ContextUpKey.UpKey<TValue, TSrc>;
 
@@ -247,7 +247,7 @@ export namespace ContextUpKey {
    * It is the same as a type of original value if the value itself is an event keeper, or an `AfterEvent` keeper
    * of original value otherwise.
    *
-   * @typeParam TValue  Original context value type.
+   * @typeParam TValue - Original context value type.
    */
   export type Up<TValue> = TValue extends AfterEvent<any>
       ? TValue
@@ -258,15 +258,15 @@ export namespace ContextUpKey {
   /**
    * A key of context value containing an {@link ContextUpKey.Up updates keeper} of this key value.
    *
-   * @typeParam TValue  Context value type.
-   * @typeParam TSrc  Source value type.
+   * @typeParam TValue - Context value type.
+   * @typeParam TSrc - Source value type.
    */
   export type UpKey<TValue, TSrc> = ContextKey<ContextUpKey.Up<TValue>, TSrc>;
 
   /**
    * Updatable context value seed key.
    *
-   * @typeParam TSrc  Source value type.
+   * @typeParam TSrc - Source value type.
    */
   export interface SeedKey<TSrc> extends ContextSeedKey<TSrc | EventKeeper<TSrc[]>, AfterEvent<TSrc[]>> {
 

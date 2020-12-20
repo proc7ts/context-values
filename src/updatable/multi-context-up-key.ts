@@ -12,7 +12,7 @@ import { ContextUpKey, ContextUpRef } from './context-up-key';
 /**
  * Multiple updatable context values reference.
  *
- * @typeParam TSrc  Source value type.
+ * @typeParam TSrc - Source value type.
  */
 export type MultiContextUpRef<TSrc> = ContextUpRef<AfterEvent<TSrc[]>, TSrc>;
 
@@ -25,7 +25,7 @@ export type MultiContextUpRef<TSrc> = ContextUpRef<AfterEvent<TSrc[]>, TSrc>;
  * It is an error to provide a `null` or `undefined` {@link ContextRequest.Opts.or fallback value} when requesting
  * an associated value. Use an `afterThe()` result as a fallback instead.
  *
- * @typeParam TSrc  Source value type.
+ * @typeParam TSrc - Source value type.
  */
 export class MultiContextUpKey<TSrc>
     extends ContextUpKey<AfterEvent<TSrc[]>, TSrc>

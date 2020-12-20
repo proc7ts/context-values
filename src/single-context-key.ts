@@ -10,7 +10,7 @@ import { SimpleContextKey } from './simple-context-key';
 /**
  * Single context value reference.
  *
- * @typeParam TValue  Context value type.
+ * @typeParam TValue - Context value type.
  */
 export type SingleContextRef<TValue> = ContextRef<TValue, TValue>;
 
@@ -19,7 +19,7 @@ export type SingleContextRef<TValue> = ContextRef<TValue, TValue>;
  *
  * Treats the last source value as context one and ignores the rest of them.
  *
- * @typeParam TValue  Context value type.
+ * @typeParam TValue - Context value type.
  */
 export class SingleContextKey<TValue>
     extends SimpleContextKey<TValue>

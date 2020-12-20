@@ -14,9 +14,9 @@ import type { ContextValues } from './context-values';
  *
  * Created by {@link ContextSeedKey.seeder} method.
  *
- * @typeParam TCtx  Context type.
- * @typeParam TSrc  Source value type.
- * @typeParam TSeed  Context value seed type.
+ * @typeParam TCtx - Context type.
+ * @typeParam TSrc - Source value type.
+ * @typeParam TSeed - Context value seed type.
  */
 export interface ContextSeeder<TCtx extends ContextValues, TSrc, TSeed> {
 
@@ -64,12 +64,12 @@ export interface ContextSeeder<TCtx extends ContextValues, TSrc, TSeed> {
 /**
  * Context seeds provider.
  *
- * @typeParam TCtx  Context type.
+ * @typeParam TCtx - Context type.
  */
 export type ContextSeeds<TCtx extends ContextValues> =
 /**
- * @typeParam TSrc  Source value type.
- * @typeParam TSeed  Value seed type.
+ * @typeParam TSrc - Source value type.
+ * @typeParam TSeed - Value seed type.
  *
  * @param key - Context value seed key.
  * @param context - Target context.
@@ -86,12 +86,12 @@ export namespace ContextSeeds {
    *
    * Does not necessarily provide a seed for the key.
    *
-   * @typeParam TCtx  Context type.
+   * @typeParam TCtx - Context type.
    */
   export type Mandatory<TCtx> =
   /**
-   * @typeParam TSrc  Source value type.
-   * @typeParam TSeed  Value seed type.
+   * @typeParam TSrc - Source value type.
+   * @typeParam TSeed - Value seed type.
    *
    * @param key - Context value seed key.
    * @param context - Target context.
@@ -107,8 +107,8 @@ export namespace ContextSeeds {
    */
   export type Headless =
   /**
-   * @typeParam TSrc  Source value type.
-   * @typeParam TSeed  Value seed type.
+   * @typeParam TSrc - Source value type.
+   * @typeParam TSeed - Value seed type.
    *
    * @param key - Context value seed key.
    * @param context - Target context.

@@ -12,7 +12,7 @@ import { ContextUpKey, ContextUpRef } from './context-up-key';
 /**
  * Single updatable context value reference.
  *
- * @typeParam TValue  Context value type.
+ * @typeParam TValue - Context value type.
  */
 export type SingleContextUpRef<TValue> = ContextUpRef<AfterEvent<[TValue]>, TValue>;
 
@@ -20,12 +20,12 @@ export type SingleContextUpRef<TValue> = ContextUpRef<AfterEvent<[TValue]>, TVal
  * Single updatable context value key.
  *
  * The associated value is an `AfterEvent` keeper of the last source value. It is always present,
- * but signals an [[ContextKeyError]] error on attempt to receive an absent value.
+ * but signals an {@link ContextKeyError} error on attempt to receive an absent value.
  *
  * It is an error to provide a `null` or `undefined` {@link ContextRequest.Opts.or fallback value} when requesting
  * an associated value. Use an `afterThe()` result as a fallback instead.
  *
- * @typeParam TValue  Context value type.
+ * @typeParam TValue - Context value type.
  */
 export class SingleContextUpKey<TValue>
     extends ContextUpKey<AfterEvent<[TValue]>, TValue>

@@ -14,7 +14,7 @@ export abstract class ContextValues {
   /**
    * Returns a value associated with the given key.
    *
-   * @typeParam TValue  A type of associated value.
+   * @typeParam TValue - A type of associated value.
    * @param request - Context value request with target key.
    * @param opts - Context value request options.
    *
@@ -25,7 +25,7 @@ export abstract class ContextValues {
   /**
    * Returns a value associated with the given key.
    *
-   * @typeParam TValue  A type of associated value.
+   * @typeParam TValue - A type of associated value.
    * @param request - Context value request with target key.
    * @param opts - Context value request options.
    *
@@ -36,7 +36,7 @@ export abstract class ContextValues {
   /**
    * Returns a value associated with the given key.
    *
-   * @typeParam TValue  A type of associated value.
+   * @typeParam TValue - A type of associated value.
    * @param request - Context value request with target key.
    * @param opts - Context value request options.
    *
