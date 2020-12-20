@@ -23,7 +23,7 @@ export interface ContextSeeder<TCtx extends ContextValues, TSrc, TSeed> {
   /**
    * Provides context value.
    *
-   * @param provider  Context value provider.
+   * @param provider - Context value provider.
    *
    * @returns Provider supply instance that removes just added context value provider once cut off.
    */
@@ -32,8 +32,8 @@ export interface ContextSeeder<TCtx extends ContextValues, TSrc, TSeed> {
   /**
    * Creates context value seed for target `context`.
    *
-   * @param context  Target context.
-   * @param initial  Initial seed the constructed one should derive values from.
+   * @param context - Target context.
+   * @param initial - Initial seed the constructed one should derive values from.
    *
    * @returns New context value seed.
    */
@@ -42,7 +42,7 @@ export interface ContextSeeder<TCtx extends ContextValues, TSrc, TSeed> {
   /**
    * Checks whether the given context value `seed` is empty.
    *
-   * @param seed  Context value seed to check.
+   * @param seed - Context value seed to check.
    *
    * @returns `true` is the given seed does not contain any source values, or `false` otherwise.
    */
@@ -51,9 +51,9 @@ export interface ContextSeeder<TCtx extends ContextValues, TSrc, TSeed> {
   /**
    * Combines two seeds into one in target `context`.
    *
-   * @param first  First seed to combine.
-   * @param second  Second seed to combine.
-   * @param context  Target context.
+   * @param first - First seed to combine.
+   * @param second - Second seed to combine.
+   * @param context - Target context.
    *
    * @returns Context value seed combining value sources from both seeds.
    */
@@ -71,8 +71,8 @@ export type ContextSeeds<TCtx extends ContextValues> =
  * @typeParam TSrc  Source value type.
  * @typeParam TSeed  Value seed type.
  *
- * @param key  Context value seed key.
- * @param context  Target context.
+ * @param key - Context value seed key.
+ * @param context - Target context.
  *
  * @returns Context value seed associated with the given `key` provided for target `context`, or `undefined` if there
  * is no such seed.
@@ -93,8 +93,8 @@ export namespace ContextSeeds {
    * @typeParam TSrc  Source value type.
    * @typeParam TSeed  Value seed type.
    *
-   * @param key  Context value seed key.
-   * @param context  Target context.
+   * @param key - Context value seed key.
+   * @param context - Target context.
    *
    * @returns Context value seed associated with the given `key` provided for target `context`.
    */
@@ -110,8 +110,8 @@ export namespace ContextSeeds {
    * @typeParam TSrc  Source value type.
    * @typeParam TSeed  Value seed type.
    *
-   * @param key  Context value seed key.
-   * @param context  Target context.
+   * @param key - Context value seed key.
+   * @param context - Target context.
    *
    * @returns Context value seed associated with the given `key` provided for target `context`.
    */

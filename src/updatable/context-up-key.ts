@@ -207,8 +207,8 @@ export abstract class ContextUpKey<TValue, TSrc>
   /**
    * Constructs simple context value key.
    *
-   * @param name  Human-readable key name.
-   * @param seedKey  Value seed key. A new one will be constructed when omitted.
+   * @param name - Human-readable key name.
+   * @param seedKey - Value seed key. A new one will be constructed when omitted.
    */
   constructor(
       name: string,
@@ -225,7 +225,7 @@ export abstract class ContextUpKey<TValue, TSrc>
   /**
    * A key of context value containing an {@link ContextUpKey.Up updates keeper} of the value of this key.
    *
-   * @param grow  A function that grows an updates keeper of context value out of its seed.
+   * @param grow - A function that grows an updates keeper of context value out of its seed.
    *
    * @returns New updates keeper key.
    */

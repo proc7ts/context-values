@@ -43,7 +43,7 @@ export abstract class ContextKey<TValue, TSrc = TValue, TSeed = unknown> impleme
   /**
    * Constructs context value key.
    *
-   * @param name  Human-readable key name.
+   * @param name - Human-readable key name.
    */
   protected constructor(name: string) {
     this.name = name;
@@ -61,7 +61,7 @@ export abstract class ContextKey<TValue, TSrc = TValue, TSeed = unknown> impleme
   /**
    * Grows context value out of its seed.
    *
-   * @param slot  Context value slot to insert the value to.
+   * @param slot - Context value slot to insert the value to.
    */
   abstract grow(slot: ContextValueSlot<TValue, TSrc, TSeed>): void;
 
@@ -138,14 +138,14 @@ export namespace ContextValueSlot {
      *
      * Supersedes a previously inserted value.
      *
-     * @param value  A value to associate with the key, or `null`/`undefined` to not associate any value.
+     * @param value - A value to associate with the key, or `null`/`undefined` to not associate any value.
      */
     insert(value: TValue | null | undefined): void;
 
     /**
      * Fills this slot by the given function.
      *
-     * @param grow  A function accepting a value slot as its only parameter.
+     * @param grow - A function accepting a value slot as its only parameter.
      *
      * @returns A value associated with target key by the given function, or `null`/`undefined` when no value
      * associated.
@@ -157,7 +157,7 @@ export namespace ContextValueSlot {
      *
      * Setup will be issued at most once per context. Setup won't be issued if no value {@link insert inserted}.
      *
-     * @param setup  Context value setup procedure.
+     * @param setup - Context value setup procedure.
      */
     setup(setup: ContextValueSetup<TValue, TSrc, TSeed>): void;
 
@@ -218,9 +218,9 @@ export namespace ContextValueSlot {
  */
 export type ContextValueSetup<TValue, TSrc, TSeed> =
 /**
- * @param key  A key the value associated with.
- * @param context  Target context the value associated with.
- * @param registry  A registry of context value providers. This context is shared among all contexts
+ * @param key - A key the value associated with.
+ * @param context - Target context the value associated with.
+ * @param registry - A registry of context value providers. This context is shared among all contexts
  * {@link ContextRegistry.newValues created} by it.
  */
     (
@@ -247,8 +247,8 @@ export type ContextValueSetup<TValue, TSrc, TSeed> =
  */
 export type ContextKeyDefault<TValue, TKey extends ContextKey<unknown, unknown>> =
 /**
- * @param context  Target context.
- * @param key  Context value key the default value is provided for.
+ * @param context - Target context.
+ * @param key - Context value key the default value is provided for.
  *
  * @return Either constructed value, or `null`/`undefined` if unknown.
  */
@@ -265,7 +265,7 @@ export abstract class ContextSeedKey<TSrc, TSeed> extends ContextKey<TSeed, TSrc
   /**
    * Constructs context value sources key.
    *
-   * @param key  A key of context value having its sources associated with this key.
+   * @param key - A key of context value having its sources associated with this key.
    */
   constructor(key: ContextKey<unknown, TSrc>) {
     super(`${key.name}:seed`);

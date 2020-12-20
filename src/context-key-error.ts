@@ -17,8 +17,8 @@ export class ContextKeyError extends Error {
   /**
    * Constructs an invalid context key error.
    *
-   * @param key  Missing value key.
-   * @param message  Arbitrary error message.
+   * @param key - Missing value key.
+   * @param message - Arbitrary error message.
    */
   constructor(key: ContextKey<any, any, any>, message = `There is no value with key ${key}`) {
     super(message);

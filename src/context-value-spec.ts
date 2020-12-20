@@ -17,7 +17,7 @@ import type { ContextValues } from './context-values';
  */
 export type ContextValueProvider<TCtx extends ContextValues, TSrc> =
 /**
- * @param context  Target context.
+ * @param context - Target context.
  *
  * @return Either constructed value source, or `null`/`undefined` if unknown.
  */
@@ -241,7 +241,7 @@ export namespace ContextValueSpec {
  * @typeParam TValue  Context value type.
  * @typeParam TDeps  Dependencies tuple type.
  * @typeParam TSrc  Source value type.
- * @param spec  Context value specifier to convert.
+ * @param spec - Context value specifier to convert.
  *
  * @returns A specifier of context value defined by provider function.
  *

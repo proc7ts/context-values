@@ -7,7 +7,7 @@
  *
  * This may be handy when {@link ContextSupply context supply} is cut off.
  *
- * @param reason  Context destruction reason.
+ * @param reason - Context destruction reason.
  */
 export function contextDestroyed(reason?: any): () => never {
   return () => {

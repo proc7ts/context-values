@@ -38,9 +38,9 @@ export class MultiContextKey<TSrc>
   /**
    * Constructs multiple context values key.
    *
-   * @param name  Human-readable key name.
-   * @param seedKey  Value seed key. A new one will be constructed when omitted.
-   * @param byDefault  Optional default value provider. If unspecified then the default value is empty array.
+   * @param name - Human-readable key name.
+   * @param seedKey - Value seed key. A new one will be constructed when omitted.
+   * @param byDefault - Optional default value provider. If unspecified then the default value is empty array.
    */
   constructor(
       name: string,

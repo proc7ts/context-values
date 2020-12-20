@@ -120,8 +120,8 @@ export abstract class SimpleContextKey<TValue, TSrc = TValue>
   /**
    * Constructs simple context value key.
    *
-   * @param name  Human-readable key name.
-   * @param seedKey  Value seed key. A new one will be constructed when omitted.
+   * @param name - Human-readable key name.
+   * @param seedKey - Value seed key. A new one will be constructed when omitted.
    */
   constructor(
       name: string,

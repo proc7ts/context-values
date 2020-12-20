@@ -43,9 +43,9 @@ export class MultiContextUpKey<TSrc>
   /**
    * Constructs multiple updatable context value key.
    *
-   * @param name  Human-readable key name.
-   * @param seedKey  Value seed key. A new one will be constructed when omitted.
-   * @param byDefault  Optional default value provider. If unspecified or `undefined` the key has no default
+   * @param name - Human-readable key name.
+   * @param seedKey - Value seed key. A new one will be constructed when omitted.
+   * @param byDefault - Optional default value provider. If unspecified or `undefined` the key has no default
    * value.
    */
   constructor(

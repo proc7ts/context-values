@@ -49,9 +49,9 @@ export class FnContextKey<TArgs extends any[], TRet = void>
   /**
    * Constructs updatable context function key.
    *
-   * @param name  Human-readable key name.
-   * @param seedKey  Value seed key. A new one will be constructed when omitted.
-   * @param byDefault  Constructs a default function to call. If unspecified then the default function would raise
+   * @param name - Human-readable key name.
+   * @param seedKey - Value seed key. A new one will be constructed when omitted.
+   * @param byDefault - Constructs a default function to call. If unspecified then the default function would raise
    * an error.
    */
   constructor(

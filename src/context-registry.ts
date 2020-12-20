@@ -25,7 +25,7 @@ export class ContextRegistry<TCtx extends ContextValues = ContextValues> {
    *
    * It can be chained with another registry by providing an initially known source of known context values.
    *
-   * @param initial  An optional source of initially known context values. This can be either a function, or
+   * @param initial - An optional source of initially known context values. This can be either a function, or
    * `ContextValues` instance.
    */
   constructor(initial?: ContextSeeds<TCtx> | ContextValues) {
@@ -42,7 +42,7 @@ export class ContextRegistry<TCtx extends ContextValues = ContextValues> {
    * @typeParam TDeps  Dependencies tuple type.
    * @typeParam TSrc  Source value type.
    * @typeParam TSeed  Value seed type.
-   * @param spec  Context value specifier.
+   * @param spec - Context value specifier.
    *
    * @returns Provider supply instance that removes just added context value provider once cut off.
    */
@@ -57,8 +57,8 @@ export class ContextRegistry<TCtx extends ContextValues = ContextValues> {
   /**
    * Creates a seed for the given key in target context.
    *
-   * @param context  Target context.
-   * @param key  Context value seed key.
+   * @param context - Target context.
+   * @param key - Context value seed key.
    *
    * @returns New context value seed.
    */
@@ -81,7 +81,7 @@ export class ContextRegistry<TCtx extends ContextValues = ContextValues> {
   /**
    * Builds context seeds provider that binds seeds to target `context`.
    *
-   * @param context  Target value context.
+   * @param context - Target value context.
    *
    * @returns A provider of context value seeds bound to the given `context`.
    */
@@ -101,7 +101,7 @@ export class ContextRegistry<TCtx extends ContextValues = ContextValues> {
   /**
    * Appends values provided by another value registry to the ones provided by this one.
    *
-   * @param other  Another context value registry or context seeds provider.
+   * @param other - Another context value registry or context seeds provider.
    *
    * @return New context value registry which values provided by both registries.
    */
