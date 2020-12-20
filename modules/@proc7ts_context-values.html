@@ -103,6 +103,7 @@
 							<h3>Type aliases</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"><a href="@proc7ts_context-values.html#ContextKeyDefault" class="tsd-kind-icon">Context<wbr>Key<wbr>Default</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="@proc7ts_context-values.html#ContextSupply" class="tsd-kind-icon">Context<wbr>Supply</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"><a href="@proc7ts_context-values.html#ContextValueProvider" class="tsd-kind-icon">Context<wbr>Value<wbr>Provider</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"><a href="@proc7ts_context-values.html#ContextValueSetup" class="tsd-kind-icon">Context<wbr>Value<wbr>Setup</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"><a href="@proc7ts_context-values.html#MultiContextRef" class="tsd-kind-icon">Multi<wbr>Context<wbr>Ref</a></li>
@@ -113,6 +114,7 @@
 							<h3>Variables</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="@proc7ts_context-values.html#ContextKey__symbol" class="tsd-kind-icon">Context<wbr>Key__symbol</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="@proc7ts_context-values.html#ContextSupply-1" class="tsd-kind-icon">Context<wbr>Supply</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -132,7 +134,7 @@
 					<div class="tsd-signature tsd-kind-icon">Context<wbr>Key<wbr>Default&lt;TValue, TKey&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, context<span class="tsd-signature-symbol">: </span><a href="../classes/@proc7ts_context-values.ContextValues.html" class="tsd-signature-type">ContextValues</a>, key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TKey</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/47296db/src/context-key.ts#L248">proc7ts/context-values/src/context-key.ts:248</a></li>
+							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/cbde5a1/src/context-key.ts#L248">proc7ts/context-values/src/context-key.ts:248</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -206,13 +208,30 @@
 						</ul>
 					</div>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="ContextSupply" class="tsd-anchor"></a>
+					<h3>Context<wbr>Supply</h3>
+					<div class="tsd-signature tsd-kind-icon">Context<wbr>Supply<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Supply</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/cbde5a1/src/context-supply.ts#L17">proc7ts/context-values/src/context-supply.ts:17</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Context values supply.</p>
+						</div>
+						<p>When available as context value, it is used to indicate the context is no longer used (e.g. destroyed).</p>
+						<p>A context value provider can destroy the value it provides when this supply is cut off.</p>
+					</div>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 					<a name="ContextValueProvider" class="tsd-anchor"></a>
 					<h3>Context<wbr>Value<wbr>Provider</h3>
 					<div class="tsd-signature tsd-kind-icon">Context<wbr>Value<wbr>Provider&lt;TCtx, TSrc&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TCtx</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/47296db/src/context-value-spec.ts#L18">proc7ts/context-values/src/context-value-spec.ts:18</a></li>
+							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/cbde5a1/src/context-value-spec.ts#L18">proc7ts/context-values/src/context-value-spec.ts:18</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -280,7 +299,7 @@
 					<div class="tsd-signature tsd-kind-icon">Context<wbr>Value<wbr>Setup&lt;TValue, TSrc, TSeed&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, __namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>context<span class="tsd-signature-symbol">: </span><a href="../classes/@proc7ts_context-values.ContextValues.html" class="tsd-signature-type">ContextValues</a><span class="tsd-signature-symbol">; </span>key<span class="tsd-signature-symbol">: </span><a href="../classes/@proc7ts_context-values.ContextKey.html" class="tsd-signature-type">ContextKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TSeed</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>registry<span class="tsd-signature-symbol">: </span><a href="../classes/@proc7ts_context-values.ContextRegistry.html" class="tsd-signature-type">ContextRegistry</a><span class="tsd-signature-symbol">&lt;</span><a href="../classes/@proc7ts_context-values.ContextValues.html" class="tsd-signature-type">ContextValues</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/47296db/src/context-key.ts#L219">proc7ts/context-values/src/context-key.ts:219</a></li>
+							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/cbde5a1/src/context-key.ts#L219">proc7ts/context-values/src/context-key.ts:219</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -356,7 +375,7 @@
 					<div class="tsd-signature tsd-kind-icon">Multi<wbr>Context<wbr>Ref&lt;TSrc&gt;<span class="tsd-signature-symbol">:</span> <a href="../interfaces/@proc7ts_context-values.ContextRef.html" class="tsd-signature-type">ContextRef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">readonly </span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/47296db/src/multi-context-key.ts#L18">proc7ts/context-values/src/multi-context-key.ts:18</a></li>
+							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/cbde5a1/src/multi-context-key.ts#L18">proc7ts/context-values/src/multi-context-key.ts:18</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -383,7 +402,7 @@
 					<div class="tsd-signature tsd-kind-icon">Single<wbr>Context<wbr>Ref&lt;TValue&gt;<span class="tsd-signature-symbol">:</span> <a href="../interfaces/@proc7ts_context-values.ContextRef.html" class="tsd-signature-type">ContextRef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/47296db/src/single-context-key.ts#L15">proc7ts/context-values/src/single-context-key.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/cbde5a1/src/single-context-key.ts#L15">proc7ts/context-values/src/single-context-key.ts:15</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -412,13 +431,30 @@
 					<div class="tsd-signature tsd-kind-icon">Context<wbr>Key__symbol<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">unique symbol</span><span class="tsd-signature-symbol"> = (/*#__PURE__*/ Symbol(&#x27;context-key&#x27;))</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/47296db/src/context-key.ts#L13">proc7ts/context-values/src/context-key.ts:13</a></li>
+							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/cbde5a1/src/context-key.ts#L13">proc7ts/context-values/src/context-key.ts:13</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>A symbol of the property containing a [ContextKey] instance.</p>
 						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
+					<a name="ContextSupply-1" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> Context<wbr>Supply</h3>
+					<div class="tsd-signature tsd-kind-icon">Context<wbr>Supply<span class="tsd-signature-symbol">:</span> <a href="../interfaces/@proc7ts_context-values.ContextRef.html" class="tsd-signature-type">ContextRef</a><span class="tsd-signature-symbol">&lt;</span><a href="@proc7ts_context-values.html#ContextSupply" class="tsd-signature-type">ContextSupply</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = (/*#__PURE__*/ new ContextSupplyKey())</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/cbde5a1/src/context-supply.ts#L47">proc7ts/context-values/src/context-supply.ts:47</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A key of context value containing a <a href="@proc7ts_context-values.html#ContextSupply">context values supply</a>.</p>
+						</div>
+						<p>It is not guaranteed to present.</p>
+						<p>Predefined to the supply of the context if the latter implements <code>SupplyPeer</code> interface.</p>
 					</div>
 				</section>
 			</section>
@@ -434,7 +470,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/47296db/src/context-value-spec.ts#L250">proc7ts/context-values/src/context-value-spec.ts:250</a></li>
+									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/cbde5a1/src/context-value-spec.ts#L250">proc7ts/context-values/src/context-value-spec.ts:250</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -548,6 +584,9 @@
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="@proc7ts_context-values.html#ContextKeyDefault" class="tsd-kind-icon">Context<wbr>Key<wbr>Default</a>
 					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="@proc7ts_context-values.html#ContextSupply" class="tsd-kind-icon">Context<wbr>Supply</a>
+					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="@proc7ts_context-values.html#ContextValueProvider" class="tsd-kind-icon">Context<wbr>Value<wbr>Provider</a>
 					</li>
@@ -562,6 +601,9 @@
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-module">
 						<a href="@proc7ts_context-values.html#ContextKey__symbol" class="tsd-kind-icon">Context<wbr>Key__symbol</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
+						<a href="@proc7ts_context-values.html#ContextSupply-1" class="tsd-kind-icon">Context<wbr>Supply</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="@proc7ts_context-values.html#contextValueSpec" class="tsd-kind-icon">context<wbr>Value<wbr>Spec</a>
