@@ -12,7 +12,7 @@ import { ContextValues } from './context-values';
  */
 export function newContextValues<TCtx extends ContextValues>(
     registry: ContextRegistry<TCtx>,
-    seedRegistry: ContextSeeders<TCtx>,
+    seeders: ContextSeeders<TCtx>,
 ): ContextValues {
 
   const values = new Map<ContextKey<any>, any>();
@@ -31,7 +31,7 @@ export function newContextValues<TCtx extends ContextValues>(
         return cached;
       }
 
-      const [constructed, setup] = new ContextValueSlot$(seedRegistry, this, key, opts)._grow();
+      const [constructed, setup] = new ContextValueSlot$(seeders, this, key, opts)._grow();
 
       if (setup) {
         values.set(key, constructed);
@@ -63,21 +63,21 @@ class ContextValueSlot$<TCtx extends ContextValues, TValue, TSrc, TSeed>
   private _setup: ContextValueSetup<TValue, TSrc, TSeed> = noop;
 
   constructor(
-      registry: ContextSeeders<TCtx>,
+      seeders: ContextSeeders<TCtx>,
       readonly context: TCtx,
       readonly key: ContextKey<TValue, TSrc, TSeed>,
       private readonly _opts: ContextRequest.Opts<TValue> = {},
   ) {
 
-    const [seeder, seed] = registry.newSeed<TSrc, TSeed>(context, key);
+    const [seeder, seed] = seeders.newSeed<TSrc, TSeed>(context, key);
 
     this.seeder = seeder;
     this.seed = seed;
-    this.hasFallback = 'or' in _opts;
+    this.hasFallback = 'or' in _opts; // Fallback _may_ have `undefined` value.
   }
 
   get or(): TValue | null | undefined {
-    return this._opts.or;
+    return this._opts.or; // Access here, as fallback value accessor may be implemented as getter.
   }
 
   insert(value: TValue | null | undefined): void {
