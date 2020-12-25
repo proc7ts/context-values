@@ -4,7 +4,7 @@
  */
 import { AfterEvent, afterThe, digAfter, EventKeeper } from '@proc7ts/fun-events';
 import { noop } from '@proc7ts/primitives';
-import type { ContextKeyDefault, ContextValueSlot } from '../context-key';
+import type { ContextKey, ContextKeyDefault, ContextValueSlot } from '../context-key';
 import { ContextKeyError } from '../context-key-error';
 import type { ContextValues } from '../context-values';
 import { contextDestroyed } from './context-destroyed';
@@ -44,7 +44,7 @@ export class FnContextKey<TArgs extends any[], TRet = void>
   readonly byDefault: (this: void, context: ContextValues, key: FnContextKey<TArgs, TRet>) =>
       (this: void, ...args: TArgs) => TRet;
 
-  readonly upKey: ContextUpKey.UpKey<(this: void, ...args: TArgs) => TRet, (this: void, ...args: TArgs) => TRet>;
+  readonly upKey: ContextKey<AfterEvent<[(this: void, ...args: TArgs) => TRet]>, (this: void, ...args: TArgs) => TRet>;
 
   /**
    * Constructs updatable context function key.
