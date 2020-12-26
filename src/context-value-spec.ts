@@ -3,6 +3,7 @@
  * @module @proc7ts/context-values
  */
 import { valueProvider } from '@proc7ts/primitives';
+import type { ContextBuilder } from './context-builder';
 import type { ContextRequest, ContextTarget } from './context-ref';
 import type { ContextValues } from './context-values';
 
@@ -24,13 +25,9 @@ export type ContextValueProvider<TCtx extends ContextValues, TSrc> =
     (this: void, context: TCtx) => TSrc | null | undefined;
 
 /**
- * A key of {@link ContextValueSpec.Ref context value specifier reference} property containing target context value
- * specifier.
- */
-export const ContextValueSpec__symbol = (/*#__PURE__*/ Symbol('context-value-spec'));
-
-/**
  * Context value specifier.
+ *
+ * Either explicit one, or a {@link ContextBuilder context builder}.
  *
  * @typeParam TCtx - Context type.
  * @typeParam TValue - Context value type.
@@ -45,7 +42,7 @@ export type ContextValueSpec<
     TSrc = TValue,
     TSeed = unknown> =
     | ContextValueSpec.Explicit<TCtx, TValue, TDeps, TSrc, TSeed>
-    | ContextValueSpec.Ref<TCtx, TValue, TDeps, TSrc, TSeed>;
+    | ContextBuilder<TCtx>;
 
 export namespace ContextValueSpec {
 
@@ -72,29 +69,6 @@ export namespace ContextValueSpec {
       | ContextValueSpec.SelfInstance<TCtx, TSrc, TSeed>
       | ContextValueSpec.AsInstanceWithDeps<TDeps, TSrc, TSeed>
       | ContextValueSpec.SelfInstanceWithDeps<TDeps, TSrc, TSeed>;
-
-  /**
-   * A reference to context value specifier.
-   *
-   * @typeParam TCtx - Context type.
-   * @typeParam TValue - Context value type.
-   * @typeParam TDeps - Dependencies tuple type.
-   * @typeParam TSrc - Source value type.
-   * @typeParam TSeed - Value seed type.
-   */
-  export interface Ref<
-      TCtx extends ContextValues,
-      TValue,
-      TDeps extends any[] = unknown[],
-      TSrc = TValue,
-      TSeed = unknown> {
-
-    /**
-     * Referred context value specifier.
-     */
-    readonly [ContextValueSpec__symbol]: Explicit<TCtx, TValue, TDeps, TSrc, TSeed>;
-
-  }
 
   /**
    * A specifier defining a context value is constant.
@@ -288,19 +262,15 @@ export namespace ContextValueSpec {
  * @typeParam TValue - Context value type.
  * @typeParam TDeps - Dependencies tuple type.
  * @typeParam TSrc - Source value type.
- * @param spec - Context value specifier to convert.
+ * @param spec - Explicit context value specifier to convert.
  *
  * @returns A specifier of context value defined by provider function.
  *
  * @throws TypeError  On malformed context value specifier.
  */
 export function contextValueSpec<TCtx extends ContextValues, TValue, TDeps extends any[], TSrc, TSeed>(
-    spec: ContextValueSpec<TCtx, TValue, TDeps, TSrc, TSeed>,
+    spec: ContextValueSpec.Explicit<TCtx, TValue, TDeps, TSrc, TSeed>,
 ): ContextValueSpec.ByProvider<TCtx, TSrc, TSeed> {
-  if (isValueSpecRef(spec)) {
-    spec = spec[ContextValueSpec__symbol];
-  }
-
   if (isValueSpecByProvider(spec)) {
     if (!isValueSpecWithDeps<TCtx, TDeps, TSrc, TSeed>(spec)) {
       return spec;
@@ -362,20 +332,6 @@ export function contextValueSpec<TCtx extends ContextValues, TValue, TDeps exten
   }
 
   throw new TypeError(`Malformed context value specifier: ${JSON.stringify(spec)}`);
-}
-
-/**
- * @internal
- */
-function isValueSpecRef<
-    TCtx extends ContextValues,
-    TValue,
-    TDeps extends any[],
-    TSrc,
-    TSeed>(
-        spec: ContextValueSpec<TCtx, TValue, TDeps, TSrc, TSeed>,
-    ): spec is ContextValueSpec.Ref<TCtx, TValue, TDeps, TSrc, TSeed> {
-  return !!(spec as Partial<ContextValueSpec.Ref<TCtx, TValue, TDeps, TSrc, TSeed>>)[ContextValueSpec__symbol];
 }
 
 /**

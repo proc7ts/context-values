@@ -19,7 +19,7 @@ export interface ContextModuleOptions {
    *
    * @defaultValue The module itself.
    */
-  readonly aliases?: ContextModule;
+  readonly aliasOf?: ContextModule;
 
   /**
    * A module or modules the constructed one requires.
@@ -47,6 +47,6 @@ export interface ContextModuleOptions {
    * @returns Either nothing to set up the module synchronously, or a promise-like instance resolved when the module
    * is set up asynchronously.
    */
-  setup?(setup: ContextModuleSetup): void | PromiseLike<void>;
+  setup?(setup: ContextModuleSetup): void | PromiseLike<unknown>;
 
 }

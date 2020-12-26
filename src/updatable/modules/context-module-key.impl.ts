@@ -59,7 +59,7 @@ function createContextModuleHandle(
 
   const loader = trackValue<ContextModuleLoader>({
     status: {
-      module: module.aliases,
+      module: module.aliasOf,
       ready: false,
     },
     supply: neverSupply(),
@@ -171,7 +171,7 @@ function loadContextModule(
   const supply = new Supply().needs(tracker);
   const loader: ContextModuleLoader = {
     status: {
-      module: module.aliases,
+      module: module.aliasOf,
       ready: false,
     },
     supply,
@@ -185,7 +185,7 @@ function loadContextModule(
     } else {
       tracker.it = {
         status: {
-          module: module.aliases,
+          module: module.aliasOf,
           ready,
         },
         supply,

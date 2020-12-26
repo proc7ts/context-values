@@ -1,6 +1,6 @@
 import { ContextKey, ContextKey__symbol } from './context-key';
 import type { ContextRequest } from './context-ref';
-import { contextValueSpec, ContextValueSpec, ContextValueSpec__symbol } from './context-value-spec';
+import { contextValueSpec, ContextValueSpec } from './context-value-spec';
 import type { ContextValues } from './context-values';
 import { SingleContextKey } from './single-context-key';
 import Mock = jest.Mock;
@@ -25,15 +25,6 @@ describe('contextValueSpec', () => {
     };
 
     expect(contextValueSpec(spec)).toBe(spec);
-  });
-  it('exposes reference', () => {
-
-    const spec: ContextValueSpec.ByProvider<ContextValues, string> = {
-      a: new SingleContextKey<string>('value'),
-      by: () => 'foo',
-    };
-
-    expect(contextValueSpec({ [ContextValueSpec__symbol]: spec })).toBe(spec);
   });
   it('converts constant to provider', () => {
 
@@ -233,7 +224,7 @@ describe('contextValueSpec', () => {
   });
   it('throws on unsupported spec', () => {
 
-    const spec: ContextValueSpec<ContextValues, string> = {} as any;
+    const spec: ContextValueSpec.Explicit<ContextValues, string> = {} as any;
 
     expect(() => contextValueSpec(spec)).toThrow(TypeError);
   });

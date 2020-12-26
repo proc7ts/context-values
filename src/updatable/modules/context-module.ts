@@ -2,11 +2,11 @@
  * @packageDocumentation
  * @module @proc7ts/fun-events/updatable
  */
-import { asis, isUndefined, noop, setOfElements, valueProvider } from '@proc7ts/primitives';
-import { mapIt, valueIt } from '@proc7ts/push-iterator';
+import { asis, isUndefined, noop, setOfElements, Supply, valueProvider } from '@proc7ts/primitives';
+import { itsElements, mapIt, valueIt } from '@proc7ts/push-iterator';
+import { ContextBuilder, ContextBuilder__symbol } from '../../context-builder';
 import { ContextKey__symbol } from '../../context-key';
-import type { ContextValueSpec } from '../../context-value-spec';
-import { ContextValueSpec__symbol } from '../../context-value-spec';
+import type { ContextRegistry } from '../../context-registry';
 import type { ContextUpKey, ContextUpRef } from '../context-up-key';
 import type { ContextModuleHandle } from './context-module-handle';
 import { ContextModuleKey } from './context-module-key.impl';
@@ -17,6 +17,11 @@ import type { ContextModuleSetup } from './context-module-setup';
  * @internal
  */
 const ContextModule_setup__symbol = (/*#__PURE__*/ Symbol('ContextModule.setup'));
+
+/**
+ * @internal
+ */
+const ContextModule_replace__symbol = (/*#__PURE__*/ Symbol('ContextModule.replace'));
 
 /**
  * Context module.
@@ -49,7 +54,7 @@ const ContextModule_setup__symbol = (/*#__PURE__*/ Symbol('ContextModule.setup')
  * myModuleSupply.off();
  * ```
  */
-export class ContextModule implements ContextUpRef<ContextModuleHandle, ContextModule> {
+export class ContextModule implements ContextUpRef<ContextModuleHandle, ContextModule>, ContextBuilder {
 
   /**
    * A key of context module.
@@ -64,9 +69,9 @@ export class ContextModule implements ContextUpRef<ContextModuleHandle, ContextM
   /**
    * The module this one is an alias of.
    *
-   * Assigned by {@link ContextModuleOptions.aliases} option.
+   * Assigned by {@link ContextModuleOptions.aliasOf} option.
    */
-  readonly aliases: ContextModule;
+  readonly aliasOf: ContextModule;
 
   /**
    * The modules this one requires.
@@ -87,7 +92,15 @@ export class ContextModule implements ContextUpRef<ContextModuleHandle, ContextM
   /**
    * @internal
    */
-  private readonly [ContextModule_setup__symbol]: (this: void, setup: ContextModuleSetup) => void | PromiseLike<void>;
+  private readonly [ContextModule_setup__symbol]: (
+      this: void,
+      setup: ContextModuleSetup,
+  ) => void | PromiseLike<unknown>;
+
+  private readonly [ContextModule_replace__symbol]: readonly (readonly [
+    replaced: ContextModule,
+    replacement: ContextModule,
+  ])[];
 
   /**
    * Constructs context module.
@@ -99,22 +112,46 @@ export class ContextModule implements ContextUpRef<ContextModuleHandle, ContextM
     this[ContextKey__symbol] = new ContextModuleKey(`${name}:module`, this);
     this.name = name;
 
-    const { aliases, needs, has, setup } = options;
+    const { aliasOf, needs, has, setup } = options;
 
-    this.aliases = aliases ? aliases.aliases : this;
+    this.aliasOf = aliasOf ? aliasOf.aliasOf : this;
     this.needs = setOfElements(needs);
-    this.has = setOfElements(has).add(this);
+
+    const replaced = setOfElements(has);
+
     this[ContextModule_setup__symbol] = setup ? setup.bind(options) : noop;
+    this[ContextModule_replace__symbol] = itsElements(valueIt(replaced, replaced => {
+      if (replaced === this) {
+        return;
+      }
+
+      return [
+        replaced,
+        new ContextModule(
+            `${replaced.name}->${this.name}`,
+            {
+              aliasOf: this,
+              setup: setup => setup.get(this).whenReady,
+            },
+        ),
+      ];
+    }));
+
+    this.has = replaced.add(this);
   }
 
   /**
-   * Context value specifier that provides this module instance.
+   * Provides this module and {@link has module replacements}.
    */
-  get [ContextValueSpec__symbol](): ContextValueSpec.IsConstant<this> {
-    return {
-      a: this,
-      is: this,
-    };
+  [ContextBuilder__symbol](registry: ContextRegistry): Supply {
+
+    const supply = registry.provide({ a: this, is: this });
+
+    for (const [replaced, replacement] of this[ContextModule_replace__symbol]) {
+      registry.provide({ a: replaced, is: replacement }).needs(supply);
+    }
+
+    return supply;
   }
 
   /**
@@ -124,15 +161,13 @@ export class ContextModule implements ContextUpRef<ContextModuleHandle, ContextM
    *
    * By default:
    * - satisfies module {@link needs dependencies},
-   * - provides {@link has module replacements},
-   * - performs the set up by {@link ContextModuleOptions.setup} option.
+   * - performs the set up procedure by {@link ContextModuleOptions.setup} option.
    *
    * @param setup - Context module setup.
    *
    * @returns A promise resolved when the module is set up asynchronously.
    */
   async setup(setup: ContextModuleSetup): Promise<void> {
-    replaceContextModules(setup);
     if (!await satisfyContextModuleDeps(setup)) {
       setup.supply.off();
       return;
@@ -144,24 +179,6 @@ export class ContextModule implements ContextUpRef<ContextModuleHandle, ContextM
     return `ContextModule(${this.name})`;
   }
 
-}
-
-/**
- * @internal
- */
-function replaceContextModules(setup: ContextModuleSetup): void {
-
-  const { module } = setup;
-
-  for (const replaced of module.has) {
-    if (replaced === module) {
-      continue; // Do not replace itself.
-    }
-
-    const replacement = new ContextModule(`${replaced.name}->${module.name}`, { aliases: module });
-
-    setup.provide({ a: replaced, is: replacement }).needs(setup);
-  }
 }
 
 /**

@@ -3,6 +3,7 @@
  * @module @proc7ts/context-values
  */
 import { noop, Supply } from '@proc7ts/primitives';
+import { ContextBuilder, ContextBuilder__symbol } from './context-builder';
 import { ContextKey__symbol, ContextSeedKey } from './context-key';
 import type { ContextSeeds } from './context-seeder';
 import { ContextSeeders } from './context-seeders.impl';
@@ -47,6 +48,9 @@ export class ContextRegistry<TCtx extends ContextValues = ContextValues> {
    * @returns Provider supply instance that removes just added context value provider once cut off.
    */
   provide<TDeps extends any[], TSrc, TSeed>(spec: ContextValueSpec<TCtx, unknown, TDeps, TSrc, TSeed>): Supply {
+    if (isContextBuilder(spec)) {
+      return spec[ContextBuilder__symbol](this);
+    }
 
     const { a: { [ContextKey__symbol]: { seedKey } }, by } = contextValueSpec(spec);
     const [seeder] = this._seeders.issuer<TSrc, TSeed>(seedKey);
@@ -121,3 +125,11 @@ export class ContextRegistry<TCtx extends ContextValues = ContextValues> {
 
 }
 
+/**
+ * @internal
+ */
+function isContextBuilder<TCtx extends ContextValues, TValue, TDeps extends any[], TSrc, TSeed>(
+    spec: ContextValueSpec<TCtx, TValue, TDeps, TSrc, TSeed>,
+): spec is ContextBuilder<TCtx> {
+  return typeof (spec as Partial<ContextBuilder<TCtx>>)[ContextBuilder__symbol] === 'function';
+}
