@@ -5,6 +5,7 @@
 import {
   afterEach,
   AfterEvent,
+  AfterEvent__symbol,
   afterSupplied,
   afterThe,
   digAfter_,
@@ -27,8 +28,8 @@ import type { ContextValues } from '../context-values';
 /**
  * @internal
  */
-const flatUpSources: <TSrc>(this: void, input: AfterEvent<TSrc[][]>) => AfterEvent<TSrc[]> = translateAfter(
-    (send, ...sources) => send(...itsElements(overElementsOf(...sources))),
+const flatUpSources: <TSrc>(this: void, input: AfterEvent<TSrc[][]>) => AfterEvent<TSrc[]> = (
+    /*#__PURE__*/ translateAfter((send, ...sources) => send(...itsElements(overElementsOf(...sources))))
 );
 
 /**
@@ -115,7 +116,7 @@ function isUpSrcKeeper<TSrc>(src: TSrc | EventKeeper<TSrc[]>): src is EventKeepe
 /**
  * @internal
  */
-class ContextSeedUpKey<TSrc>
+class ContextSeed$UpKey<TSrc>
     extends ContextSeedKey<TSrc | EventKeeper<TSrc[]>, AfterEvent<TSrc[]>>
     implements ContextUpKey.SeedKey<TSrc> {
 
@@ -144,34 +145,39 @@ export interface ContextUpRef<TValue, TSrc> extends ContextRef<TValue, TSrc | Ev
 /**
  * @internal
  */
-class ContextUpKeyUpKey<TValue, TSrc>
-    extends ContextKey<ContextUpKey.Up<TValue>, TSrc | EventKeeper<TSrc[]>, AfterEvent<TSrc[]>> {
+class ContextUpKey$UpKey<TUpdate extends any[], TSrc>
+    extends ContextKey<AfterEvent<TUpdate>, TSrc | EventKeeper<TSrc[]>, AfterEvent<TSrc[]>>
+    implements ContextUpKey.SimpleUpKey<TUpdate, TSrc> {
 
   readonly grow: (
-      slot: ContextValueSlot<ContextUpKey.Up<TValue>, EventKeeper<TSrc[]> | TSrc, AfterEvent<TSrc[]>>,
+      slot: ContextValueSlot<AfterEvent<TUpdate>, EventKeeper<TSrc[]> | TSrc, AfterEvent<TSrc[]>>,
   ) => void;
 
   get seedKey(): ContextSeedKey<TSrc | EventKeeper<TSrc[]>, AfterEvent<TSrc[]>> {
     return this._key.seedKey;
   }
 
+  get upKey(): this {
+    return this;
+  }
+
   constructor(
-      private readonly _key: ContextUpKey<TValue, TSrc>,
+      private readonly _key: ContextUpKey<unknown, TSrc>,
       grow: (
-          slot: ContextValueSlot<ContextUpKey.Up<TValue>, EventKeeper<TSrc[]> | TSrc, AfterEvent<TSrc[]>>,
+          slot: ContextValueSlot<AfterEvent<TUpdate>, EventKeeper<TSrc[]> | TSrc, AfterEvent<TSrc[]>>,
       ) => void,
   ) {
     super(_key.name + ':up');
     this.grow = slot => {
 
-      const value: AfterEvent<[TValue]> | null | undefined = slot.fillBy(grow);
+      const value: EventKeeper<TUpdate> | null | undefined = slot.fillBy(grow);
 
-      if (value) {
+      if (value != null) {
 
         const supply = slot.context.get(ContextSupply, { or: null });
 
         if (supply) {
-          slot.insert(value.do(supplyAfter(supply)) as ContextUpKey.Up<TValue>);
+          slot.insert(value[AfterEvent__symbol]().do(supplyAfter(supply)));
         }
       }
     };
@@ -191,7 +197,7 @@ class ContextUpKeyUpKey<TValue, TSrc>
  */
 export abstract class ContextUpKey<TValue, TSrc>
     extends ContextKey<TValue, TSrc | EventKeeper<TSrc[]>, AfterEvent<TSrc[]>>
-    implements ContextUpRef<TValue, TSrc> {
+    implements ContextUpRef<TValue, TSrc>, ContextUpKey.Base<TValue, TSrc> {
 
   readonly seedKey: ContextUpKey.SeedKey<TSrc>;
 
@@ -219,22 +225,23 @@ export abstract class ContextUpKey<TValue, TSrc>
       } = {},
   ) {
     super(name);
-    this.seedKey = seedKey || new ContextSeedUpKey<TSrc>(this);
+    this.seedKey = seedKey || new ContextSeed$UpKey<TSrc>(this);
   }
 
   /**
-   * A key of context value containing an {@link ContextUpKey.Up updates keeper} of the value of this key.
+   * Creates a key of context value containing an `AfterEvent` keeper of updates to the value of this key.
    *
+   * @typeParam TUpdate - Context value update type.
    * @param grow - A function that grows an updates keeper of context value out of its seed.
    *
    * @returns New updates keeper key.
    */
-  protected createUpKey(
+  protected createUpKey<TUpdate extends any[]>(
       grow: (
-          slot: ContextValueSlot<ContextUpKey.Up<TValue>, EventKeeper<TSrc[]> | TSrc, AfterEvent<TSrc[]>>,
+          slot: ContextValueSlot<AfterEvent<TUpdate>, EventKeeper<TSrc[]> | TSrc, AfterEvent<TSrc[]>>,
       ) => void,
-  ): ContextUpKey.UpKey<TValue, TSrc> {
-    return new ContextUpKeyUpKey(this, grow);
+  ): ContextUpKey.SimpleUpKey<TUpdate, TSrc> {
+    return new ContextUpKey$UpKey(this, grow);
   }
 
 }
@@ -242,26 +249,62 @@ export abstract class ContextUpKey<TValue, TSrc>
 export namespace ContextUpKey {
 
   /**
-   * A type of updates keeper of context value.
+   * A type of context value updates tracker.
    *
    * It is the same as a type of original value if the value itself is an event keeper, or an `AfterEvent` keeper
    * of original value otherwise.
    *
    * @typeParam TValue - Original context value type.
    */
-  export type Up<TValue> = TValue extends AfterEvent<any>
-      ? TValue
-      : (TValue extends EventKeeper<infer E>
-          ? AfterEvent<E>
-          : AfterEvent<[TValue]>);
+  export type Up<TValue> = TValue extends EventKeeper<any> ? TValue : AfterEvent<[TValue]>;
 
   /**
-   * A key of context value containing an {@link ContextUpKey.Up updates keeper} of this key value.
+   * Base interface of updatable context value key.
    *
    * @typeParam TValue - Context value type.
    * @typeParam TSrc - Source value type.
    */
-  export type UpKey<TValue, TSrc> = ContextKey<ContextUpKey.Up<TValue>, TSrc>;
+  export interface Base<TValue, TSrc> extends ContextKey<TValue, TSrc | EventKeeper<TSrc[]>> {
+
+    /**
+     * A key of context value containing an {@link ContextUpKey.Up updatable value tracker}.
+     *
+     * It is expected to report any updates to this key's value.
+     *
+     * The value of updates key is constructed by {@link grow} function out of the same seed.
+     */
+    readonly upKey: UpKey<TValue, TSrc>;
+
+  }
+
+  /**
+   * A key of context value containing an {@link ContextUpKey.Up updatable value tracker}.
+   *
+   * @typeParam TValue - Context value type.
+   * @typeParam TSrc - Source value type.
+   */
+  export interface UpKey<TValue, TSrc> extends ContextKey<ContextUpKey.Up<TValue>, TSrc | EventKeeper<TSrc[]>> {
+
+    /**
+     * A reference to this key.
+     *
+     * Indicates that this key is updatable too.
+     */
+    readonly upKey: this;
+
+  }
+
+  /**
+   * A key of context value containing an `AfterEvent` keeper of updates of {@link ContextUpKey updatable value}.
+   *
+   * @typeParam TUpdate - Context value update type.
+   * @typeParam TSrc - Source value type.
+   */
+  export interface SimpleUpKey<TUpdate extends any[], TSrc> extends Base<AfterEvent<TUpdate>, TSrc> {
+
+    readonly upKey: this;
+
+  }
 
   /**
    * Updatable context value seed key.
