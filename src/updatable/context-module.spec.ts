@@ -30,7 +30,7 @@ describe('ContextModule', () => {
 
     expect(await context.get(key1)).toBe(1);
 
-    expect(await context.get(module).whenReady).toBe(module);
+    expect(await context.get(module).use().whenReady).toMatchObject({ module, ready: true });
     expect(await context.get(key1)).toBe(101);
 
     supply.off();
@@ -60,7 +60,7 @@ describe('ContextModule', () => {
     expect(await context.get(key1)).toBe(1);
     expect(await context.get(key2)).toBe(2);
 
-    expect(await context.get(module).whenReady).toBe(module);
+    expect(await context.get(module).use().whenReady).toMatchObject({ module, ready: true });
     expect(await context.get(key1)).toBe(101);
     expect(await context.get(key2)).toBe(102);
 
@@ -91,7 +91,7 @@ describe('ContextModule', () => {
 
     expect(await context.get(key1)).toBe(1);
 
-    expect(await context.get(module).whenReady).toBe(module);
+    expect(await context.get(module).use().whenReady).toMatchObject({ module, ready: true });
     expect(await context.get(key1)).toBe(201);
 
     supply.off();
@@ -113,7 +113,7 @@ describe('ContextModule', () => {
 
     const replacedSupply = registry.provide(replaced);
 
-    expect(await context.get(replaced).whenReady).toBe(replaced);
+    expect(await context.get(replaced).use().whenReady).toMatchObject({ module: replaced, ready: true });
     expect(await context.get(key1)).toBe(101);
 
     const replacer = new ContextModule(
@@ -127,8 +127,8 @@ describe('ContextModule', () => {
     );
     const replacerSupply = registry.provide(replacer);
 
-    expect(await context.get(replacer).whenReady).toBe(replacer);
-    expect(await context.get(replaced).whenReady).toBe(replacer);
+    expect(await context.get(replacer).use().whenReady).toMatchObject({ module: replacer });
+    expect(await context.get(replaced).use().whenReady).toMatchObject({ module: replacer });
     expect(await context.get(key1)).toBe(1);
     expect(await context.get(key2)).toBe(102);
 
@@ -144,7 +144,7 @@ describe('ContextModule', () => {
     expect(await context.get(key1)).toBe(1);
     expect(await context.get(key2)).toBe(2);
   });
-  it('implicitly loaded on replaced module request', async () => {
+  it('implicitly loaded on replaced module use', async () => {
 
     const replaced = new ContextModule(
         'replaced',
@@ -171,12 +171,8 @@ describe('ContextModule', () => {
     );
 
     registry.provide(replacer);
-    await new Promise<void>(resolve => context.get(replaced).read(
-        // Await for the replacer load
-        ({ module, ready }) => ready && module === replacer && resolve(),
-    ));
 
-    expect(await context.get(replaced).whenReady).toBe(replacer);
+    expect(await context.get(replaced).use().whenReady).toMatchObject({ module: replacer });
     expect(await context.get(key1)).toBe(1);
     expect(await context.get(key2)).toBe(102);
 

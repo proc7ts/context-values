@@ -21,7 +21,7 @@ const ContextModule_setup__symbol = (/*#__PURE__*/ Symbol('ContextModule.setup')
 /**
  * @internal
  */
-const ContextModule_replace__symbol = (/*#__PURE__*/ Symbol('ContextModule.replace'));
+const ContextModuleReplacer__symbol = (/*#__PURE__*/ Symbol('ContextModuleReplacer'));
 
 /**
  * Context module.
@@ -44,13 +44,19 @@ const ContextModule_replace__symbol = (/*#__PURE__*/ Symbol('ContextModule.repla
  * // Load the module
  * const myModuleSupply = contextRegistry.provide(myModule);
  *
+ * // Start using the module
+ * const myModuleUse = await context.get(myModule).use();
+ *
  * // Await for the module to load
- * await context.get(myModule).whenReady;
+ * await myModuleUse.whenReady;
  *
  * // Access the value provided by module.
  * console.log(context.get(Foo));
  *
- * // Unload the module.
+ * // Stop using the module
+ * myModuleUse.supply.off();
+ *
+ * // Unload the module declaration.
  * myModuleSupply.off();
  * ```
  */
@@ -97,10 +103,7 @@ export class ContextModule implements ContextUpRef<ContextModule.Handle, Context
       setup: ContextModule.Setup,
   ) => void | PromiseLike<unknown>;
 
-  private readonly [ContextModule_replace__symbol]: readonly (readonly [
-    replaced: ContextModule,
-    replacement: ContextModule,
-  ])[];
+  private readonly [ContextModuleReplacer__symbol]: ContextModuleReplacer;
 
   /**
    * Constructs context module.
@@ -120,22 +123,7 @@ export class ContextModule implements ContextUpRef<ContextModule.Handle, Context
     const replaced = setOfElements(has);
 
     this[ContextModule_setup__symbol] = setup ? setup.bind(options) : noop;
-    this[ContextModule_replace__symbol] = itsElements(valueIt(replaced, replaced => {
-      if (replaced === this) {
-        return;
-      }
-
-      return [
-        replaced,
-        new ContextModule(
-            `${replaced.name}->${this.name}`,
-            {
-              aliasOf: this,
-              setup: setup => setup.get(this).whenReady,
-            },
-        ),
-      ];
-    }));
+    this[ContextModuleReplacer__symbol] = contextModuleReplacer(this, replaced);
 
     this.has = replaced.add(this);
   }
@@ -147,9 +135,7 @@ export class ContextModule implements ContextUpRef<ContextModule.Handle, Context
 
     const supply = registry.provide({ a: this, is: this });
 
-    for (const [replaced, replacement] of this[ContextModule_replace__symbol]) {
-      registry.provide({ a: replaced, is: replacement }).needs(supply);
-    }
+    this[ContextModuleReplacer__symbol](registry, supply);
 
     return supply;
   }
@@ -179,6 +165,46 @@ export class ContextModule implements ContextUpRef<ContextModule.Handle, Context
     return `ContextModule(${this.name})`;
   }
 
+}
+
+/**
+ * @internal
+ */
+type ContextModuleReplacer = (registry: ContextRegistry, supply: Supply) => void;
+
+/**
+ * @internal
+ */
+function contextModuleReplacer(
+    module: ContextModule,
+    replaced: ReadonlySet<ContextModule>,
+): ContextModuleReplacer {
+
+  const replacements: [
+    replaced: ContextModule,
+    replacement: ContextModule,
+  ][] = itsElements(valueIt(replaced, replaced => {
+    if (replaced === module) {
+      return;
+    }
+
+    return [
+      replaced,
+      new ContextModule(
+          `${replaced.name}->${module.name}`,
+          {
+            aliasOf: module,
+            setup: setup => setup.get(module).use(setup).whenReady,
+          },
+      ),
+    ];
+  }));
+
+  return (registry, supply) => {
+    for (const [replaced, replacement] of replacements) {
+      registry.provide({ a: replaced, is: replacement }).needs(supply);
+    }
+  };
 }
 
 /**
@@ -221,7 +247,10 @@ function loadContextModules(
           mapIt(
               modules,
               module => Promise.race([
-                setup.get(module).whenReady.then(valueProvider(true), isUndefined),
+                setup.get(module)
+                    .use(setup)
+                    .whenReady
+                    .then(valueProvider(true), isUndefined),
                 whenDone,
               ]),
           ),
@@ -329,12 +358,34 @@ export namespace ContextModule {
   export interface Handle extends EventKeeper<[ContextModule.Status]> {
 
     /**
-     * An `OnEvent` sender of the module readiness event.
+     * An `AfterEvent` keeper of module load status.
      *
-     * Sends the {@link ContextModule.Status.module loaded module} instance when it is {@link ContextModule.Status.ready
-   * ready fo use}.
+     * The `[AfterEvent__symbol]` property is an alias of this one.
      */
-    readonly whenReady: OnEvent<[ContextModule]>;
+    readonly read: AfterEvent<[ContextModule.Status]>;
+
+    /**
+     * Initiate the module use.
+     *
+     * @param user - Module user. Contains a module {@link Use.supply use supply}. A new supply instance will be created
+     * when omitted.
+     *
+     * @returns A module usage instance.
+     */
+    use(user?: SupplyPeer): Use;
+
+  }
+
+  /**
+   * An instance of the module use.
+   *
+   * The module is active while it is in use. I.e. at least one `Use` instance exists and active.
+   *
+   * The use is active util its {@link supply} is cut off.
+   *
+   * The module use instance can be used as its handle too.
+   */
+  export interface Use extends Handle, SupplyPeer {
 
     /**
      * An `AfterEvent` keeper of module load status.
@@ -342,6 +393,21 @@ export namespace ContextModule {
      * The `[AfterEvent__symbol]` property is an alias of this one.
      */
     readonly read: AfterEvent<[ContextModule.Status]>;
+
+    /**
+     * An `OnEvent` sender of the module readiness event.
+     *
+     * Sends the {@link ContextModule.Status loaded module status} when it is {@link ContextModule.Status.ready ready
+     * for use}.
+     */
+    readonly whenReady: OnEvent<[ContextModule.Status]>;
+
+    /**
+     * Module use supply.
+     *
+     * The module use stops once this supply is cut off.
+     */
+    readonly supply: Supply;
 
   }
 
