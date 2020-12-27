@@ -1,20 +1,26 @@
 import type { AfterEvent, EventKeeper } from '@proc7ts/fun-events';
-import { mapAfter_, onceOn, trackValue, trackValueBy, valueOn_, ValueTracker } from '@proc7ts/fun-events';
-import { alwaysSupply, neverSupply, noop, Supply } from '@proc7ts/primitives';
-import type { ContextValueSlot } from '../../context-key';
-import type { ContextRequest } from '../../context-ref';
-import type { ContextRegistry } from '../../context-registry';
-import { ContextSupply } from '../../context-supply';
-import type { ContextValues } from '../../context-values';
-import { ContextUpKey } from '../context-up-key';
+import {
+  AfterEvent__symbol,
+  mapAfter_,
+  onceOn,
+  trackValue,
+  trackValueBy,
+  valueOn_,
+  ValueTracker,
+} from '@proc7ts/fun-events';
+import { alwaysSupply, neverSupply, noop, Supply, valueProvider } from '@proc7ts/primitives';
+import type { ContextValueSlot } from '../context-key';
+import type { ContextRequest } from '../context-ref';
+import type { ContextRegistry } from '../context-registry';
+import { ContextSupply } from '../context-supply';
+import type { ContextValues } from '../context-values';
 import type { ContextModule } from './context-module';
-import { ContextModuleHandle } from './context-module-handle';
-import type { ContextModuleStatus } from './context-module-status';
+import { ContextUpKey } from './context-up-key';
 
 /**
  * @internal
  */
-export class ContextModuleKey extends ContextUpKey<ContextModuleHandle, ContextModule> {
+export class ContextModuleKey extends ContextUpKey<ContextModule.Handle, ContextModule> {
 
   constructor(name: string, private readonly _module: ContextModule) {
     super(name);
@@ -26,7 +32,7 @@ export class ContextModuleKey extends ContextUpKey<ContextModuleHandle, ContextM
 
   grow(
       slot: ContextValueSlot<
-          ContextModuleHandle,
+          ContextModule.Handle,
           EventKeeper<ContextModule[]> | ContextModule,
           AfterEvent<ContextModule[]>>,
   ): void {
@@ -50,7 +56,7 @@ function createContextModuleHandle(
     context: ContextValues,
     module: ContextModule,
     impls: AfterEvent<[ContextModule]>,
-): [handle: ContextModuleHandle, setup: (context: ContextValues, registry: ContextRegistry) => void] {
+): [handle: ContextModule.Handle, setup: (context: ContextValues, registry: ContextRegistry) => void] {
 
   const contextSupply = context.get(ContextSupply, { or: alwaysSupply() });
   const impl = trackValueBy(implementContextModule(module, impls));
@@ -102,7 +108,7 @@ function implementContextModule(
  */
 interface ContextModuleLoader {
 
-  readonly status: ContextModuleStatus;
+  readonly status: ContextModule.Status;
   readonly supply: Supply;
 
 }
@@ -110,22 +116,20 @@ interface ContextModuleLoader {
 /**
  * @internal
  */
-function newContextModuleHandle(loader: AfterEvent<[ContextModuleLoader]>): ContextModuleHandle {
+function newContextModuleHandle(loader: AfterEvent<[ContextModuleLoader]>): ContextModule.Handle {
 
-  class ContextModuleHandle$ extends ContextModuleHandle {
+  const read: AfterEvent<[ContextModule.Status]> = loader.do(
+      mapAfter_(({ status }) => status),
+  );
 
-    readonly read = loader.do(
-        mapAfter_(({ status }) => status),
-    );
-
-    readonly whenReady = loader.do(
+  return {
+    read,
+    whenReady: loader.do(
         valueOn_(({ status: { module, ready } }) => ready && module),
         onceOn,
-    );
-
-  }
-
-  return new ContextModuleHandle$();
+    ),
+    [AfterEvent__symbol]: valueProvider(read),
+  };
 }
 
 /**

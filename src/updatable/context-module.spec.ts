@@ -1,7 +1,7 @@
-import { ContextRegistry } from '../../context-registry';
-import type { ContextValues } from '../../context-values';
-import { SingleContextUpKey } from '../single-context-up-key';
+import { ContextRegistry } from '../context-registry';
+import type { ContextValues } from '../context-values';
 import { ContextModule } from './context-module';
+import { SingleContextUpKey } from './single-context-up-key';
 
 describe('ContextModule', () => {
 
