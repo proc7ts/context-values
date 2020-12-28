@@ -4,6 +4,7 @@ import { ContextKey__symbol } from '../context-key';
 import { ContextRegistry } from '../context-registry';
 import type { ContextValues } from '../context-values';
 import { ContextModule } from './context-module';
+import { ContextModuleDependencyError } from './context-module-dependency-error';
 import { MultiContextUpKey } from './multi-context-up-key';
 import { SingleContextUpKey } from './single-context-up-key';
 
@@ -296,6 +297,38 @@ describe('ContextModule', () => {
     expect(await context.get(key1)).toBe(201);
 
     supply.off();
+    expect(await context.get(key1)).toBe(1);
+  });
+  it('fails to load on dependency load failure', async () => {
+
+    const error = new Error('test');
+    const dep = new ContextModule(
+        'dep',
+        {
+          setup(setup) {
+            setup.provide({ a: key1, is: 101 });
+            throw error;
+          },
+        },
+    );
+    const module = new ContextModule(
+        'test',
+        {
+          needs: dep,
+          setup(setup) {
+            setup.provide({ a: key1, is: 201 });
+          },
+        },
+    );
+
+    registry.provide(module);
+    context.get(module).use();
+
+    const failure = (await whenFailed(module)) as ContextModuleDependencyError;
+
+    expect(failure).toBeInstanceOf(ContextModuleDependencyError);
+    expect(failure.module).toBe(module);
+    expect(failure.reasons).toEqual([[dep, error]]);
     expect(await context.get(key1)).toBe(1);
   });
   it('replaces other module when explicitly loaded', async () => {

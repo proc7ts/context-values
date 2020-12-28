@@ -262,6 +262,8 @@ export namespace ContextModule {
      *
      * Sends the {@link ContextModule.Status loaded module status} when it is {@link ContextModule.Status.ready ready
      * for use}.
+     *
+     * Cuts off the supply when context module {@link ContextModule.Status.error failed to load}.
      */
     readonly whenReady: OnEvent<[ContextModule.Status]>;
 

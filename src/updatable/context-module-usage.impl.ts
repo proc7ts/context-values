@@ -2,9 +2,9 @@ import {
   AfterEvent,
   AfterEvent__symbol,
   mapAfter_,
-  onceOn,
+  OnEvent,
+  onEventBy,
   trackValue,
-  valueOn_,
   ValueTracker,
 } from '@proc7ts/fun-events';
 import { alwaysSupply, neverSupply, Supply, SupplyPeer, valueProvider } from '@proc7ts/primitives';
@@ -129,10 +129,7 @@ export class ContextModuleUsage {
     const supply = user ? user.supply : new Supply();
     const use: ContextModule.Use = {
       ...handle,
-      whenReady: handle.read.do(
-          valueOn_(status => status.ready && status),
-          onceOn,
-      ),
+      whenReady: ContextModule$Use$whenReady(handle.read),
       supply,
     };
 
@@ -204,4 +201,21 @@ async function setupContextModule(
     },
 
   });
+}
+
+/**
+ * @internal
+ */
+function ContextModule$Use$whenReady(status: AfterEvent<[ContextModule.Status]>): OnEvent<[ContextModule.Status]> {
+  return onEventBy(receiver => status({
+    supply: receiver.supply,
+    receive: (context, status) => {
+      if (status.ready) {
+        receiver.receive(context, status);
+        receiver.supply.off();
+      } else if (status.error) {
+        receiver.supply.off(status.error);
+      }
+    },
+  }));
 }

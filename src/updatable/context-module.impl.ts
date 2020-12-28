@@ -1,7 +1,8 @@
-import { asis, isUndefined, noop, setOfElements, Supply, valueProvider } from '@proc7ts/primitives';
+import { isDefined, noop, setOfElements, Supply, valueProvider } from '@proc7ts/primitives';
 import { mapIt, valueIt } from '@proc7ts/push-iterator';
 import type { ContextRegistry } from '../context-registry';
 import type { ContextModule } from './context-module';
+import { ContextModuleDependencyError } from './context-module-dependency-error';
 import { ContextModuleKey } from './context-module-key.impl';
 import type { ContextUpKey } from './context-up-key';
 
@@ -80,7 +81,7 @@ function loadContextModules(
     modules: Iterable<ContextModule>,
 ): Promise<boolean> {
 
-  const { supply } = setup;
+  const { module, supply } = setup;
   const notLoaded = valueProvider(false);
   const whenDone = supply.whenDone().then(notLoaded, notLoaded);
 
@@ -90,15 +91,29 @@ function loadContextModules(
         .all(
             mapIt(
                 modules,
-                module => setup.get(module)
+                dep => setup.get(dep)
                     .use(setup)
                     .whenReady
-                    .then(valueProvider(true), isUndefined),
+                    .then(
+                        noop,
+                        error => [dep, error] as const,
+                    ),
             ),
         )
         .then(
-            results => results.every(asis),
+            reasons => {
+
+              const knownReasons = reasons.filter<readonly [ContextModule, unknown]>(isDefined);
+
+              return knownReasons.length
+                  ? new ContextModuleDependencyError(module, knownReasons) // Prevent unhandled promise rejection
+                  : true;
+            },
         ),
-  ]);
+  ]).then(
+      result => typeof result === 'boolean'
+          ? result
+          : Promise.reject(result),
+  );
 }
 
