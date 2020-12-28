@@ -3,25 +3,14 @@
  * @module @proc7ts/fun-events/updatable
  */
 import type { AfterEvent, EventKeeper, OnEvent } from '@proc7ts/fun-events';
-import { asis, isUndefined, noop, setOfElements, Supply, SupplyPeer, valueProvider } from '@proc7ts/primitives';
-import { itsElements, mapIt, valueIt } from '@proc7ts/push-iterator';
+import type { Supply, SupplyPeer } from '@proc7ts/primitives';
 import { ContextBuilder, ContextBuilder__symbol } from '../context-builder';
 import { ContextKey__symbol } from '../context-key';
 import type { ContextRegistry } from '../context-registry';
 import type { ContextValueSpec } from '../context-value-spec';
 import type { ContextValues } from '../context-values';
-import { ContextModuleKey } from './context-module-key.impl';
+import { ContextModule$, ContextModule_impl__symbol } from './context-module.impl';
 import type { ContextUpKey, ContextUpRef } from './context-up-key';
-
-/**
- * @internal
- */
-const ContextModule_setup__symbol = (/*#__PURE__*/ Symbol('ContextModule.setup'));
-
-/**
- * @internal
- */
-const ContextModuleReplacer__symbol = (/*#__PURE__*/ Symbol('ContextModuleReplacer'));
 
 /**
  * Context module.
@@ -63,47 +52,9 @@ const ContextModuleReplacer__symbol = (/*#__PURE__*/ Symbol('ContextModuleReplac
 export class ContextModule implements ContextUpRef<ContextModule.Handle, ContextModule>, ContextBuilder {
 
   /**
-   * A key of context module.
-   */
-  readonly [ContextKey__symbol]: ContextUpKey<ContextModule.Handle, ContextModule>;
-
-  /**
-   * Human-readable module name.
-   */
-  readonly name: string;
-
-  /**
-   * The module this one is an alias of.
-   *
-   * Assigned by {@link ContextModule.Options.aliasOf} option.
-   */
-  readonly aliasOf: ContextModule;
-
-  /**
-   * The modules this one requires.
-   *
-   * Assigned by {@link ContextModule.Options.needs} option.
-   */
-  readonly needs: ReadonlySet<ContextModule>;
-
-  /**
-   * The modules this one provides.
-   *
-   * Assigned by {@link ContextModule.Options.has} option.
-   *
-   * Always contains the module itself.
-   */
-  readonly has: ReadonlySet<ContextModule>;
-
-  /**
    * @internal
    */
-  private readonly [ContextModule_setup__symbol]: (
-      this: void,
-      setup: ContextModule.Setup,
-  ) => void | PromiseLike<unknown>;
-
-  private readonly [ContextModuleReplacer__symbol]: ContextModuleReplacer;
+  private readonly [ContextModule_impl__symbol]: ContextModule$;
 
   /**
    * Constructs context module.
@@ -112,20 +63,41 @@ export class ContextModule implements ContextUpRef<ContextModule.Handle, Context
    * @param options - Module construction options.
    */
   constructor(name: string, options: ContextModule.Options = {}) {
-    this[ContextKey__symbol] = new ContextModuleKey(`${name}:module`, this);
-    this.name = name;
+    this[ContextModule_impl__symbol] = new ContextModule$(this, name, options);
+  }
 
-    const { aliasOf, needs, has, setup } = options;
+  /**
+   * A key of context module.
+   */
+  get [ContextKey__symbol](): ContextUpKey<ContextModule.Handle, ContextModule> {
+    return this[ContextModule_impl__symbol].key;
+  }
 
-    this.aliasOf = aliasOf ? aliasOf.aliasOf : this;
-    this.needs = setOfElements(needs);
+  /**
+   * Human-readable module name.
+   */
+  get name(): string {
+    return this[ContextModule_impl__symbol].name;
+  }
 
-    const replaced = setOfElements(has);
+  /**
+   * The modules this one requires.
+   *
+   * Assigned by {@link ContextModule.Options.needs} option.
+   */
+  get needs(): ReadonlySet<ContextModule> {
+    return this[ContextModule_impl__symbol].needs;
+  }
 
-    this[ContextModule_setup__symbol] = setup ? setup.bind(options) : noop;
-    this[ContextModuleReplacer__symbol] = contextModuleReplacer(this, replaced);
-
-    this.has = replaced.add(this);
+  /**
+   * The modules this one provides.
+   *
+   * Assigned by {@link ContextModule.Options.has} option.
+   *
+   * Always contains the module itself.
+   */
+  get has(): ReadonlySet<ContextModule> {
+    return this[ContextModule_impl__symbol].has;
   }
 
   /**
@@ -135,7 +107,7 @@ export class ContextModule implements ContextUpRef<ContextModule.Handle, Context
 
     const supply = registry.provide({ a: this, is: this });
 
-    this[ContextModuleReplacer__symbol](registry, supply);
+    this[ContextModule_impl__symbol].replace(this, registry, supply);
 
     return supply;
   }
@@ -153,12 +125,8 @@ export class ContextModule implements ContextUpRef<ContextModule.Handle, Context
    *
    * @returns A promise resolved when the module is set up asynchronously.
    */
-  async setup(setup: ContextModule.Setup): Promise<void> {
-    if (!await satisfyContextModuleDeps(setup)) {
-      setup.supply.off();
-      return;
-    }
-    await this[ContextModule_setup__symbol](setup);
+  setup(setup: ContextModule.Setup): Promise<void> {
+    return this[ContextModule_impl__symbol].setup(setup);
   }
 
   toString(): string {
@@ -167,117 +135,12 @@ export class ContextModule implements ContextUpRef<ContextModule.Handle, Context
 
 }
 
-/**
- * @internal
- */
-type ContextModuleReplacer = (registry: ContextRegistry, supply: Supply) => void;
-
-/**
- * @internal
- */
-function contextModuleReplacer(
-    module: ContextModule,
-    replaced: ReadonlySet<ContextModule>,
-): ContextModuleReplacer {
-
-  const replacements: [
-    replaced: ContextModule,
-    replacement: ContextModule,
-  ][] = itsElements(valueIt(replaced, replaced => {
-    if (replaced === module) {
-      return;
-    }
-
-    return [
-      replaced,
-      new ContextModule(
-          `${replaced.name}->${module.name}`,
-          {
-            aliasOf: module,
-            setup: setup => setup.get(module).use(setup).whenReady,
-          },
-      ),
-    ];
-  }));
-
-  return (registry, supply) => {
-    for (const [replaced, replacement] of replacements) {
-      registry.provide({ a: replaced, is: replacement }).needs(supply);
-    }
-  };
-}
-
-/**
- * @internal
- */
-function satisfyContextModuleDeps(setup: ContextModule.Setup): Promise<boolean> {
-
-  const { module, supply } = setup;
-
-  return loadContextModules(
-      setup,
-      valueIt(
-          module.needs,
-          dep => {
-            if (dep === module) {
-              return; // Do not load itself.
-            }
-
-            setup.provide(dep).needs(supply);
-
-            return dep;
-          },
-      ),
-  );
-}
-
-/**
- * @internal
- */
-function loadContextModules(
-    setup: ContextModule.Setup,
-    modules: Iterable<ContextModule>,
-): Promise<boolean> {
-
-  const { supply } = setup;
-  const whenDone = supply.whenDone().then(valueProvider(false));
-
-  return Promise
-      .all(
-          mapIt(
-              modules,
-              module => Promise.race([
-                setup.get(module)
-                    .use(setup)
-                    .whenReady
-                    .then(valueProvider(true), isUndefined),
-                whenDone,
-              ]),
-          ),
-      )
-      .then(
-          results => results.every(asis),
-          valueProvider(false),
-      );
-}
-
 export namespace ContextModule {
 
   /**
    * Context module construction options.
    */
   export interface Options {
-
-    /**
-     * The module the constructed one aliases.
-     *
-     * The aliased module is {@link ContextModule.Status.module reported} when constructed module loaded.
-     *
-     * This is useful to report a module replacement.
-     *
-     * @defaultValue The module itself.
-     */
-    readonly aliasOf?: ContextModule;
 
     /**
      * A module or modules the constructed one requires.
@@ -422,7 +285,7 @@ export namespace ContextModule {
      * Loaded module.
      *
      * Note that it may differ from the one requested to load. E.g. when another module {@link ContextModule.Options.has
-   * provides} it.
+     * provides} it.
      */
     readonly module: ContextModule;
 
@@ -430,6 +293,11 @@ export namespace ContextModule {
      * Whether the module is loaded and ready for use.
      */
     readonly ready: boolean;
+
+    /**
+     * Error occurred while loading the module.
+     */
+    readonly error?: unknown;
 
   }
 

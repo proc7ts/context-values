@@ -21,26 +21,13 @@ export class ContextModuleUsage {
 
   private readonly _impl: ValueTracker<ContextModule| undefined>;
   private readonly _loader: ValueTracker<ContextModuleLoader>;
-
-  private _setup: () => void = () => {
-    this._updateSetup = setup => setup();
-  };
-
-  private _updateSetup = (setup: () => void): void => {
-    this._setup = setup;
-  };
-
   private _useCounter = 0;
+
+  private _setup!: () => void;
 
   constructor(context: ContextValues, readonly module: ContextModule) {
     this._impl = trackValue();
-    this._loader = trackValue<ContextModuleLoader>({
-      status: {
-        module: module.aliasOf,
-        ready: false,
-      },
-      supply: neverSupply(),
-    });
+    this._loader = trackValue<ContextModuleLoader>(this._notLoaded());
 
     const contextSupply = context.get(ContextSupply, { or: alwaysSupply() });
 
@@ -75,34 +62,66 @@ export class ContextModuleUsage {
   }
 
   setup(context: ContextValues, registry: ContextRegistry): void {
-    this._updateSetup(() => {
+    this._setup = () => {
 
-      const loader = this._loader.it;
-      const updateStatus = (ready: boolean): void => {
-        if (this._loader.it !== loader) {
-          loader.supply.off();
-        } else {
-          this._loader.it = {
-            status: {
-              module: loader.status.module.aliasOf,
-              ready,
-            },
-            supply: loader.supply,
-          };
-        }
-      };
+      let loader = this._loader.it;
+      const { status: { module }, supply } = loader;
 
-      setupContextModule(context, registry, loader)
-          .then(() => updateStatus(true))
-          .catch(error => {
-            loader.supply.off(error);
-            updateStatus(false);
-          });
-    });
+      if (module !== this.module) {
+        // Load implementation module instead.
+        // The implementation module expected to be provided already.
+        context.get(module).use(supply).read({
+          supply,
+          receive: (_ctx, { ready, error }) => {
+            loader = this._updateStatus(loader, ready, error);
+          },
+        });
+      } else {
+        setupContextModule(context, registry, loader)
+            .then(() => this._updateStatus(loader, true))
+            .catch(error => {
+              loader.supply.off(error);
+              this._updateStatus(loader, false, error);
+            });
+      }
+    };
   }
 
   implementBy(impl: AfterEvent<[ContextModule?]>): void {
     this._impl.by(impl);
+  }
+
+  private _notLoaded(): ContextModuleLoader {
+    return {
+      status: {
+        module: this.module,
+        ready: false,
+      },
+      supply: neverSupply(),
+    };
+  }
+
+  private _updateStatus(
+      loader: ContextModuleLoader,
+      ready: boolean,
+      error?: unknown,
+  ): ContextModuleLoader {
+    // Ensure updating the correct loader status.
+    if (this._loader.it !== loader) {
+      // If loader changed, then drop the obsolete one.
+      loader.supply.off();
+    } else {
+      this._loader.it = loader = {
+        status: {
+          module: loader.status.module,
+          ready,
+          error,
+        },
+        supply: loader.supply,
+      };
+    }
+
+    return loader;
   }
 
   private _use(handle: ContextModule.Handle, user?: SupplyPeer): ContextModule.Use {
@@ -121,6 +140,7 @@ export class ContextModuleUsage {
       supply.whenOff(reason => {
         if (!--this._useCounter) {
           this._loader.it.supply.off(reason);
+          this._loader.it = this._notLoaded();
         }
       });
 
@@ -139,7 +159,7 @@ export class ContextModuleUsage {
 
     this._loader.it = {
       status: {
-        module: module.aliasOf,
+        module,
         ready: false,
       },
       supply,
@@ -171,13 +191,17 @@ async function setupContextModule(
     { status: { module }, supply }: ContextModuleLoader,
 ): Promise<void> {
   await module.setup({
+
     module,
     supply,
+
     get(request: ContextRequest<any>) {
       return context.get(request);
     },
+
     provide(spec): Supply {
       return registry.provide(spec).needs(supply);
     },
+
   });
 }

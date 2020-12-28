@@ -1,6 +1,10 @@
+import { onceAfter } from '@proc7ts/fun-events';
+import { neverSupply } from '@proc7ts/primitives';
+import { ContextKey__symbol } from '../context-key';
 import { ContextRegistry } from '../context-registry';
 import type { ContextValues } from '../context-values';
 import { ContextModule } from './context-module';
+import { MultiContextUpKey } from './multi-context-up-key';
 import { SingleContextUpKey } from './single-context-up-key';
 
 describe('ContextModule', () => {
@@ -36,6 +40,112 @@ describe('ContextModule', () => {
     supply.off();
     expect(await context.get(key1)).toBe(1);
   });
+  it('loaded once', async () => {
+
+    const key = new MultiContextUpKey('key', { byDefault: () => [0] });
+    const module = new ContextModule(
+        'test',
+        {
+          setup(setup) {
+            setup.provide({ a: key, is: 1 });
+            setup.provide({ a: key, is: 2 });
+          },
+        },
+    );
+    const supply1 = registry.provide(module);
+    const supply2 = registry.provide(module);
+
+    const receiver = jest.fn();
+
+    context.get(key).do(onceAfter)(receiver);
+    expect(receiver).toHaveBeenLastCalledWith(0);
+
+    expect(await context.get(module).use().whenReady).toMatchObject({ module, ready: true });
+    context.get(key).do(onceAfter)(receiver);
+    expect(receiver).toHaveBeenLastCalledWith(1, 2);
+
+    supply1.off();
+    await Promise.resolve();
+    expect(await context.get(module).use().whenReady).toMatchObject({ module, ready: true });
+    context.get(key).do(onceAfter)(receiver);
+    expect(receiver).toHaveBeenLastCalledWith(1, 2);
+
+    supply2.off();
+    context.get(key).do(onceAfter)(receiver);
+    expect(receiver).toHaveBeenLastCalledWith(0);
+  });
+  it('never loaded when user supply is cut off', async () => {
+
+    const module = new ContextModule(
+        'test',
+        {
+          setup(setup) {
+            setup.provide({ a: key1, is: 101 });
+          },
+        },
+    );
+
+    registry.provide(module);
+
+    const use = context.get(module).use(neverSupply());
+
+    await Promise.resolve();
+    expect(await use.read).toMatchObject({ module, ready: false });
+    expect(await context.get(key1)).toBe(1);
+  });
+  it('unloaded when no more users', async () => {
+
+    const module = new ContextModule(
+        'test',
+        {
+          setup(setup) {
+            setup.provide({ a: key1, is: 101 });
+          },
+        },
+    );
+
+    registry.provide(module);
+
+    const use1 = context.get(module).use();
+    const use2 = use1.use();
+
+    expect(await use1.whenReady).toMatchObject({ module, ready: true });
+    expect(await context.get(key1)).toBe(101);
+
+    use1.supply.off();
+    await Promise.resolve();
+    expect(await use2.read).toMatchObject({ module, ready: true });
+    expect(await context.get(key1)).toBe(101);
+
+    use2.supply.off();
+    expect(await context.get(key1)).toBe(1);
+  });
+  it('reports load failure', async () => {
+
+    const error = new Error('test');
+    const module = new ContextModule(
+        'test',
+        {
+          setup(setup) {
+            setup.provide({ a: key1, is: 101 });
+            throw error;
+          },
+        },
+    );
+
+    registry.provide(module);
+
+    const use = context.get(module).use();
+
+    expect(await whenFailed(module)).toBe(error);
+    expect(await context.get(key1)).toBe(1);
+
+    use.supply.off();
+    expect(await whenStatus(module, status => status.error === undefined && status)).toMatchObject({
+      module,
+      ready: false,
+    });
+  });
   it('loads dependency', async () => {
 
     const dep = new ContextModule(
@@ -68,6 +178,67 @@ describe('ContextModule', () => {
     expect(await context.get(key1)).toBe(1);
     expect(await context.get(key2)).toBe(2);
   });
+  it('handles preliminary module unload', async () => {
+
+    const dep = new ContextModule(
+        'dep',
+        {
+          setup(setup) {
+            setup.provide({ a: key1, is: 101 });
+          },
+        },
+    );
+    const module = new ContextModule(
+        'test',
+        {
+          needs: dep,
+          setup(setup) {
+            setup.provide({ a: key1, is: 201 });
+          },
+        },
+    );
+    const supply = registry.provide(module);
+
+    expect(await context.get(key1)).toBe(1);
+
+    const read = context.get(module).use().read;
+
+    supply.off();
+
+    expect(await read).toMatchObject({ module, ready: false });
+    expect(await context.get(key1)).toBe(1);
+  });
+  it('handles preliminary module deactivation', async () => {
+
+    const dep = new ContextModule(
+        'dep',
+        {
+          setup(setup) {
+            setup.provide({ a: key1, is: 101 });
+          },
+        },
+    );
+    const module = new ContextModule(
+        'test',
+        {
+          needs: dep,
+          setup(setup) {
+            setup.provide({ a: key1, is: 201 });
+          },
+        },
+    );
+
+    registry.provide(module);
+
+    expect(await context.get(key1)).toBe(1);
+
+    const use = context.get(module).use();
+
+    use.supply.off();
+
+    expect(await use.read).toMatchObject({ module, ready: false });
+    expect(await context.get(key1)).toBe(1);
+  });
   it('sets up after dependency', async () => {
 
     const dep = new ContextModule(
@@ -87,6 +258,36 @@ describe('ContextModule', () => {
           },
         },
     );
+    const supply = registry.provide(module);
+
+    expect(await context.get(key1)).toBe(1);
+
+    expect(await context.get(module).use().whenReady).toMatchObject({ module, ready: true });
+    expect(await context.get(key1)).toBe(201);
+
+    supply.off();
+    expect(await context.get(key1)).toBe(1);
+  });
+  it('handles itself as a dependency', async () => {
+
+    class TestModule extends ContextModule {
+
+      constructor() {
+        super('test');
+      }
+
+      async setup(setup: ContextModule.Setup): Promise<void> {
+        await super.setup(setup);
+        setup.provide({ a: key1, is: 201 });
+      }
+
+      get needs(): ReadonlySet<ContextModule> {
+        return new Set([this]);
+      }
+
+    }
+
+    const module = new TestModule();
     const supply = registry.provide(module);
 
     expect(await context.get(key1)).toBe(1);
@@ -127,16 +328,15 @@ describe('ContextModule', () => {
     );
     const replacerSupply = registry.provide(replacer);
 
-    expect(await context.get(replacer).use().whenReady).toMatchObject({ module: replacer });
-    expect(await context.get(replaced).use().whenReady).toMatchObject({ module: replacer });
+    context.get(replacer).use();
+    await whenImplementedBy(replacer, replacer);
+    context.get(replaced).use();
+    await whenImplementedBy(replaced, replacer);
     expect(await context.get(key1)).toBe(1);
     expect(await context.get(key2)).toBe(102);
 
     replacerSupply.off();
-    await new Promise<void>(resolve => context.get(replaced).read(
-        // Await for the replacement to unload and the replaced module to load again
-        ({ module, ready }) => ready && module === replaced && resolve(),
-    ));
+    await whenImplementedBy(replaced, replaced);
     expect(await context.get(key1)).toBe(101);
     expect(await context.get(key2)).toBe(2);
 
@@ -171,8 +371,8 @@ describe('ContextModule', () => {
     );
 
     registry.provide(replacer);
-
-    expect(await context.get(replaced).use().whenReady).toMatchObject({ module: replacer });
+    context.get(replaced).use();
+    await whenImplementedBy(replaced, replacer);
     expect(await context.get(key1)).toBe(1);
     expect(await context.get(key2)).toBe(102);
 
@@ -180,4 +380,79 @@ describe('ContextModule', () => {
     expect(await context.get(key1)).toBe(1);
     expect(await context.get(key2)).toBe(102);
   });
+  it('handles immediate module replacement', async () => {
+
+    const replaced = new ContextModule(
+        'replaced',
+        {
+          setup(setup) {
+            setup.provide({ a: key1, is: 101 });
+          },
+        },
+    );
+
+    registry.provide(replaced);
+
+    const replacedUse = context.get(replaced).use();
+
+    const replacer = new ContextModule(
+        'test',
+        {
+          has: replaced,
+          setup(setup) {
+            setup.provide({ a: key2, is: 102 });
+          },
+        },
+    );
+    const replacerSupply = registry.provide(replacer);
+
+    expect(await replacedUse.whenReady).toMatchObject({ module: replacer, ready: true });
+    expect(await context.get(key1)).toBe(1);
+    expect(await context.get(key2)).toBe(102);
+
+    replacerSupply.off();
+    await whenImplementedBy(replaced, replaced);
+    expect(await context.get(key1)).toBe(101);
+    expect(await context.get(key2)).toBe(2);
+  });
+
+  describe('toString', () => {
+    it('builds module string representation', () => {
+      expect(new ContextModule('test').toString()).toBe('ContextModule(test)');
+    });
+  });
+
+  describe('[ContextKey__symbol]', () => {
+    it('is updatable', () => {
+
+      const module = new ContextModule('test');
+      const key = module[ContextKey__symbol];
+
+      expect(key.upKey).toBe(key);
+    });
+  });
+
+  function whenStatus<T>(
+      target: ContextModule,
+      checkStatus: (status: ContextModule.Status) => T | false | null | undefined,
+  ): Promise<T> {
+    return new Promise(resolve => context.get(target).read(
+        status => {
+
+          const result = checkStatus(status);
+
+          if (result) {
+            resolve(result);
+          }
+        },
+    ));
+  }
+
+  function whenImplementedBy(target: ContextModule, impl: ContextModule): Promise<unknown> {
+    return whenStatus(target, ({ module, ready }) => ready && module === impl);
+  }
+
+  function whenFailed(target: ContextModule): Promise<unknown> {
+    return whenStatus(target, ({ error }) => error);
+  }
 });
