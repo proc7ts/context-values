@@ -85,5 +85,10 @@ describe('FnContextKey', () => {
       expect(receiver).toHaveBeenCalledTimes(2);
       expect(fn('other')).toEqual(10);
     });
+    describe('upKey', () => {
+      it('refers to itself', () => {
+        expect(key.upKey.upKey).toBe(key.upKey);
+      });
+    });
   });
 });

@@ -224,7 +224,7 @@ describe('contextValueSpec', () => {
   });
   it('throws on unsupported spec', () => {
 
-    const spec: ContextValueSpec<ContextValues, string> = {} as any;
+    const spec: ContextValueSpec.Explicit<ContextValues, string> = {} as any;
 
     expect(() => contextValueSpec(spec)).toThrow(TypeError);
   });

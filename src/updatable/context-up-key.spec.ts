@@ -11,7 +11,7 @@ describe('ContextUpKey', () => {
 
       class TestKey extends ContextUpKey<AfterEvent<string[]>, string> {
 
-        readonly upKey: ContextUpKey.UpKey<string, string>;
+        readonly upKey: ContextUpKey.SimpleUpKey<string[], string>;
 
         constructor() {
           super('test-key');

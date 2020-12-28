@@ -146,7 +146,7 @@ export namespace SimpleContextKey {
    */
   export type Seed<TSrc> =
   /**
-   * @returns Either source value, or `null`/`undefined` when when absent.
+   * @returns Either source value, or `null`/`undefined` when absent.
    */
       (this: void) => TSrc | null | undefined;
 

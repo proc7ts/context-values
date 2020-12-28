@@ -44,7 +44,9 @@ export class FnContextKey<TArgs extends any[], TRet = void>
   readonly byDefault: (this: void, context: ContextValues, key: FnContextKey<TArgs, TRet>) =>
       (this: void, ...args: TArgs) => TRet;
 
-  readonly upKey: ContextUpKey.UpKey<(this: void, ...args: TArgs) => TRet, (this: void, ...args: TArgs) => TRet>;
+  readonly upKey: ContextUpKey.SimpleUpKey<
+      [(this: void, ...args: TArgs) => TRet],
+      (this: void, ...args: TArgs) => TRet>;
 
   /**
    * Constructs updatable context function key.

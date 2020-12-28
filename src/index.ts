@@ -1,3 +1,4 @@
+export * from './context-builder';
 export * from './context-key';
 export * from './context-key-error';
 export * from './context-ref';
