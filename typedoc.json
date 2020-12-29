@@ -1,12 +1,5 @@
 {
-  "disableAutoModuleName": true,
-  "exclude": [
-    "**/index.ts",
-    "**/*.impl.ts",
-    "**/*.spec.ts"
-  ],
-  "excludeNotExported": true,
-  "mode": "modules",
+  "entryPoints": ["src/index.ts", "src/updatable/index.ts"],
   "name": "Context Values",
   "out": "./target/typedoc",
   "tsconfig": "tsconfig.main.json"

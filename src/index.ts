@@ -1,3 +1,7 @@
+/**
+ * @packageDocumentation
+ * @module @proc7ts/fun-events
+ */
 export * from './context-builder';
 export * from './context-key';
 export * from './context-key-error';

@@ -1,3 +1,7 @@
+/**
+ * @packageDocumentation
+ * @module @proc7ts/fun-events/updatable
+ */
 export * from './context-destroyed';
 export * from './context-module';
 export * from './context-module-dependency-error';
