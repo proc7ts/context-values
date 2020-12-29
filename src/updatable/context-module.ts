@@ -9,7 +9,7 @@ import { ContextKey__symbol } from '../context-key';
 import type { ContextRegistry } from '../context-registry';
 import type { ContextValueSpec } from '../context-value-spec';
 import type { ContextValues } from '../context-values';
-import { ContextModule$, ContextModule_impl__symbol } from './context-module.impl';
+import { ContextModule$, ContextModule$impl__symbol } from './context-module.impl';
 import type { ContextUpKey, ContextUpRef } from './context-up-key';
 
 /**
@@ -54,7 +54,7 @@ export class ContextModule implements ContextUpRef<ContextModule.Handle, Context
   /**
    * @internal
    */
-  private readonly [ContextModule_impl__symbol]: ContextModule$;
+  private readonly [ContextModule$impl__symbol]: ContextModule$;
 
   /**
    * Constructs context module.
@@ -63,21 +63,21 @@ export class ContextModule implements ContextUpRef<ContextModule.Handle, Context
    * @param options - Module construction options.
    */
   constructor(name: string, options: ContextModule.Options = {}) {
-    this[ContextModule_impl__symbol] = new ContextModule$(this, name, options);
+    this[ContextModule$impl__symbol] = new ContextModule$(this, name, options);
   }
 
   /**
    * A key of context module.
    */
   get [ContextKey__symbol](): ContextUpKey<ContextModule.Handle, ContextModule> {
-    return this[ContextModule_impl__symbol].key;
+    return this[ContextModule$impl__symbol].key;
   }
 
   /**
    * Human-readable module name.
    */
   get name(): string {
-    return this[ContextModule_impl__symbol].name;
+    return this[ContextModule$impl__symbol].name;
   }
 
   /**
@@ -86,7 +86,7 @@ export class ContextModule implements ContextUpRef<ContextModule.Handle, Context
    * Assigned by {@link ContextModule.Options.needs} option.
    */
   get needs(): ReadonlySet<ContextModule> {
-    return this[ContextModule_impl__symbol].needs;
+    return this[ContextModule$impl__symbol].needs;
   }
 
   /**
@@ -97,7 +97,7 @@ export class ContextModule implements ContextUpRef<ContextModule.Handle, Context
    * Always contains the module itself.
    */
   get has(): ReadonlySet<ContextModule> {
-    return this[ContextModule_impl__symbol].has;
+    return this[ContextModule$impl__symbol].has;
   }
 
   /**
@@ -107,7 +107,7 @@ export class ContextModule implements ContextUpRef<ContextModule.Handle, Context
 
     const supply = registry.provide({ a: this, is: this });
 
-    this[ContextModule_impl__symbol].replace(this, registry, supply);
+    this[ContextModule$impl__symbol].replace(this, registry, supply);
 
     return supply;
   }
@@ -126,7 +126,7 @@ export class ContextModule implements ContextUpRef<ContextModule.Handle, Context
    * @returns A promise resolved when the module is set up asynchronously.
    */
   setup(setup: ContextModule.Setup): Promise<void> {
-    return this[ContextModule_impl__symbol].setup(setup);
+    return this[ContextModule$impl__symbol].setup(setup);
   }
 
   toString(): string {

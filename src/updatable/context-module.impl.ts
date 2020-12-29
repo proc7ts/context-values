@@ -9,7 +9,7 @@ import type { ContextUpKey } from './context-up-key';
 /**
  * @internal
  */
-export const ContextModule_impl__symbol = (/*#__PURE__*/ Symbol('ContextModule.impl'));
+export const ContextModule$impl__symbol = (/*#__PURE__*/ Symbol('ContextModule.impl'));
 
 /**
  * @internal
