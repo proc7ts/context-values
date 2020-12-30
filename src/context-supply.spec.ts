@@ -1,23 +1,22 @@
-import { Supply, SupplyPeer } from '@proc7ts/primitives';
-import { ContextKeyError } from './context-key-error';
+import { isAlwaysSupply, Supply, SupplyPeer } from '@proc7ts/primitives';
 import { ContextRegistry } from './context-registry';
 import { ContextSupply } from './context-supply';
 import type { ContextValues } from './context-values';
 
 describe('ContextSupply', () => {
-  it('is not defined by default', () => {
+  it('is always-supply by default', () => {
 
     const values = new ContextRegistry().newValues();
 
     expect(values.get(ContextSupply, { or: null })).toBeNull();
     expect(values.get(ContextSupply, { or: undefined })).toBeUndefined();
-    expect(() => values.get(ContextSupply)).toThrow(ContextKeyError);
+    expect(isAlwaysSupply(values.get(ContextSupply))).toBe(true);
   });
-  it('is equal to supply of context when context is a peer', () => {
+  it('is equal to the supply of context', () => {
 
     const values = new ContextRegistry().newValues();
     const supply = new Supply();
-    const context: ContextValues & SupplyPeer = {
+    const context: ContextValues = {
       get: values.get,
       supply,
     };
@@ -26,13 +25,23 @@ describe('ContextSupply', () => {
     expect(context.get(ContextSupply, { or: undefined })).toBe(supply);
     expect(context.get(ContextSupply)).toBe(supply);
   });
-  it('is equal to fallback when context is a peer and no value provided', () => {
+  it('is equal to the supply of context and fallback specified', () => {
 
     const values = new ContextRegistry().newValues();
     const supply = new Supply();
     const context: ContextValues & SupplyPeer = {
       get: values.get,
       supply,
+    };
+    const fallback = new Supply();
+
+    expect(context.get(ContextSupply, { or: fallback })).toBe(supply);
+  });
+  it('is equal to fallback when context has no supply and no value provided', () => {
+
+    const values = new ContextRegistry().newValues();
+    const context: ContextValues = {
+      get: values.get,
     };
     const fallback = new Supply();
 
