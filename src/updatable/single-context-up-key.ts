@@ -93,9 +93,9 @@ export class SingleContextUpKey<TValue>
       });
     }));
 
-    const supply = slot.context.get(ContextSupply, { or: null });
-
-    slot.insert(supply ? value.do<AfterEvent<TValue[]>>(supplyAfter(supply)) : value);
+    slot.insert(value.do<AfterEvent<TValue[]>>(
+        supplyAfter(slot.context.get(ContextSupply)),
+    ));
   }
 
 }

@@ -7,7 +7,7 @@ import {
   trackValue,
   ValueTracker,
 } from '@proc7ts/fun-events';
-import { alwaysSupply, neverSupply, Supply, SupplyPeer, valueProvider } from '@proc7ts/primitives';
+import { neverSupply, Supply, SupplyPeer, valueProvider } from '@proc7ts/primitives';
 import type { ContextRequest } from '../context-ref';
 import type { ContextRegistry } from '../context-registry';
 import { ContextSupply } from '../context-supply';
@@ -29,7 +29,7 @@ export class ContextModuleUsage {
     this._impl = trackValue();
     this._loader = trackValue<ContextModuleLoader>(this._notLoaded());
 
-    const contextSupply = context.get(ContextSupply, { or: alwaysSupply() });
+    const contextSupply = context.get(ContextSupply);
 
     contextSupply.cuts(this._impl);
     contextSupply.cuts(this._loader);
