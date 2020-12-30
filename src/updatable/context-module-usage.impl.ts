@@ -13,30 +13,31 @@ import type { ContextRegistry } from '../context-registry';
 import { ContextSupply } from '../context-supply';
 import type { ContextValues } from '../context-values';
 import type { ContextModule } from './context-module';
+import { ContextModuleLoader } from './context-module-loader';
 
 /**
  * @internal
  */
 export class ContextModuleUsage {
 
-  private readonly _impl: ValueTracker<ContextModule| undefined>;
-  private readonly _loader: ValueTracker<ContextModuleLoader>;
+  private readonly _impl: ValueTracker<ContextModule | undefined>;
+  private readonly _rev: ValueTracker<ContextModuleRev>;
   private _useCounter = 0;
 
   private _setup!: () => void;
 
   constructor(context: ContextValues, readonly module: ContextModule) {
     this._impl = trackValue();
-    this._loader = trackValue<ContextModuleLoader>(this._notLoaded());
+    this._rev = trackValue<ContextModuleRev>(this._notLoaded());
 
     const contextSupply = context.get(ContextSupply);
 
     contextSupply.cuts(this._impl);
-    contextSupply.cuts(this._loader);
+    contextSupply.cuts(this._rev);
 
     this._impl.read(module => {
 
-      const prevSupply = this._loader.it.supply;
+      const prevSupply = this._rev.it.supply;
 
       if (module) {
         this._load(module);
@@ -48,7 +49,7 @@ export class ContextModuleUsage {
 
   createHandle(): ContextModule.Handle {
 
-    const read: AfterEvent<[ContextModule.Status]> = this._loader.read.do(
+    const read: AfterEvent<[ContextModule.Status]> = this._rev.read.do(
         mapAfter_(({ status }) => status),
     );
 
@@ -62,10 +63,13 @@ export class ContextModuleUsage {
   }
 
   setup(context: ContextValues, registry: ContextRegistry): void {
+
+    const loader = context.get(ContextModuleLoader);
+
     this._setup = () => {
 
-      let loader = this._loader.it;
-      const { status: { module }, supply } = loader;
+      let rev = this._rev.it;
+      const { status: { module }, supply } = rev;
 
       if (module !== this.module) {
         // Load implementation module instead.
@@ -73,15 +77,15 @@ export class ContextModuleUsage {
         context.get(module).use(supply).read({
           supply,
           receive: (_ctx, { ready, error }) => {
-            loader = this._updateStatus(loader, ready, error);
+            rev = this._updateStatus(rev, ready, error);
           },
         });
       } else {
-        setupContextModule(context, registry, loader)
-            .then(() => this._updateStatus(loader, true))
+        loadContextModule(context, registry, loader, rev)
+            .then(() => this._updateStatus(rev, true))
             .catch(error => {
-              loader.supply.off(error);
-              this._updateStatus(loader, false, error);
+              rev.supply.off(error);
+              this._updateStatus(rev, false, error);
             });
       }
     };
@@ -91,7 +95,7 @@ export class ContextModuleUsage {
     this._impl.by(impl);
   }
 
-  private _notLoaded(): ContextModuleLoader {
+  private _notLoaded(): ContextModuleRev {
     return {
       status: {
         module: this.module,
@@ -102,26 +106,26 @@ export class ContextModuleUsage {
   }
 
   private _updateStatus(
-      loader: ContextModuleLoader,
+      rev: ContextModuleRev,
       ready: boolean,
       error?: unknown,
-  ): ContextModuleLoader {
-    // Ensure updating the correct loader status.
-    if (this._loader.it !== loader) {
-      // If loader changed, then drop the obsolete one.
-      loader.supply.off();
+  ): ContextModuleRev {
+    // Ensure updating the correct revision.
+    if (this._rev.it !== rev) {
+      // If revision changed, then drop the obsolete one.
+      rev.supply.off();
     } else {
-      this._loader.it = loader = {
+      this._rev.it = rev = {
         status: {
-          module: loader.status.module,
+          module: rev.status.module,
           ready,
           error,
         },
-        supply: loader.supply,
+        supply: rev.supply,
       };
     }
 
-    return loader;
+    return rev;
   }
 
   private _use(handle: ContextModule.Handle, user?: SupplyPeer): ContextModule.Use {
@@ -136,8 +140,8 @@ export class ContextModuleUsage {
     if (!supply.isOff) {
       supply.whenOff(reason => {
         if (!--this._useCounter) {
-          this._loader.it.supply.off(reason);
-          this._loader.it = this._notLoaded();
+          this._rev.it.supply.off(reason);
+          this._rev.it = this._notLoaded();
         }
       });
 
@@ -152,9 +156,9 @@ export class ContextModuleUsage {
 
   private _load(module: ContextModule): void {
 
-    const supply = new Supply().needs(this._loader);
+    const supply = new Supply().needs(this._rev);
 
-    this._loader.it = {
+    this._rev.it = {
       status: {
         module,
         ready: false,
@@ -172,7 +176,7 @@ export class ContextModuleUsage {
 /**
  * @internal
  */
-interface ContextModuleLoader {
+interface ContextModuleRev {
 
   readonly status: ContextModule.Status;
   readonly supply: Supply;
@@ -182,12 +186,13 @@ interface ContextModuleLoader {
 /**
  * @internal
  */
-async function setupContextModule(
+async function loadContextModule(
     context: ContextValues,
     registry: ContextRegistry,
-    { status: { module }, supply }: ContextModuleLoader,
+    loader: ContextModuleLoader,
+    { status: { module }, supply }: ContextModuleRev,
 ): Promise<void> {
-  await module.setup({
+  await loader.loadModule({
 
     module,
     supply,
