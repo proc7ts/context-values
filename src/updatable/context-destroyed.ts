@@ -9,8 +9,8 @@
  *
  * @param reason - Context destruction reason.
  */
-export function contextDestroyed(reason?: any): () => never {
+export function contextDestroyed(reason: unknown = new TypeError('Context destroyed')): () => never {
   return () => {
-    throw reason ?? new TypeError('Context destroyed');
+    throw reason;
   };
 }
