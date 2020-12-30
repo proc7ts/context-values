@@ -4,6 +4,7 @@
  */
 export * from './context-destroyed';
 export * from './context-module';
+export * from './context-module-loader';
 export * from './context-module-dependency-error';
 export * from './context-up-key';
 export * from './fn-context-key';
