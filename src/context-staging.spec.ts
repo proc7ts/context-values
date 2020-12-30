@@ -14,6 +14,9 @@ describe('ContextStaging', () => {
   it('executes task immediately', async () => {
     expect(await staging.now(() => 'result')).toBe('result');
   });
+  it('executes postponed task immediately if there is no currently executing ones', async () => {
+    expect(await staging.later(() => 'result')).toBe('result');
+  });
   it('executes a task from another task', async () => {
 
     let result1!: Promise<string>;
@@ -82,12 +85,14 @@ describe('ContextStaging', () => {
 
       const goon = newPromiseResolver<void>();
       const results: string[] = [];
+      let postponed!: Promise<string>;
 
       expect(await staging.now(() => {
         staging.later(() => results.push('postponed1')).catch(noop);
         staging.now(() => goon.promise()).catch(noop);
         staging.now(() => results.push('now')).catch(noop);
         staging.later(() => results.push('postponed2')).catch(noop);
+        postponed = staging.later(() => 'postponed3');
         return 'result';
       })).toBe('result');
 
@@ -95,10 +100,7 @@ describe('ContextStaging', () => {
 
       expect(results).toEqual(['now']);
       goon.resolve();
-      await Promise.resolve();
-      await Promise.resolve();
-      await Promise.resolve();
-
+      expect(await postponed.catch(asis)).toBeInstanceOf(TypeError);
       expect(results).toEqual(['now']);
     });
     it('prevents tasks execution', async () => {

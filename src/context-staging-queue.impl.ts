@@ -39,13 +39,10 @@ export class NoContextStagingQ implements ContextStagingQueue {
  */
 export class ContextStagingQ implements ContextStagingQueue {
 
-  private _execution: Promise<unknown> = Promise.resolve();
+  private _execution?: Promise<unknown> = undefined;
   private _postponed: (() => Promise<void>)[] = [];
 
   constructor(private readonly _supply: Supply) {
-    this._supply.whenOff(() => {
-      this._postponed = [];
-    });
   }
 
   now<T>(task: (this: void) => T | PromiseLike<T>): Promise<T> {
@@ -53,22 +50,28 @@ export class ContextStagingQ implements ContextStagingQueue {
     let execution: Promise<void>;
     const finish = (): void => {
       if (this._execution === execution) {
+        this._execution = undefined;
         this._execPostponed();
       }
     };
 
-    const exec = contextStagingTask(task);
-    const result = exec();
+    const exec = this._toTask(task);
+    const result = Promise.resolve().then(exec); // Do not execute the task immediately
+    const prevExecution = this._execution ? this._execution.then(() => result) : result;
 
-    this._execution = execution = this._execution.then(() => result).then(finish, finish);
+    this._execution = execution = prevExecution.then(finish, finish);
 
     return result;
   }
 
   later<T>(task: (this: void) => T | PromiseLike<T>): Promise<T> {
+    if (!this._execution) {
+      return this.now(task);
+    }
+
     return new Promise<T>((resolve, reject) => {
 
-      const exec = contextStagingTask(task);
+      const exec = this._toTask(task);
 
       this._postponed.push(async () => {
 
@@ -81,6 +84,16 @@ export class ContextStagingQ implements ContextStagingQueue {
     });
   }
 
+  private _toTask<T>(task: () => T | PromiseLike<T>): () => Promise<T> {
+    this._supply.whenOff((reason = new TypeError('Context destroyed')) => {
+      task = () => {
+        throw reason;
+      };
+    });
+
+    return async (): Promise<T> => await task();
+  }
+
   private _execPostponed(): void {
 
     const postponed = this._postponed;
@@ -91,8 +104,4 @@ export class ContextStagingQ implements ContextStagingQueue {
     }
   }
 
-}
-
-function contextStagingTask<T>(task: () => T | PromiseLike<T>): () => Promise<T> {
-  return async (): Promise<T> => await task();
 }
