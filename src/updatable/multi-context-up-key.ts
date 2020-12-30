@@ -93,11 +93,9 @@ export class MultiContextUpKey<TSrc>
       });
     }));
 
-    const supply = slot.context.get(ContextSupply, { or: null });
-
-    slot.insert(supply
-        ? value.do<AfterEvent<TSrc[]>>(supplyAfter(supply))
-        : value);
+    slot.insert(value.do<AfterEvent<TSrc[]>>(
+        supplyAfter(slot.context.get(ContextSupply)),
+    ));
   }
 
 }

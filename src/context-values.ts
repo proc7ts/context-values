@@ -3,6 +3,7 @@
  * @module @proc7ts/context-values
  */
 import type { ContextRequest } from './context-ref';
+import type { ContextSupply } from './context-supply';
 
 /**
  * The values available from context.
@@ -47,5 +48,16 @@ export abstract class ContextValues {
    * and the key has no default value.
    */
   abstract get<TValue>(request: ContextRequest<TValue>, opts?: ContextRequest.OrFallback<TValue>): TValue;
+
+}
+
+export interface ContextValues {
+
+  /**
+   * Context values supply.
+   *
+   * When provided, this value is available under {@link ContextSupply} key, unless overridden.
+   */
+  readonly supply?: ContextSupply;
 
 }

@@ -173,12 +173,9 @@ class ContextUpKey$UpKey<TUpdate extends any[], TSrc>
       const value: EventKeeper<TUpdate> | null | undefined = slot.fillBy(grow);
 
       if (value != null) {
-
-        const supply = slot.context.get(ContextSupply, { or: null });
-
-        if (supply) {
-          slot.insert(value[AfterEvent__symbol]().do(supplyAfter(supply)));
-        }
+        slot.insert(value[AfterEvent__symbol]().do(
+            supplyAfter(slot.context.get(ContextSupply)),
+        ));
       }
     };
   }
