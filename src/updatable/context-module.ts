@@ -294,6 +294,16 @@ export namespace ContextModule {
     readonly module: ContextModule;
 
     /**
+     * Whether the module implementation is provided.
+     */
+    readonly provided: boolean;
+
+    /**
+     * Whether the module is {@link Handle.use used} at least once.
+     */
+    readonly used: boolean;
+
+    /**
      * Whether the module is loaded and ready for use.
      */
     readonly ready: boolean;

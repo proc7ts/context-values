@@ -34,12 +34,29 @@ describe('ContextModule', () => {
     const supply = registry.provide(module);
 
     expect(await context.get(key1)).toBe(1);
+    expect(await context.get(module).read).toMatchObject({
+      module,
+      provided: true,
+      used: false,
+      ready: false,
+    });
 
-    expect(await context.get(module).use().whenReady).toMatchObject({ module, ready: true });
+    expect(await context.get(module).use().whenReady).toMatchObject({
+      module,
+      provided: true,
+      used: true,
+      ready: true,
+    });
     expect(await context.get(key1)).toBe(101);
 
     supply.off();
     expect(await context.get(key1)).toBe(1);
+    expect(await context.get(module).read).toMatchObject({
+      module,
+      provided: false,
+      used: true,
+      ready: false,
+    });
   });
   it('loaded once', async () => {
 
@@ -61,19 +78,35 @@ describe('ContextModule', () => {
     context.get(key).do(onceAfter)(receiver);
     expect(receiver).toHaveBeenLastCalledWith(0);
 
-    expect(await context.get(module).use().whenReady).toMatchObject({ module, ready: true });
+    expect(await context.get(module).use().whenReady).toMatchObject({
+      module,
+      provided: true,
+      used: true,
+      ready: true,
+    });
     context.get(key).do(onceAfter)(receiver);
     expect(receiver).toHaveBeenLastCalledWith(1, 2);
 
     supply1.off();
     await Promise.resolve();
-    expect(await context.get(module).use().whenReady).toMatchObject({ module, ready: true });
+    expect(await context.get(module).use().whenReady).toMatchObject({
+      module,
+      provided: true,
+      used: true,
+      ready: true,
+    });
     context.get(key).do(onceAfter)(receiver);
     expect(receiver).toHaveBeenLastCalledWith(1, 2);
 
     supply2.off();
     context.get(key).do(onceAfter)(receiver);
     expect(receiver).toHaveBeenLastCalledWith(0);
+    expect(await context.get(module).read).toMatchObject({
+      module,
+      provided: false,
+      used: true,
+      ready: false,
+    });
   });
   it('never loaded when user supply is cut off', async () => {
 
@@ -91,7 +124,12 @@ describe('ContextModule', () => {
     const use = context.get(module).use(neverSupply());
 
     await Promise.resolve();
-    expect(await use.read).toMatchObject({ module, ready: false });
+    expect(await use.read).toMatchObject({
+      module,
+      provided: true,
+      used: false,
+      ready: false,
+    });
     expect(await context.get(key1)).toBe(1);
   });
   it('unloaded when no more users', async () => {
@@ -144,6 +182,8 @@ describe('ContextModule', () => {
     use.supply.off();
     expect(await whenStatus(module, status => status.error === undefined && status)).toMatchObject({
       module,
+      provided: false,
+      used: false,
       ready: false,
     });
   });
@@ -171,13 +211,24 @@ describe('ContextModule', () => {
     expect(await context.get(key1)).toBe(1);
     expect(await context.get(key2)).toBe(2);
 
-    expect(await context.get(module).use().whenReady).toMatchObject({ module, ready: true });
+    expect(await context.get(module).use().whenReady).toMatchObject({
+      module,
+      provided: true,
+      used: true,
+      ready: true,
+    });
     expect(await context.get(key1)).toBe(101);
     expect(await context.get(key2)).toBe(102);
 
     supply.off();
     expect(await context.get(key1)).toBe(1);
     expect(await context.get(key2)).toBe(2);
+    expect(await context.get(module).read).toMatchObject({
+      module,
+      provided: false,
+      used: true,
+      ready: false,
+    });
   });
   it('handles preliminary module unload', async () => {
 
@@ -206,7 +257,12 @@ describe('ContextModule', () => {
 
     supply.off();
 
-    expect(await read).toMatchObject({ module, ready: false });
+    expect(await read).toMatchObject({
+      module,
+      provided: false,
+      used: true,
+      ready: false,
+    });
     expect(await context.get(key1)).toBe(1);
   });
   it('handles preliminary module deactivation', async () => {
@@ -237,7 +293,12 @@ describe('ContextModule', () => {
 
     use.supply.off();
 
-    expect(await use.read).toMatchObject({ module, ready: false });
+    expect(await use.read).toMatchObject({
+      module,
+      provided: true,
+      used: false,
+      ready: false,
+    });
     expect(await context.get(key1)).toBe(1);
   });
   it('sets up after dependency', async () => {
@@ -329,6 +390,13 @@ describe('ContextModule', () => {
     expect(failure).toBeInstanceOf(ContextModuleDependencyError);
     expect(failure.module).toBe(module);
     expect(failure.reasons).toEqual([[dep, error]]);
+    expect(await context.get(module).read).toMatchObject({
+      module,
+      provided: false,
+      used: true,
+      ready: false,
+      error: failure,
+    });
     expect(await context.get(key1)).toBe(1);
   });
   it('replaces other module when explicitly loaded', async () => {
@@ -412,6 +480,12 @@ describe('ContextModule', () => {
     replacedSupply.off();
     expect(await context.get(key1)).toBe(1);
     expect(await context.get(key2)).toBe(102);
+    expect(await context.get(replaced).read).toMatchObject({
+      module: replaced,
+      provided: true,
+      used: true,
+      ready: true,
+    });
   });
   it('handles immediate module replacement', async () => {
 
@@ -482,7 +556,10 @@ describe('ContextModule', () => {
   }
 
   function whenImplementedBy(target: ContextModule, impl: ContextModule): Promise<unknown> {
-    return whenStatus(target, ({ module, ready }) => ready && module === impl);
+    return whenStatus(
+        target,
+        ({ module, provided, ready }) => ready && provided && module === impl,
+    );
   }
 
   function whenFailed(target: ContextModule): Promise<unknown> {
