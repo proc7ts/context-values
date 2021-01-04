@@ -118,8 +118,16 @@ export class ContextModule implements ContextUpRef<ContextModule.Handle, Context
    * This method is called when loading the module. It is used e.g. to provide more values for the context.
    *
    * By default:
-   * - satisfies module {@link needs dependencies},
-   * - performs the set up procedure by {@link ContextModule.Options.setup} option.
+   *
+   * 1. Satisfies module {@link needs dependencies} by setting them up.
+   *
+   *    The dependency considered satisfied when it is {@link ContextModule.Status.settled settled}.
+   *
+   * 2. {@link ContextModule.Setup.initBy Initializes} the module by initializing the dependencies.
+   *
+   *    The dependency considered initialized when it is {@link ContextModule.Status.ready ready for use}.
+   *
+   * 3. Performs the module setup by invoking the {@link ContextModule.Options.setup} method.
    *
    * This method is called by {@link ContextModuleLoader.loadModule context module loader}.
    *
@@ -211,6 +219,22 @@ export namespace ContextModule {
         spec: ContextValueSpec<ContextValues, unknown, TDeps, TSrc, TSeed>,
     ): Supply;
 
+    /**
+     * Registers the module initializer.
+     *
+     * The module initializer registration is only valid during its {@link ContextModule.setup setup}.
+     *
+     * The registered initializers executed after successful module {@link ContextModule.setup}. The modules
+     * is considered {@link ContextModule.Status.ready ready for use} only when all registered initializers succeed.
+     *
+     * The registered initializers executed serially. I.e. then ext one does not start until the previous one succeeds.
+     *
+     * @param init - The module initialization function, that returns nothing when the module initialization
+     * completed synchronously, or a promise-like instance resolved when the module initialization completed
+     * asynchronously.
+     */
+    initBy(init: (this: void) => void | PromiseLike<unknown>): void;
+
   }
 
   /**
@@ -256,8 +280,21 @@ export namespace ContextModule {
      * An `AfterEvent` keeper of module load status.
      *
      * The `[AfterEvent__symbol]` property is an alias of this one.
+     *
+     * Cuts off the supply when context module no longer {@link supply used}.
      */
     readonly read: AfterEvent<[ContextModule.Status]>;
+
+    /**
+     * An `OnEvent` sender of the module settlement event.
+     *
+     * Sends the {@link ContextModule.Status loaded module status} when it is {@link ContextModule.Status.settled
+     * settled}, but possibly before it is {@link ContextModule.Status.ready ready}.
+     *
+     * Cuts off the supply when context module {@link ContextModule.Status.error failed to load} or no longer
+     * {@link supply used}.
+     */
+    readonly whenSettled: OnEvent<[ContextModule.Status]>;
 
     /**
      * An `OnEvent` sender of the module readiness event.
@@ -265,7 +302,8 @@ export namespace ContextModule {
      * Sends the {@link ContextModule.Status loaded module status} when it is {@link ContextModule.Status.ready ready
      * for use}.
      *
-     * Cuts off the supply when context module {@link ContextModule.Status.error failed to load}.
+     * Cuts off the supply when context module {@link ContextModule.Status.error failed to load} or no longer
+     * {@link supply used}.
      */
     readonly whenReady: OnEvent<[ContextModule.Status]>;
 
@@ -304,7 +342,17 @@ export namespace ContextModule {
     readonly used: boolean;
 
     /**
+     * Whether the module is settled.
+     *
+     * The module is settled when its {@link ContextModule.setup set up} is complete.
+     */
+    readonly settled: boolean;
+
+    /**
      * Whether the module is loaded and ready for use.
+     *
+     * The module is ready when it is {@link settled}, and all of its {@link ContextModule.Setup.initBy initializers}
+     * succeed.
      */
     readonly ready: boolean;
 

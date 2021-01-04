@@ -1,5 +1,6 @@
+import type { OnEvent } from '@proc7ts/fun-events';
 import { isDefined, noop, setOfElements, Supply, valueProvider } from '@proc7ts/primitives';
-import { mapIt, valueIt } from '@proc7ts/push-iterator';
+import { itsElements, valueIt } from '@proc7ts/push-iterator';
 import type { ContextRegistry } from '../context-registry';
 import type { ContextModule } from './context-module';
 import { ContextModuleDependencyError } from './context-module-dependency-error';
@@ -48,37 +49,50 @@ export class ContextModule$ {
   }
 
   async setup(setup: ContextModule.Setup): Promise<void> {
-    if (!await satisfyContextModuleDeps(setup)) {
-      setup.supply.off();
+
+    const deps = contextModuleDeps(setup);
+
+    // Await for module dependencies to be settled.
+    if (!await loadContextModuleDeps(setup, deps, whenContextModuleSettled)) {
       return;
     }
+
+    setup.initBy(async () => {
+      // Initialize module dependencies.
+      await loadContextModuleDeps(setup, deps, whenContextModuleReady);
+    });
+
     await this._setup(setup);
   }
 
 }
 
-/**
- * @internal
- */
-function satisfyContextModuleDeps(setup: ContextModule.Setup): Promise<boolean> {
+interface ContextModuleDep {
+  readonly dep: ContextModule;
+  readonly use: ContextModule.Use;
+}
+
+function contextModuleDeps(setup: ContextModule.Setup): readonly ContextModuleDep[] {
 
   const { module, supply } = setup;
 
-  return loadContextModules(
-      setup,
+  return itsElements(
       valueIt(
           module.needs,
-          dep => dep !== module && setup.provide(dep).needs(supply) && dep,
+          dep => dep !== module
+              && setup.provide(dep).needs(supply)
+              && {
+                dep,
+                use: setup.get(dep).use(setup),
+              },
       ),
   );
 }
 
-/**
- * @internal
- */
-function loadContextModules(
+function loadContextModuleDeps(
     setup: ContextModule.Setup,
-    modules: Iterable<ContextModule>,
+    deps: readonly ContextModuleDep[],
+    whenLoaded: (use: ContextModule.Use) => OnEvent<[ContextModule.Status]>,
 ): Promise<boolean> {
 
   const { module, supply } = setup;
@@ -89,31 +103,40 @@ function loadContextModules(
     whenDone,
     Promise
         .all(
-            mapIt(
-                modules,
-                dep => setup.get(dep)
-                    .use(setup)
-                    .whenReady
-                    .then(
+            deps
+                .map(
+                    ({ dep, use }) => whenLoaded(use).then(
                         noop,
                         error => [dep, error] as const,
                     ),
-            ),
+                ),
         )
         .then(
-            reasons => {
+            (results): true | ContextModuleDependencyError => {
 
-              const knownReasons = reasons.filter<readonly [ContextModule, unknown]>(isDefined);
+              const failures = results.filter<readonly [ContextModule, unknown]>(isDefined);
 
-              return knownReasons.length
-                  ? new ContextModuleDependencyError(module, knownReasons) // Prevent unhandled promise rejection
-                  : true;
+              return failures.length
+                  ? new ContextModuleDependencyError(module, failures) // Prevent unhandled promise rejection
+                  : true as const;
             },
         ),
   ]).then(
-      result => typeof result === 'boolean'
-          ? result
-          : Promise.reject(result),
+      result => {
+        if (typeof result !== 'boolean') {
+          // Fail to load module if at leas one of its dependencies failed.
+          return Promise.reject(result);
+        }
+
+        return result;
+      },
   );
 }
 
+function whenContextModuleSettled(use: ContextModule.Use): OnEvent<[ContextModule.Status]> {
+  return use.whenSettled;
+}
+
+function whenContextModuleReady(use: ContextModule.Use): OnEvent<[ContextModule.Status]> {
+  return use.whenReady;
+}
