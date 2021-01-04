@@ -4,6 +4,7 @@ import {
   mapAfter_,
   OnEvent,
   onEventBy,
+  supplyAfter,
   trackValue,
   ValueTracker,
 } from '@proc7ts/fun-events';
@@ -33,6 +34,7 @@ export class ContextModuleUsage {
         module: this.module,
         provided: false,
         used: false,
+        settled: false,
         ready: false,
       },
       supply: neverSupply(),
@@ -76,7 +78,7 @@ export class ContextModuleUsage {
 
     this._setup = () => {
 
-      let rev = this._rev.it;
+      const rev = this._rev.it;
       const { status: { module }, supply } = rev;
 
       if (module !== this.module) {
@@ -84,13 +86,17 @@ export class ContextModuleUsage {
         // The implementation module expected to be provided already.
         context.get(module).use(supply).read({
           supply,
-          receive: (_ctx, { ready, error }) => {
-            rev = this._updateStatus(rev, ready, error);
+          receive: (_ctx, { settled, ready, error }) => {
+            this._updateStatus(rev, settled, ready, error);
           },
         });
       } else {
         loadContextModule(context, registry, loader, rev)
-            .then(() => this._updateStatus(rev, true))
+            .then(({ whenReady }) => {
+              this._updateStatus(rev, true, false);
+              return whenReady;
+            })
+            .then(() => this._updateStatus(rev, true, true))
             .catch(error => rev.supply.off(error));
       }
     };
@@ -102,9 +108,10 @@ export class ContextModuleUsage {
 
   private _updateStatus(
       rev: ContextModuleRev,
+      settled: boolean,
       ready: boolean,
       error?: unknown,
-  ): ContextModuleRev {
+  ): void {
     // Ensure updating the correct revision.
     if (this._rev.it.supply !== rev.supply) {
       // If revision changed, then drop the obsolete one.
@@ -115,22 +122,62 @@ export class ContextModuleUsage {
           module: rev.status.module,
           provided: rev.status.provided,
           used: true,
+          settled,
           ready,
           error,
         },
         supply: rev.supply,
       };
     }
+  }
 
-    return rev;
+  private _load(module: ContextModule): void {
+
+    const supply = new Supply().needs(this._rev).whenOff(error => {
+
+      const rev = this._rev.it;
+
+      if (rev.supply === supply) {
+        this._rev.it = {
+          status: {
+            ...this._rev.it.status,
+            provided: false,
+            settled: false,
+            ready: false,
+            error,
+          },
+          supply,
+        };
+      }
+    });
+
+    const used = !!this._useCounter;
+
+    this._rev.it = {
+      status: {
+        module,
+        provided: true,
+        used,
+        settled: false,
+        ready: false,
+      },
+      supply,
+    };
+
+    if (used) {
+      this._setup();
+    }
   }
 
   private _use(handle: ContextModule.Handle, user?: SupplyPeer): ContextModule.Use {
 
     const supply = user ? user.supply : new Supply();
+    const read = handle.read.do(supplyAfter(supply));
     const use: ContextModule.Use = {
       ...handle,
-      whenReady: ContextModule$Use$whenReady(handle.read),
+      read,
+      whenSettled: ContextModule$Use$when(read, isContextModuleSettled),
+      whenReady: ContextModule$Use$when(read, isContextModuleReady),
       supply,
     };
 
@@ -144,6 +191,7 @@ export class ContextModuleUsage {
             status: {
               ...rev.status,
               used: false,
+              settled: false,
               ready: false,
               error,
             },
@@ -174,42 +222,6 @@ export class ContextModuleUsage {
     return use;
   }
 
-  private _load(module: ContextModule): void {
-
-    const supply = new Supply().needs(this._rev).whenOff(error => {
-
-      const rev = this._rev.it;
-
-      if (rev.supply === supply) {
-        this._rev.it = {
-          status: {
-            ...this._rev.it.status,
-            provided: false,
-            ready: false,
-            error,
-          },
-          supply,
-        };
-      }
-    });
-
-    const used = !!this._useCounter;
-
-    this._rev.it = {
-      status: {
-        module,
-        provided: true,
-        used,
-        ready: false,
-      },
-      supply,
-    };
-
-    if (used) {
-      this._setup();
-    }
-  }
-
 }
 
 /**
@@ -230,7 +242,10 @@ async function loadContextModule(
     registry: ContextRegistry,
     loader: ContextModuleLoader,
     { status: { module }, supply }: ContextModuleRev,
-): Promise<void> {
+): Promise<{ whenReady: Promise<unknown> }> {
+
+  const result: { whenReady: Promise<unknown> } = { whenReady: Promise.resolve() };
+
   await loader.loadModule({
 
     module,
@@ -244,17 +259,23 @@ async function loadContextModule(
       return registry.provide(spec).needs(supply);
     },
 
+    initBy(init: (this: void) => (void | PromiseLike<unknown>)) {
+      result.whenReady = result.whenReady.then(init);
+    },
+
   });
+
+  return result;
 }
 
-/**
- * @internal
- */
-function ContextModule$Use$whenReady(status: AfterEvent<[ContextModule.Status]>): OnEvent<[ContextModule.Status]> {
+function ContextModule$Use$when(
+    status: AfterEvent<[ContextModule.Status]>,
+    test: (status: ContextModule.Status) => boolean,
+): OnEvent<[ContextModule.Status]> {
   return onEventBy(receiver => status({
     supply: receiver.supply,
     receive: (context, status) => {
-      if (status.ready) {
+      if (test(status)) {
         receiver.receive(context, status);
         receiver.supply.off();
       } else if (status.error) {
@@ -262,4 +283,12 @@ function ContextModule$Use$whenReady(status: AfterEvent<[ContextModule.Status]>)
       }
     },
   }));
+}
+
+function isContextModuleSettled({ settled }: ContextModule.Status): boolean {
+  return settled;
+}
+
+function isContextModuleReady({ ready }: ContextModule.Status): boolean {
+  return ready;
 }
