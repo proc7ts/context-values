@@ -290,17 +290,18 @@ the last one will be constructed and used as a context value. The rest of them w
 Updatable Context Values
 ------------------------
 
-`SingleContextKey` and `MultiContextKey`, imply that once the associated context value constructed, it no longer
+The `SingleContextKey` and `MultiContextKey` imply that once the associated context value constructed, it no longer
 changes. I.e. even though more sources provided for the same key in `ContextRegistry` they won't affect the already
 constructed value. 
 
-However, it is possible to update context values. For that a `ContextUpKey` abstract context value key implementation
-may be used, or `SingleContextUpKey` and `MultiContextUpKey` implementations.
+However, it is possible to update context values. For that a `ContextUpKey` abstract key may be used,
+or `SingleContextUpKey` and `MultiContextUpKey` key implementations.
 
 They provide an [AfterEvent] keeper of value. The receivers registered in this keeper would receive the actual value
-each time it changes. E.g. when new value source is provided in `ContextRegistry`.
+immediately, and each time it changes. E.g. when new value source is provided in `ContextRegistry`.
 
-This functionality is implemented in `@proc7ts/context-value/updatable` sub-module and depends on `@proc7ts/fun-events`.
+This functionality is implemented in `@proc7ts/context-values/updatable` sub-module and depends on
+`@proc7ts/fun-events`.
 
 ```typescript
 import { ContextRegistry } from '@proc7ts/context-values'; 
@@ -319,3 +320,82 @@ registry.provide({ a: key, is: 'updated' });  // Log: 'updated'
 ```
 
 [AfterEvent]: https://www.npmjs.com/package/@proc7ts/fun-events
+
+
+Modules
+-------
+
+Context modules may be used to combine multiple context value providers, apply them at once, and unload when no longer
+needed.
+
+Usage example:
+```typescript
+import { ContextModule } from '@proc7ts/context-values/updatable';
+
+// Construct new module.
+const myModule = new ContextModule('my module', {
+  setup(setup) {
+    // Provide the values
+    setup.provide({ a: Foo, is: 'foo' });
+  },
+});
+
+// Load the module
+const myModuleSupply = contextRegistry.provide(myModule);
+
+// Start using the module
+const myModuleUse = await context.get(myModule).use();
+
+// Await for the module to load
+await myModuleUse.whenReady;
+
+// Access the value provided by module.
+console.log(context.get(Foo));
+
+// Stop using the module
+myModuleUse.supply.off();
+
+// Unload the module declaration.
+myModuleSupply.off();
+```
+
+Context module constructor accepts a human-readable module name, and options object.
+
+The following options supported:
+
+- `needs` - A module or modules the constructed one requires.
+
+  The listed modules will be loaded prior to loading the constructed one.
+
+- `has` - A module or modules the constructed one provides.
+
+  When specified, the constructed module will be loaded _instead_ of the listed ones.
+
+- `setup()` - A method that sets up constructed module.
+  
+  May be synchronous or asynchronous.
+
+  Accepts a `ContextModule.Setup` instance with the following properties:
+
+  - `get()` - For accessing context values.
+    
+    Inherited from `ContextValues` interface.
+
+  - `provide()` - For providing context values.
+    
+    The same as in `ContextRegistry`.
+    
+    The value providers will be removed automatically once the module is unloaded.
+
+  - `initBy()` - For registering module initializers.
+
+To use a module:
+
+1. Create its implementation.
+2. Provide it with `ContextRegistry.provide(module)` call.
+3. Obtain its handle from context by calling `ContextValues.get(module)`.
+4. Start using it by calling the `.use()` method of obtained module handle.
+5. Wait when the module loaded and ready: `await use.whenReady`
+6. When no longer needed, cut off the module use supply: `use.supply.off()`
+   The module will be unloaded once no longer uses remain.
+   Note that the module can be in use indirectly, when required by another one.

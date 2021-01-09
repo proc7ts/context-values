@@ -23,7 +23,7 @@ import type { ContextUpKey, ContextUpRef } from './context-up-key';
  * Usage example:
  * ```typescript
  * // Construct new module.
- * const myModule = new Module('my-module', {
+ * const myModule = new ContextModule('my module', {
  *   setup(setup) {
  *     // Provide the values
  *     setup.provide({ a: Foo, is: 'foo' });
