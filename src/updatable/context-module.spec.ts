@@ -1,5 +1,5 @@
 import { onceAfter } from '@proc7ts/fun-events';
-import { asis, newPromiseResolver, Supply } from '@proc7ts/primitives';
+import { asis, newPromiseResolver, noop, Supply } from '@proc7ts/primitives';
 import { ContextKey__symbol } from '../context-key';
 import { ContextRegistry } from '../context-registry';
 import type { ContextValues } from '../context-values';
@@ -71,6 +71,62 @@ describe('ContextModule', () => {
             setup.initBy(async () => {
               await resolver.promise();
               setup.provide({ a: key1, is: 101 });
+            });
+          },
+        },
+    );
+    const supply = registry.provide(module);
+
+    expect(await context.get(key1)).toBe(1);
+    expect(await context.get(module).read).toMatchObject({
+      module,
+      provided: true,
+      used: false,
+      settled: false,
+      ready: false,
+    });
+
+    expect(await context.get(module).use().whenSettled).toMatchObject({
+      module,
+      provided: true,
+      used: true,
+      settled: true,
+      ready: false,
+    });
+    expect(await context.get(key1)).toBe(1);
+
+    resolver.resolve();
+    expect(await context.get(module).use().whenReady).toMatchObject({
+      module,
+      provided: true,
+      used: true,
+      settled: true,
+      ready: true,
+    });
+    expect(await context.get(key1)).toBe(101);
+
+    supply.off();
+    expect(await context.get(key1)).toBe(1);
+    expect(await context.get(module).read).toMatchObject({
+      module,
+      provided: false,
+      used: true,
+      settled: false,
+      ready: false,
+    });
+  });
+  it('provides value by initializer inside initializer', async () => {
+
+    const resolver = newPromiseResolver();
+    const module = new ContextModule(
+        'test',
+        {
+          setup(setup) {
+            setup.initBy(() => {
+              setup.initBy(async () => {
+                await resolver.promise();
+                setup.provide({ a: key1, is: 101 });
+              });
             });
           },
         },
@@ -281,6 +337,41 @@ describe('ContextModule', () => {
       settled: false,
       ready: false,
     });
+  });
+  it('rejects initializer when initialization complete', async () => {
+
+    const whenInit = newPromiseResolver();
+    const afterInit = newPromiseResolver();
+    const module = new ContextModule(
+        'test',
+        {
+          setup(setup) {
+            setup.initBy(() => {
+
+              const result = Promise.resolve();
+
+              // eslint-disable-next-line jest/valid-expect-in-promise
+              afterInit.resolve(result.then(async () => {
+                await whenInit.promise();
+                setup.initBy(noop);
+              }));
+
+              return result;
+            });
+          },
+        },
+    );
+
+    registry.provide(module);
+
+    await context.get(module).use().whenReady;
+    whenInit.resolve();
+
+    const error: Error = await afterInit.promise().catch(asis);
+
+    expect(error).toBeInstanceOf(TypeError);
+    expect(error.message).toBe('ContextModule(test) initialized already, and does not accept new initializers');
+
   });
   it('loads dependency', async () => {
 

@@ -225,7 +225,9 @@ export namespace ContextModule {
      * The registered initializers executed after successful module {@link ContextModule.setup}. The modules
      * is considered {@link ContextModule.Status.ready ready for use} only when all registered initializers succeed.
      *
-     * The registered initializers executed serially. I.e. then ext one does not start until the previous one succeeds.
+     * The registered initializers executed serially. I.e. then next one does not start until the previous one succeeds.
+     *
+     * It is an error calling this method when the module initialized already.
      *
      * @param init - The module initialization function, that returns nothing when the module initialization
      * completed synchronously, or a promise-like instance resolved when the module initialization completed

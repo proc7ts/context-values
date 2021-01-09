@@ -237,9 +237,9 @@ async function loadContextModule(
     context: ContextValues,
     registry: ContextRegistry,
     { status: { module }, supply }: ContextModuleRev,
-): Promise<{ whenReady: Promise<unknown> }> {
+): Promise<ContextModuleInit> {
 
-  const result: { whenReady: Promise<unknown> } = { whenReady: Promise.resolve() };
+  const moduleInit = new ContextModuleInit(module);
 
   await module.setup({
 
@@ -255,12 +255,41 @@ async function loadContextModule(
     },
 
     initBy(init: (this: void) => (void | PromiseLike<unknown>)) {
-      result.whenReady = result.whenReady.then(init);
+      moduleInit.initBy(init);
     },
 
   });
 
-  return result;
+  return moduleInit;
+}
+
+class ContextModuleInit {
+
+  readonly whenReady: Promise<unknown>;
+  private _whenDone: Promise<unknown> = Promise.resolve();
+  private _ready!: (result?: PromiseLike<unknown>) => void;
+
+  constructor(private readonly _module: ContextModule) {
+    this.whenReady = new Promise(resolve => this._ready = resolve);
+  }
+
+  initBy(init: (this: void) => void | PromiseLike<unknown>): void {
+
+    const rev: Promise<unknown> = this._whenDone = this._whenDone
+        .then(init)
+        .finally(() => this._done(rev));
+
+  }
+
+  private _done(rev: Promise<unknown>): void {
+    if (this._whenDone === rev) {
+      this._ready(rev);
+      this.initBy = _init => {
+        throw new TypeError(`${this._module} initialized already, and does not accept new initializers`);
+      };
+    }
+  }
+
 }
 
 function ContextModule$Use$when(
