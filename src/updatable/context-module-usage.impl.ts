@@ -14,7 +14,6 @@ import type { ContextRegistry } from '../context-registry';
 import { ContextSupply } from '../context-supply';
 import type { ContextValues } from '../context-values';
 import type { ContextModule } from './context-module';
-import { ContextModuleLoader } from './context-module-loader';
 
 /**
  * @internal
@@ -73,9 +72,6 @@ export class ContextModuleUsage {
   }
 
   setup(context: ContextValues, registry: ContextRegistry): void {
-
-    const loader = context.get(ContextModuleLoader);
-
     this._setup = () => {
 
       const rev = this._rev.it;
@@ -91,7 +87,7 @@ export class ContextModuleUsage {
           },
         });
       } else {
-        loadContextModule(context, registry, loader, rev)
+        loadContextModule(context, registry, rev)
             .then(({ whenReady }) => {
               this._updateStatus(rev, true, false);
               return whenReady;
@@ -240,13 +236,12 @@ interface ContextModuleRev {
 async function loadContextModule(
     context: ContextValues,
     registry: ContextRegistry,
-    loader: ContextModuleLoader,
     { status: { module }, supply }: ContextModuleRev,
 ): Promise<{ whenReady: Promise<unknown> }> {
 
   const result: { whenReady: Promise<unknown> } = { whenReady: Promise.resolve() };
 
-  await loader.loadModule({
+  await module.setup({
 
     module,
     supply,

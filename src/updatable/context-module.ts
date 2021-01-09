@@ -129,8 +129,6 @@ export class ContextModule implements ContextUpRef<ContextModule.Handle, Context
    *
    * 3. Performs the module setup by invoking the {@link ContextModule.Options.setup} method.
    *
-   * This method is called by {@link ContextModuleLoader.loadModule context module loader}.
-   *
    * @param setup - Context module setup.
    *
    * @returns A promise resolved when the module is set up asynchronously.
