@@ -167,7 +167,12 @@ export class ContextModuleUsage {
 
   private _use(handle: ContextModule.Handle, user?: SupplyPeer): ContextModule.Use {
 
-    const supply = user ? user.supply : new Supply();
+    const supply = new Supply();
+
+    if (user) {
+      supply.needs(user);
+    }
+
     const read = handle.read.do(supplyAfter(supply));
     const use: ContextModule.Use = {
       ...handle,

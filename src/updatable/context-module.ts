@@ -256,8 +256,8 @@ export namespace ContextModule {
     /**
      * Initiate the module use.
      *
-     * @param user - Module user. Contains a module {@link Use.supply use supply}. A new supply instance will be created
-     * when omitted.
+     * @param user - Module user. Contains a supply required by {@link Use.supply module use supply}. The module use
+     * stops once the user supply is cut off.
      *
      * @returns A module usage instance.
      */
