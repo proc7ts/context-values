@@ -8,7 +8,6 @@ export * from './context-key-error';
 export * from './context-ref';
 export * from './context-registry';
 export * from './context-seeder';
-export * from './context-staging';
 export * from './context-supply';
 export * from './context-value-spec';
 export * from './context-values';
