@@ -13,8 +13,7 @@
     "importHelpers": true,
     "noEmitHelpers": true,
     "lib": [
-      "ES2018",
-      "ES2018.Promise",
+      "ES2018"
     ],
     "types": [
       "jest"
