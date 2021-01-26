@@ -88,8 +88,8 @@ export class SingleContextUpKey<TValue>
       }
 
       // Backup value is absent. Construct an error response.
-      return afterEventBy<[TValue]>(() => {
-        throw new ContextKeyError(this);
+      return afterEventBy<[TValue]>(({ supply }) => {
+        supply.off(new ContextKeyError(this));
       });
     }));
 
