@@ -1,5 +1,5 @@
 import { AfterEvent, afterThe, onceAfter } from '@proc7ts/fun-events';
-import { Supply } from '@proc7ts/primitives';
+import { asis, Supply } from '@proc7ts/primitives';
 import { ContextKeyError } from '../context-key-error';
 import { ContextRegistry } from '../context-registry';
 import { ContextSupply } from '../context-supply';
@@ -90,15 +90,15 @@ describe('SingleContextUpKey', () => {
     supply.off();
     expect(readValue(values.get(key))).toBe(value1);
   });
-  it('throws if there is neither default nor fallback value', () => {
-    expect(() => readValue(values.get(key))).toThrow(ContextKeyError);
-    expect(() => readValue(values.get(key, {})!)).toThrow(ContextKeyError);
+  it('cuts off the value supply if there is neither default nor fallback value', async () => {
+    expect(await Promise.resolve(values.get(key)).catch(asis)).toBeInstanceOf(ContextKeyError);
+    expect(await Promise.resolve(values.get(key, {})).catch(asis)).toBeInstanceOf(ContextKeyError);
   });
-  it('throws if fallback value is `null`', () => {
-    expect(() => readValue(values.get(key, { or: null })!)).toThrow(ContextKeyError);
+  it('cuts off the value supply if fallback value is `null`', async () => {
+    expect(await Promise.resolve(values.get(key, { or: null })).catch(asis)).toBeInstanceOf(ContextKeyError);
   });
-  it('throws if fallback value is `undefined`', () => {
-    expect(() => readValue(values.get(key, { or: undefined })!)).toThrow(ContextKeyError);
+  it('cuts off the value supply if fallback value is `undefined`', async () => {
+    expect(await Promise.resolve(values.get(key, { or: undefined })).catch(asis)).toBeInstanceOf(ContextKeyError);
   });
   it('provides fallback value if there is no provider', () => {
     expect(readValue(values.get(key, { or: afterThe('fallback') }))).toBe('fallback');

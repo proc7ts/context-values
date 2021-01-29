@@ -88,8 +88,8 @@ export class MultiContextUpKey<TSrc>
       }
 
       // Backup value is absent. Construct an error response.
-      return afterEventBy<TSrc[]>(() => {
-        throw new ContextKeyError(this);
+      return afterEventBy<TSrc[]>(({ supply }) => {
+        supply.off(new ContextKeyError(this));
       });
     }));
 
