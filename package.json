@@ -38,7 +38,7 @@
     }
   },
   "dependencies": {
-    "@proc7ts/primitives": "^1.6.1",
+    "@proc7ts/primitives": "^1.7.0",
     "@proc7ts/push-iterator": "^2.5.0"
   },
   "devDependencies": {
