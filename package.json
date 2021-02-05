@@ -30,7 +30,7 @@
     }
   },
   "peerDependencies": {
-    "@proc7ts/fun-events": "^10.1.1"
+    "@proc7ts/fun-events": "^10.1.2"
   },
   "peerDependenciesMeta": {
     "@proc7ts/fun-events": {
@@ -42,7 +42,7 @@
     "@proc7ts/push-iterator": "^2.5.0"
   },
   "devDependencies": {
-    "@proc7ts/fun-events": "^10.1.1",
+    "@proc7ts/fun-events": "^10.1.2",
     "@rollup/plugin-commonjs": "^17.1.0",
     "@rollup/plugin-node-resolve": "^11.1.1",
     "@run-z/eslint-config": "^1.2.1",
