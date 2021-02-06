@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @proc7ts/context-values
- */
 import type { ContextRequest } from './context-ref';
 import type { ContextSupply } from './context-supply';
 

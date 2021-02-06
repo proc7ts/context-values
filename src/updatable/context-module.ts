@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @proc7ts/fun-events/updatable
- */
 import type { AfterEvent, EventKeeper, OnEvent } from '@proc7ts/fun-events';
 import type { Supply, SupplyPeer } from '@proc7ts/primitives';
 import { ContextBuilder, ContextBuilder__symbol } from '../context-builder';

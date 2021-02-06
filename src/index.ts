@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module @proc7ts/fun-events
+ * @module Module @proc7ts/context-values
  */
 export * from './context-builder';
 export * from './context-key';

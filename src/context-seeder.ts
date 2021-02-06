@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @proc7ts/context-values
- */
 import type { Supply } from '@proc7ts/primitives';
 import type { ContextSeedKey } from './context-key';
 import type { ContextValueProvider } from './context-value-spec';

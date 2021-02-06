@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @proc7ts/fun-events/updatable
- */
 import type { ContextModule } from './context-module';
 
 /**

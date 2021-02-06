@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @proc7ts/context-values
- */
 import { valuesProvider } from '@proc7ts/primitives';
 import { itsElements } from '@proc7ts/push-iterator';
 import type { ContextKey, ContextKeyDefault, ContextSeedKey, ContextValueSlot } from './context-key';

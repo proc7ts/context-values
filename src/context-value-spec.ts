@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @proc7ts/context-values
- */
 import { valueProvider } from '@proc7ts/primitives';
 import type { ContextBuilder } from './context-builder';
 import type { ContextRequest, ContextTarget } from './context-ref';

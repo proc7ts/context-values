@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @proc7ts/context-values
- */
 import type { Supply } from '@proc7ts/primitives';
 import type { ContextRegistry } from './context-registry';
 import type { ContextValues } from './context-values';

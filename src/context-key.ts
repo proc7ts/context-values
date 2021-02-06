@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @proc7ts/context-values
- */
 import type { ContextRef } from './context-ref';
 import type { ContextRegistry } from './context-registry';
 import type { ContextSeeder } from './context-seeder';

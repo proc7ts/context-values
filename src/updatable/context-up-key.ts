@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @proc7ts/context-values/updatable
- */
 import {
   afterEach,
   AfterEvent,

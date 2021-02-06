@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @proc7ts/context-values
- */
 import { noop } from '@proc7ts/primitives';
 import type { ContextKey, ContextKeyDefault, ContextSeedKey, ContextValueSlot } from './context-key';
 import type { ContextRef } from './context-ref';

@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @proc7ts/context-values
- */
 import { noop, Supply } from '@proc7ts/primitives';
 import { ContextBuilder, ContextBuilder__symbol } from './context-builder';
 import { ContextKey__symbol, ContextSeedKey } from './context-key';

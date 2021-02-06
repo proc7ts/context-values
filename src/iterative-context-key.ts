@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @proc7ts/context-values
- */
 import { lazyValue, Supply } from '@proc7ts/primitives';
 import {
   itsElements,

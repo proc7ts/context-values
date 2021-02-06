@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @proc7ts/context-values/updatable
- */
 import { AfterEvent, afterThe, digAfter, EventKeeper } from '@proc7ts/fun-events';
 import { noop } from '@proc7ts/primitives';
 import type { ContextKeyDefault, ContextValueSlot } from '../context-key';

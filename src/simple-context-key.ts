@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @proc7ts/context-values
- */
 import { lazyValue, noop, Supply } from '@proc7ts/primitives';
 import { ContextKey, ContextSeedKey } from './context-key';
 import type { ContextSeeder } from './context-seeder';

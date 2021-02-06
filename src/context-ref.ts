@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @proc7ts/context-values
- */
 import { ContextKey, ContextKey__symbol } from './context-key';
 
 /**

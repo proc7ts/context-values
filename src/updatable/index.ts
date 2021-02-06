@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module @proc7ts/fun-events/updatable
+ * @module Module @proc7ts/context-values/updatable
  */
 export * from './context-destroyed';
 export * from './context-module';
