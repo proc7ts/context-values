@@ -98,7 +98,7 @@ export namespace ContextValueSlot {
     readonly context: ContextValues;
 
     /**
-     * A key to associated value with.
+     * A key to associate value with.
      */
     readonly key: ContextKey<TValue, TSrc, TSeed>;
 
