@@ -1,7 +1,7 @@
 import { isAlwaysSupply, Supply, SupplyPeer } from '@proc7ts/primitives';
-import { ContextRegistry } from './context-registry';
 import { ContextSupply } from './context-supply';
 import type { ContextValues } from './context-values';
+import { ContextRegistry } from './registry';
 
 describe('ContextSupply', () => {
   it('is always-supply by default', () => {

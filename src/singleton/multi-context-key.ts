@@ -1,7 +1,7 @@
 import { valuesProvider } from '@proc7ts/primitives';
 import { itsElements } from '@proc7ts/push-iterator';
-import type { ContextKey, ContextKeyDefault, ContextSeedKey, ContextValueSlot } from './context-key';
-import type { ContextRef } from './context-ref';
+import type { ContextRef } from '../context-ref';
+import type { ContextKey, ContextKeyDefault, ContextSeedKey, ContextValueSlot } from '../key';
 import { IterativeContextKey } from './iterative-context-key';
 
 /**

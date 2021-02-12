@@ -1,11 +1,10 @@
 import { valueProvider } from '@proc7ts/primitives';
-import type { ContextValueSetup, ContextValueSlot } from './context-key';
-import { ContextKeyError } from './context-key-error';
+import { ContextKeyError } from '../context-key-error';
+import type { ContextValues } from '../context-values';
+import type { ContextValueSetup, ContextValueSlot } from '../key';
+import type { SimpleContextKey } from '../singleton';
+import { MultiContextKey, SingleContextKey } from '../singleton';
 import { ContextRegistry } from './context-registry';
-import type { ContextValues } from './context-values';
-import { MultiContextKey } from './multi-context-key';
-import type { SimpleContextKey } from './simple-context-key';
-import { SingleContextKey } from './single-context-key';
 import Mock = jest.Mock;
 
 describe('ContextRegistry', () => {

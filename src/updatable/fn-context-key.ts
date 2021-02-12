@@ -1,8 +1,8 @@
 import { AfterEvent, afterThe, digAfter, EventKeeper } from '@proc7ts/fun-events';
 import { noop } from '@proc7ts/primitives';
-import type { ContextKeyDefault, ContextValueSlot } from '../context-key';
 import { ContextKeyError } from '../context-key-error';
 import type { ContextValues } from '../context-values';
+import type { ContextKeyDefault, ContextValueSlot } from '../key';
 import { contextDestroyed } from './context-destroyed';
 import { ContextUpKey, ContextUpRef } from './context-up-key';
 

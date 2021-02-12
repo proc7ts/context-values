@@ -1,4 +1,4 @@
-import type { ContextRequest } from './context-ref';
+import type { ContextRequest } from './context-request';
 import type { ContextSupply } from './context-supply';
 
 /**

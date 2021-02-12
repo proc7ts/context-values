@@ -1,12 +1,12 @@
 import { onceAfter } from '@proc7ts/fun-events';
 import { asis, newPromiseResolver, noop, Supply } from '@proc7ts/primitives';
-import { ContextKey__symbol } from '../context-key';
-import { ContextRegistry } from '../context-registry';
-import type { ContextValues } from '../context-values';
+import type { ContextValues } from '../../context-values';
+import { ContextKey__symbol } from '../../key';
+import { ContextRegistry } from '../../registry';
+import { MultiContextUpKey } from '../multi-context-up-key';
+import { SingleContextUpKey } from '../single-context-up-key';
 import { ContextModule } from './context-module';
 import { ContextModuleDependencyError } from './context-module-dependency-error';
-import { MultiContextUpKey } from './multi-context-up-key';
-import { SingleContextUpKey } from './single-context-up-key';
 
 describe('ContextModule', () => {
 

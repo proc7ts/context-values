@@ -14,12 +14,12 @@ import {
 } from '@proc7ts/fun-events';
 import { Supply } from '@proc7ts/primitives';
 import { itsElements, mapIt, overElementsOf, overIterator } from '@proc7ts/push-iterator';
-import { ContextKey, ContextKey__symbol, ContextSeedKey, ContextValueSlot } from '../context-key';
 import type { ContextRef } from '../context-ref';
-import type { ContextSeeder } from '../context-seeder';
 import { ContextSupply } from '../context-supply';
-import type { ContextValueProvider } from '../context-value-spec';
 import type { ContextValues } from '../context-values';
+import type { ContextSeeder, ContextValueSlot } from '../key';
+import { ContextKey, ContextKey__symbol, ContextSeedKey } from '../key';
+import type { ContextValueProvider } from '../registry';
 
 /**
  * @internal

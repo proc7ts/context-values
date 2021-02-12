@@ -1,7 +1,8 @@
 import { valueProvider } from '@proc7ts/primitives';
+import type { ContextRequest } from '../context-request';
+import type { ContextValues } from '../context-values';
 import type { ContextBuilder } from './context-builder';
-import type { ContextRequest, ContextTarget } from './context-ref';
-import type { ContextValues } from './context-values';
+import type { ContextTarget } from './context-target';
 
 /**
  * Context value provider.

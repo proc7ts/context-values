@@ -1,9 +1,9 @@
 import type { AfterEvent, EventKeeper } from '@proc7ts/fun-events';
 import { mapAfter_ } from '@proc7ts/fun-events';
-import type { ContextValueSlot } from '../context-key';
+import type { ContextValueSlot } from '../../key';
+import { ContextUpKey } from '../context-up-key';
 import type { ContextModule } from './context-module';
 import { ContextModuleUsage } from './context-module-usage.impl';
-import { ContextUpKey } from './context-up-key';
 
 /**
  * @internal

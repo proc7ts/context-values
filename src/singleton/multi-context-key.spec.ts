@@ -1,6 +1,6 @@
-import type { ContextKey } from './context-key';
-import { ContextRegistry } from './context-registry';
-import type { ContextValues } from './context-values';
+import type { ContextValues } from '../context-values';
+import type { ContextKey } from '../key';
+import { ContextRegistry } from '../registry';
 import { MultiContextKey } from './multi-context-key';
 
 describe('MultiContextKey', () => {
