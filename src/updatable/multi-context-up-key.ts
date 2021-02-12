@@ -1,4 +1,4 @@
-import { AfterEvent, afterEventBy, afterThe, digAfter, EventKeeper, supplyAfter } from '@proc7ts/fun-events';
+import { AfterEvent, afterEventBy, afterThe, digAfter, supplyAfter } from '@proc7ts/fun-events';
 import { noop } from '@proc7ts/primitives';
 import { ContextKeyError } from '../context-key-error';
 import { ContextSupply } from '../context-supply';
@@ -59,7 +59,10 @@ export class MultiContextUpKey<TSrc>
   }
 
   grow(
-      slot: ContextValueSlot<AfterEvent<TSrc[]>, EventKeeper<TSrc[]> | TSrc, AfterEvent<TSrc[]>>,
+      slot: ContextValueSlot<
+          AfterEvent<TSrc[]>,
+          ContextUpKey.Source<TSrc>,
+          AfterEvent<TSrc[]>>,
   ): void {
 
     const value = slot.seed.do(digAfter((...sources: TSrc[]): AfterEvent<TSrc[]> => {

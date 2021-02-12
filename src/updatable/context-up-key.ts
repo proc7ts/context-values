@@ -1,12 +1,10 @@
 import {
   afterEach,
   AfterEvent,
-  AfterEvent__symbol,
-  afterSupplied,
   afterThe,
   digAfter_,
   EventKeeper,
-  isEventKeeper,
+  isAfterEvent,
   supplyAfter,
   trackValue,
   translateAfter,
@@ -32,13 +30,13 @@ const flatUpSources: <TSrc>(this: void, input: AfterEvent<TSrc[][]>) => AfterEve
  * @internal
  */
 class ContextUpSeeder<TCtx extends ContextValues, TSrc>
-    implements ContextSeeder<TCtx, TSrc | EventKeeper<TSrc[]>, AfterEvent<TSrc[]>> {
+    implements ContextSeeder<TCtx, ContextUpKey.Source<TSrc>, AfterEvent<TSrc[]>> {
 
-  private readonly _providers = trackValue<[Map<Supply, ContextValueProvider<TCtx, TSrc | EventKeeper<TSrc[]>>>]>(
+  private readonly _providers = trackValue<[Map<Supply, ContextValueProvider<TCtx, ContextUpKey.Source<TSrc>>>]>(
       [new Map()],
   );
 
-  provide(provider: ContextValueProvider<TCtx, TSrc | EventKeeper<TSrc[]>>): Supply {
+  provide(provider: ContextValueProvider<TCtx, ContextUpKey.Source<TSrc>>): Supply {
 
     const [providers] = this._providers.it;
     const supply = new Supply();
@@ -75,7 +73,7 @@ class ContextUpSeeder<TCtx extends ContextValues, TSrc>
  */
 function upSrcKeepers<TCtx extends ContextValues, TSrc>(
     context: TCtx,
-    providersTracker: ValueTracker<[Map<Supply, ContextValueProvider<TCtx, TSrc | EventKeeper<TSrc[]>>>]>,
+    providersTracker: ValueTracker<[Map<Supply, ContextValueProvider<TCtx, ContextUpKey.Source<TSrc>>>]>,
 ): AfterEvent<TSrc[]> {
   return providersTracker.read.do(
       digAfter_(
@@ -98,29 +96,24 @@ function upSrcKeepers<TCtx extends ContextValues, TSrc>(
 /**
  * @internal
  */
-function toUpSrcKeeper<TSrc>(src: null | undefined | TSrc | EventKeeper<TSrc[]>): AfterEvent<TSrc[]> {
-  return src == null ? afterThe() : isUpSrcKeeper(src) ? afterSupplied(src) : afterThe(src);
-}
-
-/**
- * @internal
- */
-function isUpSrcKeeper<TSrc>(src: TSrc | EventKeeper<TSrc[]>): src is EventKeeper<TSrc[]> {
-  return (typeof src === 'object' || typeof src === 'function') && isEventKeeper(src as object);
+function toUpSrcKeeper<TSrc>(src: null | undefined | ContextUpKey.Source<TSrc>): AfterEvent<TSrc[]> {
+  return isAfterEvent(src)
+      ? src
+      : (src != null ? afterThe(src) : afterThe());
 }
 
 /**
  * @internal
  */
 class ContextSeed$UpKey<TSrc>
-    extends ContextSeedKey<TSrc | EventKeeper<TSrc[]>, AfterEvent<TSrc[]>>
+    extends ContextSeedKey<ContextUpKey.Source<TSrc>, AfterEvent<TSrc[]>>
     implements ContextUpKey.SeedKey<TSrc> {
 
   get upKey(): this {
     return this;
   }
 
-  seeder<TCtx extends ContextValues>(): ContextSeeder<TCtx, TSrc | EventKeeper<TSrc[]>, AfterEvent<TSrc[]>> {
+  seeder<TCtx extends ContextValues>(): ContextSeeder<TCtx, ContextUpKey.Source<TSrc>, AfterEvent<TSrc[]>> {
     return new ContextUpSeeder();
   }
 
@@ -132,7 +125,7 @@ class ContextSeed$UpKey<TSrc>
  * @typeParam TValue - Context value type.
  * @typeParam TSrc - Source value type.
  */
-export interface ContextUpRef<TValue, TSrc> extends ContextRef<TValue, TSrc | EventKeeper<TSrc[]>> {
+export interface ContextUpRef<TValue, TSrc> extends ContextRef<TValue, ContextUpKey.Source<TSrc>> {
 
   readonly [ContextKey__symbol]: ContextUpKey<TValue, TSrc>;
 
@@ -142,14 +135,17 @@ export interface ContextUpRef<TValue, TSrc> extends ContextRef<TValue, TSrc | Ev
  * @internal
  */
 class ContextUpKey$UpKey<TUpdate extends any[], TSrc>
-    extends ContextKey<AfterEvent<TUpdate>, TSrc | EventKeeper<TSrc[]>, AfterEvent<TSrc[]>>
+    extends ContextKey<AfterEvent<TUpdate>, ContextUpKey.Source<TSrc>, AfterEvent<TSrc[]>>
     implements ContextUpKey.SimpleUpKey<TUpdate, TSrc> {
 
   readonly grow: (
-      slot: ContextValueSlot<AfterEvent<TUpdate>, EventKeeper<TSrc[]> | TSrc, AfterEvent<TSrc[]>>,
+      slot: ContextValueSlot<
+          AfterEvent<TUpdate>,
+          ContextUpKey.Source<TSrc>,
+          AfterEvent<TSrc[]>>,
   ) => void;
 
-  get seedKey(): ContextSeedKey<TSrc | EventKeeper<TSrc[]>, AfterEvent<TSrc[]>> {
+  get seedKey(): ContextSeedKey<ContextUpKey.Source<TSrc>, AfterEvent<TSrc[]>> {
     return this._key.seedKey;
   }
 
@@ -160,16 +156,19 @@ class ContextUpKey$UpKey<TUpdate extends any[], TSrc>
   constructor(
       private readonly _key: ContextUpKey<unknown, TSrc>,
       grow: (
-          slot: ContextValueSlot<AfterEvent<TUpdate>, EventKeeper<TSrc[]> | TSrc, AfterEvent<TSrc[]>>,
+          slot: ContextValueSlot<
+              AfterEvent<TUpdate>,
+              ContextUpKey.Source<TSrc>,
+              AfterEvent<TSrc[]>>,
       ) => void,
   ) {
     super(_key.name + ':up');
     this.grow = slot => {
 
-      const value: EventKeeper<TUpdate> | null | undefined = slot.fillBy(grow);
+      const value: AfterEvent<TUpdate> | null | undefined = slot.fillBy(grow);
 
       if (value != null) {
-        slot.insert(value[AfterEvent__symbol]().do(
+        slot.insert(value.do(
             supplyAfter(slot.context.get(ContextSupply)),
         ));
       }
@@ -181,7 +180,7 @@ class ContextUpKey$UpKey<TUpdate extends any[], TSrc>
 /**
  * Abstract implementation of updatable context value key.
  *
- * Accepts single value sources and `EventKeeper`s of value source arrays.
+ * Accepts a {@link ContextUpKey.Source} instances as source values.
  *
  * Collects value sources into `AfterEvent` keeper of source values.
  *
@@ -189,7 +188,7 @@ class ContextUpKey$UpKey<TUpdate extends any[], TSrc>
  * @typeParam TSrc - Source value type.
  */
 export abstract class ContextUpKey<TValue, TSrc>
-    extends ContextKey<TValue, TSrc | EventKeeper<TSrc[]>, AfterEvent<TSrc[]>>
+    extends ContextKey<TValue, ContextUpKey.Source<TSrc>, AfterEvent<TSrc[]>>
     implements ContextUpRef<TValue, TSrc>, ContextUpKey.Base<TValue, TSrc> {
 
   readonly seedKey: ContextUpKey.SeedKey<TSrc>;
@@ -231,7 +230,10 @@ export abstract class ContextUpKey<TValue, TSrc>
    */
   protected createUpKey<TUpdate extends any[]>(
       grow: (
-          slot: ContextValueSlot<AfterEvent<TUpdate>, EventKeeper<TSrc[]> | TSrc, AfterEvent<TSrc[]>>,
+          slot: ContextValueSlot<
+              AfterEvent<TUpdate>,
+              ContextUpKey.Source<TSrc>,
+              AfterEvent<TSrc[]>>,
       ) => void,
   ): ContextUpKey.SimpleUpKey<TUpdate, TSrc> {
     return new ContextUpKey$UpKey(this, grow);
@@ -240,6 +242,15 @@ export abstract class ContextUpKey<TValue, TSrc>
 }
 
 export namespace ContextUpKey {
+
+  /**
+   * A source value accepted by {@link ContextUpKey updatable context key}.
+   *
+   * Either a single source value, or an `AfterEvent` keeper of source values.
+   *
+   * @typeParam TSrc - Source value type.
+   */
+  export type Source<TSrc> = TSrc | AfterEvent<TSrc[]>;
 
   /**
    * A type of context value updates tracker.
@@ -257,7 +268,7 @@ export namespace ContextUpKey {
    * @typeParam TValue - Context value type.
    * @typeParam TSrc - Source value type.
    */
-  export interface Base<TValue, TSrc> extends ContextKey<TValue, TSrc | EventKeeper<TSrc[]>> {
+  export interface Base<TValue, TSrc> extends ContextKey<TValue, ContextUpKey.Source<TSrc>> {
 
     /**
      * A key of context value containing an {@link ContextUpKey.Up updatable value tracker}.
@@ -276,7 +287,7 @@ export namespace ContextUpKey {
    * @typeParam TValue - Context value type.
    * @typeParam TSrc - Source value type.
    */
-  export interface UpKey<TValue, TSrc> extends ContextKey<ContextUpKey.Up<TValue>, TSrc | EventKeeper<TSrc[]>> {
+  export interface UpKey<TValue, TSrc> extends ContextKey<ContextUpKey.Up<TValue>, ContextUpKey.Source<TSrc>> {
 
     /**
      * A reference to this key.
@@ -304,7 +315,7 @@ export namespace ContextUpKey {
    *
    * @typeParam TSrc - Source value type.
    */
-  export interface SeedKey<TSrc> extends ContextSeedKey<TSrc | EventKeeper<TSrc[]>, AfterEvent<TSrc[]>> {
+  export interface SeedKey<TSrc> extends ContextSeedKey<ContextUpKey.Source<TSrc>, AfterEvent<TSrc[]>> {
 
     /**
      * A key of context value containing an {@link Up updates keeper} of the seed. Always equal to this key.
