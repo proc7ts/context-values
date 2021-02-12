@@ -1,8 +1,8 @@
-import { AfterEvent, afterEventBy, afterThe, digAfter, EventKeeper } from '@proc7ts/fun-events';
+import { AfterEvent, afterEventBy, afterThe, digAfter } from '@proc7ts/fun-events';
 import { noop } from '@proc7ts/primitives';
-import type { ContextValueSlot } from '../context-key';
 import { ContextKeyError } from '../context-key-error';
-import { ContextRegistry } from '../context-registry';
+import type { ContextValueSlot } from '../key';
+import { ContextRegistry } from '../registry';
 import { ContextUpKey } from './context-up-key';
 
 describe('ContextUpKey', () => {
@@ -18,7 +18,7 @@ describe('ContextUpKey', () => {
           this.upKey = this.createUpKey(noop);
         }
 
-        grow(slot: ContextValueSlot<AfterEvent<string[]>, EventKeeper<string[]> | string, AfterEvent<string[]>>): void {
+        grow(slot: ContextValueSlot<AfterEvent<string[]>, ContextUpKey.Source<string>, AfterEvent<string[]>>): void {
 
           const value = slot.seed.do(digAfter((...sources: string[]): AfterEvent<string[]> => {
             if (sources.length) {

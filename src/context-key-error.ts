@@ -1,4 +1,4 @@
-import type { ContextKey } from './context-key';
+import type { ContextKey } from './key';
 
 /**
  * An error indicating the absence of context value with the given key.

@@ -1,12 +1,11 @@
 import type { AfterEvent, EventKeeper, OnEvent } from '@proc7ts/fun-events';
 import type { Supply, SupplyPeer } from '@proc7ts/primitives';
-import { ContextBuilder, ContextBuilder__symbol } from '../context-builder';
-import { ContextKey__symbol } from '../context-key';
-import type { ContextRegistry } from '../context-registry';
-import type { ContextValueSpec } from '../context-value-spec';
-import type { ContextValues } from '../context-values';
+import type { ContextValues } from '../../context-values';
+import { ContextKey__symbol } from '../../key';
+import type { ContextRegistry, ContextValueSpec } from '../../registry';
+import { ContextBuilder, ContextBuilder__symbol } from '../../registry';
+import type { ContextUpKey, ContextUpRef } from '../context-up-key';
 import { ContextModule$, ContextModule$impl__symbol } from './context-module.impl';
-import type { ContextUpKey, ContextUpRef } from './context-up-key';
 
 /**
  * Context module.

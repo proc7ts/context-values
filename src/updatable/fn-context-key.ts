@@ -1,8 +1,8 @@
-import { AfterEvent, afterThe, digAfter, EventKeeper } from '@proc7ts/fun-events';
+import { AfterEvent, afterThe, digAfter } from '@proc7ts/fun-events';
 import { noop } from '@proc7ts/primitives';
-import type { ContextKeyDefault, ContextValueSlot } from '../context-key';
 import { ContextKeyError } from '../context-key-error';
 import type { ContextValues } from '../context-values';
+import type { ContextKeyDefault, ContextValueSlot } from '../key';
 import { contextDestroyed } from './context-destroyed';
 import { ContextUpKey, ContextUpRef } from './context-up-key';
 
@@ -67,29 +67,25 @@ export class FnContextKey<TArgs extends any[], TRet = void>
         || (() => {
           throw new ContextKeyError(this);
         });
-    this.upKey = this.createUpKey(
-        slot => {
-          slot.insert(slot.seed.do(digAfter(
-              (...fns): AfterEvent<[(this: void, ...args: TArgs) => TRet]> => {
-                if (fns.length) {
-                  return afterThe(fns[fns.length - 1]);
-                }
+    this.upKey = this.createUpKey(slot => slot.insert(slot.seed.do(
+        digAfter((...fns): AfterEvent<[(this: void, ...args: TArgs) => TRet]> => {
+          if (fns.length) {
+            return afterThe(fns[fns.length - 1]);
+          }
 
-                if (slot.hasFallback && slot.or) {
-                  return slot.or;
-                }
+          if (slot.hasFallback && slot.or) {
+            return slot.or;
+          }
 
-                return afterThe(this.byDefault(slot.context, this));
-              },
-          )));
-        },
-    );
+          return afterThe(this.byDefault(slot.context, this));
+        }),
+    )));
   }
 
   grow(
       slot: ContextValueSlot<
           (this: void, ...args: TArgs) => TRet,
-          EventKeeper<((this: void, ...args: TArgs) => TRet)[]> | ((this: void, ...args: TArgs) => TRet),
+          ContextUpKey.Source<(this: void, ...args: TArgs) => TRet>,
           AfterEvent<((this: void, ...args: TArgs) => TRet)[]>>,
   ): void {
 

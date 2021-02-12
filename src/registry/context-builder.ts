@@ -1,11 +1,11 @@
 import type { Supply } from '@proc7ts/primitives';
+import type { ContextValues } from '../context-values';
 import type { ContextRegistry } from './context-registry';
-import type { ContextValues } from './context-values';
 
 /**
  * A key of {@link ContextBuilder context builder} method that provides context values.
  */
-export const ContextBuilder__symbol = (/*#__PURE__*/ Symbol('context-value-registrar'));
+export const ContextBuilder__symbol = (/*#__PURE__*/ Symbol('ContextBuilder'));
 
 /**
  * Context builder.

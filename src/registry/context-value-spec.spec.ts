@@ -1,8 +1,8 @@
-import { ContextKey, ContextKey__symbol } from './context-key';
-import type { ContextRequest } from './context-ref';
+import type { ContextRequest } from '../context-request';
+import type { ContextValues } from '../context-values';
+import { ContextKey, ContextKey__symbol } from '../key';
+import { SingleContextKey } from '../singleton';
 import { contextValueSpec, ContextValueSpec } from './context-value-spec';
-import type { ContextValues } from './context-values';
-import { SingleContextKey } from './single-context-key';
 import Mock = jest.Mock;
 
 describe('contextValueSpec', () => {

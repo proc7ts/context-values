@@ -1,8 +1,8 @@
 import { lazyValue, noop, Supply } from '@proc7ts/primitives';
-import { ContextKey, ContextSeedKey } from './context-key';
-import type { ContextSeeder } from './context-seeder';
-import type { ContextValueProvider } from './context-value-spec';
-import type { ContextValues } from './context-values';
+import type { ContextValues } from '../context-values';
+import type { ContextSeeder } from '../key';
+import { ContextKey, ContextSeedKey } from '../key';
+import type { ContextValueProvider } from '../registry';
 
 /**
  * @internal
