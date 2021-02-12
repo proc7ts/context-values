@@ -80,9 +80,11 @@ export class SingleContextUpKey<TValue>
 
         const defaultValue = this.byDefault(slot.context, this);
 
-        backup = defaultValue && afterThe(defaultValue);
+        if (defaultValue != null) {
+          backup = afterThe(defaultValue);
+        }
       }
-      if (backup != null) {
+      if (backup) {
         return backup; // Backup value found.
       }
 

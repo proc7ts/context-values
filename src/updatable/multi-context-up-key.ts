@@ -80,9 +80,9 @@ export class MultiContextUpKey<TSrc>
 
         const defaultValue = this.byDefault(slot.context, this);
 
-        backup = defaultValue ? afterThe(...defaultValue) : afterThe();
+        backup = defaultValue != null ? afterThe(...defaultValue) : afterThe();
       }
-      if (backup != null) {
+      if (backup) {
         return backup; // Backup value found.
       }
 
