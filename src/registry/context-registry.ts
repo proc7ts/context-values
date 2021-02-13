@@ -37,20 +37,19 @@ export class ContextRegistry<TCtx extends ContextValues = ContextValues> {
   /**
    * Provides context value.
    *
-   * @typeParam TDeps - Dependencies tuple type.
    * @typeParam TSrc - Source value type.
-   * @typeParam TSeed - Value seed type.
+   * @typeParam TDeps - Dependencies tuple type.
    * @param spec - Context value specifier.
    *
    * @returns Provider supply instance that removes just added context value provider once cut off.
    */
-  provide<TDeps extends any[], TSrc, TSeed>(spec: ContextValueSpec<TCtx, unknown, TDeps, TSrc, TSeed>): Supply {
+  provide<TSrc, TDeps extends any[]>(spec: ContextValueSpec<TCtx, unknown, TSrc, TDeps>): Supply {
     if (isContextBuilder(spec)) {
       return spec[ContextBuilder__symbol](this);
     }
 
     const { a: { [ContextKey__symbol]: { seedKey } }, by } = contextValueSpec(spec);
-    const [seeder] = this._seeders.issuer<TSrc, TSeed>(seedKey);
+    const [seeder] = this._seeders.issuer(seedKey);
 
     return seeder.provide(by);
   }
@@ -125,8 +124,8 @@ export class ContextRegistry<TCtx extends ContextValues = ContextValues> {
 /**
  * @internal
  */
-function isContextBuilder<TCtx extends ContextValues, TValue, TDeps extends any[], TSrc, TSeed>(
-    spec: ContextValueSpec<TCtx, TValue, TDeps, TSrc, TSeed>,
+function isContextBuilder<TCtx extends ContextValues, TValue, TSrc, TDeps extends any[]>(
+    spec: ContextValueSpec<TCtx, TValue, TSrc, TDeps>,
 ): spec is ContextBuilder<TCtx> {
   return typeof (spec as Partial<ContextBuilder<TCtx>>)[ContextBuilder__symbol] === 'function';
 }

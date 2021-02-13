@@ -63,7 +63,7 @@ describe('contextValueSpec', () => {
 
     const key1 = new SingleContextKey<string>('arg1');
     const key2 = new SingleContextKey<number>('arg2');
-    const spec: ContextValueSpec.ByProviderWithDeps<[string, number], string> = {
+    const spec: ContextValueSpec.ByProviderWithDeps<string, [string, number]> = {
       a: new SingleContextKey<string>('value'),
       by(first: string, second: number) {
         return `${first}.${second}`;
@@ -157,7 +157,7 @@ describe('contextValueSpec', () => {
 
       const key1 = new SingleContextKey<string>('arg1');
       const key2 = new SingleContextKey<number>('arg2');
-      const spec: ContextValueSpec.AsInstanceWithDeps<[string, number], Value> = {
+      const spec: ContextValueSpec.AsInstanceWithDeps<Value, [string, number]> = {
         a: Value,
         as: Val,
         with: [key1, key2],
@@ -192,7 +192,7 @@ describe('contextValueSpec', () => {
 
       const key1 = new SingleContextKey<string>('arg1');
       const key2 = new SingleContextKey<number>('arg2');
-      const spec: ContextValueSpec.SelfInstanceWithDeps<[string, number], Value> = {
+      const spec: ContextValueSpec.SelfInstanceWithDeps<Value, [string, number]> = {
         as: Value,
         with: [key1, key2],
       };

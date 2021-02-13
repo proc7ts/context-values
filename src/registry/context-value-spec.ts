@@ -12,17 +12,15 @@ import type { ContextValueProvider } from './context-value-provider';
  *
  * @typeParam TCtx - Context type.
  * @typeParam TValue - Context value type.
- * @typeParam TDeps - Dependencies tuple type.
  * @typeParam TSrc - Source value type.
- * @typeParam TSeed - Value seed type.
+ * @typeParam TDeps - Dependencies tuple type.
  */
 export type ContextValueSpec<
     TCtx extends ContextValues,
     TValue,
-    TDeps extends any[] = unknown[],
     TSrc = TValue,
-    TSeed = unknown> =
-    | ContextValueSpec.Explicit<TCtx, TValue, TDeps, TSrc, TSeed>
+    TDeps extends any[] = unknown[]> =
+    | ContextValueSpec.Explicit<TCtx, TValue, TSrc, TDeps>
     | ContextBuilder<TCtx>;
 
 export namespace ContextValueSpec {
@@ -32,37 +30,34 @@ export namespace ContextValueSpec {
    *
    * @typeParam TCtx - Context type.
    * @typeParam TValue - Context value type.
-   * @typeParam TDeps - Dependencies tuple type.
    * @typeParam TSrc - Source value type.
-   * @typeParam TSeed - Value seed type.
+   * @typeParam TDeps - Dependencies tuple type.
    */
   export type Explicit<
       TCtx extends ContextValues,
       TValue,
-      TDeps extends any[] = unknown[],
       TSrc = TValue,
-      TSeed = unknown> =
-      | ContextValueSpec.IsConstant<TSrc, TSeed>
-      | ContextValueSpec.ViaAlias<TSrc, TSeed>
-      | ContextValueSpec.ByProvider<TCtx, TSrc, TSeed>
-      | ContextValueSpec.ByProviderWithDeps<TDeps, TSrc, TSeed>
-      | ContextValueSpec.AsInstance<TCtx, TSrc, TSeed>
-      | ContextValueSpec.SelfInstance<TCtx, TSrc, TSeed>
-      | ContextValueSpec.AsInstanceWithDeps<TDeps, TSrc, TSeed>
-      | ContextValueSpec.SelfInstanceWithDeps<TDeps, TSrc, TSeed>;
+      TDeps extends any[] = unknown[]> =
+      | ContextValueSpec.IsConstant<TSrc>
+      | ContextValueSpec.ViaAlias<TSrc>
+      | ContextValueSpec.ByProvider<TCtx, TSrc>
+      | ContextValueSpec.ByProviderWithDeps<TSrc, TDeps>
+      | ContextValueSpec.AsInstance<TCtx, TSrc>
+      | ContextValueSpec.SelfInstance<TCtx, TSrc>
+      | ContextValueSpec.AsInstanceWithDeps<TSrc, TDeps>
+      | ContextValueSpec.SelfInstanceWithDeps<TSrc, TDeps>;
 
   /**
    * A specifier defining a context value is constant.
    *
    * @typeParam TSrc - Source value type.
-   * @typeParam TSeed - Value seed type.
    */
-  export interface IsConstant<TSrc, TSeed = unknown> {
+  export interface IsConstant<TSrc> {
 
     /**
      * Target value to define.
      */
-    a: ContextTarget<TSrc, TSeed>;
+    a: ContextTarget<TSrc>;
 
     /**
      * Constant context value.
@@ -75,19 +70,18 @@ export namespace ContextValueSpec {
    * A specifier defining a context value via another one (alias).
    *
    * @typeParam TSrc - Source value type.
-   * @typeParam TSeed - Value seed type.
    */
-  export interface ViaAlias<TSrc, TSeed = unknown> {
+  export interface ViaAlias<TSrc> {
 
     /**
      * Target value to define.
      */
-    a: ContextTarget<TSrc, TSeed>;
+    a: ContextTarget<TSrc>;
 
     /**
      * Context value request for the another value that will be used instead as provided one.
      */
-    via: ContextRequest<TSrc, TSeed>;
+    via: ContextRequest<TSrc>;
 
   }
 
@@ -96,14 +90,13 @@ export namespace ContextValueSpec {
    *
    * @typeParam TCtx - Context type.
    * @typeParam TSrc - Source value type.
-   * @typeParam TSeed - Value seed type.
    */
-  export interface ByProvider<TCtx extends ContextValues, TSrc, TSeed = unknown> {
+  export interface ByProvider<TCtx extends ContextValues, TSrc> {
 
     /**
      * Target value to define.
      */
-    a: ContextTarget<TSrc, TSeed>;
+    a: ContextTarget<TSrc>;
 
     /**
      * Context value provider.
@@ -115,16 +108,15 @@ export namespace ContextValueSpec {
   /**
    * A specifier of context value defined by provider function depending on other context values.
    *
-   * @typeParam TDeps - Dependencies tuple type.
    * @typeParam TSrc - Source value type.
-   * @typeParam TSeed - Value seed type.
+   * @typeParam TDeps - Dependencies tuple type.
    */
-  export interface ByProviderWithDeps<TDeps extends any[], TSrc, TSeed = unknown> {
+  export interface ByProviderWithDeps<TSrc, TDeps extends any[]> {
 
     /**
      * Target value to define.
      */
-    a: ContextTarget<TSrc, TSeed>;
+    a: ContextTarget<TSrc>;
 
     /**
      * Context value provider function.
@@ -143,14 +135,13 @@ export namespace ContextValueSpec {
    *
    * @typeParam TCtx - Context type.
    * @typeParam TSrc - Source value type.
-   * @typeParam TSeed - Value seed type.
    */
-  export interface AsInstance<TCtx extends ContextValues, TSrc, TSeed = unknown> {
+  export interface AsInstance<TCtx extends ContextValues, TSrc> {
 
     /**
      * Target value to define.
      */
-    a: ContextTarget<TSrc, TSeed>;
+    a: ContextTarget<TSrc>;
 
     /**
      * Context value class constructor.
@@ -164,14 +155,13 @@ export namespace ContextValueSpec {
    *
    * @typeParam TCtx - Context type.
    * @typeParam TSrc - Source value type.
-   * @typeParam TSeed - Value seed type.
    */
-  export interface SelfInstance<TCtx extends ContextValues, TSrc, TSeed = unknown> {
+  export interface SelfInstance<TCtx extends ContextValues, TSrc> {
 
     /**
      * Target value to define as its class constructor.
      */
-    as: ContextTarget<TSrc, TSeed> & (new (context: TCtx) => TSrc);
+    as: ContextTarget<TSrc> & (new (context: TCtx) => TSrc);
 
   }
 
@@ -180,14 +170,13 @@ export namespace ContextValueSpec {
    *
    * @typeParam TDeps - Dependencies tuple type.
    * @typeParam TSrc - Source value type.
-   * @typeParam TSeed - Value seed type.
    */
-  export interface AsInstanceWithDeps<TDeps extends any[], TSrc, TSeed = unknown> {
+  export interface AsInstanceWithDeps<TSrc, TDeps extends any[]> {
 
     /**
      * Target value to define.
      */
-    a: ContextTarget<TSrc, TSeed>;
+    a: ContextTarget<TSrc>;
 
     /**
      * Context value class constructor.
@@ -205,16 +194,15 @@ export namespace ContextValueSpec {
    * A specifier of context value defined as instance of the same class as value with constructor depending on other
    * context values.
    *
-   * @typeParam TDeps - Dependencies tuple type.
    * @typeParam TSrc - Source value type.
-   * @typeParam TSeed - Value seed type.
+   * @typeParam TDeps - Dependencies tuple type.
    */
-  export interface SelfInstanceWithDeps<TDeps extends any[], TSrc, TSeed = unknown> {
+  export interface SelfInstanceWithDeps<TSrc, TDeps extends any[]> {
 
     /**
      * Target value to define as its class constructor.
      */
-    as: ContextTarget<TSrc, TSeed> & (new (...args: TDeps) => TSrc);
+    as: ContextTarget<TSrc> & (new (...args: TDeps) => TSrc);
 
     /**
      * Context value requests for corresponding constructor arguments.
@@ -241,19 +229,19 @@ export namespace ContextValueSpec {
  *
  * @typeParam TCtx - Context type.
  * @typeParam TValue - Context value type.
- * @typeParam TDeps - Dependencies tuple type.
  * @typeParam TSrc - Source value type.
+ * @typeParam TDeps - Dependencies tuple type.
  * @param spec - Explicit context value specifier to convert.
  *
  * @returns A specifier of context value defined by provider function.
  *
  * @throws TypeError  On malformed context value specifier.
  */
-export function contextValueSpec<TCtx extends ContextValues, TValue, TDeps extends any[], TSrc, TSeed>(
-    spec: ContextValueSpec.Explicit<TCtx, TValue, TDeps, TSrc, TSeed>,
-): ContextValueSpec.ByProvider<TCtx, TSrc, TSeed> {
+export function contextValueSpec<TCtx extends ContextValues, TValue, TSrc, TDeps extends any[]>(
+    spec: ContextValueSpec.Explicit<TCtx, TValue, TSrc, TDeps>,
+): ContextValueSpec.ByProvider<TCtx, TSrc> {
   if (isValueSpecByProvider(spec)) {
-    if (!isValueSpecWithDeps<TCtx, TDeps, TSrc, TSeed>(spec)) {
+    if (!isValueSpecWithDeps<TCtx, TSrc, TDeps>(spec)) {
       return spec;
     }
 
@@ -266,7 +254,7 @@ export function contextValueSpec<TCtx extends ContextValues, TValue, TDeps exten
       },
     };
   }
-  if (isConstantValueSpec<TSrc, TSeed>(spec)) {
+  if (isConstantValueSpec<TSrc>(spec)) {
 
     const { a, is: value } = spec;
 
@@ -286,11 +274,11 @@ export function contextValueSpec<TCtx extends ContextValues, TValue, TDeps exten
       },
     };
   }
-  if (isValueSpecAsInstance<TCtx, TDeps, TSrc, TSeed>(spec)) {
-    if (isSelfInstanceValueSpec<TCtx, TDeps, TSrc, TSeed>(spec)) {
+  if (isValueSpecAsInstance<TCtx, TSrc, TDeps>(spec)) {
+    if (isSelfInstanceValueSpec<TCtx, TSrc, TDeps>(spec)) {
       spec = toAsInstance(spec);
     }
-    if (!isValueSpecWithDeps<TCtx, TDeps, TSrc, TSeed>(spec)) {
+    if (!isValueSpecWithDeps<TCtx, TSrc, TDeps>(spec)) {
 
       const { as: Type } = spec;
 
@@ -318,85 +306,85 @@ export function contextValueSpec<TCtx extends ContextValues, TValue, TDeps exten
 /**
  * @internal
  */
-function isValueSpecByProvider<TCtx extends ContextValues, TDeps extends any[], TSrc, TSeed>(
-    spec: ContextValueSpec<TCtx, unknown, TDeps, TSrc, TSeed>,
+function isValueSpecByProvider<TCtx extends ContextValues, TSrc, TDeps extends any[]>(
+    spec: ContextValueSpec<TCtx, unknown, TSrc, TDeps>,
 ): spec is
-    | ContextValueSpec.ByProvider<TCtx, TSrc, TSeed>
-    | ContextValueSpec.ByProviderWithDeps<TDeps, TSrc, TSeed> {
+    | ContextValueSpec.ByProvider<TCtx, TSrc>
+    | ContextValueSpec.ByProviderWithDeps<TSrc, TDeps> {
   return 'by' in spec;
 }
 
 /**
  * @internal
  */
-function isValueSpecAsInstance<TCtx extends ContextValues, TDeps extends any[], TSrc, TSeed>(
-    spec: ContextValueSpec<TCtx, unknown, TDeps, TSrc, TSeed>,
+function isValueSpecAsInstance<TCtx extends ContextValues, TSrc, TDeps extends any[]>(
+    spec: ContextValueSpec<TCtx, unknown, TSrc, TDeps>,
 ): spec is
-    | ContextValueSpec.AsInstance<TCtx, TSrc, TSeed>
-    | ContextValueSpec.AsInstanceWithDeps<TDeps, TSrc, TSeed> {
+    | ContextValueSpec.AsInstance<TCtx, TSrc>
+    | ContextValueSpec.AsInstanceWithDeps<TSrc, TDeps> {
   return 'as' in spec;
 }
 
 /**
  * @internal
  */
-function isSelfInstanceValueSpec<TCtx extends ContextValues, TDeps extends any[], TSrc, TSeed>(
-    spec: ContextValueSpec<TCtx, unknown, TDeps, TSrc, TSeed>,
+function isSelfInstanceValueSpec<TCtx extends ContextValues, TSrc, TDeps extends any[]>(
+    spec: ContextValueSpec<TCtx, unknown, TSrc, TDeps>,
 ): spec is
-    | ContextValueSpec.SelfInstance<TCtx, TSrc, TSeed>
-    | ContextValueSpec.SelfInstanceWithDeps<TDeps, TSrc, TSeed> {
+    | ContextValueSpec.SelfInstance<TCtx, TSrc>
+    | ContextValueSpec.SelfInstanceWithDeps<TSrc, TDeps> {
   return !('a' in spec);
 }
 
 /**
  * @internal
  */
-function toAsInstance<TCtx extends ContextValues, TDeps extends any[], TSrc, TSeed>(
-    spec: ContextValueSpec.SelfInstance<TCtx, TSrc, TSeed> | ContextValueSpec.SelfInstanceWithDeps<TDeps, TSrc, TSeed>,
-): ContextValueSpec.AsInstance<TCtx, TSrc, TSeed> | ContextValueSpec.AsInstanceWithDeps<TDeps, TSrc, TSeed> {
+function toAsInstance<TCtx extends ContextValues, TSrc, TDeps extends any[]>(
+    spec: ContextValueSpec.SelfInstance<TCtx, TSrc> | ContextValueSpec.SelfInstanceWithDeps<TSrc, TDeps>,
+): ContextValueSpec.AsInstance<TCtx, TSrc> | ContextValueSpec.AsInstanceWithDeps<TSrc, TDeps> {
   return {
     ...spec,
     a: spec.as,
-  } as ContextValueSpec.AsInstance<TCtx, TSrc, TSeed> | ContextValueSpec.AsInstanceWithDeps<TDeps, TSrc, TSeed>;
+  } as ContextValueSpec.AsInstance<TCtx, TSrc> | ContextValueSpec.AsInstanceWithDeps<TSrc, TDeps>;
 }
 
 /**
  * @internal
  */
-function isConstantValueSpec<TSrc, TSeed>(
-    spec: ContextValueSpec<any, unknown, any, TSrc, TSeed>,
-): spec is ContextValueSpec.IsConstant<TSrc, TSeed> {
+function isConstantValueSpec<TSrc>(
+    spec: ContextValueSpec<any, unknown, TSrc, any>,
+): spec is ContextValueSpec.IsConstant<TSrc> {
   return 'is' in spec;
 }
 
 /**
  * @internal
  */
-function isValueSpecViaAlias<TSrc, TSeed>(
-    spec: ContextValueSpec<any, unknown, any, TSrc, TSeed>,
-): spec is ContextValueSpec.ViaAlias<TSrc, TSeed> {
+function isValueSpecViaAlias<TSrc>(
+    spec: ContextValueSpec<any, unknown, TSrc, any>,
+): spec is ContextValueSpec.ViaAlias<TSrc> {
   return 'via' in spec;
 }
 
 /**
  * @internal
  */
-function isValueSpecWithDeps<TCtx extends ContextValues, TDeps extends any[], TSrc, TSeed>(
-    spec: ContextValueSpec.ByProvider<TCtx, TSrc, TSeed> | ContextValueSpec.ByProviderWithDeps<TDeps, TSrc, TSeed>,
-): spec is ContextValueSpec.ByProviderWithDeps<TDeps, TSrc, TSeed>;
+function isValueSpecWithDeps<TCtx extends ContextValues, TSrc, TDeps extends any[]>(
+    spec: ContextValueSpec.ByProvider<TCtx, TSrc> | ContextValueSpec.ByProviderWithDeps<TSrc, TDeps>,
+): spec is ContextValueSpec.ByProviderWithDeps<TSrc, TDeps>;
 
 /**
  * @internal
  */
-function isValueSpecWithDeps<TCtx extends ContextValues, TDeps extends any[], TSrc, TSeed>(
-    spec: ContextValueSpec.AsInstance<TCtx, TSrc, TSeed> | ContextValueSpec.AsInstanceWithDeps<TDeps, TSrc, TSeed>,
-): spec is ContextValueSpec.AsInstanceWithDeps<TDeps, TSrc, TSeed>;
+function isValueSpecWithDeps<TCtx extends ContextValues, TSrc, TDeps extends any[]>(
+    spec: ContextValueSpec.AsInstance<TCtx, TSrc> | ContextValueSpec.AsInstanceWithDeps<TSrc, TDeps>,
+): spec is ContextValueSpec.AsInstanceWithDeps<TSrc, TDeps>;
 
 /**
  * @internal
  */
-function isValueSpecWithDeps<TCtx extends ContextValues, TDeps extends any[], TSrc, TSeed>(
-    spec: ContextValueSpec<TCtx, unknown, TDeps, TSrc, TSeed>,
+function isValueSpecWithDeps<TCtx extends ContextValues, TSrc, TDeps extends any[]>(
+    spec: ContextValueSpec<TCtx, unknown, TSrc, TDeps>,
 ): boolean {
   return 'with' in spec;
 }
