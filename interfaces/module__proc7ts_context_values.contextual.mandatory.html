@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>OrNull | Context Values</title>
+	<title>Mandatory | Context Values</title>
 	<meta name="description" content="Documentation for Context Values">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -58,24 +58,45 @@
 					<a href="../modules/module__proc7ts_context_values.html">Module @proc7ts/context-values</a>
 				</li>
 				<li>
-					<a href="../modules/module__proc7ts_context_values.contextrequest.html">ContextRequest</a>
+					<a href="../modules/module__proc7ts_context_values.contextual.html">Contextual</a>
 				</li>
 				<li>
-					<a href="module__proc7ts_context_values.contextrequest.ornull.html">OrNull</a>
+					<a href="module__proc7ts_context_values.contextual.mandatory.html">Mandatory</a>
 				</li>
 			</ul>
-			<h1>Interface OrNull&lt;TValue&gt;</h1>
+			<h1>Interface Mandatory&lt;T, TCtx&gt;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Mandatory contextual value reference.</p>
+					</div>
+					<p>Always resolves to some value.</p>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-type-parameters">
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
 					<li>
-						<h4>TValue</h4>
+						<h4>T</h4>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Referred contextual instance type.</p>
+							</div>
+						</div>
+					</li>
+					<li>
+						<h4>TCtx<span class="tsd-signature-symbol">: </span><a href="../classes/module__proc7ts_context_values.contextvalues.html" class="tsd-signature-type" data-tsd-kind="Class">ContextValues</a> = <a href="../classes/module__proc7ts_context_values.contextvalues.html" class="tsd-signature-type" data-tsd-kind="Class">ContextValues</a></h4>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Supported context type.</p>
+							</div>
+						</div>
 					</li>
 				</ul>
 			</section>
@@ -83,12 +104,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="module__proc7ts_context_values.contextrequest.opts.html" class="tsd-signature-type" data-tsd-kind="Interface">Opts</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span>
-						<ul class="tsd-hierarchy">
-							<li>
-								<span class="target">OrNull</span>
-							</li>
-						</ul>
+						<span class="target">Mandatory</span>
 					</li>
 				</ul>
 			</section>
@@ -97,33 +113,47 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Properties</h3>
+							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite"><a href="module__proc7ts_context_values.contextrequest.ornull.html#or" class="tsd-kind-icon">or</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="module__proc7ts_context_values.contextual.mandatory.html#___contextual__symbol_3698" class="tsd-kind-icon">__@<wbr>Contextual__symbol@3698</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
-					<a name="or" class="tsd-anchor"></a>
-					<h3>or</h3>
-					<div class="tsd-signature tsd-kind-icon">or<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">null</span></div>
-					<aside class="tsd-sources">
-						<p>Overrides <a href="module__proc7ts_context_values.contextrequest.opts.html">Opts</a>.<a href="module__proc7ts_context_values.contextrequest.opts.html#or">or</a></p>
-						<ul>
-							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/6791395/src/context-request.ts#L50">proc7ts/context-values/src/context-request.ts:50</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>A fallback value that will be returned if there is no value associated with target key.</p>
-						</div>
-						<p>Can be <code>null</code> or <code>undefined</code>.</p>
-						<p>This property will be accessed only if there is no value associated with target key.</p>
-					</div>
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="___contextual__symbol_3698" class="tsd-anchor"></a>
+					<h3>__@<wbr>Contextual__symbol@3698</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">__@<wbr>Contextual__symbol@3698<span class="tsd-signature-symbol">(</span>context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TCtx</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/6791395/src/conventional/contextual.ts#L46">proc7ts/context-values/src/conventional/contextual.ts:46</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Resolves a contextual instance for the target context.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>context: <span class="tsd-signature-type">TCtx</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Target context.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">T</span></h4>
+							<p>Contextual instance.</p>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -137,27 +167,18 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="module__proc7ts_context_values.contextrequest.opts.html" class="tsd-kind-icon">Opts</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="module__proc7ts_context_values.contextrequest.orfallback.html" class="tsd-kind-icon">Or<wbr>Fallback</a>
-					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="module__proc7ts_context_values.contextrequest.ornull.html" class="tsd-kind-icon">Or<wbr>Null</a>
+						<a href="module__proc7ts_context_values.contextual.mandatory.html" class="tsd-kind-icon">Mandatory</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
-								<a href="module__proc7ts_context_values.contextrequest.ornull.html#or" class="tsd-kind-icon">or</a>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="module__proc7ts_context_values.contextual.mandatory.html#___contextual__symbol_3698" class="tsd-kind-icon">__@<wbr>Contextual__symbol@3698</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="module__proc7ts_context_values.contextrequest.orundefined.html" class="tsd-kind-icon">Or<wbr>Undefined</a>
-					</li>
 				</ul>
 			</nav>
 		</div>
@@ -177,7 +198,7 @@
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>

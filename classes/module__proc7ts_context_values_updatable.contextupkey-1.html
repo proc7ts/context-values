@@ -73,7 +73,7 @@
 					<div class="lead">
 						<p>Abstract implementation of updatable context value key.</p>
 					</div>
-					<p>Accepts single value sources and <code>EventKeeper</code>s of value source arrays.</p>
+					<p>Accepts a <a href="../modules/module__proc7ts_context_values_updatable.contextupkey.html#source">ContextUpKey.Source</a> instances as source values.</p>
 					<p>Collects value sources into <code>AfterEvent</code> keeper of source values.</p>
 				</div>
 			</section>
@@ -102,7 +102,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="module__proc7ts_context_values.contextkey.html" class="tsd-signature-type" data-tsd-kind="Class">ContextKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">EventKeeper</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>
+						<a href="module__proc7ts_context_values.contextkey.html" class="tsd-signature-type" data-tsd-kind="Class">ContextKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><a href="../modules/module__proc7ts_context_values_updatable.contextupkey.html#source" class="tsd-signature-type" data-tsd-kind="Type alias">Source</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>
 						<ul class="tsd-hierarchy">
 							<li>
 								<span class="target">ContextUpKey</span>
@@ -150,7 +150,7 @@
 						<section class="tsd-index-section ">
 							<h3>Accessors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="module__proc7ts_context_values_updatable.contextupkey-1.html#___contextkey__symbol_3675" class="tsd-kind-icon">__@<wbr>Context<wbr>Key__symbol@3675</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="module__proc7ts_context_values_updatable.contextupkey-1.html#___contextkey__symbol_3420" class="tsd-kind-icon">__@<wbr>Context<wbr>Key__symbol@3420</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -177,7 +177,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="module__proc7ts_context_values.contextkey.html">ContextKey</a>.<a href="module__proc7ts_context_values.contextkey.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/3046cb5/src/updatable/context-up-key.ts#L204">proc7ts/context-values/src/updatable/context-up-key.ts:204</a></li>
+									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/6791395/src/updatable/context-up-key.ts#L203">proc7ts/context-values/src/updatable/context-up-key.ts:203</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -229,7 +229,7 @@
 						<p>Implementation of <a href="../interfaces/module__proc7ts_context_values_updatable.contextupkey.base.html">Base</a>.<a href="../interfaces/module__proc7ts_context_values_updatable.contextupkey.base.html#name">name</a></p>
 						<p>Inherited from <a href="module__proc7ts_context_values.contextkey.html">ContextKey</a>.<a href="module__proc7ts_context_values.contextkey.html#name">name</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/3046cb5/src/context-key.ts#L30">proc7ts/context-values/src/context-key.ts:30</a></li>
+							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/6791395/src/key/context-key.ts#L29">proc7ts/context-values/src/key/context-key.ts:29</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -247,9 +247,15 @@
 						<p>Implementation of <a href="../interfaces/module__proc7ts_context_values_updatable.contextupkey.base.html">Base</a>.<a href="../interfaces/module__proc7ts_context_values_updatable.contextupkey.base.html#seedkey">seedKey</a></p>
 						<p>Overrides <a href="module__proc7ts_context_values.contextkey.html">ContextKey</a>.<a href="module__proc7ts_context_values.contextkey.html#seedkey">seedKey</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/3046cb5/src/updatable/context-up-key.ts#L195">proc7ts/context-values/src/updatable/context-up-key.ts:195</a></li>
+							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/6791395/src/updatable/context-up-key.ts#L194">proc7ts/context-values/src/updatable/context-up-key.ts:194</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A key of context value holding a seed of the value associated with this key.</p>
+						</div>
+						<p>Different context value keys may have the same <a href="module__proc7ts_context_values_updatable.contextupkey-1.html#seedkey">seedKey</a> to grow them from the same seed.</p>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="upkey" class="tsd-anchor"></a>
@@ -258,7 +264,7 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/module__proc7ts_context_values_updatable.contextupkey.base.html">Base</a>.<a href="../interfaces/module__proc7ts_context_values_updatable.contextupkey.base.html#upkey">upKey</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/3046cb5/src/updatable/context-up-key.ts#L204">proc7ts/context-values/src/updatable/context-up-key.ts:204</a></li>
+							<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/6791395/src/updatable/context-up-key.ts#L203">proc7ts/context-values/src/updatable/context-up-key.ts:203</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -273,16 +279,17 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Accessors</h2>
 				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
-					<a name="___contextkey__symbol_3675" class="tsd-anchor"></a>
-					<h3>__@<wbr>Context<wbr>Key__symbol@3675</h3>
+					<a name="___contextkey__symbol_3420" class="tsd-anchor"></a>
+					<h3>__@<wbr>Context<wbr>Key__symbol@3420</h3>
 					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> __@ContextKey__symbol@3675<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> __@ContextKey__symbol@3420<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/module__proc7ts_context_values_updatable.contextupref.html">ContextUpRef</a>.<a href="../interfaces/module__proc7ts_context_values_updatable.contextupref.html#___contextkey__symbol_3420">__@ContextKey__symbol@3420</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/3046cb5/src/context-key.ts#L53">proc7ts/context-values/src/context-key.ts:53</a></li>
+									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/6791395/src/key/context-key.ts#L52">proc7ts/context-values/src/key/context-key.ts:52</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -302,13 +309,13 @@
 					<a name="createupkey" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> create<wbr>UpKey</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-protected">
-						<li class="tsd-signature tsd-kind-icon">create<wbr>UpKey&lt;TUpdate&gt;<span class="tsd-signature-symbol">(</span>grow<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>slot<span class="tsd-signature-symbol">: </span><a href="../modules/module__proc7ts_context_values.contextvalueslot.html" class="tsd-signature-type" data-tsd-kind="Namespace">ContextValueSlot</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TUpdate</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">EventKeeper</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/module__proc7ts_context_values_updatable.contextupkey.simpleupkey.html" class="tsd-signature-type" data-tsd-kind="Interface">SimpleUpKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TUpdate</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">create<wbr>UpKey&lt;TUpdate&gt;<span class="tsd-signature-symbol">(</span>grow<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>slot<span class="tsd-signature-symbol">: </span><a href="../modules/module__proc7ts_context_values.contextvalueslot.html" class="tsd-signature-type" data-tsd-kind="Namespace">ContextValueSlot</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TUpdate</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/module__proc7ts_context_values_updatable.contextupkey.html#source" class="tsd-signature-type" data-tsd-kind="Type alias">Source</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/module__proc7ts_context_values_updatable.contextupkey.simpleupkey.html" class="tsd-signature-type" data-tsd-kind="Interface">SimpleUpKey</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TUpdate</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/3046cb5/src/updatable/context-up-key.ts#L232">proc7ts/context-values/src/updatable/context-up-key.ts:232</a></li>
+									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/6791395/src/updatable/context-up-key.ts#L231">proc7ts/context-values/src/updatable/context-up-key.ts:231</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -328,21 +335,21 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>grow: <span class="tsd-signature-symbol">(</span>slot<span class="tsd-signature-symbol">: </span><a href="../modules/module__proc7ts_context_values.contextvalueslot.html" class="tsd-signature-type" data-tsd-kind="Namespace">ContextValueSlot</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TUpdate</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">EventKeeper</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h5>
+									<h5>grow: <span class="tsd-signature-symbol">(</span>slot<span class="tsd-signature-symbol">: </span><a href="../modules/module__proc7ts_context_values.contextvalueslot.html" class="tsd-signature-type" data-tsd-kind="Namespace">ContextValueSlot</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TUpdate</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/module__proc7ts_context_values_updatable.contextupkey.html#source" class="tsd-signature-type" data-tsd-kind="Type alias">Source</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>A function that grows an updates keeper of context value out of its seed.</p>
 									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-signature">
 											<ul class="tsd-signatures tsd-kind-type-literal">
-												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>slot<span class="tsd-signature-symbol">: </span><a href="../modules/module__proc7ts_context_values.contextvalueslot.html" class="tsd-signature-type" data-tsd-kind="Namespace">ContextValueSlot</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TUpdate</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">EventKeeper</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>slot<span class="tsd-signature-symbol">: </span><a href="../modules/module__proc7ts_context_values.contextvalueslot.html" class="tsd-signature-type" data-tsd-kind="Namespace">ContextValueSlot</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TUpdate</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/module__proc7ts_context_values_updatable.contextupkey.html#source" class="tsd-signature-type" data-tsd-kind="Type alias">Source</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 											</ul>
 											<ul class="tsd-descriptions">
 												<li class="tsd-description">
 													<h4 class="tsd-parameters-title">Parameters</h4>
 													<ul class="tsd-parameters">
 														<li>
-															<h5>slot: <a href="../modules/module__proc7ts_context_values.contextvalueslot.html" class="tsd-signature-type" data-tsd-kind="Namespace">ContextValueSlot</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TUpdate</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">EventKeeper</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+															<h5>slot: <a href="../modules/module__proc7ts_context_values.contextvalueslot.html" class="tsd-signature-type" data-tsd-kind="Namespace">ContextValueSlot</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TUpdate</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/module__proc7ts_context_values_updatable.contextupkey.html#source" class="tsd-signature-type" data-tsd-kind="Type alias">Source</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 														</li>
 													</ul>
 													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -361,7 +368,7 @@
 					<a name="grow" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> grow</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">grow<span class="tsd-signature-symbol">(</span>slot<span class="tsd-signature-symbol">: </span><a href="../modules/module__proc7ts_context_values.contextvalueslot.html" class="tsd-signature-type" data-tsd-kind="Namespace">ContextValueSlot</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">EventKeeper</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">grow<span class="tsd-signature-symbol">(</span>slot<span class="tsd-signature-symbol">: </span><a href="../modules/module__proc7ts_context_values.contextvalueslot.html" class="tsd-signature-type" data-tsd-kind="Namespace">ContextValueSlot</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><a href="../modules/module__proc7ts_context_values_updatable.contextupkey.html#source" class="tsd-signature-type" data-tsd-kind="Type alias">Source</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -369,7 +376,7 @@
 								<p>Implementation of <a href="../interfaces/module__proc7ts_context_values_updatable.contextupkey.base.html">Base</a>.<a href="../interfaces/module__proc7ts_context_values_updatable.contextupkey.base.html#grow">grow</a></p>
 								<p>Inherited from <a href="module__proc7ts_context_values.contextkey.html">ContextKey</a>.<a href="module__proc7ts_context_values.contextkey.html#grow">grow</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/3046cb5/src/context-key.ts#L62">proc7ts/context-values/src/context-key.ts:62</a></li>
+									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/6791395/src/key/context-key.ts#L61">proc7ts/context-values/src/key/context-key.ts:61</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -380,7 +387,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>slot: <a href="../modules/module__proc7ts_context_values.contextvalueslot.html" class="tsd-signature-type" data-tsd-kind="Namespace">ContextValueSlot</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">EventKeeper</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>slot: <a href="../modules/module__proc7ts_context_values.contextvalueslot.html" class="tsd-signature-type" data-tsd-kind="Namespace">ContextValueSlot</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><a href="../modules/module__proc7ts_context_values_updatable.contextupkey.html#source" class="tsd-signature-type" data-tsd-kind="Type alias">Source</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">AfterEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TSrc</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>Context value slot to insert the value to.</p>
 									</div>
@@ -402,7 +409,7 @@
 								<p>Implementation of <a href="../interfaces/module__proc7ts_context_values_updatable.contextupkey.base.html">Base</a>.<a href="../interfaces/module__proc7ts_context_values_updatable.contextupkey.base.html#tostring">toString</a></p>
 								<p>Inherited from <a href="module__proc7ts_context_values.contextkey.html">ContextKey</a>.<a href="module__proc7ts_context_values.contextkey.html#tostring">toString</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/3046cb5/src/context-key.ts#L64">proc7ts/context-values/src/context-key.ts:64</a></li>
+									<li>Defined in <a href="https://github.com/proc7ts/context-values/blob/6791395/src/key/context-key.ts#L63">proc7ts/context-values/src/key/context-key.ts:63</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -451,7 +458,7 @@
 								<a href="module__proc7ts_context_values_updatable.contextupkey-1.html#upkey" class="tsd-kind-icon">up<wbr>Key</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
-								<a href="module__proc7ts_context_values_updatable.contextupkey-1.html#___contextkey__symbol_3675" class="tsd-kind-icon">__@<wbr>Context<wbr>Key__symbol@3675</a>
+								<a href="module__proc7ts_context_values_updatable.contextupkey-1.html#___contextkey__symbol_3420" class="tsd-kind-icon">__@<wbr>Context<wbr>Key__symbol@3420</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-protected">
 								<a href="module__proc7ts_context_values_updatable.contextupkey-1.html#createupkey" class="tsd-kind-icon">create<wbr>UpKey</a>
@@ -486,6 +493,15 @@
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="../modules/module__proc7ts_context_values_updatable.html#singlecontextupref" class="tsd-kind-icon">Single<wbr>Context<wbr>UpRef</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/module__proc7ts_context_values_updatable.html#applycontextafter" class="tsd-kind-icon">apply<wbr>Context<wbr>After</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/module__proc7ts_context_values_updatable.html#applycontextafter_" class="tsd-kind-icon">apply<wbr>Context<wbr>After_</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/module__proc7ts_context_values_updatable.html#applycontextup" class="tsd-kind-icon">apply<wbr>Context<wbr>Up</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
 						<a href="../modules/module__proc7ts_context_values_updatable.html#contextdestroyed" class="tsd-kind-icon">context<wbr>Destroyed</a>
