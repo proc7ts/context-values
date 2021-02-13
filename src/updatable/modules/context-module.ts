@@ -201,15 +201,14 @@ export namespace ContextModule {
      *
      * The value provider will be removed automatically once the module is unloaded.
      *
-     * @typeParam TDeps - Dependencies tuple type.
      * @typeParam TSrc - Source value type.
-     * @typeParam TSeed - Value seed type.
+     * @typeParam TDeps - Dependencies tuple type.
      * @param spec - Context value specifier.
      *
      * @returns Provider supply instance that removes just added context value provider once cut off.
      */
-    provide<TDeps extends any[], TSrc, TSeed>(
-        spec: ContextValueSpec<ContextValues, unknown, TDeps, TSrc, TSeed>,
+    provide<TSrc, TDeps extends any[]>(
+        spec: ContextValueSpec<ContextValues, unknown, TSrc, TDeps>,
     ): Supply;
 
     /**

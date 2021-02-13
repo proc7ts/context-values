@@ -22,7 +22,7 @@ export interface ContextSeeder<TCtx extends ContextValues, TSrc, TSeed> {
    *
    * @returns Provider supply instance that removes just added context value provider once cut off.
    */
-  provide(provider: ContextValueProvider<TCtx, TSrc>): Supply;
+  provide(provider: ContextValueProvider<TSrc, TCtx>): Supply;
 
   /**
    * Creates context value seed for target `context`.

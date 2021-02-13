@@ -10,12 +10,12 @@ import type { ContextValueProvider } from '../registry';
 class SimpleContextSeeder<TCtx extends ContextValues, TSrc>
     implements ContextSeeder<TCtx, TSrc, SimpleContextKey.Seed<TSrc>> {
 
-  private readonly _providers: (readonly [ContextValueProvider<TCtx, TSrc>])[] = [];
+  private readonly _providers: (readonly [ContextValueProvider<TSrc, TCtx>])[] = [];
 
-  provide(provider: ContextValueProvider<TCtx, TSrc>): Supply {
+  provide(provider: ContextValueProvider<TSrc, TCtx>): Supply {
 
     // Ensure the same provider may be registered multiple times
-    const entry: readonly [ContextValueProvider<TCtx, TSrc>] = [provider];
+    const entry: readonly [ContextValueProvider<TSrc, TCtx>] = [provider];
 
     this._providers.unshift(entry);
 
@@ -31,7 +31,7 @@ class SimpleContextSeeder<TCtx extends ContextValues, TSrc>
     }
 
     const makeSeed = (
-        [provider]: readonly [ContextValueProvider<TCtx, TSrc>],
+        [provider]: readonly [ContextValueProvider<TSrc, TCtx>],
     ): SimpleContextKey.Seed<TSrc> => lazyValue(
         provider.bind(undefined, context),
     );
