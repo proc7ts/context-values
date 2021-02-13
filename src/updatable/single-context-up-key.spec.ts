@@ -1,8 +1,8 @@
 import { AfterEvent, afterThe, onceAfter } from '@proc7ts/fun-events';
 import { asis, Supply } from '@proc7ts/primitives';
 import { ContextKeyError } from '../context-key-error';
-import { ContextSupply } from '../context-supply';
 import type { ContextValues } from '../context-values';
+import { ContextSupply } from '../conventional';
 import { ContextRegistry } from '../registry';
 import type { ContextUpKey } from './context-up-key';
 import { SingleContextUpKey } from './single-context-up-key';

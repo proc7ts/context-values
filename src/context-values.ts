@@ -1,5 +1,5 @@
 import type { ContextRequest } from './context-request';
-import type { ContextSupply } from './context-supply';
+import type { ContextSupply } from './conventional';
 
 /**
  * The values available from context.

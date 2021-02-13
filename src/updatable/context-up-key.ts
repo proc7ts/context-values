@@ -13,8 +13,8 @@ import {
 import { Supply } from '@proc7ts/primitives';
 import { itsElements, mapIt, overElementsOf, overIterator } from '@proc7ts/push-iterator';
 import type { ContextRef } from '../context-ref';
-import { ContextSupply } from '../context-supply';
 import type { ContextValues } from '../context-values';
+import { ContextSupply } from '../conventional';
 import type { ContextSeeder, ContextValueSlot } from '../key';
 import { ContextKey, ContextKey__symbol, ContextSeedKey } from '../key';
 import type { ContextValueProvider } from '../registry';

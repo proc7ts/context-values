@@ -10,8 +10,8 @@ import {
 } from '@proc7ts/fun-events';
 import { neverSupply, Supply, SupplyPeer, valueProvider } from '@proc7ts/primitives';
 import type { ContextRequest } from '../../context-request';
-import { ContextSupply } from '../../context-supply';
 import type { ContextValues } from '../../context-values';
+import { ContextSupply } from '../../conventional';
 import type { ContextRegistry } from '../../registry';
 import type { ContextModule } from './context-module';
 
