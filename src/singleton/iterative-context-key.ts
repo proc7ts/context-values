@@ -19,9 +19,9 @@ import type { ContextValueProvider } from '../registry';
 class IterativeContextSeeder<TCtx extends ContextValues, TSrc>
     implements ContextSeeder<TCtx, TSrc, PushIterable<TSrc>> {
 
-  private readonly _providers = new Map<Supply, ContextValueProvider<TCtx, TSrc>>();
+  private readonly _providers = new Map<Supply, ContextValueProvider<TSrc, TCtx>>();
 
-  provide(provider: ContextValueProvider<TCtx, TSrc>): Supply {
+  provide(provider: ContextValueProvider<TSrc, TCtx>): Supply {
 
     const supply = new Supply();
 
@@ -97,7 +97,7 @@ export abstract class IterativeContextKey<TValue, TSrc = TValue> extends Context
  */
 function iterativeSeed<TCtx extends ContextValues, TSrc>(
     context: TCtx,
-    providers: Map<Supply, ContextValueProvider<TCtx, TSrc>>,
+    providers: Map<Supply, ContextValueProvider<TSrc, TCtx>>,
 ): PushIterable<TSrc> {
 
   // Lazily evaluated providers

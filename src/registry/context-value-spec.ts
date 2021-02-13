@@ -3,23 +3,7 @@ import type { ContextRequest } from '../context-request';
 import type { ContextValues } from '../context-values';
 import type { ContextBuilder } from './context-builder';
 import type { ContextTarget } from './context-target';
-
-/**
- * Context value provider.
- *
- * It is responsible for constructing the values associated with particular key for the given context. Note that
- * provider generates source value, not the context values themselves.
- *
- * @typeParam TCtx - Context type.
- * @typeParam TSrc - Source value type.
- */
-export type ContextValueProvider<TCtx extends ContextValues, TSrc> =
-/**
- * @param context - Target context.
- *
- * @return Either constructed value source, or `null`/`undefined` if unknown.
- */
-    (this: void, context: TCtx) => TSrc | null | undefined;
+import type { ContextValueProvider } from './context-value-provider';
 
 /**
  * Context value specifier.
@@ -124,7 +108,7 @@ export namespace ContextValueSpec {
     /**
      * Context value provider.
      */
-    by: ContextValueProvider<TCtx, TSrc>;
+    by: ContextValueProvider<TSrc, TCtx>;
 
   }
 

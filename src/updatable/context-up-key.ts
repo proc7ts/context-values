@@ -32,11 +32,11 @@ const flatUpSources: <TSrc>(this: void, input: AfterEvent<TSrc[][]>) => AfterEve
 class ContextUpSeeder<TCtx extends ContextValues, TSrc>
     implements ContextSeeder<TCtx, ContextUpKey.Source<TSrc>, AfterEvent<TSrc[]>> {
 
-  private readonly _providers = trackValue<[Map<Supply, ContextValueProvider<TCtx, ContextUpKey.Source<TSrc>>>]>(
+  private readonly _providers = trackValue<[Map<Supply, ContextValueProvider<ContextUpKey.Source<TSrc>, TCtx>>]>(
       [new Map()],
   );
 
-  provide(provider: ContextValueProvider<TCtx, ContextUpKey.Source<TSrc>>): Supply {
+  provide(provider: ContextValueProvider<ContextUpKey.Source<TSrc>, TCtx>): Supply {
 
     const [providers] = this._providers.it;
     const supply = new Supply();
@@ -73,7 +73,7 @@ class ContextUpSeeder<TCtx extends ContextValues, TSrc>
  */
 function upSrcKeepers<TCtx extends ContextValues, TSrc>(
     context: TCtx,
-    providersTracker: ValueTracker<[Map<Supply, ContextValueProvider<TCtx, ContextUpKey.Source<TSrc>>>]>,
+    providersTracker: ValueTracker<[Map<Supply, ContextValueProvider<ContextUpKey.Source<TSrc>, TCtx>>]>,
 ): AfterEvent<TSrc[]> {
   return providersTracker.read.do(
       digAfter_(
