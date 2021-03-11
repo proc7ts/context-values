@@ -1,4 +1,4 @@
-import { isAlwaysSupply, Supply, SupplyPeer } from '@proc7ts/primitives';
+import { isAlwaysSupply, Supply, SupplyPeer } from '@proc7ts/supply';
 import type { ContextValues } from '../context-values';
 import { ContextRegistry } from '../registry';
 import { ContextSupply } from './context-supply';

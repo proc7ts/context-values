@@ -1,4 +1,4 @@
-import type { Supply } from '@proc7ts/primitives';
+import type { Supply } from '@proc7ts/supply';
 import type { ContextValues } from '../context-values';
 import type { ContextRegistry } from './context-registry';
 

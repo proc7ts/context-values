@@ -1,4 +1,4 @@
-import { lazyValue, Supply } from '@proc7ts/primitives';
+import { lazyValue } from '@proc7ts/primitives';
 import {
   itsElements,
   itsEmpty,
@@ -8,6 +8,7 @@ import {
   PushIterable,
   valueIt,
 } from '@proc7ts/push-iterator';
+import { Supply } from '@proc7ts/supply';
 import type { ContextValues } from '../context-values';
 import type { ContextSeeder } from '../key';
 import { ContextKey, ContextSeedKey } from '../key';

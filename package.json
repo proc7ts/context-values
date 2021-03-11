@@ -39,7 +39,8 @@
   },
   "dependencies": {
     "@proc7ts/primitives": "^1.8.1",
-    "@proc7ts/push-iterator": "^2.5.0"
+    "@proc7ts/push-iterator": "^2.5.0",
+    "@proc7ts/supply": "^1.0.0-dev.0"
   },
   "devDependencies": {
     "@proc7ts/fun-events": "^10.3.1",

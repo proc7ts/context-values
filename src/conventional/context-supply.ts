@@ -1,5 +1,4 @@
-import type { Supply } from '@proc7ts/primitives';
-import { alwaysSupply } from '@proc7ts/primitives';
+import { alwaysSupply, Supply } from '@proc7ts/supply';
 import type { ContextRef } from '../context-ref';
 import type { ContextValueSlot } from '../key';
 import { SimpleContextKey } from '../singleton';

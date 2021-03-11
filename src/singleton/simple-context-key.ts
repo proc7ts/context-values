@@ -1,4 +1,5 @@
-import { lazyValue, noop, Supply } from '@proc7ts/primitives';
+import { lazyValue, noop } from '@proc7ts/primitives';
+import { Supply } from '@proc7ts/supply';
 import type { ContextValues } from '../context-values';
 import type { ContextSeeder } from '../key';
 import { ContextKey, ContextSeedKey } from '../key';

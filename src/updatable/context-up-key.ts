@@ -10,8 +10,8 @@ import {
   translateAfter,
   ValueTracker,
 } from '@proc7ts/fun-events';
-import { Supply } from '@proc7ts/primitives';
 import { itsElements, mapIt, overElementsOf, overIterator } from '@proc7ts/push-iterator';
+import { Supply } from '@proc7ts/supply';
 import type { ContextRef } from '../context-ref';
 import type { ContextValues } from '../context-values';
 import { ContextSupply } from '../conventional';
