@@ -1,5 +1,5 @@
 import type { AfterEvent, EventKeeper, OnEvent } from '@proc7ts/fun-events';
-import type { Supply, SupplyPeer } from '@proc7ts/primitives';
+import type { Supply, SupplyPeer } from '@proc7ts/supply';
 import type { ContextValues } from '../../context-values';
 import { ContextKey__symbol } from '../../key';
 import type { ContextRegistry, ContextValueSpec } from '../../registry';

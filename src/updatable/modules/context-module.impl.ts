@@ -1,6 +1,7 @@
 import type { OnEvent } from '@proc7ts/fun-events';
-import { isDefined, noop, setOfElements, Supply, valueProvider } from '@proc7ts/primitives';
+import { isDefined, noop, setOfElements, valueProvider } from '@proc7ts/primitives';
 import { itsElements, valueIt } from '@proc7ts/push-iterator';
+import type { Supply } from '@proc7ts/supply';
 import type { ContextRegistry } from '../../registry';
 import type { ContextUpKey } from '../context-up-key';
 import type { ContextModule } from './context-module';

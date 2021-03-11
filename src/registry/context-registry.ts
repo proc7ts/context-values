@@ -1,4 +1,5 @@
-import { noop, Supply } from '@proc7ts/primitives';
+import { noop } from '@proc7ts/primitives';
+import type { Supply } from '@proc7ts/supply';
 import type { ContextValues } from '../context-values';
 import type { ContextSeedKey } from '../key';
 import { ContextKey__symbol } from '../key';

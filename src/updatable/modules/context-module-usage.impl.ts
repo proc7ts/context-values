@@ -8,7 +8,8 @@ import {
   trackValue,
   ValueTracker,
 } from '@proc7ts/fun-events';
-import { neverSupply, Supply, SupplyPeer, valueProvider } from '@proc7ts/primitives';
+import { noop, valueProvider } from '@proc7ts/primitives';
+import { neverSupply, Supply, SupplyPeer } from '@proc7ts/supply';
 import type { ContextRequest } from '../../context-request';
 import type { ContextValues } from '../../context-values';
 import { ContextSupply } from '../../conventional';
@@ -129,7 +130,7 @@ export class ContextModuleUsage {
 
   private _load(module: ContextModule): void {
 
-    const supply = new Supply().needs(this._rev).whenOff(error => {
+    const supply = new Supply(noop).needs(this._rev).whenOff(error => {
 
       const rev = this._rev.it;
 
@@ -167,7 +168,7 @@ export class ContextModuleUsage {
 
   private _use(handle: ContextModule.Handle, user?: SupplyPeer): ContextModule.Use {
 
-    const supply = new Supply();
+    const supply = new Supply(noop);
 
     if (user) {
       supply.needs(user);
@@ -196,7 +197,7 @@ export class ContextModuleUsage {
               ready: false,
               error,
             },
-            supply: new Supply().off(error),
+            supply: new Supply(noop).off(error),
           };
 
           rev.supply.off(error);

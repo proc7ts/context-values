@@ -1,5 +1,6 @@
 import { AfterEvent, afterThe, onceAfter } from '@proc7ts/fun-events';
-import { asis, Supply } from '@proc7ts/primitives';
+import { asis } from '@proc7ts/primitives';
+import { Supply } from '@proc7ts/supply';
 import { ContextKeyError } from '../context-key-error';
 import type { ContextValues } from '../context-values';
 import { ContextSupply } from '../conventional';

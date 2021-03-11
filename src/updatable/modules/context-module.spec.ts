@@ -1,5 +1,6 @@
 import { onceAfter } from '@proc7ts/fun-events';
-import { asis, newPromiseResolver, noop, Supply } from '@proc7ts/primitives';
+import { asis, newPromiseResolver, noop } from '@proc7ts/primitives';
+import { Supply } from '@proc7ts/supply';
 import type { ContextValues } from '../../context-values';
 import { ContextKey__symbol } from '../../key';
 import { ContextRegistry } from '../../registry';
@@ -238,7 +239,7 @@ describe('ContextModule', () => {
     registry.provide(module);
 
     const handle = context.get(module);
-    const use = handle.use(new Supply().off('reason'));
+    const use = handle.use(new Supply(noop).off('reason'));
 
     await Promise.resolve();
     expect(await handle.read).toMatchObject({
@@ -481,7 +482,7 @@ describe('ContextModule', () => {
     const handle = context.get(module);
     const use = handle.use();
 
-    use.supply.off('reason');
+    use.supply.whenOff(noop).off('reason');
 
     expect(await handle.read).toMatchObject({
       module,
