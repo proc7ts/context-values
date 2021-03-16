@@ -54,6 +54,9 @@ export default {
               file: 'updatable/index.d.ts',
             },
           },
+          compilerOptions: {
+            declarationMap: true,
+          },
         }),
       ],
     },
