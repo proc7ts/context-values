@@ -49,13 +49,13 @@ export default {
         flatDts({
           tsconfig: 'tsconfig.main.json',
           lib: true,
+          compilerOptions: {
+            declarationMap: true,
+          },
           entries: {
             updatable: {
               file: 'updatable/index.d.ts',
             },
-          },
-          compilerOptions: {
-            declarationMap: true,
           },
         }),
       ],
