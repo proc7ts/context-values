@@ -54,10 +54,7 @@ export default {
           },
           entries: {
             updatable: {
-              file: 'updatable/index.d.ts',
-              refs: false, // Do not refer to `../index.d.ts`.
-                           // Such reference breaks `rollup-plugin-typescript2`
-                           // within pnpm workspace installation.
+              file: 'updatable.d.ts',
             },
           },
         }),
