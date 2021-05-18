@@ -18,13 +18,13 @@ describe('FnContextKey', () => {
   });
 
   it('delegates to function', () => {
-    registry.provide({ a: key, is: value => value.length });
+    registry.provide({ a: key, is: (value: string) => value.length });
     expect(values.get(key)('some')).toEqual(4);
   });
   it('delegates to updated function', () => {
-    registry.provide({ a: key, is: value => value.length });
+    registry.provide({ a: key, is: (value: string) => value.length });
     expect(values.get(key)('some')).toEqual(4);
-    registry.provide({ a: key, is: value => value.length + 100 });
+    registry.provide({ a: key, is: (value: string) => value.length + 100 });
     expect(values.get(key)('some')).toEqual(104);
   });
   it('throws when context destroyed', () => {
@@ -32,7 +32,7 @@ describe('FnContextKey', () => {
     const contextSupply = new Supply();
 
     registry.provide({ a: ContextSupply, is: contextSupply });
-    registry.provide({ a: key, is: value => value.length });
+    registry.provide({ a: key, is: (value: string) => value.length });
 
     const fn = values.get(key);
 
@@ -48,7 +48,7 @@ describe('FnContextKey', () => {
     const contextSupply = new Supply();
 
     registry.provide({ a: ContextSupply, is: contextSupply });
-    registry.provide({ a: key, is: value => value.length });
+    registry.provide({ a: key, is: (value: string) => value.length });
 
     const fn = values.get(key);
 
@@ -58,7 +58,7 @@ describe('FnContextKey', () => {
     expect(() => fn('other')).toThrow('Context destroyed');
   });
   it('delegates to fallback function when absent', () => {
-    expect(values.get(key, { or: value => value.length })('some')).toEqual(4);
+    expect(values.get(key, { or: (value: string) => value.length })('some')).toEqual(4);
   });
   it('does not throw when no function to delegate', () => {
     expect(values.get(key)).toBeInstanceOf(Function);
@@ -72,7 +72,7 @@ describe('FnContextKey', () => {
 
   describe('upKey', () => {
     it('reports the same function', () => {
-      registry.provide({ a: key, is: value => value.length });
+      registry.provide({ a: key, is: (value: string) => value.length });
 
       let fn!: (arg: string) => number;
       const receiver = jest.fn(f => fn = f);
@@ -81,7 +81,7 @@ describe('FnContextKey', () => {
       expect(receiver).toHaveBeenCalledTimes(1);
       expect(fn('some')).toEqual(4);
 
-      registry.provide({ a: key, is: value => value.length * 2 });
+      registry.provide({ a: key, is: (value: string) => value.length * 2 });
       expect(receiver).toHaveBeenCalledTimes(2);
       expect(fn('other')).toEqual(10);
     });
