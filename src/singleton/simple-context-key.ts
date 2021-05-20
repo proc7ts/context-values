@@ -18,9 +18,9 @@ class SimpleContextSeeder<TCtx extends ContextValues, TSrc>
     // Ensure the same provider may be registered multiple times
     const entry: readonly [ContextValueProvider<TSrc, TCtx>] = [provider];
 
-    this._providers.unshift(entry);
+    this._providers.push(entry);
 
-    return new Supply(() => this._providers.splice(this._providers.lastIndexOf(entry), 1));
+    return new Supply(() => this._providers.splice(this._providers.indexOf(entry), 1));
   }
 
   seed(context: TCtx, initial?: SimpleContextKey.Seed<TSrc>): SimpleContextKey.Seed<TSrc> {
@@ -37,17 +37,11 @@ class SimpleContextSeeder<TCtx extends ContextValues, TSrc>
         provider.bind(undefined, context),
     );
 
-    if (!initial && length === 1) {
-      return makeSeed(this._providers[0]);
-    }
+    const seeds = length > 1
+        ? combineSimpleSeeds(this._providers.map(makeSeed))
+        : makeSeed(this._providers[0]);
 
-    const seeds: SimpleContextKey.Seed<TSrc>[] = this._providers.map(makeSeed);
-
-    if (initial) {
-      seeds.push(initial);
-    }
-
-    return combineSimpleSeeds(seeds);
+    return initial ? combineSimpleSeeds([initial, seeds]) : seeds;
   }
 
   isEmpty(seed: SimpleContextKey.Seed<TSrc>): boolean {
@@ -64,7 +58,7 @@ class SimpleContextSeeder<TCtx extends ContextValues, TSrc>
     if (second === noop) {
       return first;
     }
-    return combineSimpleSeeds([second, first]);
+    return combineSimpleSeeds([first, second]);
   }
 
 }
@@ -76,9 +70,9 @@ function combineSimpleSeeds<TSrc>(
     seeds: readonly SimpleContextKey.Seed<TSrc>[],
 ): SimpleContextKey.Seed<TSrc> {
   return lazyValue(() => {
-    for (const seed of seeds) {
+    for (let i = seeds.length - 1; i >= 0; --i) {
 
-      const value = seed();
+      const value = seeds[i]();
 
       if (value != null) {
         return value;
