@@ -29,13 +29,14 @@ describe('SingleContextKey', () => {
 
     expect(values.get(key)).toBe(value);
   });
-  it('selects the last value if more than one provided', () => {
+  it('selects the last present value if more than one provided', () => {
 
     const value1 = 'value1';
     const value2 = 'value2';
 
     registry.provide({ a: key, is: value1 });
     registry.provide({ a: key, is: value2 });
+    registry.provide({ a: key, is: null });
 
     expect(values.get(key)).toBe(value2);
   });
@@ -69,6 +70,12 @@ describe('SingleContextKey', () => {
   });
   it('provides fallback value if there is no provider', () => {
     expect(values.get(new SingleContextKey<string>(key.name), { or: 'fallback' })).toBe('fallback');
+  });
+  it('provides fallback value when all provided values are `null` or `undefined`', () => {
+    registry.provide({ a: key, is: null });
+    registry.provide({ a: key, is: undefined });
+
+    expect(values.get(key, { or: 'miss' })).toBe('miss');
   });
   it('provides default value if no value provided', () => {
 
@@ -191,7 +198,7 @@ describe('SingleContextKey', () => {
     it('contains nothing when sources are empty', () => {
       registry.provide({ a: key, is: null });
       registry2.provide({ a: key, is: null });
-      expect(context.get(key.seedKey)()).toBeUndefined();
+      expect(context.get(key.seedKey)()).toBeNull();
     });
 
     describe('when the second seed is absent', () => {

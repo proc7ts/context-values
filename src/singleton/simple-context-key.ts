@@ -5,9 +5,6 @@ import type { ContextSeeder } from '../key';
 import { ContextKey, ContextSeedKey } from '../key';
 import type { ContextValueProvider } from '../registry';
 
-/**
- * @internal
- */
 class SimpleContextSeeder<TCtx extends ContextValues, TSrc>
     implements ContextSeeder<TCtx, TSrc, SimpleContextKey.Seed<TSrc>> {
 
@@ -41,7 +38,7 @@ class SimpleContextSeeder<TCtx extends ContextValues, TSrc>
         ? combineSimpleSeeds(this._providers.map(makeSeed))
         : makeSeed(this._providers[0]);
 
-    return initial ? combineSimpleSeeds([initial, seeds]) : seeds;
+    return initial ? combineTwoSimpleSeeds(initial, seeds) : seeds;
   }
 
   isEmpty(seed: SimpleContextKey.Seed<TSrc>): boolean {
@@ -58,14 +55,11 @@ class SimpleContextSeeder<TCtx extends ContextValues, TSrc>
     if (second === noop) {
       return first;
     }
-    return combineSimpleSeeds([first, second]);
+    return combineTwoSimpleSeeds(first, second);
   }
 
 }
 
-/**
- * @internal
- */
 function combineSimpleSeeds<TSrc>(
     seeds: readonly SimpleContextKey.Seed<TSrc>[],
 ): SimpleContextKey.Seed<TSrc> {
@@ -82,9 +76,13 @@ function combineSimpleSeeds<TSrc>(
   });
 }
 
-/**
- * @internal
- */
+function combineTwoSimpleSeeds<TSrc>(
+    first: SimpleContextKey.Seed<TSrc>,
+    second: SimpleContextKey.Seed<TSrc>,
+): SimpleContextKey.Seed<TSrc> {
+  return lazyValue(() => second() ?? first());
+}
+
 class SimpleSeedKey<TSrc> extends ContextSeedKey<TSrc, SimpleContextKey.Seed<TSrc>> {
 
   seeder<TCtx extends ContextValues>(): SimpleContextSeeder<TCtx, TSrc> {
