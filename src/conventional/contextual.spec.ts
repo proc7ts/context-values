@@ -1,3 +1,4 @@
+import { describe, expect, it } from '@jest/globals';
 import { noop } from '@proc7ts/primitives';
 import { Contextual, Contextual__symbol, isContextual } from './contextual';
 

@@ -1,9 +1,10 @@
+import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import type { Mock } from 'jest-mock';
 import type { ContextRequest } from '../context-request';
 import type { ContextValues } from '../context-values';
 import { ContextKey, ContextKey__symbol } from '../key';
 import { SingleContextKey } from '../singleton';
 import { contextValueSpec, ContextValueSpec } from './context-value-spec';
-import Mock = jest.Mock;
 
 describe('contextValueSpec', () => {
 
@@ -92,7 +93,7 @@ describe('contextValueSpec', () => {
   });
   describe('as instance', () => {
 
-    let constructorSpy: Mock;
+    let constructorSpy: Mock<void, any[]>;
     class Value {
 
       static readonly [ContextKey__symbol]: ContextKey<Value> = new SingleContextKey('value');
@@ -226,6 +227,6 @@ describe('contextValueSpec', () => {
 
     const spec: ContextValueSpec.Explicit<ContextValues, string> = {} as any;
 
-    expect(() => contextValueSpec(spec)).toThrow(TypeError);
+    expect(() => contextValueSpec(spec)).toThrow(new TypeError('Malformed context value specifier: {}'));
   });
 });

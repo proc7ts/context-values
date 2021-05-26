@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { Supply } from '@proc7ts/supply';
 import { ContextKeyError } from '../context-key-error';
 import type { ContextValues } from '../context-values';
@@ -64,10 +65,10 @@ describe('FnContextKey', () => {
     expect(values.get(key)).toBeInstanceOf(Function);
   });
   it('throws when absent delegate called', () => {
-    expect(() => values.get(key)('some')).toThrow(ContextKeyError);
+    expect(() => values.get(key)('some')).toThrow(new ContextKeyError(key));
   });
   it('throws when absent delegate called with `null` fallback', () => {
-    expect(() => values.get(key, { or: null })!('some')).toThrow(ContextKeyError);
+    expect(() => values.get(key, { or: null })!('some')).toThrow(new ContextKeyError(key));
   });
 
   describe('upKey', () => {
@@ -75,7 +76,7 @@ describe('FnContextKey', () => {
       registry.provide({ a: key, is: (value: string) => value.length });
 
       let fn!: (arg: string) => number;
-      const receiver = jest.fn(f => fn = f);
+      const receiver = jest.fn((f: (arg: string) => number) => fn = f);
 
       values.get(key.upKey)(receiver);
       expect(receiver).toHaveBeenCalledTimes(1);

@@ -29,39 +29,29 @@ export default {
     }
     return 'context-values';
   },
-  output: [
-    {
-      format: 'cjs',
-      sourcemap: true,
-      dir: './dist',
-      entryFileNames: '[name].cjs',
-      chunkFileNames: '_[name].cjs',
-      hoistTransitiveImports: false,
-    },
-    {
-      format: 'esm',
-      sourcemap: true,
-      dir: '.',
-      entryFileNames: 'dist/[name].js',
-      chunkFileNames: 'dist/_[name].js',
-      hoistTransitiveImports: false,
-      plugins: [
-        flatDts({
-          tsconfig: 'tsconfig.main.json',
-          lib: true,
-          compilerOptions: {
-            declarationMap: true,
+  output: {
+    format: 'esm',
+    sourcemap: true,
+    dir: '.',
+    entryFileNames: 'dist/[name].js',
+    chunkFileNames: 'dist/_[name].js',
+    hoistTransitiveImports: false,
+    plugins: [
+      flatDts({
+        tsconfig: 'tsconfig.main.json',
+        lib: true,
+        compilerOptions: {
+          declarationMap: true,
+        },
+        entries: {
+          updatable: {
+            file: 'updatable/index.d.ts',
+            refs: false, // Do not refer to `../index.d.ts`.
+                         // Such reference breaks `rollup-plugin-typescript2`
+                         // within pnpm workspace installation.
           },
-          entries: {
-            updatable: {
-              file: 'updatable/index.d.ts',
-              refs: false, // Do not refer to `../index.d.ts`.
-                           // Such reference breaks `rollup-plugin-typescript2`
-                           // within pnpm workspace installation.
-            },
-          },
-        }),
-      ],
-    },
-  ],
+        },
+      }),
+    ],
+  },
 };

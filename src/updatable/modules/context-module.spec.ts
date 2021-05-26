@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { onceAfter } from '@proc7ts/fun-events';
 import { asis, newPromiseResolver, noop } from '@proc7ts/primitives';
 import { Supply } from '@proc7ts/supply';
