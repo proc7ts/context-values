@@ -1,3 +1,4 @@
+import { describe, expect, it } from '@jest/globals';
 import { isAlwaysSupply, Supply, SupplyPeer } from '@proc7ts/supply';
 import type { ContextValues } from '../context-values';
 import { ContextRegistry } from '../registry';

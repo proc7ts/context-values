@@ -1,11 +1,12 @@
+import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { valueProvider } from '@proc7ts/primitives';
+import type { Mock } from 'jest-mock';
 import { ContextKeyError } from '../context-key-error';
 import type { ContextValues } from '../context-values';
 import type { ContextValueSetup, ContextValueSlot } from '../key';
 import type { SimpleContextKey } from '../singleton';
 import { MultiContextKey, SingleContextKey } from '../singleton';
 import { ContextRegistry } from './context-registry';
-import Mock = jest.Mock;
 
 describe('ContextRegistry', () => {
 
@@ -18,7 +19,8 @@ describe('ContextRegistry', () => {
   beforeEach(() => {
     registry = new ContextRegistry();
     values = registry.newValues();
-    mockProvider = jest.fn().mockName('mockProvider');
+    mockProvider = jest.fn();
+    mockProvider.mockName('mockProvider');
     registry.provide({ a: key, by: mockProvider });
     registry.provide({ a: multiKey, by: mockProvider });
   });
@@ -63,7 +65,7 @@ describe('ContextRegistry', () => {
 
   describe('Providers combination', () => {
 
-    let provider2Spy: Mock;
+    let provider2Spy: Mock<string | null>;
 
     beforeEach(() => {
       provider2Spy = jest.fn();
@@ -96,7 +98,7 @@ describe('ContextRegistry', () => {
 
     let chained: ContextRegistry;
     let chainedValues: ContextValues;
-    let provider2Spy: Mock;
+    let provider2Spy: Mock<string | null>;
 
     beforeEach(() => {
       chained = createChained();
@@ -132,8 +134,8 @@ describe('ContextRegistry', () => {
   describe('key setup', () => {
 
     let keyWithSetup: SingleContextKey<string>;
-    let byDefault: jest.Mock<string | null | undefined, []>;
-    let setup: jest.Mock<void, Parameters<ContextValueSetup<string, string, SimpleContextKey.Seed<string>>>>;
+    let byDefault: Mock<string | null | undefined, []>;
+    let setup: Mock<void, Parameters<ContextValueSetup<string, string, SimpleContextKey.Seed<string>>>>;
 
     beforeEach(() => {
 
@@ -174,7 +176,7 @@ describe('ContextRegistry', () => {
       expect(setup).not.toHaveBeenCalled();
     });
     it('does not set up the key for absent value', () => {
-      expect(() => values.get(keyWithSetup)).toThrow(ContextKeyError);
+      expect(() => values.get(keyWithSetup)).toThrow(new ContextKeyError(keyWithSetup));
       expect(setup).not.toHaveBeenCalled();
     });
   });

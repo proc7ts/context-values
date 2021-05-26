@@ -1,3 +1,4 @@
+import { describe, expect, it } from '@jest/globals';
 import { AfterEvent, afterEventBy, afterThe, digAfter } from '@proc7ts/fun-events';
 import { noop } from '@proc7ts/primitives';
 import { ContextKeyError } from '../context-key-error';
@@ -43,7 +44,7 @@ describe('ContextUpKey', () => {
       const key = new TestKey();
       const values = new ContextRegistry().newValues();
 
-      expect(() => values.get(key.upKey)(noop)).toThrow(ContextKeyError);
+      expect(() => values.get(key.upKey)(noop)).toThrow(new ContextKeyError(key.upKey));
     });
   });
 });

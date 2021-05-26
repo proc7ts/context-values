@@ -1,3 +1,4 @@
+import { describe, expect, it } from '@jest/globals';
 import { ContextModule } from './context-module';
 import { ContextModuleDependencyError } from './context-module-dependency-error';
 

@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { noop } from '@proc7ts/primitives';
 import { ContextKeyError } from '../context-key-error';
 import type { ContextValues } from '../context-values';
@@ -65,8 +66,14 @@ describe('SingleContextKey', () => {
     expect(values.get(key)).toBe(value2);
   });
   it('throws if there is neither default nor fallback value', () => {
-    expect(() => values.get(new SingleContextKey(key.name))).toThrow(ContextKeyError);
-    expect(() => values.get(new SingleContextKey(key.name), {})).toThrow(ContextKeyError);
+
+    const key1 = new SingleContextKey(key.name);
+
+    expect(() => values.get(key1)).toThrow(new ContextKeyError(key1));
+
+    const key2 = new SingleContextKey(key.name);
+
+    expect(() => values.get(key2, {})).toThrow(new ContextKeyError(key2));
   });
   it('provides fallback value if there is no provider', () => {
     expect(values.get(new SingleContextKey<string>(key.name), { or: 'fallback' })).toBe('fallback');
