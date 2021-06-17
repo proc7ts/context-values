@@ -78,9 +78,6 @@ describe('MultiContextUpKey', () => {
   it('cuts off the value supply if fallback value is `null`', async () => {
     expect(await Promise.resolve(values.get(key, { or: null })).catch(asis)).toBeInstanceOf(ContextKeyError);
   });
-  it('cuts off the value supply if fallback value is `undefined`', async () => {
-    expect(await Promise.resolve(values.get(key, { or: undefined })).catch(asis)).toBeInstanceOf(ContextKeyError);
-  });
   it('cuts off the value supply after context destruction', () => {
 
     const value = 'test value';

@@ -50,6 +50,7 @@ export default defineConfig({
                          // within pnpm workspace installation.
           },
         },
+        internal: ['**/impl/**', '**/*.impl.ts'],
       }),
     ],
   },

@@ -56,7 +56,7 @@ export class SingleContextKey<TValue>
 
     if (value != null) {
       slot.insert(value);
-    } else if (!slot.hasFallback) {
+    } else if (slot.or === undefined) {
       slot.insert(this.byDefault(slot.context, this));
     }
   }

@@ -15,17 +15,14 @@ export class ContextModuleDependencyError extends Error {
   constructor(
       readonly module: ContextModule,
       readonly reasons: readonly (readonly [ContextModule, unknown?])[] = [],
-      readonly message: string = contextModuleDependencyErrorMessage(module, reasons),
+      message: string = ContextModuleDependencyError$defaultMessage(module, reasons),
   ) {
     super(message);
   }
 
 }
 
-/**
- * @internal
- */
-function contextModuleDependencyErrorMessage(
+function ContextModuleDependencyError$defaultMessage(
     module: ContextModule,
     dependencies: readonly (readonly [ContextModule, unknown?])[],
 ): string {

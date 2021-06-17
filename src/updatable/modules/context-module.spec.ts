@@ -532,12 +532,12 @@ describe('ContextModule', () => {
         super('test');
       }
 
-      async setup(setup: ContextModule.Setup): Promise<void> {
+      override async setup(setup: ContextModule.Setup): Promise<void> {
         await super.setup(setup);
         setup.provide({ a: key1, is: 201 });
       }
 
-      get needs(): ReadonlySet<ContextModule> {
+      override get needs(): ReadonlySet<ContextModule> {
         return new Set([this]);
       }
 

@@ -71,22 +71,22 @@ export class MultiContextUpKey<TSrc>
         return afterThe(...sources);
       }
 
-      // Sources absent. Attempt to detect the backup value.
-      let backup: AfterEvent<TSrc[]> | null | undefined;
+      // Sources absent. Attempt to detect fallback value.
+      let fallback: AfterEvent<TSrc[]> | null | undefined;
 
-      if (slot.hasFallback) {
-        backup = slot.or;
+      if (slot.or !== undefined) {
+        fallback = slot.or;
       } else {
 
         const defaultValue = this.byDefault(slot.context, this);
 
-        backup = defaultValue != null ? afterThe(...defaultValue) : afterThe();
+        fallback = defaultValue != null ? afterThe(...defaultValue) : afterThe();
       }
-      if (backup) {
-        return backup; // Backup value found.
+      if (fallback) {
+        return fallback; // Fallback value found.
       }
 
-      // Backup value is absent. Construct an error response.
+      // Fallback value is absent. Construct an error response.
       return afterEventBy<TSrc[]>(({ supply }) => {
         supply.off(new ContextKeyError(this));
       });

@@ -18,7 +18,7 @@ export function newContextValues<TCtx extends ContextValues>(
 
   const values = new Map<ContextKey<any>, any>();
 
-  class ContextValues$ extends ContextValues {
+  class ContextValues$ implements ContextValues {
 
     get<TValue, TSrc>(
         this: TCtx,
@@ -51,13 +51,9 @@ export function newContextValues<TCtx extends ContextValues>(
   return new ContextValues$();
 }
 
-/**
- * @internal
- */
 class ContextValueSlot$<TCtx extends ContextValues, TValue, TSrc, TSeed>
-    implements ContextValueSlot.Base<TValue, TSrc, TSeed> {
+    implements ContextValueSlot<TValue, TSrc, TSeed> {
 
-  readonly hasFallback: boolean;
   readonly seeder: ContextSeeder<TCtx, TSrc, TSeed>;
   readonly seed: TSeed;
   private _constructed: TValue | null | undefined = null;
@@ -74,7 +70,6 @@ class ContextValueSlot$<TCtx extends ContextValues, TValue, TSrc, TSeed>
 
     this.seeder = seeder;
     this.seed = seed;
-    this.hasFallback = 'or' in _opts; // Fallback _may_ have `undefined` value.
   }
 
   get or(): TValue | null | undefined {
@@ -106,7 +101,7 @@ class ContextValueSlot$<TCtx extends ContextValues, TValue, TSrc, TSeed>
     if (this._constructed != null) {
       return [this._constructed, this._setup];
     }
-    if (!this.hasFallback) {
+    if (this.or === undefined) {
       throw new ContextKeyError(this.key);
     }
 
