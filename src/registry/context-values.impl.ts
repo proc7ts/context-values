@@ -18,7 +18,7 @@ export function newContextValues<TCtx extends ContextValues>(
 
   const values = new Map<ContextKey<any>, any>();
 
-  class ContextValues$ implements ContextValues {
+  return {
 
     get<TValue, TSrc>(
         this: TCtx,
@@ -44,11 +44,9 @@ export function newContextValues<TCtx extends ContextValues>(
       }
 
       return constructed;
-    }
+    },
 
-  }
-
-  return new ContextValues$();
+  };
 }
 
 class ContextValueSlot$<TCtx extends ContextValues, TValue, TSrc, TSeed>
