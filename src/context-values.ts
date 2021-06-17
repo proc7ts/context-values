@@ -16,17 +16,6 @@ export interface ContextValues {
   readonly supply?: ContextSupply;
 
   /**
-   * Returns the value associated with the given key, or `null` if there is no one one.
-   *
-   * @typeParam TValue - A type of associated value.
-   * @param request - Context value request with target key.
-   * @param opts - Context value request options.
-   *
-   * @returns Either associated value, or `null` when there is no associated value.
-   */
-  get<TValue>(request: ContextRequest<TValue>, opts: ContextRequest.OrNull<TValue>): TValue | null;
-
-  /**
    * Returns a value associated with the given key, or a fallback one.
    *
    * @typeParam TValue - A type of associated value.
@@ -35,7 +24,7 @@ export interface ContextValues {
    *
    * @returns Either associated value, or a fallback one,.
    */
-  get<TValue>(request: ContextRequest<TValue>, opts: ContextRequest.OrFallback<TValue>): TValue;
+  get<TValue>(request: ContextRequest<TValue>, opts?: ContextRequest.OrFallback<TValue>): TValue;
 
   /**
    * Returns a value associated with the given key.
@@ -49,6 +38,6 @@ export interface ContextValues {
    * @throws ContextKeyError  If there is no value associated with the given key, the default value is not provided,
    * and the key has no default value.
    */
-  get<TValue>(request: ContextRequest<TValue>, opts?: ContextRequest.Opts<TValue>): TValue;
+  get<TValue>(request: ContextRequest<TValue>, opts: ContextRequest.Opts<TValue>): TValue | null;
 
 }

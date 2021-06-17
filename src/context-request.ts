@@ -35,19 +35,25 @@ export namespace ContextRequest {
      * A fallback value that will be returned if there is no value associated with target key.
      *
      * Can be `null`. `undefined` means there is no fallback.
-     *
-     * This property will be accessed only if there is no value associated with target key.
      */
-    or?: TValue | null | undefined;
+    readonly or?: TValue | null | undefined;
 
   }
 
+  /**
+   * Context request options with fallback value specified.
+   *
+   * This can be passed to {@link ContextValues.get} method as a second parameter.
+   *
+   * @typeParam TValue - A type of requested context value.
+   */
   export interface OrFallback<TValue> extends Opts<TValue> {
-    or: TValue;
-  }
 
-  export interface OrNull<TValue> extends Opts<TValue> {
-    or: null;
+    /**
+     * A fallback value that will be returned if there is no value associated with target key.
+     */
+    readonly or: TValue;
+
   }
 
 }
