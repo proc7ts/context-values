@@ -73,7 +73,7 @@ export class FnContextKey<TArgs extends any[], TRet = void>
             return afterThe(fns[fns.length - 1]);
           }
 
-          if (slot.hasFallback && slot.or) {
+          if (slot.or) {
             return slot.or;
           }
 
@@ -93,7 +93,7 @@ export class FnContextKey<TArgs extends any[], TRet = void>
 
     slot.context.get(
         this.upKey,
-        slot.hasFallback ? { or: slot.or != null ? afterThe(slot.or) : slot.or } : undefined,
+        slot.or != null ? { or: afterThe(slot.or) } : undefined,
     )!(
         fn => delegated = fn,
     ).whenOff(

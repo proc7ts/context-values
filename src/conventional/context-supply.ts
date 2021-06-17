@@ -27,7 +27,7 @@ class ContextSupplyKey extends SimpleContextKey<ContextSupply> {
     slot.insert(
         slot.seed()
         || slot.context.supply
-        || (slot.hasFallback ? slot.or : alwaysSupply()),
+        || (slot.or !== undefined ? slot.or : alwaysSupply()),
     );
   }
 

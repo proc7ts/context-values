@@ -71,24 +71,24 @@ export class SingleContextUpKey<TValue>
         return afterThe(sources[sources.length - 1]);
       }
 
-      // Sources absent. Attempt to detect a backup value.
-      let backup: AfterEvent<[TValue]> | null | undefined;
+      // Sources absent. Attempt to detect a fallback value.
+      let fallback: AfterEvent<[TValue]> | null | undefined;
 
-      if (slot.hasFallback) {
-        backup = slot.or;
+      if (slot.or !== undefined) {
+        fallback = slot.or;
       } else {
 
         const defaultValue = this.byDefault(slot.context, this);
 
         if (defaultValue != null) {
-          backup = afterThe(defaultValue);
+          fallback = afterThe(defaultValue);
         }
       }
-      if (backup) {
-        return backup; // Backup value found.
+      if (fallback) {
+        return fallback; // Fallback value found.
       }
 
-      // Backup value is absent. Construct an error response.
+      // Fallback value is absent. Construct an error response.
       return afterEventBy<[TValue]>(({ supply }) => {
         supply.off(new ContextKeyError(this));
       });

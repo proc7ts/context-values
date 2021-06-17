@@ -42,7 +42,7 @@ export abstract class ContextSeedKey<TSrc, TSeed> extends ContextKey<TSeed, TSrc
 
     if (!seeder.isEmpty(seed)) {
       opts.insert(seed);
-    } else if (!opts.hasFallback) {
+    } else if (opts.or === undefined) {
       opts.insert(seed);
     }
   }

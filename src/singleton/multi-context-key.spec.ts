@@ -107,17 +107,6 @@ describe('MultiContextKey', () => {
         { or: null },
     )).toBeNull();
   });
-  it('prefers `undefined` fallback value over default one', () => {
-    expect(
-        values.get(
-            new MultiContextKey<string>(
-                key.name,
-                { byDefault: () => ['default', 'value'] },
-            ),
-            { or: undefined },
-        ),
-    ).toBeUndefined();
-  });
 
   describe('combination', () => {
 

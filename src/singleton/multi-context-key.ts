@@ -60,7 +60,7 @@ export class MultiContextKey<TSrc>
 
     if (result.length) {
       slot.insert(result);
-    } else if (!slot.hasFallback) {
+    } else if (slot.or === undefined) {
 
       const defaultSources = this.byDefault(slot.context, this);
 

@@ -145,7 +145,7 @@ describe('ContextRegistry', () => {
           super('test-key', { byDefault });
         }
 
-        grow(slot: ContextValueSlot<string, string, SimpleContextKey.Seed<string>>): void {
+        override grow(slot: ContextValueSlot<string, string, SimpleContextKey.Seed<string>>): void {
           super.grow(slot);
           slot.setup(setup);
         }

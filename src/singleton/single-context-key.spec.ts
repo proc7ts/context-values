@@ -110,10 +110,6 @@ describe('SingleContextKey', () => {
     expect(values.get(new SingleContextKey<string>(key.name, { byDefault: () => 'default' }), { or: null }))
         .toBeNull();
   });
-  it('prefers `undefined` fallback value over key one', () => {
-    expect(values.get(new SingleContextKey<string>(key.name, { byDefault: () => 'default' }), { or: undefined }))
-        .toBeUndefined();
-  });
   it('caches the value', () => {
 
     const value = 'value';

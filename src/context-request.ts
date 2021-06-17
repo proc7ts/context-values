@@ -34,11 +34,11 @@ export namespace ContextRequest {
     /**
      * A fallback value that will be returned if there is no value associated with target key.
      *
-     * Can be `null` or `undefined`.
+     * Can be `null`. `undefined` means there is no fallback.
      *
      * This property will be accessed only if there is no value associated with target key.
      */
-    or?: TValue | null;
+    or?: TValue | null | undefined;
 
   }
 
@@ -48,10 +48,6 @@ export namespace ContextRequest {
 
   export interface OrNull<TValue> extends Opts<TValue> {
     or: null;
-  }
-
-  export interface OrUndefined<TValue> extends Opts<TValue> {
-    or?: undefined;
   }
 
 }

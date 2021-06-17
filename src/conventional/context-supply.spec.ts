@@ -10,7 +10,6 @@ describe('ContextSupply', () => {
     const values = new ContextRegistry().newValues();
 
     expect(values.get(ContextSupply, { or: null })).toBeNull();
-    expect(values.get(ContextSupply, { or: undefined })).toBeUndefined();
     expect(isAlwaysSupply(values.get(ContextSupply))).toBe(true);
   });
   it('is equal to the supply of context', () => {

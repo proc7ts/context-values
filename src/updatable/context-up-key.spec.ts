@@ -26,11 +26,11 @@ describe('ContextUpKey', () => {
               // Sources present. Use them.
               return afterThe(...sources);
             }
-            if (slot.hasFallback && slot.or) {
-              return slot.or; // Backup value found.
+            if (slot.or) {
+              return slot.or; // Fallback value found.
             }
 
-            // Backup value is absent. Construct an error response.
+            // Fallback value is absent. Construct an error response.
             return afterEventBy<string[]>(() => {
               throw new ContextKeyError(this);
             });
