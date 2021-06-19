@@ -7,6 +7,7 @@ export * from './context-request';
 export * from './context-ref';
 export * from './context-values';
 export * from './conventional';
+export * from './entry';
 export * from './registry';
 export * from './singleton';
 export * from './key';
