@@ -10,4 +10,5 @@ export * from './conventional';
 export * from './entry';
 export * from './registry';
 export * from './singleton';
+export * from './static';
 export * from './key';
