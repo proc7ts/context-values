@@ -1,6 +1,6 @@
 import { Supply } from '@proc7ts/supply';
-import { ContextEntries } from './context-entries';
-import { ContextEntry } from './context-entry';
+import { CxEntry } from './entry';
+import { CxValues } from './values';
 
 /**
  * Context entry asset.
@@ -11,10 +11,10 @@ import { ContextEntry } from './context-entry';
  * @typeParam TAsset - Context value asset type.
  * @typeParam TContext - Context type.
  */
-export type ContextAsset<TValue, TAsset = TValue, TContext extends ContextEntries = ContextEntries> =
-    ContextAsset.Provider<TValue, TAsset, TContext>;
+export type CxAsset<TValue, TAsset = TValue, TContext extends CxValues = CxValues> =
+    CxAsset.Provider<TValue, TAsset, TContext>;
 
-export namespace ContextAsset {
+export namespace CxAsset {
 
   /**
    * Context value assets provider signature.
@@ -27,10 +27,10 @@ export namespace ContextAsset {
    * @param target - Context entry definition target.
    * @param receiver - Value assets receiver.
    */
-  export type Provider<TValue, TAsset = TValue, TContext extends ContextEntries = ContextEntries> = (
+  export type Provider<TValue, TAsset = TValue, TContext extends CxValues = CxValues> = (
       this: void,
-      target: ContextEntry.Target<TValue, TAsset, TContext>,
-      receiver: ContextAsset.Receiver<TAsset>,
+      target: CxEntry.Target<TValue, TAsset, TContext>,
+      receiver: CxAsset.Receiver<TAsset>,
   ) => void;
 
   /**
