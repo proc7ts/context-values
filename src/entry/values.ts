@@ -33,13 +33,9 @@ export namespace CxValues {
     /**
      * Provides assets for the target context entry.
      *
-     * @param entry - Context entry to provide assets for.
-     * @param asset - Context entry asset to.
+     * @param asset - Context entry asset.
      */
-    provide<TValue, TAsset = TValue>(
-        entry: CxEntry<TValue, TAsset>,
-        asset: CxAsset<TValue, TAsset, TContext>,
-    ): Supply;
+    provide<TValue, TAsset = TValue>(asset: CxAsset<TValue, TAsset, TContext>): Supply;
 
   }
 
@@ -126,7 +122,7 @@ export namespace CxValues {
   export type Provider<TContext extends CxValues = CxValues> = <TValue, TAsset = TValue>(
       this: void,
       target: CxEntry.Target<TValue, TAsset, TContext>,
-      receiver: CxAsset.Receiver<TAsset>,
+      receiver: CxEntry.AssetReceiver<TAsset>,
   ) => void;
 
 }

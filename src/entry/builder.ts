@@ -62,18 +62,20 @@ export class CxBuilder<TContext extends CxValues = CxValues>
     return this._record(entry).get(request);
   }
 
-  provide<TValue, TAsset = TValue>(
-      entry: CxEntry<TValue, TAsset>,
-      asset: CxAsset<TValue, TAsset, TContext>,
-  ): Supply {
-    return this._record(entry).provide(asset);
+  provide<TValue, TAsset = TValue>(asset: CxAsset<TValue, TAsset, TContext>): Supply {
+
+    const { entry, supply = new Supply() } = asset;
+
+    this._record(entry).provide(asset.read, supply);
+
+    return supply;
   }
 
-  provideAssets<TValue, TAsset>(
+  readAssets<TValue, TAsset>(
       target: CxEntry.Target<TValue, TAsset>,
-      receiver: CxAsset.Receiver<TAsset>,
+      receiver: CxEntry.AssetReceiver<TAsset>,
   ): void {
-    this._record(target.entry).provideAssets(target, receiver);
+    this._record(target.entry).readAssets(target, receiver);
   }
 
   private _record<TValue, TAsset>(entry: CxEntry<TValue, TAsset>): CxEntry$Record<TValue, TAsset, TContext> {
@@ -92,7 +94,7 @@ export class CxBuilder<TContext extends CxValues = CxValues>
 class CxEntry$Record<TValue, TAsset, TContext extends CxValues> {
 
   private readonly providers = new Map<Supply, CxAsset.Provider<TValue, TAsset, TContext>>();
-  private readonly receivers = new Map<CxEntry.Target<TValue, TAsset>, CxAsset.Receiver<TAsset>>();
+  private readonly receivers = new Map<Supply, [CxEntry.Target<TValue, TAsset>, CxEntry.AssetReceiver<TAsset>]>();
 
   constructor(
       private readonly builder: CxBuilder<TContext>,
@@ -100,28 +102,26 @@ class CxEntry$Record<TValue, TAsset, TContext extends CxValues> {
   ) {
   }
 
-  provide(provider: CxAsset.Provider<TValue, TAsset, TContext>): Supply {
-    return this.addProvider(provider);
+  provide(provider: CxAsset.Provider<TValue, TAsset, TContext>, supply: Supply): void {
+    this.addProvider(provider, supply);
   }
 
-  private provideToAll(provider: CxAsset.Provider<TValue, TAsset, TContext>): Supply {
+  private provideToAll(provider: CxAsset.Provider<TValue, TAsset, TContext>, supply: Supply): void {
+    this.addProvider(provider, supply);
 
-    const supply = this.addProvider(provider);
-
-    for (const [target, receiver] of this.receivers) {
-      this.provideAssetsTo(target, receiver);
+    for (const [supply, [target, receiver]] of this.receivers) {
+      if (!supply.isOff) {
+        this.readAssetsTo(target, receiver);
+      }
     }
-
-    return supply;
   }
 
-  private addProvider(provider: CxAsset.Provider<TValue, TAsset, TContext>): Supply {
-
-    const supply: Supply = new Supply(() => this.providers.delete(supply));
-
+  private addProvider(
+      provider: CxAsset.Provider<TValue, TAsset, TContext>,
+      supply: Supply,
+  ): void {
     this.providers.set(supply, provider);
-
-    return supply;
+    supply.whenOff(() => this.providers.delete(supply));
   }
 
   get({ or }: CxRequest<TValue> = {}): TValue | null {
@@ -145,39 +145,34 @@ class CxEntry$Record<TValue, TAsset, TContext extends CxValues> {
     throw new CxReferenceError(this.entry);
   }
 
-  provideAssets(
+  readAssets(
       target: CxEntry.Target<TValue, TAsset>,
-      receiver: CxAsset.Receiver<TAsset>,
-  ): void {
+      receiver: CxEntry.AssetReceiver<TAsset>,
+  ): Supply {
     this.provide = this.provideToAll;
-    this.provideAssets = this.provideAssetsTo;
-    this.provideAssetsTo(target, receiver);
+    this.readAssets = this.readAssetsTo;
+
+    return this.readAssetsTo(target, receiver);
   }
 
-  private provideAssetsTo(
+  private readAssetsTo(
       target: CxEntry.Target<TValue, TAsset>,
-      receiver: CxAsset.Receiver<TAsset>,
-  ): void {
+      receiver: CxEntry.AssetReceiver<TAsset>,
+  ): Supply {
 
-    const prevReceiver = this.receivers.get(target);
+    const assetsSupply: Supply = new Supply(() => this.receivers.delete(assetsSupply));
 
-    this.receivers.set(
-        target,
-        prevReceiver
-            ? (asset, supply) => {
-              receiver(asset, supply);
-              prevReceiver(asset, supply);
-            }
-            : receiver,
-    );
+    this.receivers.set(assetsSupply, [target, receiver]);
 
     this.builder._initial(target, receiver);
-    for (const [providerSupply, provider] of this.providers) {
+    for (const [supply, provider] of this.providers) {
       (provider as CxAsset.Provider<TValue, TAsset>)(
           target,
-          (asset, supply) => receiver(asset, supply.needs(providerSupply)),
+          getAsset => receiver(getAsset, supply.needs(assetsSupply)),
       );
     }
+
+    return assetsSupply;
   }
 
   private define(): CxEntry.Definition<TValue, TAsset> {
@@ -195,9 +190,7 @@ class CxEntry$Record<TValue, TAsset, TContext extends CxValues> {
     this.define = valueProvider(definition);
 
     definition.addPeer({
-      provideAssets: (receiver: CxAsset.Receiver<TAsset>) => {
-        this.provideAssets(target, receiver);
-      },
+      readAssets: receiver => this.readAssets(target, receiver),
     });
 
     return definition;
@@ -207,7 +200,7 @@ class CxEntry$Record<TValue, TAsset, TContext extends CxValues> {
 
 function CxValues$emptyProvider<TValue, TAsset>(
     _target: CxEntry.Target<TValue, TAsset>,
-    _receiver: CxAsset.Receiver<TAsset>,
+    _receiver: CxEntry.AssetReceiver<TAsset>,
 ): void {
   // No assets
 }

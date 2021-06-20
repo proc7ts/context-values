@@ -1,3 +1,4 @@
+import { Supply } from '@proc7ts/supply';
 import { CxAsset } from './asset';
 import { CxValues } from './values';
 
@@ -25,6 +26,22 @@ export interface CxEntry<TValue, TAsset = TValue> {
 }
 
 export namespace CxEntry {
+
+  /**
+   * Context entry definer signature.
+   *
+   * Starts the definition of context entry.
+   *
+   * This is the only method to be implemented by context entry.
+   *
+   * @typeParam TValue - Context value type.
+   * @typeParam TAsset - Context value asset type.
+   * @param target - Definition target.
+   *
+   * @returns New context entry definition instance.
+   */
+  export type Definer<TValue, TAsset = TValue> =
+      (this: void, target: CxEntry.Target<TValue, TAsset>) => Definition<TValue, TAsset>;
 
   /**
    * Context entry definition target.
@@ -73,8 +90,8 @@ export namespace CxEntry {
      *
      * When defined, this method is tried first when accessing the context entry value.
      *
-     * When not defined or `null`/`undefined` returned, the {@link Request.or fallback} value is used. If the latter is
-     * not available, the {@link getDefault default value} is used instead.
+     * When not defined or `null`/`undefined` returned, the {@link CxRequest.or fallback} value is used. If the latter
+     * is not available, the {@link getDefault default value} is used instead.
      *
      * @returns Either entry value, or `null`/`undefined` if the value is not available.
      */
@@ -84,7 +101,7 @@ export namespace CxEntry {
      * Returns the default context entry value.
      *
      * When defined, this method is tried if there is no {@link get value} available for the entry, and no
-     * {@link Request.or fallback} provided.
+     * {@link CxRequest.or fallback} provided.
      *
      * @returns Either default value for the entry, or `null`/`undefined` if the default value is not available.
      */
@@ -95,19 +112,30 @@ export namespace CxEntry {
   /**
    * A peer of context entry definition.
    *
-   * It is able to {@link provideAssets provide assets} for entry value in particular context.
+   * It is able to {@link readAssets provide assets} for entry value in particular context.
    *
    * @typeParam TAsset - Context value asset type.
    */
   export interface Peer<TAsset> {
 
     /**
-     * Provides value assets to target `receiver`.
+     * Reads value assets and report them to target `receiver`.
      *
      * @param receiver - Value assets receiver.
+     *
+     * @returns Assets supply. Once cut off, the added assets would no longer be reported.
      */
-    provideAssets(receiver: CxAsset.Receiver<TAsset>): void;
+    readAssets(receiver: AssetReceiver<TAsset>): Supply;
 
   }
+
+  /**
+   * Context value assets receiver.
+   *
+   * @typeParam TAsset - Context value asset type.
+   * @param getAsset - Asset evaluator function.
+   * @param supply - Asset supply. The `asset` is revoked once cut off.
+   */
+  export type AssetReceiver<TAsset> = (this: void, getAsset: CxAsset.Evaluator<TAsset>, supply: Supply) => void;
 
 }
