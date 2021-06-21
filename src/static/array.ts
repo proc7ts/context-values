@@ -29,14 +29,14 @@ export function cxArray<TElement>(
 
       const array: TElement[] = [];
 
-      target.trackAssets(getAsset => {
+      target.eachAsset(getAsset => {
 
         const asset = getAsset();
 
         if (asset != null) {
           array.push(asset);
         }
-      }).off();
+      });
 
       return array.length ? array : null;
     }),

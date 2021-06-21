@@ -108,21 +108,4 @@ export namespace CxValues {
 
   }
 
-  /**
-   * Context assets provider signature.
-   *
-   * Provides assets for the value of the `target` context entry to the given `receiver`.
-   *
-   * @typeParam TValue - Context value type.
-   * @typeParam TAsset - Context value asset type.
-   * @typeParam TContext - Context type.
-   * @param target - Context entry definition target.
-   * @param receiver - Value assets receiver.
-   */
-  export type Provider<TContext extends CxValues = CxValues> = <TValue, TAsset = TValue>(
-      this: void,
-      target: CxEntry.Target<TValue, TAsset, TContext>,
-      receiver: CxEntry.AssetReceiver<TAsset>,
-  ) => void;
-
 }

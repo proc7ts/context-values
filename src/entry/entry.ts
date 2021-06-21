@@ -65,6 +65,16 @@ export namespace CxEntry {
     readonly entry: CxEntry<TValue, TAsset>;
 
     /**
+     * Iterates over value assets.
+     *
+     * Each asset reported to the given `callback` function until the latter returns `false` or there are no more
+     * assets.
+     *
+     * @param callback - Assets callback.
+     */
+    eachAsset(callback: AssetCallback<TAsset>): void;
+
+    /**
      * Reads entry value assets and start tracking of their additions.
      *
      * @param receiver - A receiver to report existing and added assets to.
@@ -111,12 +121,33 @@ export namespace CxEntry {
   }
 
   /**
-   * Context value assets receiver.
+   * A signature of {@link Target.eachAsset assets iteration} callback.
+   *
+   * @typeParam TAsset - Context value asset type.
+   * @param asset - Current asset.
+   *
+   * @returns `false` to stop iteration, or `true`/`void` to continue.
+   */
+  export type AssetCallback<TAsset> = (
+      this: void,
+      asset: CxAsset.Evaluator<TAsset>,
+  ) => void | boolean;
+
+  /**
+   * A signature of context value assets receiver.
+   *
+   * Used to {@link Target.trackAssets track} entry value assets.
    *
    * @typeParam TAsset - Context value asset type.
    * @param getAsset - Asset evaluator function.
-   * @param supply - Asset supply. The `asset` is revoked once cut off.
+   * @param supply - Asset supply. The asset is revoked once cut off.
+   * @param rank - Asset source rank. `0` refers to current context, `1` - to its predecessor, etc.
    */
-  export type AssetReceiver<TAsset> = (this: void, getAsset: CxAsset.Evaluator<TAsset>, supply: Supply) => void;
+  export type AssetReceiver<TAsset> = (
+      this: void,
+      getAsset: CxAsset.Evaluator<TAsset>,
+      supply: Supply,
+      rank: number,
+  ) => void;
 
 }

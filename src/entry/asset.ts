@@ -29,37 +29,23 @@ export interface CxAsset<TValue, TAsset = TValue, TContext extends CxValues = Cx
   readonly supply?: Supply;
 
   /**
-   * Reads assets for the value of the `target` context entry and reports them to the given `receiver`.
+   * Iterates over assets of the `target` context entry.
+   *
+   * Each asset evaluator is reported to the given `callback` function until the latter returns `false` or there are
+   * no more assets.
    *
    * @param target - Context entry definition target.
-   * @param receiver - Value assets receiver.
+   * @param callback - Assets callback.
    */
-  read(
+  each(
       this: void,
       target: CxEntry.Target<TValue, TAsset, TContext>,
-      receiver: CxAsset.Receiver<TAsset>,
+      callback: CxAsset.Callback<TAsset>,
   ): void;
 
 }
 
 export namespace CxAsset {
-
-  /**
-   * Context value assets provider signature.
-   *
-   * Provides assets for the value of the `target` context entry to the given `receiver`.
-   *
-   * @typeParam TValue - Context value type.
-   * @typeParam TAsset - Context value asset type.
-   * @typeParam TContext - Context type.
-   * @param target - Context entry definition target.
-   * @param receiver - Value assets receiver.
-   */
-  export type Provider<TValue, TAsset = TValue, TContext extends CxValues = CxValues> = (
-      this: void,
-      target: CxEntry.Target<TValue, TAsset, TContext>,
-      receiver: Receiver<TAsset>,
-  ) => void;
 
   /**
    * Asset evaluator signature.
@@ -71,18 +57,20 @@ export namespace CxAsset {
   export type Evaluator<TAsset> = (this: void) => TAsset | null | undefined;
 
   /**
-   * Context value assets receiver.
+   * A signature of context value {@link CxAsset.each assets iteration} callback.
    *
    * @typeParam TAsset - Context value asset type.
    * @param getAsset - Asset evaluator function.
+   *
+   * @returns `false` to stop iteration, or `true`/`void` to continue.
    */
-  export type Receiver<TAsset> = (this: void, getAsset: Evaluator<TAsset>) => void;
+  export type Callback<TAsset> = (this: void, getAsset: Evaluator<TAsset>) => void | boolean;
 
 }
 
 function CxAsset$provideNone<TValue, TAsset, TContext extends CxValues>(
     _target: CxEntry.Target<TValue, TAsset, TContext>,
-    _receiver: CxAsset.Receiver<TAsset>,
+    _receiver: CxAsset.Callback<TAsset>,
 ): void {
   // No assets.
 }
@@ -104,7 +92,7 @@ export function cxConstAsset<TAsset, TContext extends CxValues = CxValues>(
   return {
     entry,
     supply,
-    read: value != null
+    each: value != null
         ? (_target, receiver) => receiver(valueProvider(value))
         : CxAsset$provideNone,
   };
@@ -127,7 +115,7 @@ export function cxAliasAsset<TAsset, TContext extends CxValues = CxValues>(
   return {
     entry,
     supply,
-    read(target, receiver) {
+    each(target, receiver) {
       receiver(() => target.get(alias, { or: null }));
     },
   };
@@ -141,7 +129,7 @@ export function cxBuildAsset<TValue, TAsset = TValue, TContext extends CxValues 
   return {
     entry,
     supply,
-    read(target, receiver) {
+    each(target, receiver) {
       receiver(() => build(target));
     },
   };

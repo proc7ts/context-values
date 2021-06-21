@@ -1,12 +1,19 @@
-import { lazyValue, valueProvider } from '@proc7ts/primitives';
+import { lazyValue } from '@proc7ts/primitives';
 import { neverSupply, Supply } from '@proc7ts/supply';
 import { CxAsset } from './asset';
+import { CxBuilder$Record } from './builder.record.impl';
 import { CxEntry } from './entry';
-import { CxReferenceError } from './reference-error';
 import { CxRequest } from './request';
 import { CxValues } from './values';
 
 const CxBuilder$noAssets: CxBuilder.AssetSource = {
+
+  eachAsset<TValue, TAsset>(
+      _target: CxEntry.Target<TValue, TAsset>,
+      _receiver: CxEntry.AssetReceiver<TAsset>,
+  ): void {
+    // No assets to iterate.
+  },
 
   trackAssets<TValue, TAsset>(
       _target: CxEntry.Target<TValue, TAsset>,
@@ -33,7 +40,7 @@ export class CxBuilder<TContext extends CxValues = CxValues>
   /**
    * @internal
    */
-  private readonly _records = new Map<CxEntry<any, any>, CxEntry$Record<any, any, TContext>>();
+  private readonly _records = new Map<CxEntry<any, any>, CxBuilder$Record<any, any, TContext>>();
 
   /**
    * @internal
@@ -77,9 +84,16 @@ export class CxBuilder<TContext extends CxValues = CxValues>
 
     const { entry, supply = new Supply() } = asset;
 
-    this._record(entry).provide(asset.read, supply);
+    this._record(entry).provide(asset.each, supply);
 
     return supply;
+  }
+
+  eachAsset<TValue, TAsset>(
+      target: CxEntry.Target<TValue, TAsset>,
+      callback: CxEntry.AssetCallback<TAsset>,
+  ): void {
+    this._record(target.entry).eachAsset(target, callback);
   }
 
   trackAssets<TValue, TAsset>(
@@ -89,12 +103,12 @@ export class CxBuilder<TContext extends CxValues = CxValues>
     return this._record(target.entry).trackAssets(target, receiver);
   }
 
-  private _record<TValue, TAsset>(entry: CxEntry<TValue, TAsset>): CxEntry$Record<TValue, TAsset, TContext> {
+  private _record<TValue, TAsset>(entry: CxEntry<TValue, TAsset>): CxBuilder$Record<TValue, TAsset, TContext> {
 
-    let record: CxEntry$Record<TValue, TAsset, TContext> | undefined = this._records.get(entry);
+    let record: CxBuilder$Record<TValue, TAsset, TContext> | undefined = this._records.get(entry);
 
     if (!record) {
-      this._records.set(entry, record = new CxEntry$Record(this, entry));
+      this._records.set(entry, record = new CxBuilder$Record(this, entry));
     }
 
     return record;
@@ -110,6 +124,20 @@ export namespace CxBuilder {
   export interface AssetSource {
 
     /**
+     * Iterates over particular entry value assets.
+     *
+     * Each asset reported to the given `callback` function until the latter returns `false` or there are no more
+     * assets.
+     *
+     * @param target - Context entry definition target to iterate over assets of.
+     * @param callback - Assets callback.
+     */
+    eachAsset<TValue, TAsset>(
+        target: CxEntry.Target<TValue, TAsset>,
+        callback: CxEntry.AssetCallback<TAsset>,
+    ): void;
+
+    /**
      * Reads assets of particular entry value and start tracking of their additions.
      *
      * @param target - Context entry definition target to track assets for.
@@ -122,110 +150,6 @@ export namespace CxBuilder {
         receiver: CxEntry.AssetReceiver<TAsset>,
     ): Supply;
 
-  }
-
-}
-
-class CxEntry$Record<TValue, TAsset, TContext extends CxValues> {
-
-  private readonly providers = new Map<Supply, CxAsset.Provider<TValue, TAsset, TContext>>();
-  private readonly receivers = new Map<Supply, [CxEntry.Target<TValue, TAsset>, CxEntry.AssetReceiver<TAsset>]>();
-
-  constructor(
-      private readonly builder: CxBuilder<TContext>,
-      private readonly entry: CxEntry<TValue, TAsset>,
-  ) {
-  }
-
-  provide(provider: CxAsset.Provider<TValue, TAsset, TContext>, supply: Supply): void {
-    this._provide(provider, supply);
-  }
-
-  private _provideForAll(provider: CxAsset.Provider<TValue, TAsset, TContext>, supply: Supply): void {
-    this._provide(provider, supply);
-
-    for (const [supply, [target, receiver]] of this.receivers) {
-      if (!supply.isOff) {
-        this._trackAssets(target, receiver);
-      }
-    }
-  }
-
-  private _provide(
-      provider: CxAsset.Provider<TValue, TAsset, TContext>,
-      supply: Supply,
-  ): void {
-    this.providers.set(supply, provider);
-    supply.whenOff(() => this.providers.delete(supply));
-  }
-
-  get({ or }: CxRequest<TValue> = {}): TValue | null {
-
-    const definition = this.define();
-    const value = definition.get?.();
-
-    if (value != null) {
-      return value;
-    }
-    if (or !== undefined) {
-      return or;
-    }
-
-    const defaultValue = definition.getDefault?.();
-
-    if (defaultValue != null) {
-      return defaultValue;
-    }
-
-    throw new CxReferenceError(this.entry);
-  }
-
-  trackAssets(
-      target: CxEntry.Target<TValue, TAsset>,
-      receiver: CxEntry.AssetReceiver<TAsset>,
-  ): Supply {
-    this.provide = this._provideForAll;
-    this.trackAssets = this._trackAssets;
-
-    return this._trackAssets(target, receiver);
-  }
-
-  private _trackAssets(
-      target: CxEntry.Target<TValue, TAsset>,
-      receiver: CxEntry.AssetReceiver<TAsset>,
-  ): Supply {
-
-    const assetsSupply: Supply = new Supply(() => this.receivers.delete(assetsSupply));
-
-    this.receivers.set(assetsSupply, [target, receiver]);
-
-    this.builder._initial.trackAssets(target, receiver).needs(assetsSupply);
-    for (const [supply, provider] of this.providers) {
-      (provider as CxAsset.Provider<TValue, TAsset>)(
-          target,
-          getAsset => receiver(getAsset, supply.needs(assetsSupply)),
-      );
-    }
-
-    return assetsSupply;
-  }
-
-  private define(): CxEntry.Definition<TValue> {
-
-    const { entry, builder } = this;
-    const { context } = builder;
-    const target: CxEntry.Target<TValue, TAsset, TContext> = {
-      context,
-      entry,
-      get: context.get.bind(context),
-      provide: builder.provide.bind(builder),
-      trackAssets: receiver => this.trackAssets(target, receiver),
-  };
-    const definition = this.entry.perContext(target);
-
-    this.define = valueProvider(definition);
-
-    return definition;
   }
 
 }

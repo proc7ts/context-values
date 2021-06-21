@@ -26,7 +26,9 @@ export function cxSingle<TValue>(
 
       const assets: CxAsset.Evaluator<TValue>[] = [];
 
-      target.trackAssets(getAsset => assets.push(getAsset)).off();
+      target.eachAsset(getAsset => {
+        assets.push(getAsset);
+      });
 
       let value: TValue | null | undefined;
 
