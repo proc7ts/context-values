@@ -15,6 +15,13 @@ const CxBuilder$noAssets: CxBuilder.AssetSource = {
     // No assets to iterate.
   },
 
+  eachActualAsset<TValue, TAsset>(
+      _target: CxEntry.Target<TValue, TAsset>,
+      _receiver: CxEntry.AssetReceiver<TAsset>,
+  ): void {
+    // No assets to iterate.
+  },
+
   trackAssets<TValue, TAsset>(
       _target: CxEntry.Target<TValue, TAsset>,
       _receiver: CxEntry.AssetReceiver<TAsset>,
@@ -96,6 +103,13 @@ export class CxBuilder<TContext extends CxValues = CxValues>
     this._record(target.entry).eachAsset(target, callback);
   }
 
+  eachActualAsset<TValue, TAsset>(
+      target: CxEntry.Target<TValue, TAsset>,
+      callback: CxEntry.AssetCallback<TAsset>,
+  ): void {
+    this._record(target.entry).eachActualAsset(target, callback);
+  }
+
   trackAssets<TValue, TAsset>(
       target: CxEntry.Target<TValue, TAsset>,
       receiver: CxEntry.AssetReceiver<TAsset>,
@@ -124,7 +138,7 @@ export namespace CxBuilder {
   export interface AssetSource {
 
     /**
-     * Iterates over particular entry value assets.
+     * Iterates over particular entry assets in the same order they are provided.
      *
      * Each asset reported to the given `callback` function until the latter returns `false` or there are no more
      * assets.
@@ -133,6 +147,21 @@ export namespace CxBuilder {
      * @param callback - Assets callback.
      */
     eachAsset<TValue, TAsset>(
+        target: CxEntry.Target<TValue, TAsset>,
+        callback: CxEntry.AssetCallback<TAsset>,
+    ): void;
+
+    /**
+     * Iterates over particular entry assets with the most actual assets iterated first. I.e. in reverse order to the
+     * order they are provided.
+     *
+     * Each asset reported to the given `callback` function until the latter returns `false` or there are no more
+     * assets.
+     *
+     * @param target - Context entry definition target to iterate over assets of.
+     * @param callback - Assets callback.
+     */
+    eachActualAsset<TValue, TAsset>(
         target: CxEntry.Target<TValue, TAsset>,
         callback: CxEntry.AssetCallback<TAsset>,
     ): void;

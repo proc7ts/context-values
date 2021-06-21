@@ -1,5 +1,5 @@
 import { lazyValue } from '@proc7ts/primitives';
-import { CxAsset, CxEntry } from '../entry';
+import { CxEntry } from '../entry';
 
 /**
  * Creates single-valued context entry definer.
@@ -24,22 +24,11 @@ export function cxSingle<TValue>(
   return target => ({
     get: lazyValue(() => {
 
-      const assets: CxAsset.Evaluator<TValue>[] = [];
+      let asset: TValue | null | undefined;
 
-      target.eachAsset(getAsset => {
-        assets.push(getAsset);
-      });
+      target.eachActualAsset(getAsset => (asset = getAsset()) == null);
 
-      let value: TValue | null | undefined;
-
-      for (let i = assets.length - 1; i >= 0; --i) {
-        value = assets[i]();
-        if (value != null) {
-          break;
-        }
-      }
-
-      return value;
+      return asset;
     }),
     getDefault: byDefault && lazyValue(() => byDefault(target)),
   });

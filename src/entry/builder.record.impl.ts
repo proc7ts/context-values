@@ -85,6 +85,32 @@ export class CxBuilder$Record<TValue, TAsset, TContext extends CxValues> {
     }
   }
 
+  eachActualAsset(
+      target: CxEntry.Target<TValue, TAsset>,
+      callback: CxEntry.AssetCallback<TAsset>,
+  ): void {
+
+    // Record asset evaluators in the order they are provided.
+    const assets: CxAsset.Evaluator<TAsset>[] = [];
+
+    for (const iterator of this.assets.values()) {
+      iterator(target, getAsset => { assets.push(getAsset); });
+    }
+
+    // Iterate in reverse order.
+    for (let i = assets.length - 1; i >= 0; --i) {
+      if (callback(assets[i]) === false) {
+        return;
+      }
+    }
+
+    // Do the same for initial assets.
+    this.builder._initial.eachActualAsset(
+        target,
+        getAsset => callback(getAsset),
+    );
+  }
+
   trackAssets(
       target: CxEntry.Target<TValue, TAsset>,
       receiver: CxEntry.AssetReceiver<TAsset>,
@@ -132,6 +158,7 @@ export class CxBuilder$Record<TValue, TAsset, TContext extends CxValues> {
       get: context.get.bind(context),
       provide: builder.provide.bind(builder),
       eachAsset: callback => this.eachAsset(target, callback),
+      eachActualAsset: callback => this.eachActualAsset(target, callback),
       trackAssets: receiver => this.trackAssets(target, receiver),
     };
     const definition = this.entry.perContext(target);

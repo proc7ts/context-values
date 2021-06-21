@@ -65,7 +65,7 @@ export namespace CxEntry {
     readonly entry: CxEntry<TValue, TAsset>;
 
     /**
-     * Iterates over value assets.
+     * Iterates over value assets in the same order they are provided.
      *
      * Each asset reported to the given `callback` function until the latter returns `false` or there are no more
      * assets.
@@ -73,6 +73,17 @@ export namespace CxEntry {
      * @param callback - Assets callback.
      */
     eachAsset(callback: AssetCallback<TAsset>): void;
+
+    /**
+     * Iterates over value assets with the most actual assets iterated first. I.e. in reverse order to the order they
+     * are provided.
+     *
+     * Each asset reported to the given `callback` function until the latter returns `false` or there are no more
+     * assets.
+     *
+     * @param callback - Assets callback.
+     */
+    eachActualAsset(callback: AssetCallback<TAsset>): void;
 
     /**
      * Reads entry value assets and start tracking of their additions.
