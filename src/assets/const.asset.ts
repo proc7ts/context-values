@@ -1,8 +1,6 @@
 import { valueProvider } from '@proc7ts/primitives';
 import { Supply } from '@proc7ts/supply';
-import { CxAsset } from '../asset';
-import { CxEntry } from '../entry';
-import { CxValues } from '../values';
+import { CxAsset, CxEntry, CxValues } from '../core';
 
 /**
  * Creates constant context entry asset.

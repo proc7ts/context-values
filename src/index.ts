@@ -2,6 +2,7 @@
  * @packageDocumentation
  * @module Module @proc7ts/context-values
  */
+export * from './assets';
 export * from './build';
 export * from './context-key-error';
 export * from './context-request';

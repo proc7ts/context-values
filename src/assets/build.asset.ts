@@ -1,7 +1,5 @@
 import { Supply } from '@proc7ts/supply';
-import { CxAsset } from '../asset';
-import { CxEntry } from '../entry';
-import { CxValues } from '../values';
+import { CxAsset, CxEntry, CxValues } from '../core';
 
 /**
  * Creates context entry asset that builds asset value with the given builder function.
