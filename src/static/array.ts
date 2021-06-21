@@ -29,13 +29,8 @@ export function cxArray<TElement>(
 
       const array: TElement[] = [];
 
-      target.eachAsset(getAsset => {
-
-        const asset = getAsset();
-
-        if (asset != null) {
-          array.push(asset);
-        }
+      target.eachAsset(asset => {
+        array.push(asset);
       });
 
       return array.length ? array : null;

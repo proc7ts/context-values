@@ -77,7 +77,12 @@ export class CxBuilder$Record<TValue, TAsset, TContext extends CxValues> {
 
     if (goOn !== false) {
       for (const iterator of this.assets.values()) {
-        iterator(target, getAsset => goOn = callback(getAsset));
+        iterator(target, getAsset => {
+
+          const asset = getAsset();
+
+          return goOn = asset == null || callback(asset);
+        });
         if (goOn === false) {
           break;
         }
@@ -99,7 +104,10 @@ export class CxBuilder$Record<TValue, TAsset, TContext extends CxValues> {
 
     // Iterate in reverse order.
     for (let i = assets.length - 1; i >= 0; --i) {
-      if (callback(assets[i]) === false) {
+
+      const asset = assets[i]();
+
+      if (asset != null && callback(asset) === false) {
         return;
       }
     }
@@ -141,7 +149,14 @@ export class CxBuilder$Record<TValue, TAsset, TContext extends CxValues> {
     for (const [supply, iterator] of this.assets) {
       iterator(
           target,
-          getAsset => receiver(getAsset, supply.needs(trackingSupply), 0),
+          getAsset => {
+
+            const asset = getAsset();
+
+            if (asset != null) {
+              receiver(asset, supply.needs(trackingSupply), 0);
+            }
+          },
       );
     }
 

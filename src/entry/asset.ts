@@ -29,13 +29,13 @@ export interface CxAsset<TValue, TAsset = TValue, TContext extends CxValues = Cx
   readonly supply?: Supply;
 
   /**
-   * Iterates over assets of the `target` context entry.
+   * Iterates over {@link CxAsset.Evaluator asset evaluators} of the `target` context entry.
    *
-   * Each asset evaluator is reported to the given `callback` function until the latter returns `false` or there are
-   * no more assets.
+   * Passes each asset evaluator to the given `callback` function, until the latter returns `false` or there are no more
+   * assets.
    *
    * @param target - Context entry definition target.
-   * @param callback - Assets callback.
+   * @param callback - Asset evaluators iteration callback.
    */
   each(
       this: void,
@@ -57,10 +57,10 @@ export namespace CxAsset {
   export type Evaluator<TAsset> = (this: void) => TAsset | null | undefined;
 
   /**
-   * A signature of context value {@link CxAsset.each assets iteration} callback.
+   * A signature of context value {@link CxAsset.each asset evaluators iteration} callback.
    *
    * @typeParam TAsset - Context value asset type.
-   * @param getAsset - Asset evaluator function.
+   * @param getAsset - Asset evaluator.
    *
    * @returns `false` to stop iteration, or `true`/`void` to continue.
    */

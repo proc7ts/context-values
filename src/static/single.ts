@@ -24,11 +24,14 @@ export function cxSingle<TValue>(
   return target => ({
     get: lazyValue(() => {
 
-      let asset: TValue | null | undefined;
+      let result: TValue | null | undefined;
 
-      target.eachActualAsset(getAsset => (asset = getAsset()) == null);
+      target.eachActualAsset(asset => {
+        result = asset;
+        return false;
+      });
 
-      return asset;
+      return result;
     }),
     getDefault: byDefault && lazyValue(() => byDefault(target)),
   });

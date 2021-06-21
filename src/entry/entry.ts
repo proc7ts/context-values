@@ -1,5 +1,4 @@
 import { Supply } from '@proc7ts/supply';
-import { CxAsset } from './asset';
 import { CxValues } from './values';
 
 /**
@@ -67,7 +66,7 @@ export namespace CxEntry {
     /**
      * Iterates over value assets in the same order they are provided.
      *
-     * Each asset reported to the given `callback` function until the latter returns `false` or there are no more
+     * Passes each asset to the given `callback` function, until the latter returns `false` or there are no more
      * assets.
      *
      * @param callback - Assets callback.
@@ -78,8 +77,7 @@ export namespace CxEntry {
      * Iterates over value assets with the most actual assets iterated first. I.e. in reverse order to the order they
      * are provided.
      *
-     * Each asset reported to the given `callback` function until the latter returns `false` or there are no more
-     * assets.
+     * Passes each asset to the given `callback` function until the latter returns `false` or there are no more assets.
      *
      * @param callback - Assets callback.
      */
@@ -88,7 +86,10 @@ export namespace CxEntry {
     /**
      * Reads entry value assets and start tracking of their additions.
      *
-     * @param receiver - A receiver to report existing and added assets to.
+     * Passes already provided assets to the given `receiver` function, then passes every added assets too, until
+     * the returned asset supply cut off.
+     *
+     * @param receiver - Assets receiver.
      *
      * @returns Assets supply. Stops assets tracking once cut off.
      */
@@ -99,7 +100,7 @@ export namespace CxEntry {
   /**
    * Context entry definition.
    *
-   * The entry is defined based on value assets provided by entry definition {@link Peer peers}.
+   * The entry is defined based on value assets available via {@link Target definition target}.
    *
    * The definition is {@link CxEntry.perContext started} for context entry at most once per context.
    *
@@ -139,10 +140,7 @@ export namespace CxEntry {
    *
    * @returns `false` to stop iteration, or `true`/`void` to continue.
    */
-  export type AssetCallback<TAsset> = (
-      this: void,
-      asset: CxAsset.Evaluator<TAsset>,
-  ) => void | boolean;
+  export type AssetCallback<TAsset> = (this: void, asset: TAsset) => void | boolean;
 
   /**
    * A signature of context value assets receiver.
@@ -150,13 +148,13 @@ export namespace CxEntry {
    * Used to {@link Target.trackAssets track} entry value assets.
    *
    * @typeParam TAsset - Context value asset type.
-   * @param getAsset - Asset evaluator function.
+   * @param asset - Reported asset.
    * @param supply - Asset supply. The asset is revoked once cut off.
    * @param rank - Asset source rank. `0` refers to current context, `1` - to its predecessor, etc.
    */
   export type AssetReceiver<TAsset> = (
       this: void,
-      getAsset: CxAsset.Evaluator<TAsset>,
+      asset: TAsset,
       supply: Supply,
       rank: number,
   ) => void;
