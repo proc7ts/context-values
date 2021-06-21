@@ -1,0 +1,4 @@
+{
+  "main": "../dist/context-values.core.js",
+  "types": "./index.d.ts"
+}

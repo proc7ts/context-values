@@ -1,11 +1,8 @@
 import { valueProvider } from '@proc7ts/primitives';
 import { Supply } from '@proc7ts/supply';
-import { CxAsset } from './asset';
+import { CxAsset, CxEntry, CxRequest, CxValues } from '../core';
 import { CxBuilder } from './builder';
-import { CxEntry } from './entry';
 import { CxReferenceError } from './reference-error';
-import { CxRequest } from './request';
-import { CxValues } from './values';
 
 export type CxAsset$Iterator<TValue, TAsset = TValue> = CxAsset<TValue, TAsset>['each'];
 

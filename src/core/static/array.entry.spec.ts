@@ -1,7 +1,10 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { noop } from '@proc7ts/primitives';
-import { cxBuildAsset, CxBuilder, cxConstAsset, CxEntry, CxReferenceError, CxValues } from '../entry';
-import { cxArray } from './array';
+import { CxBuilder, CxReferenceError } from '../../build';
+import { cxBuildAsset, cxConstAsset } from '../assets';
+import { CxEntry } from '../entry';
+import { CxValues } from '../values';
+import { cxArray } from './array.entry';
 
 describe('cxArray', () => {
 

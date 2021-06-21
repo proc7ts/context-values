@@ -1,10 +1,7 @@
 import { lazyValue } from '@proc7ts/primitives';
 import { neverSupply, Supply } from '@proc7ts/supply';
-import { CxAsset } from './asset';
+import { CxAsset, CxEntry, CxRequest, CxValues } from '../core';
 import { CxBuilder$Record } from './builder.record.impl';
-import { CxEntry } from './entry';
-import { CxRequest } from './request';
-import { CxValues } from './values';
 
 const CxBuilder$noAssets: CxBuilder.AssetSource = {
 

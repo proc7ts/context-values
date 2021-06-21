@@ -20,6 +20,7 @@
   "types": "./index.d.ts",
   "exports": {
     ".": "./dist/context-values.js",
+    "./core": "./dist/context-values.core.js",
     "./updatable": "./dist/context-values.updatable.js"
   },
   "peerDependencies": {
