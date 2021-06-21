@@ -1,4 +1,4 @@
-import { lazyValue } from '@proc7ts/primitives';
+import { lazyValue, valuesProvider } from '@proc7ts/primitives';
 import { CxEntry } from '../entry';
 
 /**
@@ -10,7 +10,7 @@ import { CxEntry } from '../entry';
  *
  * @typeParam TElement - Array element type. The same as entry value asset type.
  * @param byDefault - Creates {@link CxEntry.Definition.getDefault default} entry value. Accepts entry definition target
- * as the only parameter.
+ * as the only parameter. Empty array will be used as default value when omitted.
  *
  * @returns New context entry definer.
  */
@@ -35,6 +35,6 @@ export function cxArray<TElement>(
 
       return array.length ? array : null;
     }),
-    getDefault: byDefault && lazyValue(() => byDefault(target)),
+    getDefault: byDefault ? lazyValue(() => byDefault(target)) : valuesProvider(),
   });
 }
