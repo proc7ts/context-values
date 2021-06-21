@@ -21,7 +21,7 @@ export interface CxEntry<TValue, TAsset = TValue> {
    *
    * @returns New context entry definition instance.
    */
-  perContext(target: CxEntry.Target<TValue, TAsset>): CxEntry.Definition<TValue, TAsset>;
+  perContext(target: CxEntry.Target<TValue, TAsset>): CxEntry.Definition<TValue>;
 
 }
 
@@ -41,7 +41,7 @@ export namespace CxEntry {
    * @returns New context entry definition instance.
    */
   export type Definer<TValue, TAsset = TValue> =
-      (this: void, target: CxEntry.Target<TValue, TAsset>) => Definition<TValue, TAsset>;
+      (this: void, target: CxEntry.Target<TValue, TAsset>) => Definition<TValue>;
 
   /**
    * Context entry definition target.
@@ -64,6 +64,15 @@ export namespace CxEntry {
      */
     readonly entry: CxEntry<TValue, TAsset>;
 
+    /**
+     * Reads entry value assets and start tracking of their additions.
+     *
+     * @param receiver - A receiver to report existing and added assets to.
+     *
+     * @returns Assets supply. Stops assets tracking once cut off.
+     */
+    trackAssets(receiver: AssetReceiver<TAsset>): Supply;
+
   }
 
   /**
@@ -74,16 +83,8 @@ export namespace CxEntry {
    * The definition is {@link CxEntry.perContext started} for context entry at most once per context.
    *
    * @typeParam TValue - Context value type.
-   * @typeParam TAsset - Context value asset type.
    */
-  export interface Definition<TValue, TAsset = TValue> {
-
-    /**
-     * Add a peer of this context entry definition.
-     *
-     * @param peer - A peer to add.
-     */
-    addPeer(peer: Peer<TAsset>): void;
+  export interface Definition<TValue> {
 
     /**
      * Returns context entry value.
@@ -106,26 +107,6 @@ export namespace CxEntry {
      * @returns Either default value for the entry, or `null`/`undefined` if the default value is not available.
      */
     getDefault?(): TValue | null | undefined;
-
-  }
-
-  /**
-   * A peer of context entry definition.
-   *
-   * It is able to {@link readAssets provide assets} for entry value in particular context.
-   *
-   * @typeParam TAsset - Context value asset type.
-   */
-  export interface Peer<TAsset> {
-
-    /**
-     * Reads value assets and report them to target `receiver`.
-     *
-     * @param receiver - Value assets receiver.
-     *
-     * @returns Assets supply. Once cut off, the added assets would no longer be reported.
-     */
-    readAssets(receiver: AssetReceiver<TAsset>): Supply;
 
   }
 

@@ -21,34 +21,24 @@ export function cxSingle<TValue>(
       byDefault?: (this: void, target: CxEntry.Target<TValue>) => TValue | undefined;
     } = {},
 ): CxEntry.Definer<TValue> {
-  return target => {
+  return target => ({
+    get: lazyValue(() => {
 
-    const peers: CxEntry.Peer<TValue>[] = [];
+      const assets: CxAsset.Evaluator<TValue>[] = [];
 
-    return {
-      addPeer(peer: CxEntry.Peer<TValue>): void {
-        peers.push(peer);
-      },
-      get: lazyValue(() => {
+      target.trackAssets(getAsset => assets.push(getAsset)).off();
 
-        const assets: CxAsset.Evaluator<TValue>[] = [];
+      let value: TValue | null | undefined;
 
-        for (const peer of peers) {
-          peer.readAssets(getAsset => assets.push(getAsset)).off();
+      for (let i = assets.length - 1; i >= 0; --i) {
+        value = assets[i]();
+        if (value != null) {
+          break;
         }
+      }
 
-        let value: TValue | null | undefined;
-
-        for (let i = assets.length - 1; i >= 0; --i) {
-          value = assets[i]();
-          if (value != null) {
-            break;
-          }
-        }
-
-        return value;
-      }),
-      getDefault: byDefault && lazyValue(() => byDefault(target)),
-    };
-  };
+      return value;
+    }),
+    getDefault: byDefault && lazyValue(() => byDefault(target)),
+  });
 }

@@ -24,32 +24,22 @@ export function cxArray<TElement>(
       ) => readonly TElement[] | undefined;
     } = {},
 ): CxEntry.Definer<readonly TElement[], TElement> {
-  return target => {
+  return target => ({
+    get: lazyValue(() => {
 
-    const peers: CxEntry.Peer<TElement>[] = [];
+      const array: TElement[] = [];
 
-    return {
-      addPeer(peer: CxEntry.Peer<TElement>): void {
-        peers.push(peer);
-      },
-      get: lazyValue(() => {
+      target.trackAssets(getAsset => {
 
-        const array: TElement[] = [];
+        const asset = getAsset();
 
-        for (const peer of peers) {
-          peer.readAssets(getAsset => {
-
-            const asset = getAsset();
-
-            if (asset != null) {
-              array.push(asset);
-            }
-          }).off();
+        if (asset != null) {
+          array.push(asset);
         }
+      }).off();
 
-        return array.length ? array : null;
-      }),
-      getDefault: byDefault && lazyValue(() => byDefault(target)),
-    };
-  };
+      return array.length ? array : null;
+    }),
+    getDefault: byDefault && lazyValue(() => byDefault(target)),
+  });
 }
