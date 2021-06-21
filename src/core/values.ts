@@ -1,5 +1,4 @@
 import { Supply } from '@proc7ts/supply';
-import { ContextSupply } from '../conventional';
 import { CxAsset } from './asset';
 import { CxEntry } from './entry';
 import { CxRequest } from './request';
@@ -14,7 +13,7 @@ export interface CxValues extends CxValues.Accessor {
    *
    * When provided, this value is available as {@link ContextSupply} entry, unless overridden.
    */
-  readonly supply?: ContextSupply;
+  readonly supply?: Supply;
 
 }
 
