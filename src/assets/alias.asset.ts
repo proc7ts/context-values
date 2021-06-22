@@ -1,4 +1,5 @@
 import { Supply } from '@proc7ts/supply';
+import { CxReferenceError } from '../build';
 import { CxAsset, CxEntry, CxValues } from '../core';
 
 /**
@@ -21,7 +22,16 @@ export function cxAliasAsset<TAsset, TContext extends CxValues = CxValues>(
     entry,
     supply,
     each(target, receiver) {
-      receiver(() => target.get(alias, { or: null }));
+      receiver(() => {
+        try {
+          return target.get(alias);
+        } catch (reason) {
+          if (reason instanceof CxReferenceError) {
+            throw new CxReferenceError(target.entry, undefined, reason);
+          }
+          throw reason;
+        }
+      });
     },
   };
 }
