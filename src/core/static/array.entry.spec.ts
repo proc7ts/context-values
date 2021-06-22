@@ -109,4 +109,22 @@ describe('cxArray', () => {
         { or: null },
     )).toBeNull();
   });
+  it('rebuilds the value in another context', () => {
+
+    const value1 = 'value1';
+    const value2 = 'value2';
+    const mockProvider = jest.fn((_target: CxEntry.Target<readonly string[], string>) => value1);
+
+    builder.provide(cxBuildAsset(entry, mockProvider));
+    expect(context.get(entry)).toEqual([value1]);
+
+    const builder2 = new CxBuilder(get => ({ get }), builder);
+    const context2 = builder2.context;
+
+    mockProvider.mockReturnValue(value2);
+    expect(context.get(entry)).toEqual([value1]);
+    expect(context2.get(entry)).toEqual([value2]);
+
+    expect(mockProvider).toHaveBeenCalledTimes(2);
+  });
 });
