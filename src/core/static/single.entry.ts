@@ -18,7 +18,7 @@ export function cxSingle<TValue>(
     {
       byDefault,
     }: {
-      byDefault?: (this: void, target: CxEntry.Target<TValue>) => TValue | undefined;
+      byDefault?(this: void, target: CxEntry.Target<TValue>): TValue | null | undefined;
     } = {},
 ): CxEntry.Definer<TValue> {
   return target => ({

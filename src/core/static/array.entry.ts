@@ -18,10 +18,10 @@ export function cxArray<TElement>(
     {
       byDefault,
     }: {
-      byDefault?: (
+      byDefault?(
           this: void,
           target: CxEntry.Target<readonly TElement[], TElement>,
-      ) => readonly TElement[] | undefined;
+      ): readonly TElement[] | null | undefined;
     } = {},
 ): CxEntry.Definer<readonly TElement[], TElement> {
   return target => ({
