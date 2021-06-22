@@ -134,11 +134,11 @@ export class CxBuilder$Record<TValue, TAsset, TContext extends CxValues> {
 
     this.builder._initial.trackAssets(
         target,
-        (getAsset, supply, rank) => receiver(
-            getAsset,
-            supply.needs(trackingSupply),
-            rank + 1,
-        ),
+        ({ supply, rank, get }) => receiver({
+          supply,
+          rank: rank + 1,
+          get,
+        }),
     ).needs(trackingSupply);
 
     for (const [assetSupply, iterator] of this.assets) {
@@ -164,12 +164,7 @@ export class CxBuilder$Record<TValue, TAsset, TContext extends CxValues> {
     }
 
     let sendAsset = (getAsset: CxAsset.Evaluator<TAsset>): boolean | void => {
-
-      const asset = getAsset();
-
-      if (asset != null) {
-        receiver(asset, supply, 0);
-      }
+      receiver({ supply, rank: 0, get: lazyValue(getAsset) });
     };
 
     supply.whenOff(() => {

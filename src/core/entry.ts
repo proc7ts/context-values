@@ -152,20 +152,45 @@ export namespace CxEntry {
   export type AssetCallback<TAsset> = (this: void, asset: TAsset) => void | boolean;
 
   /**
-   * A signature of context value assets receiver.
+   * A signature of receiver of new context value assets.
    *
    * Used to {@link Target.trackAssets track} entry value assets.
    *
    * @typeParam TAsset - Context value asset type.
-   * @param asset - Reported asset.
-   * @param supply - Asset supply. The asset is revoked once cut off.
-   * @param rank - Asset source rank. `0` refers to current context, `1` - to its predecessor, etc.
+   * @param newAsset - New asset added to context entry.
    */
-  export type AssetReceiver<TAsset> = (
-      this: void,
-      asset: TAsset,
-      supply: Supply,
-      rank: number,
-  ) => void;
+  export type AssetReceiver<TAsset> = (this: void, newAsset: NewAsset<TAsset>) => void;
+
+  /**
+   * New asset added to context entry.
+   *
+   * @typeParam TAsset - Context value asset type.
+   */
+  export interface NewAsset<TAsset> {
+
+    /**
+     * Asset supply.
+     *
+     * The asset is revoked once cut off.
+     */
+    readonly supply: Supply;
+
+    /**
+     * A rank of the asset modifier the asset is {@link CxValues.Modifier.provide provided} for.
+     *
+     * `0` refers to current context modifier, `1` - to its predecessor, etc.
+     */
+    readonly rank: number;
+
+    /**
+     * Evaluates asset.
+     *
+     * Asset evaluated at most once. All subsequent calls to this method would return the previously evaluated asset.
+     *
+     * @returns Either evaluated asset, or `null`/`undefined` if asset is not available.
+     */
+    get(this: void): TAsset | null | undefined;
+
+  }
 
 }

@@ -7,14 +7,14 @@ const CxBuilder$noAssets: CxBuilder.AssetSource = {
 
   eachAsset<TValue, TAsset>(
       _target: CxEntry.Target<TValue, TAsset>,
-      _receiver: CxEntry.AssetReceiver<TAsset>,
+      _receiver: CxEntry.AssetCallback<TAsset>,
   ): void {
     // No assets to iterate.
   },
 
   eachActualAsset<TValue, TAsset>(
       _target: CxEntry.Target<TValue, TAsset>,
-      _receiver: CxEntry.AssetReceiver<TAsset>,
+      _receiver: CxEntry.AssetCallback<TAsset>,
   ): void {
     // No assets to iterate.
   },
