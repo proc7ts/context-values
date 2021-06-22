@@ -64,6 +64,15 @@ export namespace CxEntry {
     readonly entry: CxEntry<TValue, TAsset>;
 
     /**
+     * Entry value supply.
+     *
+     * The assets won't be provided any more when cut off. If applicable, disables the entry value.
+     *
+     * This entry depends on {@link CxSupply context values supply}.
+     */
+    readonly supply: Supply;
+
+    /**
      * Iterates over value assets in the same order they are provided.
      *
      * Passes each asset to the given `callback` function, until the latter returns `false` or there are no more

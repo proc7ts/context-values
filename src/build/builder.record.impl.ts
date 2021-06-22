@@ -1,5 +1,6 @@
-import { valueProvider } from '@proc7ts/primitives';
-import { Supply } from '@proc7ts/supply';
+import { lazyValue, noop, valueProvider } from '@proc7ts/primitives';
+import { alwaysSupply, Supply } from '@proc7ts/supply';
+import { CxSupply } from '../conventional';
 import { CxAsset, CxEntry, CxRequest, CxValues } from '../core';
 import { CxBuilder } from './builder';
 import { CxReferenceError } from './reference-error';
@@ -17,26 +18,18 @@ export class CxBuilder$Record<TValue, TAsset, TContext extends CxValues> {
   ) {
   }
 
-  provide(iterator: CxAsset$Iterator<TValue, TAsset>, supply: Supply): void {
-    this._provide(iterator, supply);
-  }
+  provide(iterator: CxAsset$Iterator<TValue, TAsset>, assetSupply: Supply): void {
+    this.assets.set(assetSupply, iterator);
+    assetSupply.whenOff(() => this.assets.delete(assetSupply));
 
-  private _provideForAll(iterator: CxAsset$Iterator<TValue, TAsset>, supply: Supply): void {
-    this._provide(iterator, supply);
-
-    for (const [supply, [target, receiver]] of this.receivers) {
-      if (!supply.isOff) {
-        this._trackAssets(target, receiver);
-      }
+    for (const [trackingSupply, [target, receiver]] of this.receivers) {
+      this.sendToReceiver(
+          target,
+          iterator,
+          new Supply().needs(assetSupply).needs(trackingSupply),
+          receiver,
+      );
     }
-  }
-
-  private _provide(
-      iterator: CxAsset$Iterator<TValue, TAsset>,
-      supply: Supply,
-  ): void {
-    this.assets.set(supply, iterator);
-    supply.whenOff(() => this.assets.delete(supply));
   }
 
   get({ or }: CxRequest<TValue> = {}): TValue | null {
@@ -64,6 +57,7 @@ export class CxBuilder$Record<TValue, TAsset, TContext extends CxValues> {
       target: CxEntry.Target<TValue, TAsset>,
       callback: CxEntry.AssetCallback<TAsset>,
   ): void {
+    target.supply.whenOff(() => callback = valueProvider(false));
 
     let goOn: unknown;
 
@@ -94,9 +88,17 @@ export class CxBuilder$Record<TValue, TAsset, TContext extends CxValues> {
 
     // Record asset evaluators in the order they are provided.
     const assets: CxAsset.Evaluator<TAsset>[] = [];
+    let recordAsset = (getAsset: CxAsset.Evaluator<TAsset>): boolean | void => {
+      assets.push(getAsset);
+    };
+
+    target.supply.whenOff(() => {
+      recordAsset = callback = valueProvider(false);
+      assets.length = 0;
+    });
 
     for (const iterator of this.assets.values()) {
-      iterator(target, getAsset => { assets.push(getAsset); });
+      iterator(target, getAsset => recordAsset(getAsset));
     }
 
     // Iterate in reverse order.
@@ -120,20 +122,15 @@ export class CxBuilder$Record<TValue, TAsset, TContext extends CxValues> {
       target: CxEntry.Target<TValue, TAsset>,
       receiver: CxEntry.AssetReceiver<TAsset>,
   ): Supply {
-    this.provide = this._provideForAll;
-    this.trackAssets = this._trackAssets;
 
-    return this._trackAssets(target, receiver);
-  }
+    const trackingSupply: Supply = new Supply().needs(target.supply);
 
-  private _trackAssets(
-      target: CxEntry.Target<TValue, TAsset>,
-      receiver: CxEntry.AssetReceiver<TAsset>,
-  ): Supply {
-
-    const trackingSupply: Supply = new Supply(() => this.receivers.delete(trackingSupply));
+    if (trackingSupply.isOff) {
+      return trackingSupply;
+    }
 
     this.receivers.set(trackingSupply, [target, receiver]);
+    trackingSupply.whenOff(() => this.receivers.delete(trackingSupply));
 
     this.builder._initial.trackAssets(
         target,
@@ -143,30 +140,59 @@ export class CxBuilder$Record<TValue, TAsset, TContext extends CxValues> {
             rank + 1,
         ),
     ).needs(trackingSupply);
-    for (const [supply, iterator] of this.assets) {
-      iterator(
+
+    for (const [assetSupply, iterator] of this.assets) {
+      this.sendToReceiver(
           target,
-          getAsset => {
-
-            const asset = getAsset();
-
-            if (asset != null) {
-              receiver(asset, supply.needs(trackingSupply), 0);
-            }
-          },
+          iterator,
+          new Supply().needs(assetSupply).needs(trackingSupply),
+          receiver,
       );
     }
 
     return trackingSupply;
   }
 
+  private sendToReceiver(
+      target: CxEntry.Target<TValue, TAsset>,
+      iterator: CxAsset$Iterator<TValue, TAsset>,
+      supply: Supply,
+      receiver: CxEntry.AssetReceiver<TAsset>,
+  ): void {
+    if (supply.isOff) {
+      return;
+    }
+
+    let sendAsset = (getAsset: CxAsset.Evaluator<TAsset>): boolean | void => {
+
+      const asset = getAsset();
+
+      if (asset != null) {
+        receiver(asset, supply, 0);
+      }
+    };
+
+    supply.whenOff(() => {
+      receiver = noop;
+      sendAsset = valueProvider(false);
+    });
+
+    iterator(target, getAsset => sendAsset(getAsset));
+  }
+
   private define(): CxEntry.Definition<TValue> {
 
     const { entry, builder } = this;
     const { context } = builder;
+    const getSupply = entry === CxSupply as CxEntry<any>
+        ? valueProvider(alwaysSupply())
+        : lazyValue(() => new Supply().needs(context.get(CxSupply)));
     const target: CxEntry.Target<TValue, TAsset, TContext> = {
       context,
       entry,
+      get supply(): Supply {
+        return getSupply();
+      },
       get: context.get.bind(context),
       provide: builder.provide.bind(builder),
       eachAsset: callback => this.eachAsset(target, callback),
