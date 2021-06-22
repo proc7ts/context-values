@@ -1,4 +1,4 @@
-import { Supply } from '@proc7ts/supply';
+import { Supply, SupplyPeer } from '@proc7ts/supply';
 import { CxValues } from './values';
 
 /**
@@ -56,7 +56,7 @@ export namespace CxEntry {
       TValue,
       TAsset = TValue,
       TContext extends CxValues = CxValues
-      > extends CxValues.Accessor, CxValues.Modifier<TContext> {
+      > extends CxValues.Accessor, CxValues.Modifier<TContext>, SupplyPeer {
 
     /**
      * Context entry to define.
