@@ -1,5 +1,5 @@
 import { AfterEvent, trackValue, translateAfter_ } from '@proc7ts/fun-events';
-import { flatMapIt } from '@proc7ts/push-iterator';
+import { flatMapIt, reverseArray } from '@proc7ts/push-iterator';
 import { Supply } from '@proc7ts/supply';
 import { CxAsset, CxEntry } from '../../core';
 
@@ -47,7 +47,7 @@ function flattenUcxAssets<TAsset>(
 ): AfterEvent<CxAsset.Evaluator<TAsset>[]> {
   return assetsByRank.do(
       translateAfter_((send, ranks: Map<Supply, CxAsset.Evaluator<TAsset>>[]) => send(...flatMapIt(
-          ranks.values(),
+          reverseArray(ranks),
           rankAssets => rankAssets.values(),
       ))),
   );
