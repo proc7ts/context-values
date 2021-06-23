@@ -43,7 +43,7 @@ export function CxEntry$assetsByRank<TAsset>(
   return assetsByRank;
 }
 
-export function CxEntry$actualAsset<TAsset>(
+export function CxEntry$recentAsset<TAsset>(
     assetsByRank: CxEntry$AssetsByRank<TAsset>,
 ): CxAsset.Existing<TAsset> | undefined {
   for (const rankAssets of assetsByRank) {

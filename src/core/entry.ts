@@ -84,7 +84,7 @@ export namespace CxEntry {
     eachAsset(callback: CxAsset.Callback<TAsset>): void;
 
     /**
-     * Iterates over value assets with the most actual assets iterated first. I.e. in reverse order to the order they
+     * Iterates over value assets with the most recent assets iterated first. I.e. in reverse order to the order they
      * are provided.
      *
      * Passes each asset to the given `callback` function until the latter returns `false` or there are no more assets.
@@ -106,18 +106,18 @@ export namespace CxEntry {
     trackAssets(receiver: CxAsset.Receiver<TAsset>): Supply;
 
     /**
-     * Reads the actual entry asset and starts its tracking.
+     * Reads the most recent entry asset and starts its tracking.
      *
-     * The actual asset is the one with the smallest {@link CxAsset.Provided.rank rank} provided last.
+     * The most recent asset is the one with the smallest {@link CxAsset.Provided.rank rank} provided last.
      *
-     * Sends the actual asset to the given `receiver`, then sends it again whenever the actual asset changes. Sends
-     * `undefined` when there is no assets in the entry.
+     * Sends the recent asset to the given `receiver`, then sends again whenever the recent asset changes. Sends
+     * `undefined` when there are no assets provided for the entry.
      *
-     * @param receiver - Actual asset receiver.
+     * @param receiver - Most recent asset receiver.
      *
-     * @returns Actual asset supply. Stops tracking once cut off.
+     * @returns Most recent assets supply. Stops tracking once cut off.
      */
-    trackActualAsset(receiver: CxAsset.ActualReceiver<TAsset>): Supply;
+    trackRecentAsset(receiver: CxAsset.RecentReceiver<TAsset>): Supply;
 
   }
 

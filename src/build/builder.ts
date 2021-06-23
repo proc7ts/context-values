@@ -150,7 +150,7 @@ export namespace CxBuilder {
     ): void;
 
     /**
-     * Iterates over particular entry assets with the most actual assets iterated first. I.e. in reverse order to the
+     * Iterates over particular entry assets with the most recent assets iterated first. I.e. in reverse order to the
      * order they are provided.
      *
      * Each asset reported to the given `callback` function until the latter returns `false` or there are no more

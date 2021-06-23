@@ -3,7 +3,7 @@ import { lazyValue, valueProvider } from '@proc7ts/primitives';
 import { alwaysSupply, Supply } from '@proc7ts/supply';
 import { CxSupply } from '../conventional';
 import { CxAsset, CxEntry, CxRequest, CxValues } from '../core';
-import { CxEntry$actualAsset, CxEntry$assetsByRank } from './entry.assets-by-rank.impl';
+import { CxEntry$assetsByRank, CxEntry$recentAsset } from './entry.assets-by-rank.impl';
 import { CxEntry$Record } from './entry.record.impl';
 import { CxBuilder } from './index';
 
@@ -50,9 +50,9 @@ export class CxEntry$Target<TValue, TAsset, TContext extends CxValues>
     return this._builder.trackAssets(this, receiver);
   }
 
-  trackActualAsset(receiver: EventReceiver<[CxAsset.Existing<TAsset> | undefined]>): Supply {
+  trackRecentAsset(receiver: EventReceiver<[CxAsset.Existing<TAsset> | undefined]>): Supply {
     return CxEntry$assetsByRank(this).read.do(
-        mapAfter_(CxEntry$actualAsset),
+        mapAfter_(CxEntry$recentAsset),
         deduplicateAfter_(),
     )(receiver);
   }

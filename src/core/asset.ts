@@ -66,9 +66,9 @@ export namespace CxAsset {
   export type Collector<TAsset> = (this: void, getAsset: Evaluator<TAsset>) => void | boolean;
 
   /**
-   * An updater of context value asset.
+   * An updater of context entry value with asset.
    *
-   * It is notified on every asset change, and responsible for entry value evaluation based on its asset.
+   * It is notified on every asset change and responsible for entry value evaluation based on this asset.
    *
    * @typeParam TValue - Context value type.
    * @typeParam TAsset - Context value asset type.
@@ -90,7 +90,7 @@ export namespace CxAsset {
     set(asset: TAsset): void;
 
     /**
-     * Resets context value when it no longer has any assets.
+     * Resets context value when asset is no longer available.
      */
     reset(): void;
 
@@ -115,13 +115,13 @@ export namespace CxAsset {
   export type Receiver<TAsset> = (this: void, asset: Provided<TAsset>) => void;
 
   /**
-   * A signature of receiver of actual asset of the context entry.
+   * A signature of the receiver of the most recent asset provided for context entry.
    *
    * @typeParam TAsset - Context value asset type.
-   * @param asset - Actual context entry asset provided for context entry, or `undefined` if there are no assets
-   * provided.
+   * @param asset - Existing context entry asset provided for context entry most recently, or `undefined` if there are
+   * no assets provided.
    */
-  export type ActualReceiver<TAsset> = (this: void, asset: Existing<TAsset> | undefined) => void;
+  export type RecentReceiver<TAsset> = (this: void, asset: Existing<TAsset> | undefined) => void;
 
   /**
    * An asset provided for context entry.

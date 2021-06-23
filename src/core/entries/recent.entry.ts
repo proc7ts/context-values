@@ -3,17 +3,17 @@ import { CxAsset } from '../asset';
 import { CxEntry } from '../entry';
 
 /**
- * Creates single-valued context entry definer that treats the {@link CxEntry.Target.trackActualAsset actual asset}
+ * Creates single-valued context entry definer that treats the {@link CxEntry.Target.trackRecentAsset most recent asset}
  * as entry value.
  *
- * The entry value updated each time the {@link CxEntry.Target.trackActualAsset actual asset} changes.
+ * The entry value updated each time the {@link CxEntry.Target.trackRecentAsset most recent asset} changes.
  *
  * @typeParam TValue - Context value asset type.
  * @param byDefault - Creates default entry value used when there is no assets.
  *
  * @returns New context entry definer.
  */
-export function cxActual<TValue>(
+export function cxRecent<TValue>(
     {
       byDefault,
     }: {
@@ -22,17 +22,17 @@ export function cxActual<TValue>(
 ): CxEntry.Definer<TValue>;
 
 /**
- * Creates actual single-valued context entry definer.
+ * Creates single-valued context entry definer based on the {@link CxEntry.Target.trackRecentAsset most recent asset}.
  *
- * The entry value updated each time the {@link CxEntry.Target.trackActualAsset actual asset} changes.
+ * The entry value updated each time the {@link CxEntry.Target.trackRecentAsset most recent asset} changes.
  *
  * @typeParam TValue - Context value type.
  * @param createUpdater - Creates the entry value updater. Accepts entry definition target as the only parameter.
- * This method is called at most once per context. The returned updater is then notified when actual asset changes.
+ * This method is called at most once per context. The returned updater is then notified when most recent asset changes.
  *
  * @returns New context entry definer.
  */
-export function cxActual<TValue, TAsset>(
+export function cxRecent<TValue, TAsset>(
     {
       createUpdater,
     }: {
@@ -40,7 +40,7 @@ export function cxActual<TValue, TAsset>(
     },
 ): CxEntry.Definer<TValue, TAsset>;
 
-export function cxActual<TValue, TAsset>(
+export function cxRecent<TValue, TAsset>(
     {
       byDefault,
       createUpdater = CxAsset$createDefaultUpdater(byDefault!),
@@ -58,7 +58,7 @@ export function cxActual<TValue, TAsset>(
       const updater = getUpdater();
 
       getValue = () => updater.get();
-      target.trackActualAsset(asset => asset ? updater.set(asset.get()) : updater.reset());
+      target.trackRecentAsset(asset => asset ? updater.set(asset.get()) : updater.reset());
 
       return getValue();
     };

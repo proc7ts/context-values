@@ -3,9 +3,9 @@ import { cxBuildAsset, cxConstAsset } from '../../assets';
 import { CxBuilder } from '../../build';
 import { CxEntry } from '../entry';
 import { CxValues } from '../values';
-import { cxActual } from './actual.entry';
+import { cxRecent } from './recent.entry';
 
-describe('cxActual', () => {
+describe('cxRecent', () => {
 
   let builder: CxBuilder;
   let context: CxValues;
@@ -20,19 +20,19 @@ describe('cxActual', () => {
     let entry: CxEntry<string>;
 
     beforeEach(() => {
-      entry = { perContext: cxActual({ byDefault: () => 'default' }) };
+      entry = { perContext: cxRecent({ byDefault: () => 'default' }) };
     });
 
     it('provides default value initially', () => {
       expect(context.get(entry)).toBe('default');
     });
-    it('provides the actual value', () => {
+    it('provides the most recent value', () => {
       builder.provide(cxConstAsset(entry, 'value1'));
       builder.provide(cxConstAsset(entry, 'value2'));
 
       expect(context.get(entry)).toBe('value2');
     });
-    it('updates the value with actual asset', () => {
+    it('updates the value with most recent asset', () => {
       expect(context.get(entry)).toBe('default');
 
       builder.provide(cxConstAsset(entry, 'value1'));
@@ -40,7 +40,7 @@ describe('cxActual', () => {
 
       expect(context.get(entry)).toBe('value2');
     });
-    it('switches to next actual asset when previous one removed', () => {
+    it('switches to next most recent asset when previous one removed', () => {
       expect(context.get(entry)).toBe('default');
 
       builder.provide(cxConstAsset(entry, 'value1'));
@@ -59,7 +59,7 @@ describe('cxActual', () => {
         context2 = builder2.context;
       });
 
-      it('updates the value with actual asset', () => {
+      it('updates the value with most recent asset', () => {
         expect(context2.get(entry)).toBe('default');
 
         builder.provide(cxConstAsset(entry, 'value1'));
@@ -67,14 +67,14 @@ describe('cxActual', () => {
 
         expect(context2.get(entry)).toBe('value2');
       });
-      it('updates the value with actual asset from derived context', () => {
+      it('updates the value with most recent asset from derived context', () => {
         expect(context2.get(entry)).toBe('default');
 
         builder.provide(cxConstAsset(entry, 'value1'));
 
         expect(context2.get(entry)).toBe('value1');
       });
-      it('switches to next actual asset from derived context when previous one removed', () => {
+      it('switches to next most recent asset from derived context when previous one removed', () => {
         expect(context2.get(entry)).toBe('default');
 
         builder.provide(cxConstAsset(entry, 'value1'));
@@ -96,7 +96,7 @@ describe('cxActual', () => {
 
     beforeEach(() => {
       entry = {
-        perContext: cxActual({
+        perContext: cxRecent({
           createUpdater() {
 
             let value = 'initial';
@@ -120,13 +120,13 @@ describe('cxActual', () => {
     it('provides default value initially', () => {
       expect(context.get(entry)).toBe('default');
     });
-    it('provides the actual value', () => {
+    it('provides the most recent value', () => {
       builder.provide(cxConstAsset(entry, 'value1'));
       builder.provide(cxConstAsset(entry, 'value2'));
 
       expect(context.get(entry)).toBe('value2!');
     });
-    it('updates the value with actual asset', () => {
+    it('updates the value with most recent asset', () => {
       expect(context.get(entry)).toBe('default');
 
       builder.provide(cxConstAsset(entry, 'value1'));
@@ -134,7 +134,7 @@ describe('cxActual', () => {
 
       expect(context.get(entry)).toBe('value2!');
     });
-    it('switches to next actual asset when previous one removed', () => {
+    it('switches to next most recent asset when previous one removed', () => {
       expect(context.get(entry)).toBe('default');
 
       builder.provide(cxConstAsset(entry, 'value1'));
@@ -142,7 +142,7 @@ describe('cxActual', () => {
 
       expect(context.get(entry)).toBe('value1!');
     });
-    it('does not change the value when non-actual asset when previous one removed', () => {
+    it('does not change the value when non-recent asset when previous one removed', () => {
       expect(context.get(entry)).toBe('default');
 
       const supply = builder.provide(cxConstAsset(entry, 'value1'));
@@ -163,7 +163,7 @@ describe('cxActual', () => {
         context2 = builder2.context;
       });
 
-      it('updates the value with actual asset', () => {
+      it('updates the value with most recent asset', () => {
         expect(context2.get(entry)).toBe('default');
 
         builder.provide(cxConstAsset(entry, 'value1'));
@@ -171,14 +171,14 @@ describe('cxActual', () => {
 
         expect(context2.get(entry)).toBe('value1!');
       });
-      it('updates the value with actual asset from derived context', () => {
+      it('updates the value with most recent asset from derived context', () => {
         expect(context2.get(entry)).toBe('default');
 
         builder.provide(cxConstAsset(entry, 'value1'));
 
         expect(context2.get(entry)).toBe('value1!');
       });
-      it('switches to next actual asset from derived context when previous one removed', () => {
+      it('switches to next most recent asset from derived context when previous one removed', () => {
         expect(context2.get(entry)).toBe('default');
 
         builder.provide(cxConstAsset(entry, 'value1'));
