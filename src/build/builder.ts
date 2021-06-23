@@ -2,7 +2,7 @@ import { EventReceiver } from '@proc7ts/fun-events';
 import { lazyValue } from '@proc7ts/primitives';
 import { neverSupply, Supply } from '@proc7ts/supply';
 import { CxAsset, CxEntry, CxRequest, CxValues } from '../core';
-import { CxBuilder$Record } from './builder.record.impl';
+import { CxEntry$Record } from './entry.record.impl';
 
 const CxBuilder$noAssets: CxBuilder.AssetSource = {
 
@@ -45,7 +45,7 @@ export class CxBuilder<TContext extends CxValues = CxValues>
   /**
    * @internal
    */
-  private readonly _records = new Map<CxEntry<any, any>, CxBuilder$Record<any, any, TContext>>();
+  private readonly _records = new Map<CxEntry<any, any>, CxEntry$Record<any, any, TContext>>();
 
   /**
    * @internal
@@ -110,17 +110,17 @@ export class CxBuilder<TContext extends CxValues = CxValues>
 
   trackAssets<TValue, TAsset>(
       target: CxEntry.Target<TValue, TAsset>,
-      receiver: CxEntry.AssetReceiver<TAsset>,
+      receiver: EventReceiver<[CxEntry.Asset<TAsset>]>,
   ): Supply {
     return this._record(target.entry).trackAssets(target, receiver);
   }
 
-  private _record<TValue, TAsset>(entry: CxEntry<TValue, TAsset>): CxBuilder$Record<TValue, TAsset, TContext> {
+  private _record<TValue, TAsset>(entry: CxEntry<TValue, TAsset>): CxEntry$Record<TValue, TAsset, TContext> {
 
-    let record: CxBuilder$Record<TValue, TAsset, TContext> | undefined = this._records.get(entry);
+    let record: CxEntry$Record<TValue, TAsset, TContext> | undefined = this._records.get(entry);
 
     if (!record) {
-      this._records.set(entry, record = new CxBuilder$Record(this, entry));
+      this._records.set(entry, record = new CxEntry$Record(this, entry));
     }
 
     return record;

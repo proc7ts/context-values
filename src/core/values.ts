@@ -32,7 +32,7 @@ export namespace CxValues {
     /**
      * Provides assets for the target context entry.
      *
-     * @param asset - Context entry asset.
+     * @param asset - Context entry asset. Removes the provided asset when removed.
      */
     provide<TValue, TAsset = TValue>(asset: CxAsset<TValue, TAsset, TContext>): Supply;
 

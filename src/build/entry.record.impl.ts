@@ -1,25 +1,28 @@
 import { EventEmitter, EventReceiver, eventReceiver } from '@proc7ts/fun-events';
 import { lazyValue, valueProvider } from '@proc7ts/primitives';
-import { alwaysSupply, Supply } from '@proc7ts/supply';
-import { CxSupply } from '../conventional';
+import { Supply } from '@proc7ts/supply';
 import { CxAsset, CxEntry, CxRequest, CxValues } from '../core';
 import { CxBuilder } from './builder';
+import { CxEntry$Target } from './entry.target.impl';
 import { CxReferenceError } from './reference-error';
 
-export type CxAsset$Iterator<TValue, TAsset = TValue> = CxAsset<TValue, TAsset>['each'];
+export type CxEntry$AssetIterator<TValue, TAsset = TValue> = CxAsset<TValue, TAsset>['each'];
 
-export class CxBuilder$Record<TValue, TAsset, TContext extends CxValues> {
+export class CxEntry$Record<TValue, TAsset, TContext extends CxValues> {
 
-  private readonly assets = new Map<Supply, CxAsset$Iterator<TValue, TAsset>>();
-  private readonly senders = new Map<Supply, CxBuilder$AssetSender<TValue, TAsset>>();
+  private readonly define: () => CxEntry.Definition<TValue>;
+  private readonly assets = new Map<Supply, CxEntry$AssetIterator<TValue, TAsset>>();
+  private readonly senders = new Map<Supply, CxEntry$AssetSender<TValue, TAsset>>();
 
   constructor(
-      private readonly builder: CxBuilder<TContext>,
-      private readonly entry: CxEntry<TValue, TAsset>,
+      readonly builder: CxBuilder<TContext>,
+      readonly entry: CxEntry<TValue, TAsset>,
   ) {
+    this.define = lazyValue(() => entry.perContext(new CxEntry$Target(this)));
   }
 
-  provide(iterator: CxAsset$Iterator<TValue, TAsset>, assetSupply: Supply): void {
+  provide(iterator: CxEntry$AssetIterator<TValue, TAsset>, assetSupply: Supply): void {
+
     this.assets.set(assetSupply, iterator);
     assetSupply.whenOff(() => this.assets.delete(assetSupply));
 
@@ -130,7 +133,7 @@ export class CxBuilder$Record<TValue, TAsset, TContext extends CxValues> {
     emitter.supply.needs(target);
     emitter.on(rcv);
 
-    const sender: CxBuilder$AssetSender<TValue, TAsset> = [target, emitter];
+    const sender: CxEntry$AssetSender<TValue, TAsset> = [target, emitter];
 
     this.senders.set(trackingSupply, sender);
     trackingSupply.whenOff(() => this.senders.delete(trackingSupply));
@@ -162,8 +165,8 @@ export class CxBuilder$Record<TValue, TAsset, TContext extends CxValues> {
   }
 
   private sendAssets(
-      [target, emitter]: CxBuilder$AssetSender<TValue, TAsset>,
-      iterator: CxAsset$Iterator<TValue, TAsset>,
+      [target, emitter]: CxEntry$AssetSender<TValue, TAsset>,
+      iterator: CxEntry$AssetIterator<TValue, TAsset>,
       supply: Supply,
   ): void {
     if (supply.isOff) {
@@ -181,35 +184,9 @@ export class CxBuilder$Record<TValue, TAsset, TContext extends CxValues> {
     iterator(target, getAsset => sendAsset(getAsset));
   }
 
-  private define(): CxEntry.Definition<TValue> {
-
-    const { entry, builder } = this;
-    const { context } = builder;
-    const getSupply = entry === CxSupply as CxEntry<any>
-        ? valueProvider(alwaysSupply())
-        : lazyValue(() => new Supply().needs(context.get(CxSupply)));
-    const target: CxEntry.Target<TValue, TAsset, TContext> = {
-      context,
-      entry,
-      get supply(): Supply {
-        return getSupply();
-      },
-      get: context.get.bind(context),
-      provide: builder.provide.bind(builder),
-      eachAsset: callback => this.eachAsset(target, callback),
-      eachActualAsset: callback => this.eachActualAsset(target, callback),
-      trackAssets: receiver => this.trackAssets(target, receiver),
-    };
-    const definition = this.entry.perContext(target);
-
-    this.define = valueProvider(definition);
-
-    return definition;
-  }
-
 }
 
-type CxBuilder$AssetSender<TValue, TAsset> = readonly [
+type CxEntry$AssetSender<TValue, TAsset> = readonly [
   target: CxEntry.Target<TValue, TAsset>,
   emitter: EventEmitter<[CxEntry.Asset<TAsset>]>,
 ];

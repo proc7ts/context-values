@@ -65,4 +65,35 @@ export namespace CxAsset {
    */
   export type Callback<TAsset> = (this: void, getAsset: Evaluator<TAsset>) => void | boolean;
 
+  /**
+   * An updater of context value asset.
+   *
+   * It is notified on every asset change, and responsible for entry value evaluation based on its asset.
+   *
+   * @typeParam TValue - Context value type.
+   * @typeParam TAsset - Context value asset type.
+   */
+  export interface Updater<TValue, TAsset = TValue> {
+
+    /**
+     * Evaluates context value.
+     *
+     * @returns Context value.
+     */
+    get(): TValue;
+
+    /**
+     * Updates context value based on asset.
+     *
+     * @param asset - Updated asset.
+     */
+    set(asset: TAsset): void;
+
+    /**
+     * Resets context value when it no longer has any assets.
+     */
+    reset(): void;
+
+  }
+
 }

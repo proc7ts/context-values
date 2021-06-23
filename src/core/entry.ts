@@ -93,16 +93,30 @@ export namespace CxEntry {
     eachActualAsset(callback: AssetCallback<TAsset>): void;
 
     /**
-     * Reads entry value assets and start tracking of their additions.
+     * Reads entry assets and start tracking of their additions.
      *
-     * Passes already provided assets to the given `receiver` function, then passes every added assets too, until
-     * the returned asset supply cut off.
+     * Sends already provided assets to the given `receiver`, then sends every added assets too, until the returned
+     * asset supply cut off.
      *
      * @param receiver - Assets receiver.
      *
-     * @returns Assets supply. Stops assets tracking once cut off.
+     * @returns Assets supply. Stops tracking once cut off.
      */
     trackAssets(receiver: AssetReceiver<TAsset>): Supply;
+
+    /**
+     * Reads the actual entry asset and starts its tracking.
+     *
+     * The actual asset is the one with the smallest {@link Asset.rank rank} provided last.
+     *
+     * Sends the actual asset to the given `receiver`, then sends it again whenever the actual asset changes. Sends
+     * `undefined` when there is no assets in the entry.
+     *
+     * @param receiver - Actual asset receiver.
+     *
+     * @returns Actual asset supply. Stops tracking once cut off.
+     */
+    trackActualAsset(receiver: ActualAssetReceiver<TAsset>): Supply;
 
   }
 
@@ -160,6 +174,14 @@ export namespace CxEntry {
   export type AssetReceiver<TAsset> = (this: void, asset: Asset<TAsset>) => void;
 
   /**
+   * A signature of receiver of actual asset of the context entry.
+   *
+   * @typeParam TAsset - Context value asset type.
+   * @param asset - Actual context entry asset, or `undefined` if there is no assets in the entry.
+   */
+  export type ActualAssetReceiver<TAsset> = (this: void, asset: ExistingAsset<TAsset> | undefined) => void;
+
+  /**
    * An asset added to context entry.
    *
    * @typeParam TAsset - Context value asset type.
@@ -188,6 +210,22 @@ export namespace CxEntry {
      * @returns Either evaluated asset, or `null`/`undefined` if asset is not available.
      */
     get(this: void): TAsset | null | undefined;
+
+  }
+
+  /**
+   * Existing asset added to context entry.
+   *
+   * @typeParam TAsset - Context value asset type.
+   */
+  export interface ExistingAsset<TAsset> extends Asset<TAsset> {
+
+    /**
+     * Evaluates asset.
+     *
+     * @returns Evaluated asset. Never `null` or `undefined`.
+     */
+    get(this: void): TAsset;
 
   }
 
