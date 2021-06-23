@@ -1,3 +1,4 @@
+import { EventReceiver } from '@proc7ts/fun-events';
 import { lazyValue } from '@proc7ts/primitives';
 import { neverSupply, Supply } from '@proc7ts/supply';
 import { CxAsset, CxEntry, CxRequest, CxValues } from '../core';
@@ -21,7 +22,7 @@ const CxBuilder$noAssets: CxBuilder.AssetSource = {
 
   trackAssets<TValue, TAsset>(
       _target: CxEntry.Target<TValue, TAsset>,
-      _receiver: CxEntry.AssetReceiver<TAsset>,
+      _receiver: EventReceiver<[CxEntry.Asset<TAsset>]>,
   ): Supply {
     return neverSupply();
   },
@@ -173,7 +174,7 @@ export namespace CxBuilder {
      */
     trackAssets<TValue, TAsset>(
         target: CxEntry.Target<TValue, TAsset>,
-        receiver: CxEntry.AssetReceiver<TAsset>,
+        receiver: EventReceiver<[CxEntry.Asset<TAsset>]>,
     ): Supply;
 
   }

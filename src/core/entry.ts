@@ -152,21 +152,19 @@ export namespace CxEntry {
   export type AssetCallback<TAsset> = (this: void, asset: TAsset) => void | boolean;
 
   /**
-   * A signature of receiver of new context value assets.
-   *
-   * Used to {@link Target.trackAssets track} entry value assets.
+   * A signature of receiver of assets added to context entry.
    *
    * @typeParam TAsset - Context value asset type.
-   * @param newAsset - New asset added to context entry.
+   * @param asset - An asset added to context entry.
    */
-  export type AssetReceiver<TAsset> = (this: void, newAsset: NewAsset<TAsset>) => void;
+  export type AssetReceiver<TAsset> = (this: void, asset: Asset<TAsset>) => void;
 
   /**
-   * New asset added to context entry.
+   * An asset added to context entry.
    *
    * @typeParam TAsset - Context value asset type.
    */
-  export interface NewAsset<TAsset> {
+  export interface Asset<TAsset> {
 
     /**
      * Asset supply.

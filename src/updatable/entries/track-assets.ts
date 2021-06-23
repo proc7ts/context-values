@@ -26,7 +26,7 @@ export function trackUcxAssets<TAsset>(
     rankAssets.delete(supply);
     assetsByRank.it = ranks;
   };
-  const addAsset = ({ supply, rank, get }: CxEntry.NewAsset<TAsset>): void => {
+  const addAsset = ({ supply, rank, get }: CxEntry.Asset<TAsset>): void => {
 
     const ranks = [...assetsByRank.it];
     const rankAssets = ranks[rank] ||= new Map();
