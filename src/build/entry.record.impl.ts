@@ -84,7 +84,7 @@ export class CxEntry$Record<TValue, TAsset, TContext extends CxValues> {
     }
   }
 
-  eachActualAsset(
+  eachRecentAsset(
       target: CxEntry.Target<TValue, TAsset>,
       callback: CxAsset.Callback<TAsset>,
   ): void {
@@ -115,7 +115,7 @@ export class CxEntry$Record<TValue, TAsset, TContext extends CxValues> {
     }
 
     // Do the same for initial assets.
-    this.builder._initial.eachActualAsset(
+    this.builder._initial.eachRecentAsset(
         target,
         getAsset => callback(getAsset),
     );

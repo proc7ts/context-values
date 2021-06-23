@@ -25,7 +25,7 @@ export const CxSupply: CxEntry<CxSupply> = {
 
         let result = target.context.supply;
 
-        target.eachActualAsset(asset => {
+        target.eachRecentAsset(asset => {
           result = asset;
           return false;
         });

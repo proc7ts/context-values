@@ -91,7 +91,7 @@ export namespace CxEntry {
      *
      * @param callback - Assets callback.
      */
-    eachActualAsset(callback: CxAsset.Callback<TAsset>): void;
+    eachRecentAsset(callback: CxAsset.Callback<TAsset>): void;
 
     /**
      * Reads entry assets and start tracking of their additions.

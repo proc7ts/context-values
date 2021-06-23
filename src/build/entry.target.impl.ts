@@ -42,8 +42,8 @@ export class CxEntry$Target<TValue, TAsset, TContext extends CxValues>
     this._builder.eachAsset(this, callback);
   }
 
-  eachActualAsset(callback: CxAsset.Callback<TAsset>): void {
-    this._builder.eachActualAsset(this, callback);
+  eachRecentAsset(callback: CxAsset.Callback<TAsset>): void {
+    this._builder.eachRecentAsset(this, callback);
   }
 
   trackAssets(receiver: EventReceiver<[CxAsset.Provided<TAsset>]>): Supply {

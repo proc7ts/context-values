@@ -26,7 +26,7 @@ export function cxSingle<TValue>(
 
       let result: TValue | null | undefined;
 
-      target.eachActualAsset(asset => {
+      target.eachRecentAsset(asset => {
         result = asset;
         return false;
       });

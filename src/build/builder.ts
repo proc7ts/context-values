@@ -13,7 +13,7 @@ const CxBuilder$noAssets: CxBuilder.AssetSource = {
     // No assets to iterate.
   },
 
-  eachActualAsset<TValue, TAsset>(
+  eachRecentAsset<TValue, TAsset>(
       _target: CxEntry.Target<TValue, TAsset>,
       _callback: CxAsset.Callback<TAsset>,
   ): void {
@@ -101,11 +101,11 @@ export class CxBuilder<TContext extends CxValues = CxValues>
     this._record(target.entry).eachAsset(target, callback);
   }
 
-  eachActualAsset<TValue, TAsset>(
+  eachRecentAsset<TValue, TAsset>(
       target: CxEntry.Target<TValue, TAsset>,
       callback: CxAsset.Callback<TAsset>,
   ): void {
-    this._record(target.entry).eachActualAsset(target, callback);
+    this._record(target.entry).eachRecentAsset(target, callback);
   }
 
   trackAssets<TValue, TAsset>(
@@ -159,7 +159,7 @@ export namespace CxBuilder {
      * @param target - Context entry definition target to iterate over assets of.
      * @param callback - Assets callback.
      */
-    eachActualAsset<TValue, TAsset>(
+    eachRecentAsset<TValue, TAsset>(
         target: CxEntry.Target<TValue, TAsset>,
         callback: CxAsset.Callback<TAsset>,
     ): void;
