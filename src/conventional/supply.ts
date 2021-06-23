@@ -21,17 +21,7 @@ export type CxSupply = Supply;
 export const CxSupply: CxEntry<CxSupply> = {
   perContext(target) {
     return {
-      get: lazyValue(() => {
-
-        let result = target.context.supply;
-
-        target.eachRecentAsset(asset => {
-          result = asset;
-          return false;
-        });
-
-        return result;
-      }),
+      get: lazyValue(() => target.recentAsset || target.context.supply),
       getDefault: () => target.context.supply || alwaysSupply(),
     };
   },

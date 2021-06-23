@@ -74,6 +74,13 @@ export namespace CxEntry {
     readonly supply: Supply;
 
     /**
+     * The most recent asset provided for the entry.
+     *
+     * `undefined` when no assets provided.
+     */
+    readonly recentAsset: TAsset | undefined;
+
+    /**
      * Iterates over value assets in the same order they are provided.
      *
      * Passes each asset to the given `callback` function, until the latter returns `false` or there are no more

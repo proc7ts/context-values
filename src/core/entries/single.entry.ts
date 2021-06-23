@@ -22,17 +22,7 @@ export function cxSingle<TValue>(
     } = {},
 ): CxEntry.Definer<TValue> {
   return target => ({
-    get: lazyValue(() => {
-
-      let result: TValue | null | undefined;
-
-      target.eachRecentAsset(asset => {
-        result = asset;
-        return false;
-      });
-
-      return result;
-    }),
+    get: lazyValue(() => target.recentAsset),
     getDefault: byDefault && lazyValue(() => byDefault(target)),
   });
 }

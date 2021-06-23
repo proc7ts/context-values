@@ -30,6 +30,18 @@ export class CxEntry$Target<TValue, TAsset, TContext extends CxValues>
     return this._getSupply();
   }
 
+  get recentAsset(): TAsset | undefined {
+
+    let mostRecent: TAsset | undefined;
+
+    this.eachRecentAsset(asset => {
+      mostRecent = asset;
+      return false;
+    });
+
+    return mostRecent;
+  }
+
   get<TValue, TAsset = TValue>(entry: CxEntry<TValue, TAsset>, request?: CxRequest<TValue>): TValue | null {
     return this.context.get(entry, request);
   }
