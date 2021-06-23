@@ -29,7 +29,7 @@ export function cxConstAsset<TAsset, TContext extends CxValues = CxValues>(
 
 function CxAsset$provideNone<TValue, TAsset, TContext extends CxValues>(
     _target: CxEntry.Target<TValue, TAsset, TContext>,
-    _receiver: CxAsset.Callback<TAsset>,
+    _collector: CxAsset.Collector<TAsset>,
 ): void {
   // No assets.
 }

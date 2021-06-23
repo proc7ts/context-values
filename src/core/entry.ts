@@ -1,4 +1,5 @@
 import { Supply, SupplyPeer } from '@proc7ts/supply';
+import { CxAsset } from './asset';
 import { CxValues } from './values';
 
 /**
@@ -80,7 +81,7 @@ export namespace CxEntry {
      *
      * @param callback - Assets callback.
      */
-    eachAsset(callback: AssetCallback<TAsset>): void;
+    eachAsset(callback: CxAsset.Callback<TAsset>): void;
 
     /**
      * Iterates over value assets with the most actual assets iterated first. I.e. in reverse order to the order they
@@ -90,7 +91,7 @@ export namespace CxEntry {
      *
      * @param callback - Assets callback.
      */
-    eachActualAsset(callback: AssetCallback<TAsset>): void;
+    eachActualAsset(callback: CxAsset.Callback<TAsset>): void;
 
     /**
      * Reads entry assets and start tracking of their additions.
@@ -102,12 +103,12 @@ export namespace CxEntry {
      *
      * @returns Assets supply. Stops tracking once cut off.
      */
-    trackAssets(receiver: AssetReceiver<TAsset>): Supply;
+    trackAssets(receiver: CxAsset.Receiver<TAsset>): Supply;
 
     /**
      * Reads the actual entry asset and starts its tracking.
      *
-     * The actual asset is the one with the smallest {@link Asset.rank rank} provided last.
+     * The actual asset is the one with the smallest {@link CxAsset.Provided.rank rank} provided last.
      *
      * Sends the actual asset to the given `receiver`, then sends it again whenever the actual asset changes. Sends
      * `undefined` when there is no assets in the entry.
@@ -116,7 +117,7 @@ export namespace CxEntry {
      *
      * @returns Actual asset supply. Stops tracking once cut off.
      */
-    trackActualAsset(receiver: ActualAssetReceiver<TAsset>): Supply;
+    trackActualAsset(receiver: CxAsset.ActualReceiver<TAsset>): Supply;
 
   }
 
@@ -152,80 +153,6 @@ export namespace CxEntry {
      * @returns Either default value for the entry, or `null`/`undefined` if the default value is not available.
      */
     getDefault?(): TValue | null | undefined;
-
-  }
-
-  /**
-   * A signature of {@link Target.eachAsset assets iteration} callback.
-   *
-   * @typeParam TAsset - Context value asset type.
-   * @param asset - Current asset.
-   *
-   * @returns `false` to stop iteration, or `true`/`void` to continue.
-   */
-  export type AssetCallback<TAsset> = (this: void, asset: TAsset) => void | boolean;
-
-  /**
-   * A signature of receiver of assets added to context entry.
-   *
-   * @typeParam TAsset - Context value asset type.
-   * @param asset - An asset added to context entry.
-   */
-  export type AssetReceiver<TAsset> = (this: void, asset: Asset<TAsset>) => void;
-
-  /**
-   * A signature of receiver of actual asset of the context entry.
-   *
-   * @typeParam TAsset - Context value asset type.
-   * @param asset - Actual context entry asset, or `undefined` if there is no assets in the entry.
-   */
-  export type ActualAssetReceiver<TAsset> = (this: void, asset: ExistingAsset<TAsset> | undefined) => void;
-
-  /**
-   * An asset added to context entry.
-   *
-   * @typeParam TAsset - Context value asset type.
-   */
-  export interface Asset<TAsset> {
-
-    /**
-     * Asset supply.
-     *
-     * The asset is revoked once cut off.
-     */
-    readonly supply: Supply;
-
-    /**
-     * A rank of the asset modifier the asset is {@link CxValues.Modifier.provide provided} for.
-     *
-     * `0` refers to current context modifier, `1` - to its predecessor, etc.
-     */
-    readonly rank: number;
-
-    /**
-     * Evaluates asset.
-     *
-     * Asset evaluated at most once. All subsequent calls to this method would return the previously evaluated asset.
-     *
-     * @returns Either evaluated asset, or `null`/`undefined` if asset is not available.
-     */
-    get(this: void): TAsset | null | undefined;
-
-  }
-
-  /**
-   * Existing asset added to context entry.
-   *
-   * @typeParam TAsset - Context value asset type.
-   */
-  export interface ExistingAsset<TAsset> extends Asset<TAsset> {
-
-    /**
-     * Evaluates asset.
-     *
-     * @returns Evaluated asset. Never `null` or `undefined`.
-     */
-    get(this: void): TAsset;
 
   }
 

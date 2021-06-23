@@ -38,19 +38,19 @@ export class CxEntry$Target<TValue, TAsset, TContext extends CxValues>
     return this._builder.provide(asset);
   }
 
-  eachAsset(callback: CxEntry.AssetCallback<TAsset>): void {
+  eachAsset(callback: CxAsset.Callback<TAsset>): void {
     this._builder.eachAsset(this, callback);
   }
 
-  eachActualAsset(callback: CxEntry.AssetCallback<TAsset>): void {
+  eachActualAsset(callback: CxAsset.Callback<TAsset>): void {
     this._builder.eachActualAsset(this, callback);
   }
 
-  trackAssets(receiver: EventReceiver<[CxEntry.Asset<TAsset>]>): Supply {
+  trackAssets(receiver: EventReceiver<[CxAsset.Provided<TAsset>]>): Supply {
     return this._builder.trackAssets(this, receiver);
   }
 
-  trackActualAsset(receiver: EventReceiver<[CxEntry.ExistingAsset<TAsset> | undefined]>): Supply {
+  trackActualAsset(receiver: EventReceiver<[CxAsset.Existing<TAsset> | undefined]>): Supply {
     return CxEntry$assetsByRank(this).read.do(
         mapAfter_(CxEntry$actualAsset),
         deduplicateAfter_(),

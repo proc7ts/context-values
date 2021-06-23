@@ -1,9 +1,9 @@
 import { trackValue, ValueTracker } from '@proc7ts/fun-events';
 import { itsElements } from '@proc7ts/push-iterator/src';
 import { Supply } from '@proc7ts/supply';
-import { CxEntry } from '../core';
+import { CxAsset, CxEntry } from '../core';
 
-export type CxEntry$AssetsByRank<TAsset> = Map<Supply, CxEntry.Asset<TAsset>>[];
+export type CxEntry$AssetsByRank<TAsset> = Map<Supply, CxAsset.Provided<TAsset>>[];
 
 export function CxEntry$assetsByRank<TAsset>(
     target: CxEntry.Target<unknown, TAsset>,
@@ -21,7 +21,7 @@ export function CxEntry$assetsByRank<TAsset>(
     rankAssets.delete(supply);
     assetsByRank.it = ranks;
   };
-  const addAsset = (asset: CxEntry.Asset<TAsset>): void => {
+  const addAsset = (asset: CxAsset.Provided<TAsset>): void => {
 
     const { supply, rank } = asset;
     const ranks = [...assetsByRank.it];
@@ -45,10 +45,10 @@ export function CxEntry$assetsByRank<TAsset>(
 
 export function CxEntry$actualAsset<TAsset>(
     assetsByRank: CxEntry$AssetsByRank<TAsset>,
-): CxEntry.ExistingAsset<TAsset> | undefined {
+): CxAsset.Existing<TAsset> | undefined {
   for (const rankAssets of assetsByRank) {
 
-    const assets: CxEntry.Asset<TAsset>[] = itsElements(rankAssets.values());
+    const assets: CxAsset.Provided<TAsset>[] = itsElements(rankAssets.values());
 
     for (let i = assets.length - 1; i >= 0; --i) {
 
@@ -63,6 +63,6 @@ export function CxEntry$actualAsset<TAsset>(
   return;
 }
 
-function CxEntry$assetExists<TAsset>(asset: CxEntry.Asset<TAsset>): asset is CxEntry.ExistingAsset<TAsset> {
+function CxEntry$assetExists<TAsset>(asset: CxAsset.Provided<TAsset>): asset is CxAsset.Existing<TAsset> {
   return asset.get() != null;
 }

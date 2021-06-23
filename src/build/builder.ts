@@ -8,21 +8,21 @@ const CxBuilder$noAssets: CxBuilder.AssetSource = {
 
   eachAsset<TValue, TAsset>(
       _target: CxEntry.Target<TValue, TAsset>,
-      _receiver: CxEntry.AssetCallback<TAsset>,
+      _callback: CxAsset.Callback<TAsset>,
   ): void {
     // No assets to iterate.
   },
 
   eachActualAsset<TValue, TAsset>(
       _target: CxEntry.Target<TValue, TAsset>,
-      _receiver: CxEntry.AssetCallback<TAsset>,
+      _callback: CxAsset.Callback<TAsset>,
   ): void {
     // No assets to iterate.
   },
 
   trackAssets<TValue, TAsset>(
       _target: CxEntry.Target<TValue, TAsset>,
-      _receiver: EventReceiver<[CxEntry.Asset<TAsset>]>,
+      _receiver: EventReceiver<[CxAsset.Provided<TAsset>]>,
   ): Supply {
     return neverSupply();
   },
@@ -96,21 +96,21 @@ export class CxBuilder<TContext extends CxValues = CxValues>
 
   eachAsset<TValue, TAsset>(
       target: CxEntry.Target<TValue, TAsset>,
-      callback: CxEntry.AssetCallback<TAsset>,
+      callback: CxAsset.Callback<TAsset>,
   ): void {
     this._record(target.entry).eachAsset(target, callback);
   }
 
   eachActualAsset<TValue, TAsset>(
       target: CxEntry.Target<TValue, TAsset>,
-      callback: CxEntry.AssetCallback<TAsset>,
+      callback: CxAsset.Callback<TAsset>,
   ): void {
     this._record(target.entry).eachActualAsset(target, callback);
   }
 
   trackAssets<TValue, TAsset>(
       target: CxEntry.Target<TValue, TAsset>,
-      receiver: EventReceiver<[CxEntry.Asset<TAsset>]>,
+      receiver: EventReceiver<[CxAsset.Provided<TAsset>]>,
   ): Supply {
     return this._record(target.entry).trackAssets(target, receiver);
   }
@@ -146,7 +146,7 @@ export namespace CxBuilder {
      */
     eachAsset<TValue, TAsset>(
         target: CxEntry.Target<TValue, TAsset>,
-        callback: CxEntry.AssetCallback<TAsset>,
+        callback: CxAsset.Callback<TAsset>,
     ): void;
 
     /**
@@ -161,7 +161,7 @@ export namespace CxBuilder {
      */
     eachActualAsset<TValue, TAsset>(
         target: CxEntry.Target<TValue, TAsset>,
-        callback: CxEntry.AssetCallback<TAsset>,
+        callback: CxAsset.Callback<TAsset>,
     ): void;
 
     /**
@@ -174,7 +174,7 @@ export namespace CxBuilder {
      */
     trackAssets<TValue, TAsset>(
         target: CxEntry.Target<TValue, TAsset>,
-        receiver: EventReceiver<[CxEntry.Asset<TAsset>]>,
+        receiver: EventReceiver<[CxAsset.Provided<TAsset>]>,
     ): Supply;
 
   }

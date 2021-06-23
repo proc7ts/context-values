@@ -58,7 +58,7 @@ export class CxEntry$Record<TValue, TAsset, TContext extends CxValues> {
 
   eachAsset(
       target: CxEntry.Target<TValue, TAsset>,
-      callback: CxEntry.AssetCallback<TAsset>,
+      callback: CxAsset.Callback<TAsset>,
   ): void {
     target.supply.whenOff(() => callback = valueProvider(false));
 
@@ -86,7 +86,7 @@ export class CxEntry$Record<TValue, TAsset, TContext extends CxValues> {
 
   eachActualAsset(
       target: CxEntry.Target<TValue, TAsset>,
-      callback: CxEntry.AssetCallback<TAsset>,
+      callback: CxAsset.Callback<TAsset>,
   ): void {
 
     // Record asset evaluators in the order they are provided.
@@ -123,7 +123,7 @@ export class CxEntry$Record<TValue, TAsset, TContext extends CxValues> {
 
   trackAssets(
       target: CxEntry.Target<TValue, TAsset>,
-      receiver: EventReceiver<[CxEntry.Asset<TAsset>]>,
+      receiver: EventReceiver<[CxAsset.Provided<TAsset>]>,
   ): Supply {
 
     const rcv = eventReceiver(receiver);
@@ -188,5 +188,5 @@ export class CxEntry$Record<TValue, TAsset, TContext extends CxValues> {
 
 type CxEntry$AssetSender<TValue, TAsset> = readonly [
   target: CxEntry.Target<TValue, TAsset>,
-  emitter: EventEmitter<[CxEntry.Asset<TAsset>]>,
+  emitter: EventEmitter<[CxAsset.Provided<TAsset>]>,
 ];

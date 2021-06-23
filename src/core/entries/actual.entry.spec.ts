@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from '@jest/globals';
-import { cxConstAsset } from '../../assets';
+import { cxBuildAsset, cxConstAsset } from '../../assets';
 import { CxBuilder } from '../../build';
 import { CxEntry } from '../entry';
 import { CxValues } from '../values';
@@ -63,7 +63,7 @@ describe('cxActual', () => {
         expect(context2.get(entry)).toBe('default');
 
         builder.provide(cxConstAsset(entry, 'value1'));
-        builder2.provide(cxConstAsset(entry, 'value2'));
+        builder2.provide(cxBuildAsset(entry, () => 'value2'));
 
         expect(context2.get(entry)).toBe('value2');
       });
@@ -167,9 +167,9 @@ describe('cxActual', () => {
         expect(context2.get(entry)).toBe('default');
 
         builder.provide(cxConstAsset(entry, 'value1'));
-        builder2.provide(cxConstAsset(entry, 'value2'));
+        builder2.provide(cxBuildAsset(entry, () => null));
 
-        expect(context2.get(entry)).toBe('value2!');
+        expect(context2.get(entry)).toBe('value1!');
       });
       it('updates the value with actual asset from derived context', () => {
         expect(context2.get(entry)).toBe('default');
