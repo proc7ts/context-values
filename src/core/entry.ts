@@ -126,6 +126,18 @@ export namespace CxEntry {
      */
     trackRecentAsset(receiver: CxAsset.RecentReceiver<TAsset>): Supply;
 
+    /**
+     * Reads entry assets list and start tracking of their additions.
+     *
+     * Sends a list of already provided assets to the given `receiver`, then sends it again on whenever asset provided
+     * or revoked, until the returned asset supply cut off.
+     *
+     * @param receiver - Assets list receiver.
+     *
+     * @returns Assets list supply. Stops tracking once cut off.
+     */
+    trackAssetList(receiver: CxAsset.ListReceiver<TAsset>): Supply;
+
   }
 
   /**

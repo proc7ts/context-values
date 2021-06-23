@@ -80,7 +80,7 @@ describe('cxRecent', () => {
         builder.provide(cxConstAsset(entry, 'value1'));
         expect(context2.get(entry)).toBe('value1');
 
-        const supply = builder.provide(cxConstAsset(entry, 'value2'));
+        const supply = builder2.provide(cxConstAsset(entry, 'value2'));
 
         expect(context2.get(entry)).toBe('value2');
 
@@ -184,7 +184,7 @@ describe('cxRecent', () => {
         builder.provide(cxConstAsset(entry, 'value1'));
         expect(context2.get(entry)).toBe('value1!');
 
-        const supply = builder.provide(cxConstAsset(entry, 'value2'));
+        const supply = builder2.provide(cxConstAsset(entry, 'value2'));
 
         expect(context2.get(entry)).toBe('value2!');
 

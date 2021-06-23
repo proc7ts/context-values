@@ -1,5 +1,5 @@
 import { trackValue, ValueTracker } from '@proc7ts/fun-events';
-import { itsElements } from '@proc7ts/push-iterator/src';
+import { itsElements } from '@proc7ts/push-iterator';
 import { Supply } from '@proc7ts/supply';
 import { CxAsset, CxEntry } from '../core';
 

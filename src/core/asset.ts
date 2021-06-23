@@ -124,6 +124,14 @@ export namespace CxAsset {
   export type RecentReceiver<TAsset> = (this: void, asset: Existing<TAsset> | undefined) => void;
 
   /**
+   * A signature of receiver of asset list provided for context entry.
+   *
+   * @typeParam TAsset - Context value asset type.
+   * @param assets - Array of assets provided for context entry.
+   */
+  export type ListReceiver<TAsset> = (this: void, assets: Provided<TAsset>[]) => void;
+
+  /**
    * An asset provided for context entry.
    *
    * @typeParam TAsset - Context value asset type.
