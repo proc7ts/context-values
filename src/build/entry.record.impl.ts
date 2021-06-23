@@ -60,13 +60,18 @@ export class CxEntry$Record<TValue, TAsset, TContext extends CxValues> {
       target: CxEntry.Target<TValue, TAsset>,
       callback: CxAsset.Callback<TAsset>,
   ): void {
-    target.supply.whenOff(() => callback = valueProvider(false));
+    if (target.supply.isOff) {
+      return;
+    }
 
+    const cb: CxAsset.Callback<TAsset> = asset => !target.supply.isOff
+        && callback(asset) !== false
+        && !target.supply.isOff;
     let goOn: unknown;
 
     this.builder._initial.eachAsset(
         target,
-        getAsset => goOn = callback(getAsset),
+        getAsset => goOn = cb(getAsset),
     );
 
     if (goOn !== false) {
@@ -75,7 +80,7 @@ export class CxEntry$Record<TValue, TAsset, TContext extends CxValues> {
 
           const asset = getAsset();
 
-          return goOn = asset == null || callback(asset);
+          return goOn = asset == null || cb(asset);
         });
         if (goOn === false) {
           break;
@@ -88,37 +93,39 @@ export class CxEntry$Record<TValue, TAsset, TContext extends CxValues> {
       target: CxEntry.Target<TValue, TAsset>,
       callback: CxAsset.Callback<TAsset>,
   ): void {
+    if (target.supply.isOff) {
+      return;
+    }
 
     // Record asset evaluators in the order they are provided.
     const assets: CxAsset.Evaluator<TAsset>[] = [];
-    let recordAsset = (getAsset: CxAsset.Evaluator<TAsset>): boolean | void => {
-      assets.push(getAsset);
-    };
-
-    target.supply.whenOff(() => {
-      recordAsset = callback = valueProvider(false);
-      assets.length = 0;
-    });
 
     for (const iterator of this.assets.values()) {
-      iterator(target, getAsset => recordAsset(getAsset));
+      iterator(target, (getAsset: CxAsset.Evaluator<TAsset>): boolean | void => {
+        if (target.supply.isOff) {
+          assets.length = 0;
+          return false;
+        }
+        assets.push(getAsset);
+      });
     }
 
     // Iterate in reverse order.
+    const cb: CxAsset.Callback<TAsset> = asset => !target.supply.isOff
+        && callback(asset) !== false
+        && !target.supply.isOff;
+
     for (let i = assets.length - 1; i >= 0; --i) {
 
       const asset = assets[i]();
 
-      if (asset != null && callback(asset) === false) {
+      if (asset != null && cb(asset) === false) {
         return;
       }
     }
 
     // Do the same for initial assets.
-    this.builder._initial.eachRecentAsset(
-        target,
-        getAsset => callback(getAsset),
-    );
+    this.builder._initial.eachRecentAsset(target, cb);
   }
 
   trackAssets(
@@ -169,9 +176,6 @@ export class CxEntry$Record<TValue, TAsset, TContext extends CxValues> {
       iterator: CxEntry$AssetIterator<TValue, TAsset>,
       supply: Supply,
   ): void {
-    if (supply.isOff) {
-      return;
-    }
 
     let sendAsset = (getAsset: CxAsset.Evaluator<TAsset>): boolean | void => {
       emitter.send({ supply, rank: 0, get: lazyValue(getAsset) });
