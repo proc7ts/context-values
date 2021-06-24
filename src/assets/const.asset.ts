@@ -20,10 +20,10 @@ export function cxConstAsset<TAsset, TContext extends CxValues = CxValues>(
 ): CxAsset<unknown, TAsset, TContext> {
   return {
     entry,
-    supply,
-    each: value != null
-        ? (_target, receiver) => receiver(valueProvider(value))
+    buildAssets: value != null
+        ? (_target, collector) => collector(valueProvider(value))
         : CxAsset$provideNone,
+    supply,
   };
 }
 

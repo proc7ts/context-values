@@ -5,7 +5,7 @@ import { CxValues } from './values';
 /**
  * Context entry asset.
  *
- * Used to provide assets of the value of specific context entry.
+ * Builds assets for the value of specific context entry.
  *
  * @typeParam TValue - Context value type.
  * @typeParam TAsset - Context value asset type.
@@ -19,6 +19,31 @@ export interface CxAsset<TValue, TAsset = TValue, TContext extends CxValues = Cx
   readonly entry: CxEntry<TValue, TAsset>;
 
   /**
+   * Builds assets for the `target` context entry.
+   *
+   * Passes each {@link CxAsset.Evaluator asset evaluator} to the given `collector`, until the latter returns `false`
+   * or there are no more assets.
+   *
+   * @param target - Context entry definition target.
+   * @param collector - Asset evaluators collector.
+   */
+  buildAssets(
+      target: CxEntry.Target<TValue, TAsset, TContext>,
+      collector: CxAsset.Collector<TAsset>,
+  ): void;
+
+  /**
+   * Sets up asset.
+   *
+   * This method is called immediately when asset {@link CxValues.Modifier.provide provided}.
+   *
+   * It can be used e.g. to provide additional assets. Additional assets will be revoked when the asset itself revoked.
+   *
+   * @param target - Context entry definition target.
+   */
+  setupAsset?(target: CxEntry.Target<TValue, TAsset, TContext>): void;
+
+  /**
    * Asset supply.
    *
    * Removes the asset once cut off.
@@ -26,21 +51,6 @@ export interface CxAsset<TValue, TAsset = TValue, TContext extends CxValues = Cx
    * Returned from {@link CxValues.Modifier.provide} when specified. New one created when omitted.
    */
   readonly supply?: Supply;
-
-  /**
-   * Passes each {@link CxAsset.Evaluator asset evaluator} provided for the `target` context entry to the given
-   * `collector`.
-   *
-   * Calls `collector` with each evaluator, until the latter returns `false` or there are no more assets.
-   *
-   * @param target - Context entry definition target.
-   * @param collector - Asset evaluators collector.
-   */
-  each(
-      this: void,
-      target: CxEntry.Target<TValue, TAsset, TContext>,
-      collector: CxAsset.Collector<TAsset>,
-  ): void;
 
 }
 
@@ -56,12 +66,12 @@ export namespace CxAsset {
   export type Evaluator<TAsset> = (this: void) => TAsset | null | undefined;
 
   /**
-   * A signature of context value {@link CxAsset.each asset evaluators iteration} callback.
+   * A signature of context value {@link CxAsset.buildAssets asset evaluators} collector.
    *
    * @typeParam TAsset - Context value asset type.
-   * @param getAsset - Asset evaluator.
+   * @param getAsset - Asset evaluator to collect.
    *
-   * @returns `false` to stop iteration, or `true`/`void` to continue.
+   * @returns `false` to stop collecting, or `true`/`void` to continue.
    */
   export type Collector<TAsset> = (this: void, getAsset: Evaluator<TAsset>) => void | boolean;
 

@@ -20,9 +20,8 @@ export function cxAliasAsset<TAsset, TContext extends CxValues = CxValues>(
 ): CxAsset<unknown, TAsset, TContext> {
   return {
     entry,
-    supply,
-    each(target, receiver) {
-      receiver(() => {
+    buildAssets(target, collector) {
+      collector(() => {
         try {
           return target.get(alias);
         } catch (reason) {
@@ -33,5 +32,6 @@ export function cxAliasAsset<TAsset, TContext extends CxValues = CxValues>(
         }
       });
     },
+    supply,
   };
 }

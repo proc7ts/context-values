@@ -1,38 +1,47 @@
 import { EventEmitter, EventReceiver, eventReceiver } from '@proc7ts/fun-events';
 import { lazyValue, valueProvider } from '@proc7ts/primitives';
-import { Supply } from '@proc7ts/supply';
+import { alwaysSupply, Supply } from '@proc7ts/supply';
+import { CxSupply } from '../conventional';
 import { CxAsset, CxEntry, CxRequest, CxValues } from '../core';
 import { CxBuilder } from './builder';
 import { CxEntry$Target } from './entry.target.impl';
 import { CxReferenceError } from './reference-error';
 
-export type CxEntry$AssetIterator<TValue, TAsset = TValue> = CxAsset<TValue, TAsset>['each'];
-
 export class CxEntry$Record<TValue, TAsset, TContext extends CxValues> {
 
   private readonly define: () => CxEntry.Definition<TValue>;
-  private readonly assets = new Map<Supply, CxEntry$AssetIterator<TValue, TAsset>>();
+  private readonly assets = new Map<Supply, CxAsset<TValue, TAsset>>();
   private readonly senders = new Map<Supply, CxEntry$AssetSender<TValue, TAsset>>();
+  readonly supply: (this: void) => Supply;
 
   constructor(
       readonly builder: CxBuilder<TContext>,
       readonly entry: CxEntry<TValue, TAsset>,
   ) {
-    this.define = lazyValue(() => entry.perContext(new CxEntry$Target(this)));
+    this.supply = entry === CxSupply as CxEntry<any>
+        ? valueProvider(alwaysSupply())
+        : lazyValue(() => new Supply().needs(builder.context.get(CxSupply)));
+    this.define = lazyValue(() => entry.perContext(new CxEntry$Target(this, this.supply)));
   }
 
-  provide(iterator: CxEntry$AssetIterator<TValue, TAsset>, assetSupply: Supply): void {
+  provide(asset: CxAsset<TValue, TAsset>): Supply {
 
-    this.assets.set(assetSupply, iterator);
-    assetSupply.whenOff(() => this.assets.delete(assetSupply));
+    const { supply = new Supply() } = asset;
+
+    this.assets.set(supply, asset);
+    supply.whenOff(() => this.assets.delete(supply));
 
     for (const [trackingSupply, sender] of this.senders) {
       this.sendAssets(
           sender,
-          iterator,
-          new Supply().needs(assetSupply).needs(trackingSupply),
+          asset,
+          new Supply().needs(supply).needs(trackingSupply),
       );
     }
+
+    asset.setupAsset?.(new CxEntry$Target(this, () => supply.needs(this.supply())));
+
+    return supply;
   }
 
   get({ or }: CxRequest<TValue> = {}): TValue | null {
@@ -75,12 +84,12 @@ export class CxEntry$Record<TValue, TAsset, TContext extends CxValues> {
     );
 
     if (goOn !== false) {
-      for (const iterator of this.assets.values()) {
-        iterator(target, getAsset => {
+      for (const asset of this.assets.values()) {
+        asset.buildAssets(target, getAsset => {
 
-          const asset = getAsset();
+          const assetValue = getAsset();
 
-          return goOn = asset == null || cb(asset);
+          return goOn = assetValue == null || cb(assetValue);
         });
         if (goOn === false) {
           break;
@@ -100,8 +109,8 @@ export class CxEntry$Record<TValue, TAsset, TContext extends CxValues> {
     // Record asset evaluators in the order they are provided.
     const assets: CxAsset.Evaluator<TAsset>[] = [];
 
-    for (const iterator of this.assets.values()) {
-      iterator(target, (getAsset: CxAsset.Evaluator<TAsset>): boolean | void => {
+    for (const asset of this.assets.values()) {
+      asset.buildAssets(target, (getAsset: CxAsset.Evaluator<TAsset>): boolean | void => {
         if (target.supply.isOff) {
           assets.length = 0;
           return false;
@@ -173,7 +182,7 @@ export class CxEntry$Record<TValue, TAsset, TContext extends CxValues> {
 
   private sendAssets(
       [target, emitter]: CxEntry$AssetSender<TValue, TAsset>,
-      iterator: CxEntry$AssetIterator<TValue, TAsset>,
+      asset: CxAsset<TValue, TAsset>,
       supply: Supply,
   ): void {
 
@@ -185,7 +194,7 @@ export class CxEntry$Record<TValue, TAsset, TContext extends CxValues> {
       sendAsset = valueProvider(false);
     });
 
-    iterator(target, getAsset => sendAsset(getAsset));
+    asset.buildAssets(target, getAsset => sendAsset(getAsset));
   }
 
 }
