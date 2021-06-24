@@ -21,7 +21,7 @@ export function cxConstAsset<TAsset, TContext extends CxValues = CxValues>(
   return {
     entry,
     supply,
-    each: value != null
+    buildAssets: value != null
         ? (_target, receiver) => receiver(valueProvider(value))
         : CxAsset$provideNone,
   };

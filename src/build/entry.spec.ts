@@ -122,7 +122,7 @@ describe('CxEntry', () => {
       });
       it('is aborted when supply cut off by asset', () => {
 
-        const entry: CxEntry<string> = {
+        const entry: CxEntry<string, number> = {
           perContext(target) {
             return {
               get() {
@@ -141,7 +141,7 @@ describe('CxEntry', () => {
         const asset: CxAsset<unknown, number> = {
           entry,
           supply: new Supply(),
-          each(target, collector) {
+          buildAssets(target, collector) {
             for (let i = 0; i < 10; ++i) {
               if (i > 2) {
                 target.supply.off();

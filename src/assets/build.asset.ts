@@ -21,7 +21,7 @@ export function cxBuildAsset<TValue, TAsset = TValue, TContext extends CxValues 
   return {
     entry,
     supply,
-    each(target, receiver) {
+    buildAssets(target, receiver) {
       receiver(() => build(target));
     },
   };

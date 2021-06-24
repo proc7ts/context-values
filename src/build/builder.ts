@@ -89,7 +89,7 @@ export class CxBuilder<TContext extends CxValues = CxValues>
 
     const { entry, supply = new Supply() } = asset;
 
-    this._record(entry).provide(asset.each, supply);
+    this._record(entry).provide(asset.buildAssets, supply);
 
     return supply;
   }

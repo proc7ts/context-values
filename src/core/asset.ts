@@ -5,7 +5,7 @@ import { CxValues } from './values';
 /**
  * Context entry asset.
  *
- * Used to provide assets of the value of specific context entry.
+ * Builds assets for the value of specific context entry.
  *
  * @typeParam TValue - Context value type.
  * @typeParam TAsset - Context value asset type.
@@ -28,15 +28,15 @@ export interface CxAsset<TValue, TAsset = TValue, TContext extends CxValues = Cx
   readonly supply?: Supply;
 
   /**
-   * Passes each {@link CxAsset.Evaluator asset evaluator} provided for the `target` context entry to the given
-   * `collector`.
+   * Builds assets for the `target` context entry.
    *
-   * Calls `collector` with each evaluator, until the latter returns `false` or there are no more assets.
+   * Passes each {@link CxAsset.Evaluator asset evaluator} to the given `collector`, until the latter returns `false`
+   * or there are no more assets.
    *
    * @param target - Context entry definition target.
    * @param collector - Asset evaluators collector.
    */
-  each(
+  buildAssets(
       this: void,
       target: CxEntry.Target<TValue, TAsset, TContext>,
       collector: CxAsset.Collector<TAsset>,
@@ -56,7 +56,7 @@ export namespace CxAsset {
   export type Evaluator<TAsset> = (this: void) => TAsset | null | undefined;
 
   /**
-   * A signature of context value {@link CxAsset.each asset evaluators iteration} callback.
+   * A signature of context value {@link CxAsset.buildAssets asset evaluators iteration} callback.
    *
    * @typeParam TAsset - Context value asset type.
    * @param getAsset - Asset evaluator.

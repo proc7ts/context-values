@@ -6,7 +6,7 @@ import { CxBuilder } from './builder';
 import { CxEntry$Target } from './entry.target.impl';
 import { CxReferenceError } from './reference-error';
 
-export type CxEntry$AssetIterator<TValue, TAsset = TValue> = CxAsset<TValue, TAsset>['each'];
+export type CxEntry$AssetIterator<TValue, TAsset = TValue> = CxAsset<TValue, TAsset>['buildAssets'];
 
 export class CxEntry$Record<TValue, TAsset, TContext extends CxValues> {
 
