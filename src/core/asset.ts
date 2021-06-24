@@ -57,13 +57,34 @@ export interface CxAsset<TValue, TAsset = TValue, TContext extends CxValues = Cx
 export namespace CxAsset {
 
   /**
+   * Asset resolver.
+   *
+   * When {@link Evaluator asset evaluation} results to resolver instead of asset instance, its {@link cxAsset} method
+   * called to resolve to actual asset.
+   *
+   * @typeParam TAsset - Context value asset type.
+   */
+  export interface Resolver<TAsset> {
+
+    /**
+     * Resolves asset value.
+     *
+     * @param target - Context entry to resolve the asset for.
+     *
+     * @returns Either asset value, or `null`/`undefined` if asset is not available.
+     */
+    cxAsset(target: CxEntry.Target<unknown, TAsset>): TAsset | null | undefined;
+
+  }
+
+  /**
    * Asset evaluator signature.
    *
    * @typeParam TAsset - Evaluated asset type.
    *
-   * @returns Either evaluated asset, or `null`/`undefined` if asset is not available.
+   * @returns Either evaluated asset, its {@link Resolver}, or `null`/`undefined` if asset is not available.
    */
-  export type Evaluator<TAsset> = (this: void) => TAsset | null | undefined;
+  export type Evaluator<TAsset> = (this: void) => TAsset | Resolver<TAsset> | null | undefined;
 
   /**
    * A signature of context value {@link CxAsset.buildAssets asset evaluators} collector.
