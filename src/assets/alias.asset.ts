@@ -21,8 +21,8 @@ export function cxAliasAsset<TAsset, TContext extends CxValues = CxValues>(
   return {
     entry,
     supply,
-    buildAssets(target, receiver) {
-      receiver(() => {
+    buildAssets(target, collector) {
+      collector(() => {
         try {
           return target.get(alias);
         } catch (reason) {

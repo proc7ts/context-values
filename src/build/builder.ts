@@ -86,12 +86,7 @@ export class CxBuilder<TContext extends CxValues = CxValues>
   }
 
   provide<TValue, TAsset = TValue>(asset: CxAsset<TValue, TAsset, TContext>): Supply {
-
-    const { entry, supply = new Supply() } = asset;
-
-    this._record(entry).provide(asset.buildAssets, supply);
-
-    return supply;
+    return this._record(asset.entry).provide(asset);
   }
 
   eachAsset<TValue, TAsset>(

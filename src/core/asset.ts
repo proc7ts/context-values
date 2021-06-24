@@ -37,7 +37,6 @@ export interface CxAsset<TValue, TAsset = TValue, TContext extends CxValues = Cx
    * @param collector - Asset evaluators collector.
    */
   buildAssets(
-      this: void,
       target: CxEntry.Target<TValue, TAsset, TContext>,
       collector: CxAsset.Collector<TAsset>,
   ): void;
@@ -56,12 +55,12 @@ export namespace CxAsset {
   export type Evaluator<TAsset> = (this: void) => TAsset | null | undefined;
 
   /**
-   * A signature of context value {@link CxAsset.buildAssets asset evaluators iteration} callback.
+   * A signature of context value {@link CxAsset.buildAssets asset evaluators} collector.
    *
    * @typeParam TAsset - Context value asset type.
-   * @param getAsset - Asset evaluator.
+   * @param getAsset - Asset evaluator to collect.
    *
-   * @returns `false` to stop iteration, or `true`/`void` to continue.
+   * @returns `false` to stop collecting, or `true`/`void` to continue.
    */
   export type Collector<TAsset> = (this: void, getAsset: Evaluator<TAsset>) => void | boolean;
 

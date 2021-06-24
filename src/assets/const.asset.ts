@@ -22,7 +22,7 @@ export function cxConstAsset<TAsset, TContext extends CxValues = CxValues>(
     entry,
     supply,
     buildAssets: value != null
-        ? (_target, receiver) => receiver(valueProvider(value))
+        ? (_target, collector) => collector(valueProvider(value))
         : CxAsset$provideNone,
   };
 }

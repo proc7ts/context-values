@@ -21,8 +21,8 @@ export function cxBuildAsset<TValue, TAsset = TValue, TContext extends CxValues 
   return {
     entry,
     supply,
-    buildAssets(target, receiver) {
-      receiver(() => build(target));
+    buildAssets(target, collector) {
+      collector(() => build(target));
     },
   };
 }
