@@ -15,7 +15,10 @@ import { CxAsset, CxEntry, CxValues } from '../core';
  */
 export function cxBuildAsset<TValue, TAsset = TValue, TContext extends CxValues = CxValues>(
     entry: CxEntry<TValue, TAsset>,
-    build: (this: void, target: CxEntry.Target<TValue, TAsset>) => TAsset | null | undefined,
+    build: (
+        this: void,
+        target: CxEntry.Target<TValue, TAsset>,
+    ) => TAsset | CxAsset.Resolver<TAsset> | null | undefined,
     supply?: Supply,
 ): CxAsset<TValue, TAsset, TContext> {
   return {

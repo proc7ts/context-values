@@ -1,0 +1,26 @@
+import { beforeEach, describe, expect, it } from '@jest/globals';
+import { CxBuilder } from '../build';
+import { CxEntry, cxSingle, CxValues } from '../core';
+import { cxConstAsset } from './const.asset';
+
+describe('cxConstAsset', () => {
+
+  let builder: CxBuilder;
+  let context: CxValues;
+
+  beforeEach(() => {
+    builder = new CxBuilder<CxValues>(get => ({ get }));
+    context = builder.context;
+  });
+
+  const entry1: CxEntry<string> = { perContext: cxSingle() };
+  const entry2: CxEntry<string> = { perContext: cxSingle() };
+
+  it('accepts asset resolver instead of constant', () => {
+    builder.provide(cxConstAsset(entry2, { cxAsset: ({ context }) => context.get(entry1) + '!!!' }));
+    builder.provide(cxConstAsset(entry1, 'test'));
+
+    expect(context.get(entry2)).toBe('test!!!');
+  });
+
+});

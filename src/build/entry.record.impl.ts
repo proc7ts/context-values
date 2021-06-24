@@ -87,7 +87,7 @@ export class CxEntry$Record<TValue, TAsset, TContext extends CxValues> {
       for (const asset of this.assets.values()) {
         asset.buildAssets(target, getAsset => {
 
-          const assetValue = getAsset();
+          const assetValue = CxAsset$resolve(target, getAsset());
 
           return goOn = assetValue == null || cb(assetValue);
         });
@@ -126,7 +126,7 @@ export class CxEntry$Record<TValue, TAsset, TContext extends CxValues> {
 
     for (let i = assets.length - 1; i >= 0; --i) {
 
-      const asset = assets[i]();
+      const asset = CxAsset$resolve(target, assets[i]());
 
       if (asset != null && cb(asset) === false) {
         return;
@@ -187,7 +187,7 @@ export class CxEntry$Record<TValue, TAsset, TContext extends CxValues> {
   ): void {
 
     let sendAsset = (getAsset: CxAsset.Evaluator<TAsset>): boolean | void => {
-      emitter.send({ supply, rank: 0, get: lazyValue(getAsset) });
+      emitter.send({ supply, rank: 0, get: lazyValue(() => CxAsset$resolve(target, getAsset())) });
     };
 
     supply.whenOff(() => {
@@ -203,3 +203,19 @@ type CxEntry$AssetSender<TValue, TAsset> = readonly [
   target: CxEntry.Target<TValue, TAsset>,
   emitter: EventEmitter<[CxAsset.Provided<TAsset>]>,
 ];
+
+function CxAsset$resolve<TAsset>(
+    target: CxEntry.Target<unknown, TAsset>,
+    asset: TAsset | CxAsset.Resolver<TAsset> | null | undefined,
+): TAsset | null | undefined {
+  return CxAsset$isResolver(asset)
+      ? asset.cxAsset(target)
+      : asset;
+}
+
+function CxAsset$isResolver<TAsset>(
+    asset: TAsset | CxAsset.Resolver<TAsset> | null | undefined,
+): asset is CxAsset.Resolver<TAsset> {
+  return (typeof asset === 'object' && !!asset || typeof asset === 'function')
+      && typeof (asset as Partial<CxAsset.Resolver<TAsset>>).cxAsset === 'function';
+}
