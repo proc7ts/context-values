@@ -20,7 +20,6 @@ export function cxAliasAsset<TAsset, TContext extends CxValues = CxValues>(
 ): CxAsset<unknown, TAsset, TContext> {
   return {
     entry,
-    supply,
     buildAssets(target, collector) {
       collector(() => {
         try {
@@ -33,5 +32,6 @@ export function cxAliasAsset<TAsset, TContext extends CxValues = CxValues>(
         }
       });
     },
+    supply,
   };
 }

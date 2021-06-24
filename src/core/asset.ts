@@ -19,15 +19,6 @@ export interface CxAsset<TValue, TAsset = TValue, TContext extends CxValues = Cx
   readonly entry: CxEntry<TValue, TAsset>;
 
   /**
-   * Asset supply.
-   *
-   * Removes the asset once cut off.
-   *
-   * Returned from {@link CxValues.Modifier.provide} when specified. New one created when omitted.
-   */
-  readonly supply?: Supply;
-
-  /**
    * Builds assets for the `target` context entry.
    *
    * Passes each {@link CxAsset.Evaluator asset evaluator} to the given `collector`, until the latter returns `false`
@@ -40,6 +31,15 @@ export interface CxAsset<TValue, TAsset = TValue, TContext extends CxValues = Cx
       target: CxEntry.Target<TValue, TAsset, TContext>,
       collector: CxAsset.Collector<TAsset>,
   ): void;
+
+  /**
+   * Asset supply.
+   *
+   * Removes the asset once cut off.
+   *
+   * Returned from {@link CxValues.Modifier.provide} when specified. New one created when omitted.
+   */
+  readonly supply?: Supply;
 
 }
 
