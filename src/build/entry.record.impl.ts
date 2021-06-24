@@ -1,6 +1,7 @@
 import { EventEmitter, EventReceiver, eventReceiver } from '@proc7ts/fun-events';
 import { lazyValue, valueProvider } from '@proc7ts/primitives';
-import { Supply } from '@proc7ts/supply';
+import { alwaysSupply, Supply } from '@proc7ts/supply';
+import { CxSupply } from '../conventional';
 import { CxAsset, CxEntry, CxRequest, CxValues } from '../core';
 import { CxBuilder } from './builder';
 import { CxEntry$Target } from './entry.target.impl';
@@ -11,12 +12,16 @@ export class CxEntry$Record<TValue, TAsset, TContext extends CxValues> {
   private readonly define: () => CxEntry.Definition<TValue>;
   private readonly assets = new Map<Supply, CxAsset<TValue, TAsset>>();
   private readonly senders = new Map<Supply, CxEntry$AssetSender<TValue, TAsset>>();
+  readonly supply: (this: void) => Supply;
 
   constructor(
       readonly builder: CxBuilder<TContext>,
       readonly entry: CxEntry<TValue, TAsset>,
   ) {
-    this.define = lazyValue(() => entry.perContext(new CxEntry$Target(this)));
+    this.supply = entry === CxSupply as CxEntry<any>
+        ? valueProvider(alwaysSupply())
+        : lazyValue(() => new Supply().needs(builder.context.get(CxSupply)));
+    this.define = lazyValue(() => entry.perContext(new CxEntry$Target(this, this.supply)));
   }
 
   provide(asset: CxAsset<TValue, TAsset>): Supply {
@@ -33,6 +38,8 @@ export class CxEntry$Record<TValue, TAsset, TContext extends CxValues> {
           new Supply().needs(supply).needs(trackingSupply),
       );
     }
+
+    asset.setupAsset?.(new CxEntry$Target(this, () => supply.needs(this.supply())));
 
     return supply;
   }

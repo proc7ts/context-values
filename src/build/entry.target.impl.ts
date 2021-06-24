@@ -1,30 +1,25 @@
 import { deduplicateAfter_, EventReceiver, mapAfter_ } from '@proc7ts/fun-events';
-import { lazyValue, valueProvider } from '@proc7ts/primitives';
 import { flatMapIt, itsElements } from '@proc7ts/push-iterator';
-import { alwaysSupply, Supply } from '@proc7ts/supply';
-import { CxSupply } from '../conventional';
+import { Supply } from '@proc7ts/supply';
 import { CxAsset, CxEntry, CxRequest, CxValues } from '../core';
 import { CxEntry$assetsByRank, CxEntry$recentAsset } from './entry.assets-by-rank.impl';
 import { CxEntry$Record } from './entry.record.impl';
-import { CxBuilder } from './index';
 
 export class CxEntry$Target<TValue, TAsset, TContext extends CxValues>
     implements CxEntry.Target<TValue, TAsset, TContext> {
 
-  readonly context: TContext;
-  readonly entry: CxEntry<TValue, TAsset>;
-  private readonly _builder: CxBuilder<TContext>;
-  private readonly _getSupply: () => Supply;
+  constructor(
+      private readonly _record: CxEntry$Record<TValue, TAsset, TContext>,
+      private readonly _getSupply: () => Supply,
+  ) {
+  }
 
-  constructor(record: CxEntry$Record<TValue, TAsset, TContext>) {
+  get entry(): CxEntry<TValue, TAsset> {
+    return this._record.entry;
+  }
 
-    const builder = this._builder = record.builder;
-    const entry = this.entry = record.entry;
-    const context = this.context = builder.context;
-
-    this._getSupply = entry === CxSupply as CxEntry<any>
-        ? valueProvider(alwaysSupply())
-        : lazyValue(() => new Supply().needs(context.get(CxSupply)));
+  get context(): TContext {
+    return this._record.builder.context;
   }
 
   get supply(): Supply {
@@ -48,19 +43,19 @@ export class CxEntry$Target<TValue, TAsset, TContext extends CxValues>
   }
 
   provide<TValue, TAsset = TValue>(asset: CxAsset<TValue, TAsset, TContext>): Supply {
-    return this._builder.provide(asset);
+    return this._record.builder.provide(asset).needs(this);
   }
 
   eachAsset(callback: CxAsset.Callback<TAsset>): void {
-    this._builder.eachAsset(this, callback);
+    this._record.builder.eachAsset(this, callback);
   }
 
   eachRecentAsset(callback: CxAsset.Callback<TAsset>): void {
-    this._builder.eachRecentAsset(this, callback);
+    this._record.builder.eachRecentAsset(this, callback);
   }
 
   trackAssets(receiver: EventReceiver<[CxAsset.Provided<TAsset>]>): Supply {
-    return this._builder.trackAssets(this, receiver);
+    return this._record.builder.trackAssets(this, receiver);
   }
 
   trackRecentAsset(receiver: EventReceiver<[CxAsset.Existing<TAsset> | undefined]>): Supply {

@@ -33,6 +33,17 @@ export interface CxAsset<TValue, TAsset = TValue, TContext extends CxValues = Cx
   ): void;
 
   /**
+   * Sets up asset.
+   *
+   * This method is called immediately when asset {@link CxValues.Modifier.provide provided}.
+   *
+   * It can be used e.g. to provide additional assets. Additional assets will be revoked when the asset itself revoked.
+   *
+   * @param target - Context entry definition target.
+   */
+  setupAsset?(target: CxEntry.Target<TValue, TAsset, TContext>): void;
+
+  /**
    * Asset supply.
    *
    * Removes the asset once cut off.
