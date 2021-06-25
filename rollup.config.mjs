@@ -10,7 +10,6 @@ import typescript from 'typescript';
 export default defineConfig({
   input: {
     'context-values': './src/index.ts',
-    'context-values.core': './src/core/index.ts',
     'context-values.updatable': './src/updatable/index.ts',
   },
   plugins: [
@@ -24,9 +23,6 @@ export default defineConfig({
   ],
   external: externalModules(),
   manualChunks(id) {
-    if (id.startsWith(path.resolve('src', 'core') + path.sep)) {
-      return 'context-values.core';
-    }
     if (id.startsWith(path.resolve('src', 'updatable') + path.sep)) {
       return 'context-values.updatable';
     }
