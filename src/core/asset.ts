@@ -59,7 +59,7 @@ export namespace CxAsset {
   /**
    * Context value asset placeholder.
    *
-   * A placeholder could be {@link CxEntry.placeAsset placed} instead of the value asset. In this case it will be used
+   * A placeholder could be {@link CxAsset.placeAsset placed} instead of the value asset. In this case it will be used
    * to evaluate and place assets instead.
    *
    * @typeParam TAsset - Context value asset type.
@@ -120,7 +120,7 @@ export namespace CxAsset {
   }
 
   /**
-   * A signature of {@link CxAsset.Target.eachAsset assets iteration} callback.
+   * A signature of {@link CxEntry.Target.eachAsset assets iteration} callback.
    *
    * @typeParam TAsset - Context value asset type.
    * @param asset - Current asset.

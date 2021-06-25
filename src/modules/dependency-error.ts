@@ -15,14 +15,14 @@ export class CxDependencyError extends Error {
   constructor(
       readonly module: CxModule,
       readonly reasons: readonly (readonly [CxModule, unknown?])[] = [],
-      message: string = ContextModuleDependencyError$defaultMessage(module, reasons),
+      message: string = CxDependencyError$defaultMessage(module, reasons),
   ) {
     super(message);
   }
 
 }
 
-function ContextModuleDependencyError$defaultMessage(
+function CxDependencyError$defaultMessage(
     module: CxModule,
     dependencies: readonly (readonly [CxModule, unknown?])[],
 ): string {

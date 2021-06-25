@@ -9,8 +9,8 @@ import { CxEntry$assign } from './entry.assign.impl';
  * The entry value is evaluated at most once.
  *
  * @typeParam TValue - Context value type.
- * @param byDefault - Creates {@link CxEntry.Definition.getDefault default} entry value. Accepts entry definition target
- * as the only parameter.
+ * @param byDefault - Creates {@link CxEntry.Definition.assignDefault default} entry value. Accepts entry definition
+ * target as the only parameter.
  *
  * @returns New context entry definer.
  */

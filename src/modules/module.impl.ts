@@ -6,7 +6,7 @@ import { CxAsset, CxEntry } from '../core';
 import { CxDependencyError } from './dependency-error';
 import type { CxModule } from './module';
 
-export const CxModule$Impl__symbol = (/*#__PURE__*/ Symbol('ContextModule.impl'));
+export const CxModule$Impl__symbol = (/*#__PURE__*/ Symbol('CxModule.impl'));
 
 export class CxModule$Impl {
 

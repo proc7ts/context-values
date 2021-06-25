@@ -72,4 +72,5 @@ export interface ContextValueSlot<TValue, TSrc, TSeed> {
    * @param setup - Context value setup procedure.
    */
   setup(setup: ContextValueSetup<TValue, TSrc, TSeed>): void;
+
 }
