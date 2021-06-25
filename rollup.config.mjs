@@ -43,12 +43,6 @@ export default defineConfig({
           declarationMap: true,
         },
         entries: {
-          core: {
-            file: 'core/index.d.ts',
-            refs: false, // Do not refer to `../index.d.ts`.
-                         // Such reference breaks `rollup-plugin-typescript2`
-                         // within pnpm workspace installation.
-          },
           updatable: {
             file: 'updatable/index.d.ts',
             refs: false, // Do not refer to `../index.d.ts`.
