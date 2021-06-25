@@ -1,5 +1,5 @@
-import { valuesProvider } from '@proc7ts/primitives';
 import { CxEntry } from '../entry';
+import { CxAsset$emptyArray } from './asset.updater.impl';
 import { CxEntry$assign } from './entry.assign.impl';
 
 /**
@@ -17,7 +17,7 @@ import { CxEntry$assign } from './entry.assign.impl';
  */
 export function cxArray<TElement>(
     {
-      byDefault = valuesProvider(),
+      byDefault = CxAsset$emptyArray,
     }: {
       byDefault?(
           this: void,
@@ -26,16 +26,18 @@ export function cxArray<TElement>(
     } = {},
 ): CxEntry.Definer<readonly TElement[], TElement> {
   return target => ({
-    assign: CxEntry$assign(() => {
-
-      const array: TElement[] = [];
-
-      target.eachAsset(asset => {
-        array.push(asset);
-      });
-
-      return array.length ? array : null;
-    }),
-    assignDefault: CxEntry$assign(() => byDefault(target)),
+    assign: CxEntry$assign(target, cxArray$value),
+    assignDefault: CxEntry$assign(target, byDefault),
   });
+}
+
+function cxArray$value<TElement>(target: CxEntry.Target<readonly TElement[], TElement>): readonly TElement[] | null {
+
+  const array: TElement[] = [];
+
+  target.eachAsset(asset => {
+    array.push(asset);
+  });
+
+  return array.length ? array : null;
 }

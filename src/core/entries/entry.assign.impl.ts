@@ -1,11 +1,12 @@
-import { lazyValue } from '@proc7ts/primitives';
 import { CxEntry } from '../entry';
+import { CxValues } from '../values';
 
-export function CxEntry$assign<TValue>(
-    getValue: () => TValue | null | undefined,
+export function CxEntry$assign<TValue, TAsset, TContext extends CxValues>(
+    target: CxEntry.Target<TValue, TAsset, TContext>,
+    getValue: (target: CxEntry.Target<TValue, TAsset, TContext>) => TValue | null | undefined,
 ): (assigner: CxEntry.Assigner<TValue>) => void {
 
-  const get = lazyValue(getValue);
+  const get = target.lazy(getValue);
 
   return assigner => {
 

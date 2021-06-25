@@ -1,4 +1,4 @@
-import { CxEntry } from '../core';
+import { CxEntry } from './entry';
 
 /**
  * Represents an error when non-existent context value referenced. I.e. when requested context entry has no value.

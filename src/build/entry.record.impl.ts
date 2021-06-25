@@ -3,10 +3,10 @@ import { lazyValue, valueProvider } from '@proc7ts/primitives';
 import { alwaysSupply, Supply } from '@proc7ts/supply';
 import { CxSupply } from '../conventional';
 import { CxAsset, CxEntry, CxRequest, CxValues } from '../core';
+import { CxReferenceError } from '../core/reference-error';
 import { CxAsset$collector, CxAsset$Derived, CxAsset$Provided } from './asset.provided.impl';
 import { CxBuilder } from './builder';
 import { CxEntry$Target } from './entry.target.impl';
-import { CxReferenceError } from './reference-error';
 
 export class CxEntry$Record<TValue, TAsset, TContext extends CxValues> {
 

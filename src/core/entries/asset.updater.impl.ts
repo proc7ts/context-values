@@ -1,6 +1,9 @@
-import { lazyValue, valueProvider } from '@proc7ts/primitives';
 import { CxAsset } from '../asset';
 import { CxEntry } from '../entry';
+
+export function CxAsset$emptyArray<TValue, TAsset>(_target: CxEntry.Target<TValue, TAsset>): TValue {
+  return [] as unknown as TValue;
+}
 
 export function CxAsset$Updater$createDefault<TValue, TAsset, TUpdate = TAsset>(
     byDefault: (this: void, target: CxEntry.Target<TValue, TAsset>) => TValue,
@@ -9,7 +12,7 @@ export function CxAsset$Updater$createDefault<TValue, TAsset, TUpdate = TAsset>(
 
     let getValue: () => TValue;
     const reset = (): void => {
-      getValue = lazyValue(() => byDefault(target));
+      getValue = target.lazy(byDefault);
     };
 
     return {
@@ -17,7 +20,7 @@ export function CxAsset$Updater$createDefault<TValue, TAsset, TUpdate = TAsset>(
         return getValue();
       },
       set(update: TUpdate) {
-        getValue = valueProvider(update as unknown as TValue);
+        getValue = () => update as unknown as TValue;
       },
       reset,
     };

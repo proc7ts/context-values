@@ -1,4 +1,3 @@
-import { lazyValue } from '@proc7ts/primitives';
 import { CxAsset } from '../asset';
 import { CxEntry } from '../entry';
 import { CxAsset$Updater$createDefault } from './asset.updater.impl';
@@ -53,7 +52,7 @@ export function cxRecent<TValue, TAsset>(
 ): CxEntry.Definer<TValue, TAsset> {
   return target => {
 
-    const getUpdater = lazyValue(() => createUpdater(target));
+    const getUpdater = target.lazy(createUpdater);
     let getValue = (): TValue => {
 
       const updater = getUpdater();

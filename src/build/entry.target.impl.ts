@@ -1,4 +1,5 @@
 import { deduplicateAfter_, EventReceiver, mapAfter_ } from '@proc7ts/fun-events';
+import { lazyValue } from '@proc7ts/primitives';
 import { flatMapIt, itsElements } from '@proc7ts/push-iterator';
 import { Supply } from '@proc7ts/supply';
 import { CxAsset, CxEntry, CxRequest, CxValues } from '../core';
@@ -69,6 +70,10 @@ export class CxEntry$Target<TValue, TAsset, TContext extends CxValues>
     return CxEntry$assetsByRank(this).read.do(
         mapAfter_(assetByRank => itsElements(flatMapIt(assetByRank, rankAssets => rankAssets.values()))),
     )(receiver);
+  }
+
+  lazy<T>(evaluator: (this: void, target: this) => T): (this: void) => T {
+    return lazyValue(() => evaluator(this));
   }
 
 }

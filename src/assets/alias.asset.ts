@@ -1,6 +1,5 @@
 import { Supply } from '@proc7ts/supply';
-import { CxReferenceError } from '../build';
-import { CxAsset, CxEntry, CxValues } from '../core';
+import { CxAsset, CxEntry, CxReferenceError, CxValues } from '../core';
 
 /**
  * Creates aliasing context entry asset.

@@ -1,7 +1,6 @@
-import { lazyValue, valuesProvider } from '@proc7ts/primitives';
 import { CxAsset } from '../asset';
 import { CxEntry } from '../entry';
-import { CxAsset$Updater$createDefault } from './asset.updater.impl';
+import { CxAsset$emptyArray, CxAsset$Updater$createDefault } from './asset.updater.impl';
 
 /**
  * Creates potentially empty array-valued context entry definer that treats all {@link CxEntry.Target.trackAssetList
@@ -57,7 +56,7 @@ export function cxDynamic<TValue, TAsset = TValue>(
 
 export function cxDynamic<TValue, TAsset>(
     {
-        byDefault = valuesProvider<any>(),
+        byDefault = CxAsset$emptyArray,
         createUpdater = CxAsset$Updater$createDefault<TValue, TAsset, TAsset[]>(byDefault),
     }: {
       byDefault?(target: CxEntry.Target<TValue, TAsset>): TValue;
@@ -66,7 +65,7 @@ export function cxDynamic<TValue, TAsset>(
 ): CxEntry.Definer<TValue, TAsset> {
   return target => {
 
-    const getUpdater = lazyValue(() => createUpdater(target));
+    const getUpdater = target.lazy(createUpdater);
     let getValue = (): TValue => {
 
       const updater = getUpdater();

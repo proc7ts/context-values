@@ -22,7 +22,11 @@ export function cxSingle<TValue>(
     } = {},
 ): CxEntry.Definer<TValue> {
   return target => ({
-    assign: CxEntry$assign(() => target.recentAsset),
-    assignDefault: byDefault && CxEntry$assign(() => byDefault(target)),
+    assign: CxEntry$assign(target, cxSingle$value),
+    assignDefault: byDefault && CxEntry$assign(target, byDefault),
   });
+}
+
+function cxSingle$value<TValue>(target: CxEntry.Target<TValue>): TValue | undefined {
+  return target.recentAsset;
 }

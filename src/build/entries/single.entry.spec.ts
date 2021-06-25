@@ -1,10 +1,9 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { noop } from '@proc7ts/primitives';
 import { cxBuildAsset, cxConstAsset } from '../../assets';
-import { CxBuilder, CxReferenceError } from '../../build';
-import { CxEntry } from '../entry';
-import { CxValues } from '../values';
-import { cxSingle } from './single.entry';
+import { CxEntry, cxSingle, CxValues } from '../../core';
+import { CxReferenceError } from '../../core/reference-error';
+import { CxBuilder } from '../builder';
 
 describe('cxSingle', () => {
 

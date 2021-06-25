@@ -138,6 +138,17 @@ export namespace CxEntry {
      */
     trackAssetList(receiver: CxAsset.ListReceiver<TAsset>): Supply;
 
+    /**
+     * Creates a lazy evaluator against `this` entry definition target instance.
+     *
+     * @typeParam T - Evaluation result type.
+     * @param evaluator - Evaluator function accepting `this` entry definition target instance as its only parameter
+     * and returning some result.
+     *
+     * @returns A function without parameters returning the evaluated result. The result will be evaluated at most once.
+     */
+    lazy<T>(evaluator: (this: void, target: this) => T): (this: void) => T;
+
   }
 
   /**

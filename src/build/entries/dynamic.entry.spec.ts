@@ -1,9 +1,7 @@
 import { beforeEach, describe, expect, it } from '@jest/globals';
 import { cxBuildAsset, cxConstAsset } from '../../assets';
-import { CxBuilder } from '../../build';
-import { CxEntry } from '../entry';
-import { CxValues } from '../values';
-import { cxDynamic } from './dynamic.entry';
+import { cxDynamic, CxEntry, CxValues } from '../../core';
+import { CxBuilder } from '../builder';
 
 describe('cxDynamic', () => {
 

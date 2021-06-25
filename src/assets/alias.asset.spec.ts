@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from '@jest/globals';
-import { CxBuilder, CxReferenceError } from '../build';
-import { CxEntry, cxSingle, CxValues } from '../core';
+import { CxBuilder } from '../build';
+import { CxEntry, CxReferenceError, cxSingle, CxValues } from '../core';
 import { cxAliasAsset } from './alias.asset';
 import { cxBuildAsset } from './build.asset';
 import { cxConstAsset } from './const.asset';
