@@ -1,5 +1,6 @@
 import { Supply, SupplyPeer } from '@proc7ts/supply';
 import { CxAsset } from './asset';
+import { CxRequest } from './request';
 import { CxValues } from './values';
 
 /**
@@ -171,8 +172,9 @@ export namespace CxEntry {
      * is not available, the {@link assignDefault default value} is used instead.
      *
      * @param assigner - Entry value assigner to call if the value is available.
+     * @param request - Context value {@link CxValues.get request}.
      */
-    assign?(assigner: Assigner<TValue>): void;
+    assign?(assigner: Assigner<TValue>, request: CxRequest<TValue>): void;
 
     /**
      * Assigns the default context entry value.
