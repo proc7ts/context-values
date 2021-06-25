@@ -3,6 +3,7 @@ import { lazyValue, valueProvider } from '@proc7ts/primitives';
 import { alwaysSupply, Supply } from '@proc7ts/supply';
 import { CxSupply } from '../conventional';
 import { CxAsset, CxEntry, CxRequest, CxValues } from '../core';
+import { CxAsset$collector, CxAsset$Derived, CxAsset$Provided } from './asset.provided.impl';
 import { CxBuilder } from './builder';
 import { CxEntry$Target } from './entry.target.impl';
 import { CxReferenceError } from './reference-error';
@@ -46,20 +47,27 @@ export class CxEntry$Record<TValue, TAsset, TContext extends CxValues> {
 
   get({ or }: CxRequest<TValue> = {}): TValue | null {
 
-    const definition = this.define();
-    const value = definition.get?.();
+    let hasValue = false;
+    let value: TValue | undefined;
 
-    if (value != null) {
-      return value;
+    const definition = this.define();
+    const assigner = (newValue: TValue): void => {
+      hasValue = true;
+      value = newValue;
+    };
+
+    definition.assign?.(assigner);
+
+    if (hasValue) {
+      return value!;
     }
     if (or !== undefined) {
       return or;
     }
 
-    const defaultValue = definition.getDefault?.();
-
-    if (defaultValue != null) {
-      return defaultValue;
+    definition.assignDefault?.(assigner);
+    if (hasValue) {
+      return value!;
     }
 
     throw new CxReferenceError(this.entry);
@@ -73,24 +81,19 @@ export class CxEntry$Record<TValue, TAsset, TContext extends CxValues> {
       return;
     }
 
-    const cb: CxAsset.Callback<TAsset> = asset => !target.supply.isOff
+    let goOn: unknown;
+    const cb: CxAsset.Callback<TAsset> = asset => goOn = !target.supply.isOff
         && callback(asset) !== false
         && !target.supply.isOff;
-    let goOn: unknown;
 
-    this.builder._initial.eachAsset(
-        target,
-        getAsset => goOn = cb(getAsset),
-    );
+    this.builder._initial.eachAsset(target, cb);
 
     if (goOn !== false) {
+
+      const collector = CxAsset$collector(target, cb);
+
       for (const asset of this.assets.values()) {
-        asset.buildAssets(target, getAsset => {
-
-          const assetValue = CxAsset$resolve(target, getAsset());
-
-          return goOn = assetValue == null || cb(assetValue);
-        });
+        asset.placeAsset(target, collector);
         if (goOn === false) {
           break;
         }
@@ -106,35 +109,22 @@ export class CxEntry$Record<TValue, TAsset, TContext extends CxValues> {
       return;
     }
 
-    // Record asset evaluators in the order they are provided.
-    const assets: CxAsset.Evaluator<TAsset>[] = [];
-
-    for (const asset of this.assets.values()) {
-      asset.buildAssets(target, (getAsset: CxAsset.Evaluator<TAsset>): boolean | void => {
-        if (target.supply.isOff) {
-          assets.length = 0;
-          return false;
-        }
-        assets.push(getAsset);
-      });
-    }
+    let goOn = true;
+    const collector = CxAsset$collector(
+        target,
+        asset => goOn = !target.supply.isOff && callback(asset) !== false && !target.supply.isOff,
+    );
 
     // Iterate in reverse order.
-    const cb: CxAsset.Callback<TAsset> = asset => !target.supply.isOff
-        && callback(asset) !== false
-        && !target.supply.isOff;
-
-    for (let i = assets.length - 1; i >= 0; --i) {
-
-      const asset = CxAsset$resolve(target, assets[i]());
-
-      if (asset != null && cb(asset) === false) {
+    for (const asset of [...this.assets.values()].reverse()) {
+      asset.placeAsset(target, collector);
+      if (!goOn) {
         return;
       }
     }
 
     // Do the same for initial assets.
-    this.builder._initial.eachRecentAsset(target, cb);
+    this.builder._initial.eachRecentAsset(target, callback);
   }
 
   trackAssets(
@@ -158,13 +148,9 @@ export class CxEntry$Record<TValue, TAsset, TContext extends CxValues> {
         target,
         {
           supply: trackingSupply,
-          receive: (ecx, { supply, rank, get }) => rcv.receive(
+          receive: (ecx, provided) => rcv.receive(
               ecx,
-              {
-                supply,
-                rank: rank + 1,
-                get,
-              },
+              new CxAsset$Derived(provided),
           ),
         },
     ).needs(trackingSupply);
@@ -185,16 +171,7 @@ export class CxEntry$Record<TValue, TAsset, TContext extends CxValues> {
       asset: CxAsset<TValue, TAsset>,
       supply: Supply,
   ): void {
-
-    let sendAsset = (getAsset: CxAsset.Evaluator<TAsset>): boolean | void => {
-      emitter.send({ supply, rank: 0, get: lazyValue(() => CxAsset$resolve(target, getAsset())) });
-    };
-
-    supply.whenOff(() => {
-      sendAsset = valueProvider(false);
-    });
-
-    asset.buildAssets(target, getAsset => sendAsset(getAsset));
+    emitter.send(new CxAsset$Provided(target, asset, supply));
   }
 
 }
@@ -203,19 +180,3 @@ type CxEntry$AssetSender<TValue, TAsset> = readonly [
   target: CxEntry.Target<TValue, TAsset>,
   emitter: EventEmitter<[CxAsset.Provided<TAsset>]>,
 ];
-
-function CxAsset$resolve<TAsset>(
-    target: CxEntry.Target<unknown, TAsset>,
-    asset: TAsset | CxAsset.Resolver<TAsset> | null | undefined,
-): TAsset | null | undefined {
-  return CxAsset$isResolver(asset)
-      ? asset.cxAsset(target)
-      : asset;
-}
-
-function CxAsset$isResolver<TAsset>(
-    asset: TAsset | CxAsset.Resolver<TAsset> | null | undefined,
-): asset is CxAsset.Resolver<TAsset> {
-  return (typeof asset === 'object' && !!asset || typeof asset === 'function')
-      && typeof (asset as Partial<CxAsset.Resolver<TAsset>>).cxAsset === 'function';
-}

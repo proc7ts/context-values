@@ -5,7 +5,7 @@ import type { ContextKey } from './context-key';
 /**
  * Context value setup procedure signature.
  *
- * A function with this signature can be passed to {@link ContextValueSlot.Base.setup} method to be issued when
+ * A function with this signature can be passed to {@link ContextValueSlot.setup} method to be issued when
  * the value associated with target key.
  *
  * @typeParam TValue - Context value type.

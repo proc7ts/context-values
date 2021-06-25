@@ -1,4 +1,3 @@
-import { valueProvider } from '@proc7ts/primitives';
 import { Supply } from '@proc7ts/supply';
 import { CxAsset, CxEntry, CxValues } from '../core';
 
@@ -15,13 +14,13 @@ import { CxAsset, CxEntry, CxValues } from '../core';
  */
 export function cxConstAsset<TAsset, TContext extends CxValues = CxValues>(
     entry: CxEntry<unknown, TAsset>,
-    value: TAsset | CxAsset.Resolver<TAsset> | null | undefined,
+    value: TAsset | CxAsset.Placeholder<TAsset> | null | undefined,
     supply?: Supply,
 ): CxAsset<unknown, TAsset, TContext> {
   return {
     entry,
-    buildAssets: value != null
-        ? (_target, collector) => collector(valueProvider(value))
+    placeAsset: value != null
+        ? (_target, collector) => collector(value)
         : CxAsset$provideNone,
     supply,
   };

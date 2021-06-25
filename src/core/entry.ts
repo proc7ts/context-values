@@ -152,27 +152,37 @@ export namespace CxEntry {
   export interface Definition<TValue> {
 
     /**
-     * Returns context entry value.
+     * Assigns context entry value.
      *
      * When defined, this method is tried first when accessing the context entry value.
      *
-     * When not defined or `null`/`undefined` returned, the {@link CxRequest.or fallback} value is used. If the latter
-     * is not available, the {@link getDefault default value} is used instead.
+     * If the value is not assigned by this method call, the {@link CxRequest.or fallback} value is used. If the latter
+     * is not available, the {@link assignDefault default value} is used instead.
      *
-     * @returns Either entry value, or `null`/`undefined` if the value is not available.
+     * @param assigner - Entry value assigner to call if the value is available.
      */
-    get?(): TValue | null | undefined;
+    assign?(assigner: Assigner<TValue>): void;
 
     /**
-     * Returns the default context entry value.
+     * Assigns the default context entry value.
      *
-     * When defined, this method is tried if there is no {@link get value} available for the entry, and no
+     * When defined, this method is tried if there is no {@link assign value} available for the entry, and no
      * {@link CxRequest.or fallback} provided.
      *
-     * @returns Either default value for the entry, or `null`/`undefined` if the default value is not available.
+     * @param assigner - Entry value assigner to call if the value is available.
      */
-    getDefault?(): TValue | null | undefined;
+    assignDefault?(assigner: Assigner<TValue>): void;
 
   }
+
+  /**
+   * Context value assigner signature.
+   *
+   * Called to {@link Definition.assign} context value.
+   *
+   * @typeParam TValue - Context value type.
+   * @param value - Assigned entry value.
+   */
+  export type Assigner<TValue> = (this: void, value: TValue) => void;
 
 }

@@ -54,18 +54,20 @@ export function cxRecent<TValue, TAsset>(
   return target => {
 
     const getUpdater = lazyValue(() => createUpdater(target));
-    let getValue = (): TValue | undefined => {
+    let getValue = (): TValue => {
 
       const updater = getUpdater();
 
       getValue = () => updater.get();
-      target.trackRecentAsset(asset => asset ? updater.set(asset.get()) : updater.reset());
+      target.trackRecentAsset(asset => asset ? updater.set(asset.asset) : updater.reset());
 
       return getValue();
     };
 
     return {
-      get: () => getValue(),
+      assign(assigner) {
+        assigner(getValue());
+      },
     };
   };
 }

@@ -8,7 +8,7 @@
 export interface CxRequest<TValue> {
 
   /**
-   * A fallback value to use if there is no value {@link Definition.get available} for requested entry.
+   * A fallback value to use if there is no value {@link Definition.assign available} for requested entry.
    *
    * Can be `null`. `undefined` means there is no fallback.
    */
@@ -28,7 +28,7 @@ export namespace CxRequest {
   export interface WithFallback<TValue> extends CxRequest<TValue> {
 
     /**
-     * A fallback value to use if there is no value {@link Definition.get available} for requested entry.
+     * A fallback value to use if there is no value {@link Definition.assign available} for requested entry.
      */
     readonly or: TValue;
 

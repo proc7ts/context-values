@@ -17,7 +17,7 @@ import type { CxModule } from './module';
 export class CxModule$Usage {
 
   private readonly _impl: ValueTracker<CxModule | undefined>;
-  private readonly _rev: ValueTracker<ContextModuleRev>;
+  private readonly _rev: ValueTracker<CxModule$Rev>;
   private _useCounter = 0;
 
   private _setup!: () => void;
@@ -83,7 +83,7 @@ export class CxModule$Usage {
           },
         });
       } else {
-        loadContextModule(target, rev)
+        CxModule$load(target, rev)
             .then(({ whenReady }) => {
               this._updateStatus(rev, true, false);
               return whenReady;
@@ -99,7 +99,7 @@ export class CxModule$Usage {
   }
 
   private _updateStatus(
-      rev: ContextModuleRev,
+      rev: CxModule$Rev,
       settled: boolean,
       ready: boolean,
       error?: unknown,
@@ -173,8 +173,8 @@ export class CxModule$Usage {
     const use: CxModule.Use = {
       ...handle,
       read,
-      whenSettled: ContextModule$Use$when(read, isContextModuleSettled),
-      whenReady: ContextModule$Use$when(read, isContextModuleReady),
+      whenSettled: CxModule$Use$when(read, CxModule$isSettled),
+      whenReady: CxModule$Use$when(read, CxModule$isReady),
       supply,
     };
 
@@ -221,19 +221,19 @@ export class CxModule$Usage {
 
 }
 
-interface ContextModuleRev {
+interface CxModule$Rev {
 
   readonly status: CxModule.Status;
   readonly supply: Supply;
 
 }
 
-async function loadContextModule(
+async function CxModule$load(
     target: CxEntry.Target<CxModule.Handle, CxModule>,
-    { status: { module }, supply }: ContextModuleRev,
-): Promise<ContextModuleInit> {
+    { status: { module }, supply }: CxModule$Rev,
+): Promise<CxModule$Init> {
 
-  const moduleInit = new ContextModuleInit(module);
+  const moduleInit = new CxModule$Init(module);
 
   await module.setup({
 
@@ -258,7 +258,7 @@ async function loadContextModule(
   return moduleInit;
 }
 
-class ContextModuleInit {
+class CxModule$Init {
 
   readonly whenReady: Promise<unknown>;
   private _whenDone: Promise<unknown> = Promise.resolve();
@@ -287,7 +287,7 @@ class ContextModuleInit {
 
 }
 
-function ContextModule$Use$when(
+function CxModule$Use$when(
     status: AfterEvent<[CxModule.Status]>,
     test: (status: CxModule.Status) => boolean,
 ): OnEvent<[CxModule.Status]> {
@@ -304,10 +304,10 @@ function ContextModule$Use$when(
   }));
 }
 
-function isContextModuleSettled({ settled }: CxModule.Status): boolean {
+function CxModule$isSettled({ settled }: CxModule.Status): boolean {
   return settled;
 }
 
-function isContextModuleReady({ ready }: CxModule.Status): boolean {
+function CxModule$isReady({ ready }: CxModule.Status): boolean {
   return ready;
 }

@@ -20,9 +20,21 @@ export type CxSupply = Supply;
  */
 export const CxSupply: CxEntry<CxSupply> = {
   perContext(target) {
+
+    const getSupply = lazyValue(() => target.recentAsset || target.context.supply);
+
     return {
-      get: lazyValue(() => target.recentAsset || target.context.supply),
-      getDefault: () => target.context.supply || alwaysSupply(),
+      assign(assigner) {
+
+        const supply = getSupply();
+
+        if (supply) {
+          assigner(supply);
+        }
+      },
+      assignDefault(assigner) {
+        assigner(target.context.supply || alwaysSupply());
+      },
     };
   },
 };

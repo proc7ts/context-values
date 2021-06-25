@@ -58,7 +58,7 @@ export class CxEntry$Target<TValue, TAsset, TContext extends CxValues>
     return this._record.builder.trackAssets(this, receiver);
   }
 
-  trackRecentAsset(receiver: EventReceiver<[CxAsset.Existing<TAsset> | undefined]>): Supply {
+  trackRecentAsset(receiver: EventReceiver<[CxAsset.Evaluated<TAsset> | undefined]>): Supply {
     return CxEntry$assetsByRank(this).read.do(
         mapAfter_(CxEntry$recentAsset),
         deduplicateAfter_(),

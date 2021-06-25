@@ -16,8 +16,12 @@ describe('cxConstAsset', () => {
   const entry1: CxEntry<string> = { perContext: cxSingle() };
   const entry2: CxEntry<string> = { perContext: cxSingle() };
 
-  it('accepts asset resolver instead of constant', () => {
-    builder.provide(cxConstAsset(entry2, { cxAsset: ({ context }) => context.get(entry1) + '!!!' }));
+  it('accepts asset placeholder', () => {
+    builder.provide(cxConstAsset(entry2, {
+      placeAsset({ context }, collector) {
+        collector(context.get(entry1) + '!!!');
+      },
+    }));
     builder.provide(cxConstAsset(entry1, 'test'));
 
     expect(context.get(entry2)).toBe('test!!!');

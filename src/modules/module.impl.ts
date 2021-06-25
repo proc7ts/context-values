@@ -6,7 +6,7 @@ import { CxAsset, CxEntry } from '../core';
 import { CxDependencyError } from './dependency-error';
 import type { CxModule } from './module';
 
-export const CxModule$Impl__symbol = (/*#__PURE__*/ Symbol('ContextModule.impl'));
+export const CxModule$Impl__symbol = (/*#__PURE__*/ Symbol('CxModule.impl'));
 
 export class CxModule$Impl {
 
@@ -46,13 +46,10 @@ export class CxModule$Impl {
 
 }
 
-export function CxModule$replace(replaced: CxModule, replacer: CxModule): CxAsset<CxModule.Handle, CxModule> {
-
-  const replacement = valueProvider(replacer);
-
+export function CxModule$replace(replaced: CxModule, replacement: CxModule): CxAsset<CxModule.Handle, CxModule> {
   return {
     entry: replaced,
-    buildAssets(_target, collector) {
+    placeAsset(_target, collector) {
       collector(replacement);
     },
   };
@@ -70,19 +67,21 @@ export function CxModule$implement(
 
     target.trackAssetList(candidates => {
 
-      let impl: CxModule | null | undefined;
+      let impl: CxModule | undefined;
 
       for (let i = candidates.length - 1; i >= 0; --i) {
 
-        const candidate = candidates[i].get();
+        const recent = candidates[i].recentAsset;
 
-        impl = candidate;
-        if (candidate !== module) {
-          break;
+        if (recent) {
+          impl = recent.asset;
+          if (impl !== module) {
+            break;
+          }
         }
       }
 
-      receive(impl || undefined);
+      receive(impl);
     }).needs(receiver.supply);
   });
 }

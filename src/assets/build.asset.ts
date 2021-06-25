@@ -18,13 +18,18 @@ export function cxBuildAsset<TValue, TAsset = TValue, TContext extends CxValues 
     build: (
         this: void,
         target: CxEntry.Target<TValue, TAsset>,
-    ) => TAsset | CxAsset.Resolver<TAsset> | null | undefined,
+    ) => TAsset | CxAsset.Placeholder<TAsset> | null | undefined,
     supply?: Supply,
 ): CxAsset<TValue, TAsset, TContext> {
   return {
     entry,
-    buildAssets(target, collector) {
-      collector(() => build(target));
+    placeAsset(target, collector) {
+
+      const asset = build(target);
+
+      if (asset != null) {
+        collector(asset);
+      }
     },
     supply,
   };
