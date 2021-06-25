@@ -1,5 +1,6 @@
-import { lazyValue, valuesProvider } from '@proc7ts/primitives';
+import { valuesProvider } from '@proc7ts/primitives';
 import { CxEntry } from '../entry';
+import { CxEntry$assign } from './entry.assign.impl';
 
 /**
  * Creates array-valued context entry definer.
@@ -9,14 +10,14 @@ import { CxEntry } from '../entry';
  * The entry value is evaluated at most once.
  *
  * @typeParam TElement - Array element type. The same as entry value asset type.
- * @param byDefault - Creates {@link CxEntry.Definition.getDefault default} entry value. Accepts entry definition target
- * as the only parameter. Empty array will be used as default value when omitted.
+ * @param byDefault - Creates {@link CxEntry.Definition.assignDefault default} entry value. Accepts entry definition
+ * target as the only parameter. Empty array will be used as default value when omitted.
  *
  * @returns New context entry definer.
  */
 export function cxArray<TElement>(
     {
-      byDefault,
+      byDefault = valuesProvider(),
     }: {
       byDefault?(
           this: void,
@@ -25,7 +26,7 @@ export function cxArray<TElement>(
     } = {},
 ): CxEntry.Definer<readonly TElement[], TElement> {
   return target => ({
-    get: lazyValue(() => {
+    assign: CxEntry$assign(() => {
 
       const array: TElement[] = [];
 
@@ -35,6 +36,6 @@ export function cxArray<TElement>(
 
       return array.length ? array : null;
     }),
-    getDefault: byDefault ? lazyValue(() => byDefault(target)) : valuesProvider(),
+    assignDefault: CxEntry$assign(() => byDefault(target)),
   });
 }

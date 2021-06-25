@@ -116,7 +116,9 @@ export class CxModule implements CxEntry<CxModule.Handle, CxModule>, CxAsset<CxM
     };
 
     return {
-      get: () => getHandle(),
+      assign(assigner) {
+        assigner(getHandle());
+      },
     };
   }
 

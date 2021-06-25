@@ -29,8 +29,8 @@ describe('CxEntry', () => {
         const entry: CxEntry<string> = {
           perContext() {
             return {
-              getDefault() {
-                return 'default';
+              assignDefault(assigner) {
+                assigner('default');
               },
             };
           },
@@ -52,7 +52,7 @@ describe('CxEntry', () => {
       const entry: CxEntry<string> = {
         perContext(target) {
           return {
-            get() {
+            assign(assigner) {
 
               let result = '';
 
@@ -63,7 +63,7 @@ describe('CxEntry', () => {
                 }
               });
 
-              return result;
+              assigner(result);
             },
           };
         },
@@ -96,7 +96,7 @@ describe('CxEntry', () => {
         const entry: CxEntry<string> = {
           perContext(target) {
             return {
-              get() {
+              assign(assigner) {
 
                 let result = '';
 
@@ -107,7 +107,7 @@ describe('CxEntry', () => {
                   }
                 });
 
-                return result;
+                assigner(result);
               },
             };
           },
@@ -125,7 +125,7 @@ describe('CxEntry', () => {
         const entry: CxEntry<string, number> = {
           perContext(target) {
             return {
-              get() {
+              assign(assigner) {
 
                 let result = '';
 
@@ -133,7 +133,7 @@ describe('CxEntry', () => {
                   result += asset;
                 });
 
-                return result;
+                assigner(result);
               },
             };
           },
@@ -184,8 +184,8 @@ describe('CxEntry', () => {
             });
 
             return {
-              get() {
-                return value;
+              assign(assigner) {
+                assigner(value);
               },
             };
           },

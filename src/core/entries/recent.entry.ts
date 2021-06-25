@@ -54,7 +54,7 @@ export function cxRecent<TValue, TAsset>(
   return target => {
 
     const getUpdater = lazyValue(() => createUpdater(target));
-    let getValue = (): TValue | undefined => {
+    let getValue = (): TValue => {
 
       const updater = getUpdater();
 
@@ -65,7 +65,9 @@ export function cxRecent<TValue, TAsset>(
     };
 
     return {
-      get: () => getValue(),
+      assign(assigner) {
+        assigner(getValue());
+      },
     };
   };
 }

@@ -47,20 +47,27 @@ export class CxEntry$Record<TValue, TAsset, TContext extends CxValues> {
 
   get({ or }: CxRequest<TValue> = {}): TValue | null {
 
-    const definition = this.define();
-    const value = definition.get?.();
+    let hasValue = false;
+    let value: TValue | undefined;
 
-    if (value != null) {
-      return value;
+    const definition = this.define();
+    const assigner = (newValue: TValue): void => {
+      hasValue = true;
+      value = newValue;
+    };
+
+    definition.assign?.(assigner);
+
+    if (hasValue) {
+      return value!;
     }
     if (or !== undefined) {
       return or;
     }
 
-    const defaultValue = definition.getDefault?.();
-
-    if (defaultValue != null) {
-      return defaultValue;
+    definition.assignDefault?.(assigner);
+    if (hasValue) {
+      return value!;
     }
 
     throw new CxReferenceError(this.entry);

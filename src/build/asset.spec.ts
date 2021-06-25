@@ -25,25 +25,25 @@ describe('CxAsset', () => {
 
         const entry: CxEntry<number[], number> = {
           perContext(target) {
+
+            let value: number[] = [];
+
+            target.trackAssetList(assets => {
+
+              const newValue: number[] = [];
+
+              for (const { recentAsset } of assets) {
+                if (recentAsset) {
+                  newValue.push(recentAsset.asset);
+                }
+              }
+
+              value = newValue;
+            });
+
             return {
-              get() {
-
-                let value: number[] = [];
-
-                target.trackAssetList(assets => {
-
-                  const newValue: number[] = [];
-
-                  for (const { recentAsset } of assets) {
-                    if (recentAsset) {
-                      newValue.push(recentAsset.asset);
-                    }
-                  }
-
-                  value = newValue;
-                });
-
-                return value;
+              assign(assigner) {
+                assigner(value);
               },
             };
           },
@@ -68,25 +68,25 @@ describe('CxAsset', () => {
 
         const entry: CxEntry<number[], number> = {
           perContext(target) {
-            return {
-              get() {
 
-                let value: number[] = [];
+            let value: number[] = [];
 
-                target.trackAssetList(assets => {
+            target.trackAssetList(assets => {
 
-                  const newValue: number[] = [];
+              const newValue: number[] = [];
 
-                  for (const provided of assets) {
-                    provided.eachRecentAsset(asset => {
-                      newValue.push(asset);
-                    });
-                  }
-
-                  value = newValue;
+              for (const provided of assets) {
+                provided.eachRecentAsset(asset => {
+                  newValue.push(asset);
                 });
+              }
 
-                return value;
+              value = newValue;
+            });
+
+            return {
+              assign(assigner) {
+                assigner(value);
               },
             };
           },

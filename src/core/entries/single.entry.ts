@@ -1,5 +1,5 @@
-import { lazyValue } from '@proc7ts/primitives';
 import { CxEntry } from '../entry';
+import { CxEntry$assign } from './entry.assign.impl';
 
 /**
  * Creates single-valued context entry definer.
@@ -22,7 +22,7 @@ export function cxSingle<TValue>(
     } = {},
 ): CxEntry.Definer<TValue> {
   return target => ({
-    get: lazyValue(() => target.recentAsset),
-    getDefault: byDefault && lazyValue(() => byDefault(target)),
+    assign: CxEntry$assign(() => target.recentAsset),
+    assignDefault: byDefault && CxEntry$assign(() => byDefault(target)),
   });
 }

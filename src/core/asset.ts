@@ -59,8 +59,8 @@ export namespace CxAsset {
   /**
    * Context value asset placeholder.
    *
-   * A placeholder could be {@link CxEntry.placeAsset placed}, instead of asset value. Then it will be used to evaluate
-   * and place assets instead.
+   * A placeholder could be {@link CxEntry.placeAsset placed} instead of the value asset. In this case it will be used
+   * to evaluate and place assets instead.
    *
    * @typeParam TAsset - Context value asset type.
    */
