@@ -1,4 +1,4 @@
-import { isPresent, lazyValue, valuesProvider } from '@proc7ts/primitives';
+import { lazyValue, valuesProvider } from '@proc7ts/primitives';
 import { CxAsset } from '../asset';
 import { CxEntry } from '../entry';
 import { CxAsset$Updater$createDefault } from './asset.updater.impl';
@@ -73,7 +73,7 @@ export function cxDynamic<TValue, TAsset>(
 
       getValue = () => updater.get();
       target.trackAssetList(assets => assets.length
-          ? updater.set(assets.map(({ get }) => get()).filter(isPresent))
+          ? updater.set(cxDynamic$assets(assets))
           : updater.reset());
 
       return getValue();
@@ -83,4 +83,18 @@ export function cxDynamic<TValue, TAsset>(
       get: () => getValue(),
     };
   };
+}
+
+function cxDynamic$assets<TAsset>(assets: CxAsset.Provided<TAsset>[]): TAsset[] {
+
+  const result: TAsset[] = [];
+  const addAsset = (asset: TAsset): void => {
+    result.push(asset);
+  };
+
+  for (const provided of assets) {
+    provided.eachAsset(addAsset);
+  }
+
+  return result;
 }

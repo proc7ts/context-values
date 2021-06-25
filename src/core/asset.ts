@@ -19,15 +19,15 @@ export interface CxAsset<TValue, TAsset = TValue, TContext extends CxValues = Cx
   readonly entry: CxEntry<TValue, TAsset>;
 
   /**
-   * Builds assets for the `target` context entry.
+   * Evaluates value asset or multiple assets and places them to `target` context entry.
    *
-   * Passes each {@link CxAsset.Evaluator asset evaluator} to the given `collector`, until the latter returns `false`
-   * or there are no more assets.
+   * Passes each evaluated asset to the given `collector`, until the latter returns `false` or there are no more assets
+   * to place.
    *
    * @param target - Context entry definition target.
-   * @param collector - Asset evaluators collector.
+   * @param collector - Asset collector.
    */
-  buildAssets(
+  placeAsset(
       target: CxEntry.Target<TValue, TAsset, TContext>,
       collector: CxAsset.Collector<TAsset>,
   ): void;
@@ -57,44 +57,36 @@ export interface CxAsset<TValue, TAsset = TValue, TContext extends CxValues = Cx
 export namespace CxAsset {
 
   /**
-   * Asset resolver.
+   * Context value asset placeholder.
    *
-   * When {@link Evaluator asset evaluation} results to resolver instead of asset instance, its {@link cxAsset} method
-   * called to resolve to actual asset.
+   * A placeholder could be {@link CxEntry.placeAsset placed}, instead of asset value. Then it will be used to evaluate
+   * and place assets instead.
    *
    * @typeParam TAsset - Context value asset type.
    */
-  export interface Resolver<TAsset> {
+  export interface Placeholder<TAsset> {
 
     /**
-     * Resolves asset value.
+     * Evaluates value asset or multiple assets and places them to `target` context entry.
      *
-     * @param target - Context entry to resolve the asset for.
-     *
-     * @returns Either asset value, or `null`/`undefined` if asset is not available.
+     * @param target - Context entry definition target.
+     * @param callback - Asset placement callback.
      */
-    cxAsset(target: CxEntry.Target<unknown, TAsset>): TAsset | null | undefined;
+    placeAsset(target: CxEntry.Target<unknown, TAsset>, callback: Callback<TAsset>): void;
 
   }
 
   /**
-   * Asset evaluator signature.
+   * A signature of context value asset collector.
    *
-   * @typeParam TAsset - Evaluated asset type.
-   *
-   * @returns Either evaluated asset, its {@link Resolver}, or `null`/`undefined` if asset is not available.
-   */
-  export type Evaluator<TAsset> = (this: void) => TAsset | Resolver<TAsset> | null | undefined;
-
-  /**
-   * A signature of context value {@link CxAsset.buildAssets asset evaluators} collector.
+   * The {@link CxAsset.placeAsset} method passes evaluated assets to it.
    *
    * @typeParam TAsset - Context value asset type.
-   * @param getAsset - Asset evaluator to collect.
+   * @param asset - Either asset instance to collect, or its resolver.
    *
    * @returns `false` to stop collecting, or `true`/`void` to continue.
    */
-  export type Collector<TAsset> = (this: void, getAsset: Evaluator<TAsset>) => void | boolean;
+  export type Collector<TAsset> = (this: void, asset: TAsset | Placeholder<TAsset>) => void | boolean;
 
   /**
    * An updater of context entry value with asset.
@@ -149,10 +141,10 @@ export namespace CxAsset {
    * A signature of the receiver of the most recent asset provided for context entry.
    *
    * @typeParam TAsset - Context value asset type.
-   * @param asset - Existing context entry asset provided for context entry most recently, or `undefined` if there are
+   * @param asset - Evaluated context entry asset provided for context entry most recently, or `undefined` if there are
    * no assets provided.
    */
-  export type RecentReceiver<TAsset> = (this: void, asset: Existing<TAsset> | undefined) => void;
+  export type RecentReceiver<TAsset> = (this: void, asset: Evaluated<TAsset> | undefined) => void;
 
   /**
    * A signature of receiver of asset list provided for context entry.
@@ -170,11 +162,59 @@ export namespace CxAsset {
   export interface Provided<TAsset> {
 
     /**
+     * A rank of the asset modifier it is {@link CxValues.Modifier.provide provided} for.
+     *
+     * `0` refers to current context modifier, `1` - to its predecessor, etc.
+     */
+    readonly rank: number;
+
+    /**
      * Asset supply.
      *
      * The asset is revoked once cut off.
      */
     readonly supply: Supply;
+
+    /**
+     * The most recent asset evaluated by this entry asset.
+     *
+     * `undefined` when no value assets provided by this entry asset.
+     */
+    readonly recentAsset: Evaluated<TAsset> | undefined;
+
+    /**
+     * Iterates over value assets in the same order they are provided by this entry asset.
+     *
+     * Passes each asset to the given `callback` function, until the latter returns `false` or there are no more
+     * assets.
+     *
+     * @param callback - Assets callback.
+     */
+    eachAsset(callback: CxAsset.Callback<TAsset>): void;
+
+    /**
+     * Iterates over value assets with the most recent assets iterated first. I.e. in reverse order to the order they
+     * are provided by this entry asset.
+     *
+     * Passes each asset to the given `callback` function until the latter returns `false` or there are no more assets.
+     *
+     * @param callback - Assets callback.
+     */
+    eachRecentAsset(callback: CxAsset.Callback<TAsset>): void;
+
+  }
+
+  /**
+   * Evaluated asset provided for context entry.
+   *
+   * @typeParam TAsset - Context value asset type.
+   */
+  export interface Evaluated<TAsset> {
+
+    /**
+     * Evaluated value asset.
+     */
+    readonly asset: TAsset;
 
     /**
      * A rank of the asset modifier it is {@link CxValues.Modifier.provide provided} for.
@@ -184,29 +224,11 @@ export namespace CxAsset {
     readonly rank: number;
 
     /**
-     * Evaluates asset.
+     * Asset supply.
      *
-     * Asset evaluated at most once. All subsequent calls to this method would return the previously evaluated asset.
-     *
-     * @returns Either evaluated asset, or `null`/`undefined` if asset is not available.
+     * The asset is revoked once cut off.
      */
-    get(this: void): TAsset | null | undefined;
-
-  }
-
-  /**
-   * Existing asset provided for context entry.
-   *
-   * @typeParam TAsset - Context value asset type.
-   */
-  export interface Existing<TAsset> extends Provided<TAsset> {
-
-    /**
-     * Evaluates asset.
-     *
-     * @returns Evaluated asset. Never `null` or `undefined`.
-     */
-    get(this: void): TAsset;
+    readonly supply: Supply;
 
   }
 

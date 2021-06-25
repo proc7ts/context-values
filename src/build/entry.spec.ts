@@ -141,12 +141,12 @@ describe('CxEntry', () => {
         const asset: CxAsset<unknown, number> = {
           entry,
           supply: new Supply(),
-          buildAssets(target, collector) {
+          placeAsset(target, collector) {
             for (let i = 0; i < 10; ++i) {
               if (i > 2) {
                 target.supply.off();
               }
-              if (collector(() => i) === false) {
+              if (collector(i) === false) {
                 break;
               }
             }
@@ -155,7 +155,7 @@ describe('CxEntry', () => {
 
         builder.provide(asset);
 
-        expect(context.get(entry)).toBe('');
+        expect(context.get(entry)).toBe('012');
         expect(context.get(entry)).toBe('');
       });
     });
@@ -172,15 +172,14 @@ describe('CxEntry', () => {
             const trackingSupply = target.trackAssets(provided => {
               list.push(provided);
               value = '';
-              for (const { get } of list) {
-
-                const asset = get();
-
-                value += asset;
-                if (asset === '!') {
-                  trackingSupply.off();
-                  target.provide(cxConstAsset(entry, '*'));
-                }
+              for (const provided of list) {
+                provided.eachAsset(asset => {
+                  value += asset;
+                  if (asset === '!') {
+                    trackingSupply.off();
+                    target.provide(cxConstAsset(entry, '*'));
+                  }
+                });
               }
             });
 

@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from '@jest/globals';
 import { asis, newPromiseResolver, noop } from '@proc7ts/primitives';
 import { Supply } from '@proc7ts/supply';
-import { cxConstAsset } from '../assets';
+import { cxBuildAsset, cxConstAsset } from '../assets';
 import { CxBuilder } from '../build';
 import { cxDynamic, CxEntry, cxRecent, CxValues } from '../core';
 import { CxDependencyError } from './dependency-error';
@@ -20,6 +20,29 @@ describe('CxModule', () => {
     context = builder.context;
   });
 
+  it('makes module handle available before it is provided', async () => {
+
+    const module = new CxModule('test');
+
+    builder.provide(cxBuildAsset(module, () => null));
+
+    const handle = context.get(module);
+
+    expect(await handle.read).toMatchObject({
+      module,
+      provided: false,
+      used: false,
+      settled: false,
+      ready: false,
+    });
+    expect(await handle.use().read).toMatchObject({
+      module,
+      provided: false,
+      used: true,
+      settled: false,
+      ready: false,
+    });
+  });
   it('provides value when loaded', async () => {
 
     const module = new CxModule(

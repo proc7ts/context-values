@@ -120,11 +120,11 @@ export class CxModule implements CxEntry<CxModule.Handle, CxModule>, CxAsset<CxM
     };
   }
 
-  buildAssets(
+  placeAsset(
       _target: CxEntry.Target<CxModule.Handle, CxModule>,
       collector: CxAsset.Collector<CxModule>,
   ): void {
-    collector(valueProvider(this));
+    collector(this);
   }
 
   setupAsset(target: CxEntry.Target<CxModule.Handle, CxModule>): void {

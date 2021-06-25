@@ -45,24 +45,20 @@ export function CxEntry$assetsByRank<TAsset>(
 
 export function CxEntry$recentAsset<TAsset>(
     assetsByRank: CxEntry$AssetsByRank<TAsset>,
-): CxAsset.Existing<TAsset> | undefined {
+): CxAsset.Evaluated<TAsset> | undefined {
   for (const rankAssets of assetsByRank) {
 
-    const assets: CxAsset.Provided<TAsset>[] = itsElements(rankAssets.values());
+    const list: CxAsset.Provided<TAsset>[] = itsElements(rankAssets.values());
 
-    for (let i = assets.length - 1; i >= 0; --i) {
+    for (let i = list.length - 1; i >= 0; --i) {
 
-      const asset = assets[i];
+      const recent = list[i].recentAsset;
 
-      if (CxEntry$assetExists(asset)) {
-        return asset;
+      if (recent) {
+        return recent;
       }
     }
   }
 
   return;
-}
-
-function CxEntry$assetExists<TAsset>(asset: CxAsset.Provided<TAsset>): asset is CxAsset.Existing<TAsset> {
-  return asset.get() != null;
 }

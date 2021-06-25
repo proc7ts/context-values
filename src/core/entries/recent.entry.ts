@@ -59,7 +59,7 @@ export function cxRecent<TValue, TAsset>(
       const updater = getUpdater();
 
       getValue = () => updater.get();
-      target.trackRecentAsset(asset => asset ? updater.set(asset.get()) : updater.reset());
+      target.trackRecentAsset(asset => asset ? updater.set(asset.asset) : updater.reset());
 
       return getValue();
     };
