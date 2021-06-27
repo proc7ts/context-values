@@ -30,13 +30,13 @@ export namespace CxValues {
     readonly context: TContext;
 
     /**
-     * Provides assets for context {@link CxAsset.entry entry}.
+     * Provides an asset for context {@link CxAsset.entry entry}.
      *
      * @typeParam TValue - Context value type.
      * @typeParam TAsset - Context value asset type.
      * @param asset - Context entry asset.
      *
-     * @returns Assets supply. Revokes provided assets once cut off.
+     * @returns Asset supply. Revokes provided asset once cut off.
      */
     provide<TValue, TAsset = TValue>(asset: CxAsset<TValue, TAsset, TContext>): Supply;
 
