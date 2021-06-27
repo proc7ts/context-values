@@ -1,12 +1,12 @@
 import { CxEntry } from '../entry';
-import { CxEntry$assign } from './entry.assign.impl';
+import { CxEntry$assignOnce } from './entry.assign-once.impl';
 
 /**
  * Creates single-valued context entry definer.
  *
  * Treats the last provided asset as entry value and ignores the rest of them.
  *
- * The entry value is evaluated at most once.
+ * The entry value is evaluated at most once per context.
  *
  * @typeParam TValue - Context value type.
  * @param byDefault - Creates {@link CxEntry.Definition.assignDefault default} entry value. Accepts entry definition
@@ -22,8 +22,8 @@ export function cxSingle<TValue>(
     } = {},
 ): CxEntry.Definer<TValue> {
   return target => ({
-    assign: CxEntry$assign(target, cxSingle$value),
-    assignDefault: byDefault && CxEntry$assign(target, byDefault),
+    assign: CxEntry$assignOnce(target, cxSingle$value),
+    assignDefault: byDefault && CxEntry$assignOnce(target, byDefault),
   });
 }
 
