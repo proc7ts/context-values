@@ -1,4 +1,6 @@
 import { CxEntry } from '../entry';
+import { CxRequest } from '../request';
+import { CxRequestMethod } from '../request-method';
 import { CxValues } from '../values';
 
 /**
@@ -13,7 +15,7 @@ import { CxValues } from '../values';
  * value would be the same regardless the context it is requested from.
  *
  * @param scope - Context entry containing target scope as its value.
- * @param definer - An entry definer that defines the entry in target `scope`. It won't be applied to anything else.
+ * @param definer - An entry definer that defines the entry in target `scope`.
  *
  * @returns New scoped context entry definer.
  */
@@ -30,15 +32,69 @@ export function cxScoped<TValue, TAsset = TValue, TContext extends CxValues = Cx
     }
 
     return {
-      assign(assigner, request) {
+      assign(set: CxEntry.Assigner<TValue>, request: CxRequest<TValue>) {
+        context.get(
+            target.entry,
+            {
+              ...request,
+              by: CxRequestMethod.Assets,
+              set,
+            },
+        );
+      },
+      assignDefault(set: CxEntry.Assigner<TValue>, request: CxRequest<TValue>) {
+        context.get(
+            target.entry,
+            {
+              ...request,
+              by: CxRequestMethod.Defaults,
+              set,
+            },
+        );
+      },
+    };
+  };
+}
 
-        const value = context.get(target.entry, request);
+/**
+ * Creates value definer with scoped default value.
+ *
+ * Unlike {@link cxScoped}, the definer created by this function scopes only {@link CxEntry.Definition.assignDefault
+ * default value}, while the {@link CxEntry.Definition.assign value provided by assets} is always evaluated in the
+ * requested context.
+ *
+ * @param scope - Context entry containing target scope as its value.
+ * @param definer - An entry definer that defines the entry.
+ *
+ * @returns New scoped context entry definer.
+ */
+export function cxDefaultScoped<TValue, TAsset = TValue, TContext extends CxValues = CxValues>(
+    scope: CxEntry<TContext, unknown>,
+    definer: CxEntry.Definer<TValue, TAsset>,
+): CxEntry.Definer<TValue, TAsset> {
+  return target => {
 
-        if (request.or === null && value === null) {
-          return;
-        }
+    const context = target.get(scope);
 
-        assigner(value!);
+    if (context === target.context) {
+      return definer(target);
+    }
+
+    const getDefiner = target.lazy(definer);
+
+    return {
+      assign(assigner: CxEntry.Assigner<TValue>, request: CxRequest<TValue>) {
+        getDefiner().assign?.(assigner, request);
+      },
+      assignDefault(set: CxEntry.Assigner<TValue>, request: CxRequest<TValue>) {
+        context.get(
+            target.entry,
+            {
+              ...request,
+              by: CxRequestMethod.Defaults,
+              set,
+            },
+        );
       },
     };
   };

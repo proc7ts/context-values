@@ -1,6 +1,7 @@
 import { Supply, SupplyPeer } from '@proc7ts/supply';
 import { CxAsset } from './asset';
 import { CxRequest } from './request';
+import { CxRequestMethod } from './request-method';
 import { CxValues } from './values';
 
 /**
@@ -164,7 +165,7 @@ export namespace CxEntry {
   export interface Definition<TValue> {
 
     /**
-     * Assigns context entry value.
+     * Assigns context entry value {@link CxValues.Modifier.provide provided} by its assets.
      *
      * When defined, this method is tried first when accessing the context entry value.
      *
@@ -172,7 +173,7 @@ export namespace CxEntry {
      * is not available, the {@link assignDefault default value} is used instead.
      *
      * @param assigner - Entry value assigner to call if the value is available.
-     * @param request - Context value {@link CxValues.get request}.
+     * @param request - Original context value {@link CxValues.get request}.
      */
     assign?(assigner: Assigner<TValue>, request: CxRequest<TValue>): void;
 
@@ -183,8 +184,9 @@ export namespace CxEntry {
      * {@link CxRequest.or fallback} provided.
      *
      * @param assigner - Entry value assigner to call if the value is available.
+     * @param request - Original context value {@link CxValues.get request}.
      */
-    assignDefault?(assigner: Assigner<TValue>): void;
+    assignDefault?(assigner: Assigner<TValue>, request: CxRequest<TValue>): void;
 
   }
 
@@ -195,7 +197,9 @@ export namespace CxEntry {
    *
    * @typeParam TValue - Context value type.
    * @param value - Assigned entry value.
+   * @param by - Optional request method the value is obtained by. By default, depends on {@link Definition entry
+   * definition} method the assigner passed to.
    */
-  export type Assigner<TValue> = (this: void, value: TValue) => void;
+  export type Assigner<TValue> = (this: void, value: TValue, by?: CxRequestMethod) => void;
 
 }
