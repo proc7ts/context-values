@@ -32,6 +32,8 @@ export namespace CxValues {
     /**
      * Provides assets for context {@link CxAsset.entry entry}.
      *
+     * @typeParam TValue - Context value type.
+     * @typeParam TAsset - Context value asset type.
      * @param asset - Context entry asset.
      *
      * @returns Assets supply. Revokes provided assets once cut off.
