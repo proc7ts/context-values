@@ -1,7 +1,7 @@
 import { CxEntry } from '../entry';
 import { CxValues } from '../values';
 
-export function CxEntry$assign<TValue, TAsset, TContext extends CxValues>(
+export function CxEntry$assignOnce<TValue, TAsset, TContext extends CxValues>(
     target: CxEntry.Target<TValue, TAsset, TContext>,
     getValue: (target: CxEntry.Target<TValue, TAsset, TContext>) => TValue | null | undefined,
 ): (assigner: CxEntry.Assigner<TValue>) => void {

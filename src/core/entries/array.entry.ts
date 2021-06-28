@@ -1,13 +1,13 @@
 import { CxEntry } from '../entry';
 import { CxAsset$emptyArray } from './asset.updater.impl';
-import { CxEntry$assign } from './entry.assign.impl';
+import { CxEntry$assignOnce } from './entry.assign-once.impl';
 
 /**
  * Creates array-valued context entry definer.
  *
  * The entry value is a read-only array of assets.
  *
- * The entry value is evaluated at most once.
+ * The entry value is evaluated at most once per context.
  *
  * @typeParam TElement - Array element type. The same as entry value asset type.
  * @param byDefault - Creates {@link CxEntry.Definition.assignDefault default} entry value. Accepts entry definition
@@ -26,8 +26,8 @@ export function cxArray<TElement>(
     } = {},
 ): CxEntry.Definer<readonly TElement[], TElement> {
   return target => ({
-    assign: CxEntry$assign(target, cxArray$value),
-    assignDefault: CxEntry$assign(target, byDefault),
+    assign: CxEntry$assignOnce(target, cxArray$value),
+    assignDefault: CxEntry$assignOnce(target, byDefault),
   });
 }
 
