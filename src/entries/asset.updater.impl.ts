@@ -1,5 +1,4 @@
-import { CxAsset } from '../core/asset';
-import { CxEntry } from '../core/entry';
+import { CxAsset, CxEntry } from '../core';
 
 export function CxAsset$emptyArray<TValue, TAsset>(_target: CxEntry.Target<TValue, TAsset>): TValue {
   return [] as unknown as TValue;

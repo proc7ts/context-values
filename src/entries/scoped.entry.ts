@@ -1,7 +1,4 @@
-import { CxEntry } from '../core/entry';
-import { CxRequest } from '../core/request';
-import { CxRequestMethod } from '../core/request-method';
-import { CxValues } from '../core/values';
+import { CxEntry, CxRequest, CxRequestMethod, CxValues } from '../core';
 
 /**
  * Creates scoped context value definer.

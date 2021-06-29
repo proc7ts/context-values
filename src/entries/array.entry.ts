@@ -1,4 +1,4 @@
-import { CxEntry } from '../core/entry';
+import { CxEntry } from '../core';
 import { CxAsset$emptyArray } from './asset.updater.impl';
 import { CxEntry$assignOnce } from './entry.assign-once.impl';
 
