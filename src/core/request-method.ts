@@ -14,7 +14,7 @@ export const enum CxRequestMethod {
    * {@link CxEntry.Definition.assignDefault} one. If no value assigned in turn, uses a {@link CxRequest.or fallback}
    * one if specified, or throws {@link CxReferenceError} otherwise.
    *
-   * When passed to {@link CxRequest.get} callback means the assigned value is a {@link CxRequest.or fallback} one.
+   * When passed to {@link CxRequest.set} callback means the assigned value is a {@link CxRequest.or fallback} one.
    */
   Fallback = 0,
 
@@ -24,18 +24,18 @@ export const enum CxRequestMethod {
    * Calls {@link CxEntry.Definition.assignDefault} method. If no value assigned, uses a {@link CxRequest.or fallback}
    * one if specified, or throws {@link CxReferenceError} otherwise.
    *
-   * When passed to {@link CxRequest.get} callback means the value is a {@link CxEntry.Definition.assignDefault default}
+   * When passed to {@link CxRequest.set} callback means the value is a {@link CxEntry.Definition.assignDefault default}
    * one.
    */
   Defaults = -1,
 
   /**
-   * Requests the value {@link CxValues.Modifier.provide provided} by context entry assets.
+   * Requests the value {@link CxModifier.provide provided} by context entry assets.
    *
    * Calls {@link CxEntry.Definition.assign} method. If no value assigned, uses a {@link CxRequest.or fallback} one
    * if specified, or throws {@link CxReferenceError} otherwise.
    *
-   * When passed to {@link CxRequest.get} callback means the value is {@link CxEntry.Definition.assign provided} by
+   * When passed to {@link CxRequest.set} callback means the value is {@link CxEntry.Definition.assign provided} by
    * entry assets.
    */
   Assets = 1,

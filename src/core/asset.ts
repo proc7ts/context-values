@@ -35,7 +35,7 @@ export interface CxAsset<TValue, TAsset = TValue, TContext extends CxValues = Cx
   /**
    * Sets up asset.
    *
-   * This method is called immediately when asset {@link CxValues.Modifier.provide provided}.
+   * This method is called immediately when asset {@link CxModifier.provide provided}.
    *
    * It can be used e.g. to provide additional assets. Additional assets will be revoked when the asset itself revoked.
    *
@@ -48,7 +48,7 @@ export interface CxAsset<TValue, TAsset = TValue, TContext extends CxValues = Cx
    *
    * Removes the asset once cut off.
    *
-   * Returned from {@link CxValues.Modifier.provide} when specified. New one created when omitted.
+   * Returned from {@link CxModifier.provide} when specified. New one created when omitted.
    */
   readonly supply?: Supply;
 
@@ -217,7 +217,7 @@ export namespace CxAsset {
     readonly asset: TAsset;
 
     /**
-     * A rank of the asset modifier it is {@link CxValues.Modifier.provide provided} for.
+     * A rank of the asset modifier it is {@link CxModifier.provide provided} for.
      *
      * `0` refers to current context modifier, `1` - to its predecessor, etc.
      */
