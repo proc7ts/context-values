@@ -1,5 +1,5 @@
-import { CxEntry } from '../entry';
-import { CxValues } from '../values';
+import { CxEntry } from '../core/entry';
+import { CxValues } from '../core/values';
 
 export function CxEntry$assignOnce<TValue, TAsset, TContext extends CxValues>(
     target: CxEntry.Target<TValue, TAsset, TContext>,

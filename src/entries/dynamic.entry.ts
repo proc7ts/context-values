@@ -1,5 +1,5 @@
-import { CxAsset } from '../asset';
-import { CxEntry } from '../entry';
+import { CxAsset } from '../core/asset';
+import { CxEntry } from '../core/entry';
 import { CxAsset$emptyArray, CxAsset$Updater$createDefault } from './asset.updater.impl';
 
 /**

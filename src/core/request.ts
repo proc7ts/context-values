@@ -3,7 +3,7 @@ import { CxRequestMethod } from './request-method';
 /**
  * Context value request.
  *
- * This can be passed to {@link CxValues.get} method as second parameter.
+ * This can be passed to {@link CxAccessor.get} method as second parameter.
  *
  * @typeParam TValue - Requested context value type.
  */
@@ -27,8 +27,8 @@ export interface CxRequest<TValue> {
   /**
    * Assigns the value.
    *
-   * When specified, this method is called right before returning the value from {@link CxValues.get} call. It won't be
-   * called if there is no value to return.
+   * When specified, this method is called right before returning the value from {@link CxAccessor.get} call. It won't
+   * be called if there is no value to return.
    *
    * @param value - The {@link CxEntry.Definition.assign value} or {@link CxEntry.Definition.assignDefault default
    * value} assigned to entry, or a {@link or fallback} one.
@@ -43,7 +43,7 @@ export namespace CxRequest {
   /**
    * Context value request with fallback specified.
    *
-   * Can be passed to {@link CxValues.get} method as second parameter.
+   * Can be passed to {@link CxAccessor.get} method as second parameter.
    *
    * @typeParam TValue - Requested context value type.
    */
@@ -61,7 +61,7 @@ export namespace CxRequest {
   /**
    * Context value request without fallback specified.
    *
-   * Can be passed to {@link CxValues.get} method as second parameter.
+   * Can be passed to {@link CxAccessor.get} method as second parameter.
    *
    * @typeParam TValue - Requested context value type.
    */

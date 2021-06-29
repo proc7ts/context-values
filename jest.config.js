@@ -3,8 +3,9 @@ export default {
   collectCoverage: true,
   collectCoverageFrom: [
     'src/**/*.ts',
-    '!src/core/**/*.ts',
     '!src/context-ref.ts',
+    '!src/core/**/*.ts',
+    '!src/entries/**/*.ts',
     '!src/**/*.spec.ts',
     '!src/**/index.ts',
     '!**/node_modules/**',

@@ -1,5 +1,7 @@
 import { Supply, SupplyPeer } from '@proc7ts/supply';
+import { CxAccessor } from './accessor';
 import { CxAsset } from './asset';
+import { CxModifier } from './modifier';
 import { CxRequest } from './request';
 import { CxRequestMethod } from './request-method';
 import { CxValues } from './values';
@@ -59,7 +61,7 @@ export namespace CxEntry {
       TValue,
       TAsset = TValue,
       TContext extends CxValues = CxValues
-      > extends CxValues.Accessor, CxValues.Modifier<TContext>, SupplyPeer {
+      > extends CxAccessor, CxModifier<TContext>, SupplyPeer {
 
     /**
      * Context entry to define.
@@ -71,7 +73,7 @@ export namespace CxEntry {
      *
      * The assets won't be provided any more when cut off. If applicable, disables the entry value.
      *
-     * This entry depends on {@link CxSupply context values supply}.
+     * This entry depends on context values supply.
      */
     readonly supply: Supply;
 
@@ -165,7 +167,7 @@ export namespace CxEntry {
   export interface Definition<TValue> {
 
     /**
-     * Assigns context entry value {@link CxValues.Modifier.provide provided} by its assets.
+     * Assigns context entry value {@link CxModifier.provide provided} by its assets.
      *
      * When defined, this method is tried first when accessing the context entry value.
      *
@@ -173,7 +175,7 @@ export namespace CxEntry {
      * is not available, the {@link assignDefault default value} is used instead.
      *
      * @param assigner - Entry value assigner to call if the value is available.
-     * @param request - Original context value {@link CxValues.get request}.
+     * @param request - Original context value {@link CxAccessor.get request}.
      */
     assign?(assigner: Assigner<TValue>, request: CxRequest<TValue>): void;
 
@@ -184,7 +186,7 @@ export namespace CxEntry {
      * {@link CxRequest.or fallback} provided.
      *
      * @param assigner - Entry value assigner to call if the value is available.
-     * @param request - Original context value {@link CxValues.get request}.
+     * @param request - Original context value {@link CxAccessor.get request}.
      */
     assignDefault?(assigner: Assigner<TValue>, request: CxRequest<TValue>): void;
 

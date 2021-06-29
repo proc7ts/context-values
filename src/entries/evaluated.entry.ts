@@ -1,4 +1,4 @@
-import { CxEntry } from '../entry';
+import { CxEntry } from '../core/entry';
 import { CxEntry$assignOnce } from './entry.assign-once.impl';
 
 /**
