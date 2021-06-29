@@ -73,7 +73,7 @@ export namespace CxEntry {
      *
      * The assets won't be provided any more when cut off. If applicable, disables the entry value.
      *
-     * This entry depends on {@link CxSupply context values supply}.
+     * This entry depends on context values supply.
      */
     readonly supply: Supply;
 
