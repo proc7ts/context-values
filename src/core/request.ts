@@ -27,8 +27,8 @@ export interface CxRequest<TValue> {
   /**
    * Assigns the value.
    *
-   * When specified, this method is called right before returning the value from {@link CxAccessor.get} call. It won't be
-   * called if there is no value to return.
+   * When specified, this method is called right before returning the value from {@link CxAccessor.get} call. It won't
+   * be called if there is no value to return.
    *
    * @param value - The {@link CxEntry.Definition.assign value} or {@link CxEntry.Definition.assignDefault default
    * value} assigned to entry, or a {@link or fallback} one.
