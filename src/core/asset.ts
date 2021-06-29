@@ -162,9 +162,9 @@ export namespace CxAsset {
   export interface Provided<TAsset> {
 
     /**
-     * A rank of the asset modifier it is {@link CxValues.Modifier.provide provided} for.
+     * A rank of context peer this asset is provided by.
      *
-     * `0` refers to current context modifier, `1` - to its predecessor, etc.
+     * `0` refers to current context builder, `1` - to the peer it derives, etc.
      */
     readonly rank: number;
 
