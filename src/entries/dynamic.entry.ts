@@ -1,5 +1,5 @@
-import { CxAsset, CxEntry } from '../core';
-import { CxAsset$emptyArray, CxAsset$Updater$createDefault } from './asset.updater.impl';
+import { CxEntry, cxUnavailable } from '../core';
+import { cxRecent$access } from './recent.impl';
 
 /**
  * Creates potentially empty array-valued context entry definer that treats all {@link CxEntry.Target.trackAssetList
@@ -20,7 +20,8 @@ export function cxDynamic<TElement>(): CxEntry.Definer<readonly TElement[], TEle
  * The entry value updated each time an asset provided or revoked.
  *
  * @typeParam TElement - Array element type. The same as entry value asset type.
- * @param byDefault - Creates entry value used when there are no assets.
+ * @param byDefault - Creates entry value used when there are no assets. The default value evaluated at most once per
+ * context.
  *
  * @returns New context entry definer.
  */
@@ -29,7 +30,7 @@ export function cxDynamic<TElement>(
     {
       byDefault,
     }: {
-      byDefault(this: void, target: CxEntry.Target<readonly TElement[], TElement>): readonly TElement[];
+      byDefault?(this: void, target: CxEntry.Target<readonly TElement[], TElement>): readonly TElement[];
     }
 ): CxEntry.Definer<readonly TElement[], TElement>;
 
@@ -40,61 +41,113 @@ export function cxDynamic<TElement>(
  *
  * @typeParam TValue - Context value type.
  * @typeParam TAsset - Context value asset type.
- * @param createUpdater - Creates the entry value updater. Accepts entry definition target as the only parameter.
- * This method is called at most once per context. The returned updater is then notified on assets change.
+ * @param create - Creates entry value based on assets array.
+ * @param byDefault - Creates entry value used when there are no assets. The default value evaluated at most once per
+ * context.
  *
  * @returns New context entry definer.
  */
-export function cxDynamic<TValue, TAsset = TValue>(
+export function cxDynamic<TValue, TAsset>(
     {
-      createUpdater,
+      create,
+      byDefault,
     }: {
-      createUpdater(this: void, target: CxEntry.Target<TValue, TAsset>): CxAsset.Updater<TValue, TAsset[]>;
+      create(this: void, assets: TAsset[], target: CxEntry.Target<TValue, TAsset>): TValue;
+      byDefault(this: void, target: CxEntry.Target<TValue, TAsset>): TValue;
     },
 ): CxEntry.Definer<TValue, TAsset>;
 
-export function cxDynamic<TValue, TAsset>(
+/**
+ * Creates single-valued context entry definer with internal state based on {@link CxEntry.Target.trackAssetList entry
+ * asset list}.
+ *
+ * The internal state updated each time an asset provided or revoked.
+ *
+ * @typeParam TValue - Context value type.
+ * @typeParam TAsset - Context value asset type.
+ * @typeParam TState - Internal state type.
+ * @param create - Creates internal entry state based on assets array.
+ * @param byDefault - Creates default internal entry state when there are no assets. The default state evaluated at most
+ * once per context.
+ * @param access - Converts internal state accessor to entity value accessor. The converter created at most once per
+ * context.
+ *
+ * @returns New context entry definer.
+ */
+export function cxDynamic<TValue, TAsset, TState>(
     {
-        byDefault = CxAsset$emptyArray,
-        createUpdater = CxAsset$Updater$createDefault<TValue, TAsset, TAsset[]>(byDefault),
+      create,
+      byDefault,
+      access,
     }: {
-      byDefault?(target: CxEntry.Target<TValue, TAsset>): TValue;
-      createUpdater?(target: CxEntry.Target<TValue, TAsset>): CxAsset.Updater<TValue, TAsset[]>;
+      create(this: void, assets: TAsset[], target: CxEntry.Target<TValue, TAsset>): TState;
+      byDefault(this: void, target: CxEntry.Target<TValue, TAsset>): TState;
+      access(this: void, get: (this: void) => TState, target: CxEntry.Target<TValue, TAsset>): (this: void) => TValue;
+    },
+): CxEntry.Definer<TValue, TAsset>;
+
+export function cxDynamic<TValue, TAsset, TState>(
+    {
+      create = cxDynamic$create,
+      byDefault,
+      access = cxRecent$access,
+    }: {
+      create?(this: void, assets: TAsset[], target: CxEntry.Target<TValue, TAsset>): TState;
+      byDefault?(this: void, target: CxEntry.Target<TValue, TAsset>): TState;
+      access?(this: void, get: (this: void) => TState, target: CxEntry.Target<TValue, TAsset>): (this: void) => TValue;
     } = {},
 ): CxEntry.Definer<TValue, TAsset> {
   return target => {
 
-    const getUpdater = target.lazy(createUpdater);
-    let getValue = (): TValue => {
+    const getDefault = byDefault
+        ? target.lazy(byDefault)
+        : cxDynamic$byDefault;
+    let getAccessor = target.lazy(target => {
 
-      const updater = getUpdater();
+      let getState: () => TState;
 
-      getValue = () => updater.get();
-      target.trackAssetList(assets => assets.length
-          ? updater.set(cxDynamic$assets(assets))
-          : updater.reset());
+      target.trackAssetList(list => {
 
-      return getValue();
-    };
+        const assets: TAsset[] = [];
+
+        for (const provided of list) {
+          provided.eachAsset(asset => {
+            assets.push(asset);
+          });
+        }
+
+        if (assets.length) {
+
+          const state = create(assets, target);
+
+          getState = () => state;
+        } else {
+          getState = getDefault;
+        }
+      });
+
+      return access(() => getState(), target);
+    });
+
+    target.supply.whenOff(reason => {
+      getAccessor = cxUnavailable(target.entry, undefined, reason);
+    });
 
     return {
       assign(assigner) {
-        assigner(getValue());
+        assigner(getAccessor()());
       },
     };
   };
 }
 
-function cxDynamic$assets<TAsset>(assets: CxAsset.Provided<TAsset>[]): TAsset[] {
+function cxDynamic$create<TValue, TAsset, TState>(
+    assets: TAsset[],
+    _target: CxEntry.Target<TValue, TAsset>,
+): TState {
+  return assets as unknown as TState;
+}
 
-  const result: TAsset[] = [];
-  const addAsset = (asset: TAsset): void => {
-    result.push(asset);
-  };
-
-  for (const provided of assets) {
-    provided.eachAsset(addAsset);
-  }
-
-  return result;
+function cxDynamic$byDefault<TState>(): TState {
+  return [] as unknown as TState;
 }

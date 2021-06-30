@@ -1,5 +1,4 @@
 import { CxEntry } from '../core';
-import { CxAsset$emptyArray } from './asset.updater.impl';
 import { CxEntry$assignOnce } from './entry.assign-once.impl';
 
 /**
@@ -17,7 +16,7 @@ import { CxEntry$assignOnce } from './entry.assign-once.impl';
  */
 export function cxArray<TElement>(
     {
-      byDefault = CxAsset$emptyArray,
+      byDefault = cxArray$byDefault,
     }: {
       byDefault?(
           this: void,
@@ -29,6 +28,10 @@ export function cxArray<TElement>(
     assign: CxEntry$assignOnce(target, cxArray$value),
     assignDefault: CxEntry$assignOnce(target, byDefault),
   });
+}
+
+function cxArray$byDefault<TValue, TAsset>(_target: CxEntry.Target<TValue, TAsset>): TValue {
+  return [] as unknown as TValue;
 }
 
 function cxArray$value<TElement>(target: CxEntry.Target<readonly TElement[], TElement>): readonly TElement[] | null {
