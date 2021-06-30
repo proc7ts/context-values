@@ -22,7 +22,7 @@ export class CxReferenceError extends ReferenceError {
    * @param message - Arbitrary error message.
    * @param reason - Original error reason.
    */
-  constructor(entry: CxEntry<any>, message = `The ${String(entry)} has no value`, reason?: unknown) {
+  constructor(entry: CxEntry<any>, message = `The ${entry} has no value`, reason?: unknown) {
     super(message);
     this.entry = entry;
     this.reason = reason;
