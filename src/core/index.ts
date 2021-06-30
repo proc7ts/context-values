@@ -6,4 +6,5 @@ export * from './modifier';
 export * from './reference-error';
 export * from './request';
 export * from './request-method';
+export * from './unavailable';
 export * from './values';
