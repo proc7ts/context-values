@@ -4,7 +4,6 @@ export default {
   collectCoverageFrom: [
     'src/**/*.ts',
     '!src/context-ref.ts',
-    '!src/core/**/*.ts',
     '!src/entries/**/*.ts',
     '!src/**/*.spec.ts',
     '!src/**/index.ts',
