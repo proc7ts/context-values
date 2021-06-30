@@ -27,6 +27,8 @@ export interface CxEntry<TValue, TAsset = TValue> {
    */
   perContext(target: CxEntry.Target<TValue, TAsset>): CxEntry.Definition<TValue>;
 
+  toString?(): string;
+
 }
 
 export namespace CxEntry {
