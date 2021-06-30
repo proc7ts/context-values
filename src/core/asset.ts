@@ -89,37 +89,6 @@ export namespace CxAsset {
   export type Collector<TAsset> = (this: void, asset: TAsset | Placeholder<TAsset>) => void | boolean;
 
   /**
-   * An updater of context entry value with asset.
-   *
-   * It is notified on every asset change and responsible for entry value evaluation based on this asset.
-   *
-   * @typeParam TValue - Context value type.
-   * @typeParam TAsset - Context value asset type.
-   */
-  export interface Updater<TValue, TAsset = TValue> {
-
-    /**
-     * Evaluates context value.
-     *
-     * @returns Context value.
-     */
-    get(): TValue;
-
-    /**
-     * Updates context value based on asset.
-     *
-     * @param asset - Updated asset.
-     */
-    set(asset: TAsset): void;
-
-    /**
-     * Resets context value when asset is no longer available.
-     */
-    reset(): void;
-
-  }
-
-  /**
    * A signature of {@link CxEntry.Target.eachAsset assets iteration} callback.
    *
    * @typeParam TAsset - Context value asset type.

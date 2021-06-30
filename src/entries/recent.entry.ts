@@ -1,4 +1,5 @@
 import { CxEntry, cxUnavailable } from '../core';
+import { cxRecent$access } from './recent.impl';
 
 /**
  * Creates single-valued context entry definer that treats the {@link CxEntry.Target.trackRecentAsset most recent asset}
@@ -60,15 +61,16 @@ export function cxRecent<TValue, TAsset>(
  * Creates single-valued context entry definer with internal state based on {@link CxEntry.Target.trackRecentAsset most
  * recent asset}.
  *
- * The entry value updated each time the {@link CxEntry.Target.trackRecentAsset most recent asset} changes.
+ * The internal state updated each time the {@link CxEntry.Target.trackRecentAsset most recent asset} changes.
  *
  * @typeParam TValue - Context value type.
  * @typeParam TAsset - Context value asset type.
  * @typeParam TState - Internal state type.
- * @param create - Creates internal entity state by recent asset.
- * @param byDefault - Creates default internal entity state when there are no assets. The default state evaluated
+ * @param create - Creates internal entry state by recent asset.
+ * @param byDefault - Creates default internal entry state when there are no assets. The default state evaluated
  * at most once per context. When omitted, the default state (and thus the value) would be unavailable.
- * @param access - Converts internal state accessor to entity value accessor. This happens at most once per context.
+ * @param access - Converts internal state accessor to entity value accessor. The converter created at most once per
+ * context.
  *
  * @returns New context entry definer.
  */
@@ -135,11 +137,4 @@ function cxRecent$create<TValue, TAsset, TState>(
     _target: CxEntry.Target<TValue, TAsset>,
 ): TState {
   return recent as unknown as TState;
-}
-
-function cxRecent$access<TValue, TAsset, TState>(
-    get: (this: void) => TState,
-    _target: CxEntry.Target<TValue, TAsset>,
-): (this: void) => TValue {
-  return get as unknown as () => TValue;
 }
