@@ -2,6 +2,18 @@ import { CxEntry, cxUnavailable } from '../core';
 
 /**
  * Creates single-valued context entry definer that treats the {@link CxEntry.Target.trackRecentAsset most recent asset}
+ * as entry value, or becomes unavailable when there is no one.
+ *
+ * The entry value updated each time the {@link CxEntry.Target.trackRecentAsset most recent asset} changes.
+ *
+ * @typeParam TValue - Context value asset type.
+ *
+ * @returns New context entry definer.
+ */
+export function cxRecent<TValue>(): CxEntry.Definer<TValue>;
+
+/**
+ * Creates single-valued context entry definer that treats the {@link CxEntry.Target.trackRecentAsset most recent asset}
  * as entry value.
  *
  * The entry value updated each time the {@link CxEntry.Target.trackRecentAsset most recent asset} changes.
@@ -13,6 +25,7 @@ import { CxEntry, cxUnavailable } from '../core';
  * @returns New context entry definer.
  */
 export function cxRecent<TValue>(
+    // eslint-disable-next-line @typescript-eslint/unified-signatures
     {
       byDefault,
     }: {
@@ -44,7 +57,7 @@ export function cxRecent<TValue, TAsset>(
 ): CxEntry.Definer<TValue, TAsset>;
 
 /**
- * Creates single-valued context entry definer with internal state base on {@link CxEntry.Target.trackRecentAsset most
+ * Creates single-valued context entry definer with internal state based on {@link CxEntry.Target.trackRecentAsset most
  * recent asset}.
  *
  * The entry value updated each time the {@link CxEntry.Target.trackRecentAsset most recent asset} changes.
@@ -55,8 +68,7 @@ export function cxRecent<TValue, TAsset>(
  * @param create - Creates internal entity state by recent asset.
  * @param byDefault - Creates default internal entity state when there are no assets. The default state evaluated
  * at most once per context. When omitted, the default state (and thus the value) would be unavailable.
- * @param delegate - Creates entity value based on entity state accessor. Such value is created at most once per
- * context. It is expected to delegate its functionality to internal state. E.g. when the value is a function.
+ * @param access - Converts internal state accessor to entity value accessor. This happens at most once per context.
  *
  * @returns New context entry definer.
  */
@@ -64,11 +76,11 @@ export function cxRecent<TValue, TAsset, TState>(
     {
       create,
       byDefault,
-      delegate,
+      access,
     }: {
       create(this: void, recent: TAsset, target: CxEntry.Target<TValue, TAsset>): TState;
       byDefault?(this: void, target: CxEntry.Target<TValue, TAsset>): TState;
-      delegate(this: void, get: (this: void) => TState, target: CxEntry.Target<TValue, TAsset>): TValue;
+      access(this: void, get: (this: void) => TState, target: CxEntry.Target<TValue, TAsset>): (this: void) => TValue;
     },
 ): CxEntry.Definer<TValue, TAsset>;
 
@@ -76,34 +88,43 @@ export function cxRecent<TValue, TAsset, TState>(
     {
       create = cxRecent$create,
       byDefault,
-      delegate = cxRecent$delegate,
+      access = cxRecent$access,
     }: {
       create?(this: void, recent: TAsset, target: CxEntry.Target<TValue, TAsset>): TState;
       byDefault?(this: void, target: CxEntry.Target<TValue, TAsset>): TState;
-      delegate?(this: void, get: (this: void) => TState, target: CxEntry.Target<TValue, TAsset>): TValue;
-    },
+      access?(this: void, get: (this: void) => TState, target: CxEntry.Target<TValue, TAsset>): (this: void) => TValue;
+    } = {},
 ): CxEntry.Definer<TValue, TAsset> {
   return target => {
 
     const getDefault = byDefault
         ? target.lazy(byDefault)
         : cxUnavailable(target.entry);
-    let getState: () => TState;
-    let getValue = target.lazy(target => {
+    let getAccessor = target.lazy(target => {
+
+      let getState: () => TState;
+
       target.trackRecentAsset(evaluated => {
-        getState = evaluated
-            ? () => create(evaluated.asset, target)
-            : getDefault;
-      }).whenOff(reason => {
-        getValue = cxUnavailable(target.entry, undefined, reason);
+        if (evaluated) {
+
+          const state = create(evaluated.asset, target);
+
+          getState = () => state;
+        } else {
+          getState = getDefault;
+        }
       });
 
-      return delegate(() => getState(), target);
+      return access(() => getState(), target);
+    });
+
+    target.supply.whenOff(reason => {
+      getAccessor = cxUnavailable(target.entry, undefined, reason);
     });
 
     return {
       assign(assigner) {
-        assigner(getValue());
+        assigner(getAccessor()());
       },
     };
   };
@@ -116,9 +137,9 @@ function cxRecent$create<TValue, TAsset, TState>(
   return recent as unknown as TState;
 }
 
-function cxRecent$delegate<TValue, TAsset, TState>(
+function cxRecent$access<TValue, TAsset, TState>(
     get: (this: void) => TState,
     _target: CxEntry.Target<TValue, TAsset>,
-): TValue {
-  return get() as unknown as TValue;
+): (this: void) => TValue {
+  return get as unknown as () => TValue;
 }
