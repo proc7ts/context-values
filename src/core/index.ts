@@ -1,4 +1,3 @@
-export * from './accessor';
 export * from './asset';
 export * from './entry';
 export * from './getter';

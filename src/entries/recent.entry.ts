@@ -102,10 +102,8 @@ export function cxRecent<TValue, TAsset, TState>(
     const getDefault = byDefault
         ? target.lazy(byDefault)
         : cxUnavailable(target.entry);
+    let getState: () => TState;
     let getAccessor = target.lazy(target => {
-
-      let getState: () => TState;
-
       target.trackRecentAsset(evaluated => {
         if (evaluated) {
 
@@ -121,7 +119,7 @@ export function cxRecent<TValue, TAsset, TState>(
     });
 
     target.supply.whenOff(reason => {
-      getAccessor = cxUnavailable(target.entry, undefined, reason);
+      getState = getAccessor = cxUnavailable(target.entry, undefined, reason);
     });
 
     return {
