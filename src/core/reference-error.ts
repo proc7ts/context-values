@@ -23,9 +23,13 @@ export class CxReferenceError extends ReferenceError {
    * @param reason - Original error reason.
    */
   constructor(entry: CxEntry<any>, message = `The ${entry} has no value`, reason?: unknown) {
-    super(message);
+    super(reason === undefined ? message : `${message}. ${reason}`);
     this.entry = entry;
     this.reason = reason;
+  }
+
+  override get name(): string {
+    return 'CxReferenceError';
   }
 
 }
