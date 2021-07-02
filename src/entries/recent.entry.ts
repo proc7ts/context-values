@@ -69,8 +69,7 @@ export function cxRecent<TValue, TAsset>(
  * @param create - Creates internal entry state by recent asset.
  * @param byDefault - Creates default internal entry state when there are no assets. The default state evaluated
  * at most once per context. When omitted, the default state (and thus the value) would be unavailable.
- * @param access - Converts internal state accessor to entity value accessor. The converter created at most once per
- * context.
+ * @param access - Converts internal state accessor to entity value accessor.
  *
  * @returns New context entry definer.
  */
