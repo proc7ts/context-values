@@ -1,4 +1,4 @@
-import { CxEntry, cxUnavailable } from '../core';
+import { CxEntry, CxRequestMethod, cxUnavailable } from '../core';
 import { cxRecent$access } from './recent.impl';
 
 /**
@@ -43,7 +43,7 @@ export function cxDynamic<TElement>(
  * @typeParam TAsset - Context value asset type.
  * @param create - Creates entry value based on assets array.
  * @param byDefault - Creates entry value used when there are no assets. The default value evaluated at most once per
- * context.
+ * context. When omitted, the default value would be unavailable.
  *
  * @returns New context entry definer.
  */
@@ -53,7 +53,7 @@ export function cxDynamic<TValue, TAsset>(
       byDefault,
     }: {
       create(this: void, assets: TAsset[], target: CxEntry.Target<TValue, TAsset>): TValue;
-      byDefault(this: void, target: CxEntry.Target<TValue, TAsset>): TValue;
+      byDefault?(this: void, target: CxEntry.Target<TValue, TAsset>): TValue;
     },
 ): CxEntry.Definer<TValue, TAsset>;
 
@@ -68,7 +68,7 @@ export function cxDynamic<TValue, TAsset>(
  * @typeParam TState - Internal state type.
  * @param create - Creates internal entry state based on assets array.
  * @param byDefault - Creates default internal entry state when there are no assets. The default state evaluated at most
- * once per context.
+ * once per context.  When omitted, the default value would be unavailable.
  * @param access - Converts internal state accessor to entity value accessor. The converter created at most once per
  * context.
  *
@@ -81,14 +81,14 @@ export function cxDynamic<TValue, TAsset, TState>(
       access,
     }: {
       create(this: void, assets: TAsset[], target: CxEntry.Target<TValue, TAsset>): TState;
-      byDefault(this: void, target: CxEntry.Target<TValue, TAsset>): TState;
+      byDefault?(this: void, target: CxEntry.Target<TValue, TAsset>): TState;
       access(this: void, get: (this: void) => TState, target: CxEntry.Target<TValue, TAsset>): (this: void) => TValue;
     },
 ): CxEntry.Definer<TValue, TAsset>;
 
 export function cxDynamic<TValue, TAsset, TState>(
     {
-      create = cxDynamic$create,
+      create,
       byDefault,
       access = cxRecent$access,
     }: {
@@ -99,11 +99,22 @@ export function cxDynamic<TValue, TAsset, TState>(
 ): CxEntry.Definer<TValue, TAsset> {
   return target => {
 
-    const getDefault = byDefault
+    const hasDefault = byDefault || !create;
+    let getDefaultState = byDefault
         ? target.lazy(byDefault)
-        : cxDynamic$byDefault;
+        : create
+            ? cxUnavailable(target.entry)
+            : cxDynamic$byDefault;
+
+    create ||= cxDynamic$create;
+
     let getState: () => TState;
-    let getAccessor = target.lazy(target => {
+    let getDefaultValue: (this: void) => TValue = access(() => getDefaultState(), target);
+    let getValue: () => TValue = access(() => getState(), target);
+    let getAssign: () => (assigner: CxEntry.Assigner<TValue>, isDefault: 0 | 1) => void = target.lazy(target => {
+
+      let method!: CxRequestMethod;
+
       target.trackAssetList(list => {
 
         const assets: TAsset[] = [];
@@ -116,24 +127,39 @@ export function cxDynamic<TValue, TAsset, TState>(
 
         if (assets.length) {
 
-          const state = create(assets, target);
+          const state = create!(assets, target);
 
+          method = CxRequestMethod.Assets;
           getState = () => state;
         } else {
-          getState = getDefault;
+          method = CxRequestMethod.Defaults;
+          getState = getDefaultState;
         }
       });
 
-      return access(() => getState(), target);
+      return hasDefault
+          ? (assigner, isDefault) => isDefault
+              ? assigner(getDefaultValue())
+              : assigner(getValue(), method)
+          : (assigner, isDefault) => !isDefault
+              && method > 0
+              && assigner(getValue(), method);
     });
 
     target.supply.whenOff(reason => {
-      getState = getAccessor = cxUnavailable(target.entry, undefined, reason);
+      getDefaultState = getState = getDefaultValue = getValue = getAssign = cxUnavailable(
+          target.entry,
+          undefined,
+          reason,
+      );
     });
 
     return {
       assign(assigner) {
-        assigner(getAccessor()());
+        getAssign()(assigner, 0);
+      },
+      assignDefault(assigner) {
+        getAssign()(assigner, 1);
       },
     };
   };
