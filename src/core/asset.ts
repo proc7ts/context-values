@@ -25,7 +25,7 @@ export interface CxAsset<TValue, TAsset = TValue, TContext extends CxValues = Cx
    * to place.
    *
    * @param target - Context entry definition target.
-   * @param collector - Asset collector.
+   * @param collector - Assets collector to place assets to.
    */
   placeAsset(
       target: CxEntry.Target<TValue, TAsset, TContext>,
@@ -57,36 +57,16 @@ export interface CxAsset<TValue, TAsset = TValue, TContext extends CxValues = Cx
 export namespace CxAsset {
 
   /**
-   * Context value asset placeholder.
-   *
-   * A placeholder could be {@link CxAsset.placeAsset placed} instead of the value asset. In this case it will be used
-   * to evaluate and place assets instead.
-   *
-   * @typeParam TAsset - Context value asset type.
-   */
-  export interface Placeholder<TAsset> {
-
-    /**
-     * Evaluates value asset or multiple assets and places them to `target` context entry.
-     *
-     * @param target - Context entry definition target.
-     * @param callback - Asset placement callback.
-     */
-    placeAsset(target: CxEntry.Target<unknown, TAsset>, callback: Callback<TAsset>): void;
-
-  }
-
-  /**
-   * A signature of context value asset collector.
+   * A signature of context value assets collector.
    *
    * The {@link CxAsset.placeAsset} method passes evaluated assets to it.
    *
    * @typeParam TAsset - Context value asset type.
-   * @param asset - Either asset instance to collect, or its resolver.
+   * @param asset - Asset to collect.
    *
    * @returns `false` to stop collecting, or `true`/`void` to continue.
    */
-  export type Collector<TAsset> = (this: void, asset: TAsset | Placeholder<TAsset>) => void | boolean;
+  export type Collector<TAsset> = (this: void, asset: TAsset) => void | boolean;
 
   /**
    * A signature of {@link CxEntry.Target.eachAsset assets iteration} callback.
