@@ -1,4 +1,4 @@
-import { CxEntry, cxUnavailable } from '../core';
+import { CxEntry, CxRequestMethod, cxUnavailable } from '../core';
 import { cxRecent$access } from './recent.impl';
 
 /**
@@ -99,32 +99,52 @@ export function cxRecent<TValue, TAsset, TState>(
 ): CxEntry.Definer<TValue, TAsset> {
   return target => {
 
-    const getDefault = byDefault
+    let getDefaultState = byDefault
         ? target.lazy(byDefault)
         : cxUnavailable(target.entry);
     let getState: () => TState;
-    let getAccessor = target.lazy(target => {
+    let getDefaultValue: (this: void) => TValue = access(() => getDefaultState(), target);
+    let getValue: () => TValue = access(() => getState(), target);
+    let getAssign: () => (assigner: CxEntry.Assigner<TValue>, isDefault: 0 | 1) => void = target.lazy(target => {
+
+      let method!: CxRequestMethod;
+
       target.trackRecentAsset(evaluated => {
         if (evaluated) {
 
           const state = create(evaluated.asset, target);
 
+          method = CxRequestMethod.Assets;
           getState = () => state;
         } else {
-          getState = getDefault;
+          method = CxRequestMethod.Defaults;
+          getState = getDefaultState;
         }
       });
 
-      return access(() => getState(), target);
+      return byDefault
+          ? (assigner, isDefault) => isDefault
+              ? assigner(getDefaultValue())
+              : assigner(getValue(), method)
+          : (assigner, isDefault) => !isDefault
+              && method > 0
+              && assigner(getValue(), method);
     });
 
     target.supply.whenOff(reason => {
-      getState = getAccessor = cxUnavailable(target.entry, undefined, reason);
+      getDefaultState = getState = getDefaultValue = getValue = getAssign = cxUnavailable(
+          target.entry,
+          undefined,
+          reason,
+      );
     });
 
     return {
       assign(assigner) {
-        assigner(getAccessor()());
+        getAssign()(assigner, 0);
+      },
+      assignDefault(assigner) {
+        getAssign()(assigner, 1);
       },
     };
   };
