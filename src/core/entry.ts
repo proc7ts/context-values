@@ -115,7 +115,7 @@ export namespace CxEntry {
      *
      * @returns Assets supply. Stops tracking once cut off.
      */
-    trackAssets(receiver: CxAsset.Receiver<TAsset>): Supply;
+    trackAssets(receiver: CxAsset.Receiver<TAsset>, { supply }?: { readonly supply: Supply }): Supply;
 
     /**
      * Reads the most recent entry asset and starts its tracking.
@@ -176,7 +176,7 @@ export namespace CxEntry {
      * is not available, the {@link assignDefault default value} is used instead.
      *
      * @param assigner - Entry value assigner to call if the value is available.
-     * @param request - Original context value {@link CxAccessor.get request}.
+     * @param request - Original context value {@link CxValues.get request}.
      */
     assign?(assigner: Assigner<TValue>, request: CxRequest<TValue>): void;
 
@@ -187,7 +187,7 @@ export namespace CxEntry {
      * {@link CxRequest.or fallback} provided.
      *
      * @param assigner - Entry value assigner to call if the value is available.
-     * @param request - Original context value {@link CxAccessor.get request}.
+     * @param request - Original context value {@link CxValues.get request}.
      */
     assignDefault?(assigner: Assigner<TValue>, request: CxRequest<TValue>): void;
 
