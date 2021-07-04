@@ -3,6 +3,7 @@ import { CxAsset } from './asset';
 import { CxModifier } from './modifier';
 import { CxRequest } from './request';
 import { CxRequestMethod } from './request-method';
+import { CxTracking } from './tracking';
 import { CxValues } from './values';
 
 /**
@@ -112,10 +113,11 @@ export namespace CxEntry {
      * asset supply cut off.
      *
      * @param receiver - Assets receiver.
+     * @param tracking - Tacking options.
      *
      * @returns Assets supply. Stops tracking once cut off.
      */
-    trackAssets(receiver: CxAsset.Receiver<TAsset>, { supply }?: { readonly supply: Supply }): Supply;
+    trackAssets(receiver: CxAsset.Receiver<TAsset>, tracking?: CxTracking): Supply;
 
     /**
      * Reads the most recent entry asset and starts its tracking.
@@ -126,10 +128,11 @@ export namespace CxEntry {
      * `undefined` when there are no assets provided for the entry.
      *
      * @param receiver - Most recent asset receiver.
+     * @param tracking - Tracking options.
      *
      * @returns Most recent assets supply. Stops tracking once cut off.
      */
-    trackRecentAsset(receiver: CxAsset.RecentReceiver<TAsset>): Supply;
+    trackRecentAsset(receiver: CxAsset.RecentReceiver<TAsset>, tracking?: CxTracking): Supply;
 
     /**
      * Reads entry assets list and start tracking of their additions.
@@ -138,10 +141,11 @@ export namespace CxEntry {
      * or revoked, until the returned asset supply cut off.
      *
      * @param receiver - Assets list receiver.
+     * @param tracking - Tracking options.
      *
      * @returns Assets list supply. Stops tracking once cut off.
      */
-    trackAssetList(receiver: CxAsset.ListReceiver<TAsset>): Supply;
+    trackAssetList(receiver: CxAsset.ListReceiver<TAsset>, tracking?: CxTracking): Supply;
 
     /**
      * Creates a lazy evaluator against `this` entry definition target instance.
