@@ -1,5 +1,5 @@
-import { CxEntry, CxRequestMethod, cxUnavailable } from '../core';
-import { cxRecent$access } from './recent.impl';
+import { CxEntry, CxRequestMethod, CxTracker } from '../core';
+import { CxTracker$assign, CxTracker$create, CxTracker$default } from './tracker.impl';
 
 /**
  * Creates single-valued context entry definer that treats the {@link CxEntry.Target.trackRecentAsset most recent asset}
@@ -30,7 +30,9 @@ export function cxRecent<TValue>(
     {
       byDefault,
     }: {
+      create?: undefined;
       byDefault?(this: void, target: CxEntry.Target<TValue>): TValue;
+      assign?: undefined;
     },
 ): CxEntry.Definer<TValue>;
 
@@ -54,6 +56,44 @@ export function cxRecent<TValue, TAsset>(
     }: {
       create(this: void, recent: TAsset, target: CxEntry.Target<TValue, TAsset>): TValue;
       byDefault?(this: void, target: CxEntry.Target<TValue, TAsset>): TValue;
+      assign?: undefined;
+    },
+): CxEntry.Definer<TValue, TAsset>;
+
+/**
+ * Creates single-valued context entry definer with internal state based on {@link CxEntry.Target.trackRecentAsset most
+ * recent asset} and without default state.
+ *
+ * The internal state updated each time the {@link CxEntry.Target.trackRecentAsset most recent asset} changes.
+ *
+ * @typeParam TValue - Context value type.
+ * @typeParam TAsset - Context value asset type.
+ * @typeParam TState - Internal state type.
+ * @param create - Creates internal entry state by recent asset.
+ * @param access - Converts internal state tracker to entry value assigner.
+ *
+ * @returns New context entry definer.
+ */
+export function cxRecent<TValue, TAsset, TState>(
+    {
+      create,
+      assign,
+    }: {
+
+      create(
+          this: void,
+          recent: TAsset,
+          target: CxEntry.Target<TValue, TAsset>,
+      ): TState;
+
+      byDefault?: undefined;
+
+      assign(
+          this: void,
+          tracker: CxTracker<TState>,
+          target: CxEntry.Target<TValue, TAsset>,
+      ): CxEntry.Assigner<TValue>;
+
     },
 ): CxEntry.Definer<TValue, TAsset>;
 
@@ -68,20 +108,36 @@ export function cxRecent<TValue, TAsset>(
  * @typeParam TState - Internal state type.
  * @param create - Creates internal entry state by recent asset.
  * @param byDefault - Creates default internal entry state when there are no assets. The default state evaluated
- * at most once per context. When omitted, the default state (and thus the value) would be unavailable.
- * @param access - Converts internal state accessor to entity value accessor.
+ * at most once per context.
+ * @param assign - Converts internal state tracker to entry value assigner.
  *
  * @returns New context entry definer.
  */
 export function cxRecent<TValue, TAsset, TState>(
+    // eslint-disable-next-line @typescript-eslint/unified-signatures
     {
       create,
       byDefault,
-      access,
+      assign,
     }: {
-      create(this: void, recent: TAsset, target: CxEntry.Target<TValue, TAsset>): TState;
-      byDefault?(this: void, target: CxEntry.Target<TValue, TAsset>): TState;
-      access(this: void, get: (this: void) => TState, target: CxEntry.Target<TValue, TAsset>): (this: void) => TValue;
+
+      create(
+          this: void,
+          recent: TAsset,
+          target: CxEntry.Target<TValue, TAsset>,
+      ): TState;
+
+      byDefault(
+          this: void,
+          target: CxEntry.Target<TValue, TAsset>,
+      ): TState;
+
+      assign(
+          this: void,
+          tracker: CxTracker.Mandatory<TState>,
+          target: CxEntry.Target<TValue, TAsset>,
+      ): CxEntry.Assigner<TValue>;
+
     },
 ): CxEntry.Definer<TValue, TAsset>;
 
@@ -89,62 +145,28 @@ export function cxRecent<TValue, TAsset, TState>(
     {
       create = cxRecent$create,
       byDefault,
-      access = cxRecent$access,
+      assign = CxTracker$assign,
     }: {
       create?(this: void, recent: TAsset, target: CxEntry.Target<TValue, TAsset>): TState;
       byDefault?(this: void, target: CxEntry.Target<TValue, TAsset>): TState;
-      access?(this: void, get: (this: void) => TState, target: CxEntry.Target<TValue, TAsset>): (this: void) => TValue;
+      assign?(this: void, tracker: CxTracker<TState>, target: CxEntry.Target<TValue, TAsset>): CxEntry.Assigner<TValue>;
     } = {},
 ): CxEntry.Definer<TValue, TAsset> {
   return target => {
 
-    let getDefaultState = byDefault
-        ? target.lazy(byDefault)
-        : cxUnavailable(target.entry);
-    let getState: () => TState;
-    let getDefaultValue: (this: void) => TValue = access(() => getDefaultState(), target);
-    let getValue: () => TValue = access(() => getState(), target);
-    let getAssign: () => (assigner: CxEntry.Assigner<TValue>, isDefault: 0 | 1) => void = target.lazy(target => {
-
-      let method!: CxRequestMethod;
-
-      target.trackRecentAsset(evaluated => {
-        if (evaluated) {
-
-          const state = create(evaluated.asset, target);
-
-          method = CxRequestMethod.Assets;
-          getState = () => state;
-        } else {
-          method = CxRequestMethod.Defaults;
-          getState = getDefaultState;
-        }
-      });
-
-      return byDefault
-          ? (assigner, isDefault) => isDefault
-              ? assigner(getDefaultValue())
-              : assigner(getValue(), method)
-          : (assigner, isDefault) => !isDefault
-              && method > 0
-              && assigner(getValue(), method);
-    });
-
-    target.supply.whenOff(reason => {
-      getDefaultState = getState = getDefaultValue = getValue = getAssign = cxUnavailable(
-          target.entry,
-          undefined,
-          reason,
-      );
-    });
+    const getDefault = byDefault && target.lazy(byDefault);
+    const tracker = CxTracker$create<TState>(
+        target,
+        receiver => target.trackRecentAsset(evaluated => evaluated
+            ? receiver(create(evaluated.asset, target), CxRequestMethod.Assets)
+            : receiver()),
+        getDefault,
+    );
+    const defaultTracker = CxTracker$default<TState>(target, getDefault);
 
     return {
-      assign(assigner) {
-        getAssign()(assigner, 0);
-      },
-      assignDefault(assigner) {
-        getAssign()(assigner, 1);
-      },
+      assign: assign(tracker, target),
+      assignDefault: assign(defaultTracker, target),
     };
   };
 }

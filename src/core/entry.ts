@@ -3,6 +3,7 @@ import { CxAsset } from './asset';
 import { CxModifier } from './modifier';
 import { CxRequest } from './request';
 import { CxRequestMethod } from './request-method';
+import { CxTracking } from './tracking';
 import { CxValues } from './values';
 
 /**
@@ -112,10 +113,11 @@ export namespace CxEntry {
      * asset supply cut off.
      *
      * @param receiver - Assets receiver.
+     * @param tracking - Tacking options.
      *
      * @returns Assets supply. Stops tracking once cut off.
      */
-    trackAssets(receiver: CxAsset.Receiver<TAsset>): Supply;
+    trackAssets(receiver: CxAsset.Receiver<TAsset>, tracking?: CxTracking): Supply;
 
     /**
      * Reads the most recent entry asset and starts its tracking.
@@ -126,10 +128,11 @@ export namespace CxEntry {
      * `undefined` when there are no assets provided for the entry.
      *
      * @param receiver - Most recent asset receiver.
+     * @param tracking - Tracking options.
      *
      * @returns Most recent assets supply. Stops tracking once cut off.
      */
-    trackRecentAsset(receiver: CxAsset.RecentReceiver<TAsset>): Supply;
+    trackRecentAsset(receiver: CxAsset.RecentReceiver<TAsset>, tracking?: CxTracking): Supply;
 
     /**
      * Reads entry assets list and start tracking of their additions.
@@ -138,10 +141,11 @@ export namespace CxEntry {
      * or revoked, until the returned asset supply cut off.
      *
      * @param receiver - Assets list receiver.
+     * @param tracking - Tracking options.
      *
      * @returns Assets list supply. Stops tracking once cut off.
      */
-    trackAssetList(receiver: CxAsset.ListReceiver<TAsset>): Supply;
+    trackAssetList(receiver: CxAsset.ListReceiver<TAsset>, tracking?: CxTracking): Supply;
 
     /**
      * Creates a lazy evaluator against `this` entry definition target instance.
@@ -175,10 +179,10 @@ export namespace CxEntry {
      * If the value is not assigned by this method call, the {@link CxRequest.or fallback} value is used. If the latter
      * is not available, the {@link assignDefault default value} is used instead.
      *
-     * @param assigner - Entry value assigner to call if the value is available.
-     * @param request - Original context value {@link CxAccessor.get request}.
+     * @param receiver - Entry value receiver to call if the value is available.
+     * @param request - Original context value {@link CxValues.get request}.
      */
-    assign?(assigner: Assigner<TValue>, request: CxRequest<TValue>): void;
+    assign?(receiver: Receiver<TValue>, request: CxRequest<TValue>): void;
 
     /**
      * Assigns the default context entry value.
@@ -186,23 +190,33 @@ export namespace CxEntry {
      * When defined, this method is tried if there is no {@link assign value} available for the entry, and no
      * {@link CxRequest.or fallback} provided.
      *
-     * @param assigner - Entry value assigner to call if the value is available.
-     * @param request - Original context value {@link CxAccessor.get request}.
+     * @param receiver - Entry value receiver to call if the value is available.
+     * @param request - Original context value {@link CxValues.get request}.
      */
-    assignDefault?(assigner: Assigner<TValue>, request: CxRequest<TValue>): void;
+    assignDefault?(receiver: Receiver<TValue>, request: CxRequest<TValue>): void;
 
   }
 
   /**
-   * Context value assigner signature.
+   * Context value receiver signature.
    *
-   * Called to {@link Definition.assign} context value.
+   * Called to {@link Definition.assign assign} context value.
    *
    * @typeParam TValue - Context value type.
-   * @param value - Assigned entry value.
+   * @param value - Received entry value.
    * @param by - Optional request method the value is obtained by. By default, depends on {@link Definition entry
-   * definition} method the assigner passed to.
+   * definition} method the receiver passed to.
    */
-  export type Assigner<TValue> = (this: void, value: TValue, by?: CxRequestMethod) => void;
+  export type Receiver<TValue> = (this: void, value: TValue, by?: CxRequestMethod) => void;
+
+  /**
+   * Context value assigned signature.
+   *
+   * Assigns entry value by calling the given receiver once, unless the value is unavailable.
+   *
+   * @typeParam TValue - Context value type.
+   * @param Entity value receive to call if the value is available.
+   */
+  export type Assigner<TValue> = (this: void, receiver: Receiver<TValue>) => void;
 
 }

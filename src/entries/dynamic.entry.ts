@@ -1,5 +1,5 @@
-import { CxEntry, CxRequestMethod, cxUnavailable } from '../core';
-import { cxRecent$access } from './recent.impl';
+import { CxEntry, CxRequestMethod, CxTracker } from '../core';
+import { CxTracker$assign, CxTracker$create, CxTracker$default } from './tracker.impl';
 
 /**
  * Creates potentially empty array-valued context entry definer that treats all {@link CxEntry.Target.trackAssetList
@@ -30,7 +30,9 @@ export function cxDynamic<TElement>(
     {
       byDefault,
     }: {
+      create?: undefined;
       byDefault?(this: void, target: CxEntry.Target<readonly TElement[], TElement>): readonly TElement[];
+      assign?: undefined;
     }
 ): CxEntry.Definer<readonly TElement[], TElement>;
 
@@ -54,6 +56,44 @@ export function cxDynamic<TValue, TAsset>(
     }: {
       create(this: void, assets: TAsset[], target: CxEntry.Target<TValue, TAsset>): TValue;
       byDefault?(this: void, target: CxEntry.Target<TValue, TAsset>): TValue;
+      assign?: undefined;
+    },
+): CxEntry.Definer<TValue, TAsset>;
+
+/**
+ * Creates single-valued context entry definer with internal state based on {@link CxEntry.Target.trackAssetList entry
+ * asset list} and without default state.
+ *
+ * The internal state updated each time an asset provided or revoked.
+ *
+ * @typeParam TValue - Context value type.
+ * @typeParam TAsset - Context value asset type.
+ * @typeParam TState - Internal state type.
+ * @param create - Creates internal entry state based on assets array.
+ * @param assign - Converts internal state tracker to entry value assigner.
+ *
+ * @returns New context entry definer.
+ */
+export function cxDynamic<TValue, TAsset, TState>(
+    {
+      create,
+      assign,
+    }: {
+
+      create(
+          this: void,
+          assets: TAsset[],
+          target: CxEntry.Target<TValue, TAsset>,
+      ): TState;
+
+      byDefault?: undefined;
+
+      assign(
+          this: void,
+          tracker: CxTracker<TState>,
+          target: CxEntry.Target<TValue, TAsset>,
+      ): CxEntry.Assigner<TValue>;
+
     },
 ): CxEntry.Definer<TValue, TAsset>;
 
@@ -68,20 +108,36 @@ export function cxDynamic<TValue, TAsset>(
  * @typeParam TState - Internal state type.
  * @param create - Creates internal entry state based on assets array.
  * @param byDefault - Creates default internal entry state when there are no assets. The default state evaluated at most
- * once per context.  When omitted, the default value would be unavailable.
- * @param access - Converts internal state accessor to entity value accessor.
+ * once per context. When omitted, the default value would be unavailable.
+ * @param assign - Converts internal state tracker to entry value assigner.
  *
  * @returns New context entry definer.
  */
 export function cxDynamic<TValue, TAsset, TState>(
+    // eslint-disable-next-line @typescript-eslint/unified-signatures
     {
       create,
       byDefault,
-      access,
+      assign,
     }: {
-      create(this: void, assets: TAsset[], target: CxEntry.Target<TValue, TAsset>): TState;
-      byDefault?(this: void, target: CxEntry.Target<TValue, TAsset>): TState;
-      access(this: void, get: (this: void) => TState, target: CxEntry.Target<TValue, TAsset>): (this: void) => TValue;
+
+      create(
+          this: void,
+          assets: TAsset[],
+          target: CxEntry.Target<TValue, TAsset>,
+      ): TState;
+
+      byDefault(
+          this: void,
+          target: CxEntry.Target<TValue, TAsset>,
+      ): TState;
+
+      assign(
+          this: void,
+          tracker: CxTracker.Mandatory<TState>,
+          target: CxEntry.Target<TValue, TAsset>,
+      ): CxEntry.Assigner<TValue>;
+
     },
 ): CxEntry.Definer<TValue, TAsset>;
 
@@ -89,77 +145,43 @@ export function cxDynamic<TValue, TAsset, TState>(
     {
       create,
       byDefault,
-      access = cxRecent$access,
+      assign = CxTracker$assign,
     }: {
       create?(this: void, assets: TAsset[], target: CxEntry.Target<TValue, TAsset>): TState;
       byDefault?(this: void, target: CxEntry.Target<TValue, TAsset>): TState;
-      access?(this: void, get: (this: void) => TState, target: CxEntry.Target<TValue, TAsset>): (this: void) => TValue;
+      assign?(this: void, tracker: CxTracker<TState>, target: CxEntry.Target<TValue, TAsset>): CxEntry.Assigner<TValue>;
     } = {},
 ): CxEntry.Definer<TValue, TAsset> {
   return target => {
-
-    const hasDefault = byDefault || !create;
-    let getDefaultState = byDefault
-        ? target.lazy(byDefault)
-        : create
-            ? cxUnavailable(target.entry)
-            : cxDynamic$byDefault;
-
+    if (!byDefault && !create) {
+      byDefault = cxDynamic$byDefault;
+    }
     create ||= cxDynamic$create;
 
-    let getState: () => TState;
-    let getDefaultValue: (this: void) => TValue = access(() => getDefaultState(), target);
-    let getValue: () => TValue = access(() => getState(), target);
-    let getAssign: () => (assigner: CxEntry.Assigner<TValue>, isDefault: 0 | 1) => void = target.lazy(target => {
+    const getDefault = byDefault && target.lazy(byDefault);
+    const tracker = CxTracker$create<TState>(
+        target,
+        receiver => target.trackAssetList(list => {
 
-      let method!: CxRequestMethod;
+          const assets: TAsset[] = [];
 
-      target.trackAssetList(list => {
+          for (const provided of list) {
+            provided.eachAsset(asset => {
+              assets.push(asset);
+            });
+          }
 
-        const assets: TAsset[] = [];
-
-        for (const provided of list) {
-          provided.eachAsset(asset => {
-            assets.push(asset);
-          });
-        }
-
-        if (assets.length) {
-
-          const state = create!(assets, target);
-
-          method = CxRequestMethod.Assets;
-          getState = () => state;
-        } else {
-          method = CxRequestMethod.Defaults;
-          getState = getDefaultState;
-        }
-      });
-
-      return hasDefault
-          ? (assigner, isDefault) => isDefault
-              ? assigner(getDefaultValue())
-              : assigner(getValue(), method)
-          : (assigner, isDefault) => !isDefault
-              && method > 0
-              && assigner(getValue(), method);
-    });
-
-    target.supply.whenOff(reason => {
-      getDefaultState = getState = getDefaultValue = getValue = getAssign = cxUnavailable(
-          target.entry,
-          undefined,
-          reason,
-      );
-    });
+          return assets.length
+              ? receiver(create!(assets, target), CxRequestMethod.Assets)
+              : receiver();
+        }),
+        getDefault,
+    );
+    const defaultTracker = CxTracker$default<TState>(target, getDefault);
 
     return {
-      assign(assigner) {
-        getAssign()(assigner, 0);
-      },
-      assignDefault(assigner) {
-        getAssign()(assigner, 1);
-      },
+      assign: assign(tracker, target),
+      assignDefault: assign(defaultTracker, target),
     };
   };
 }

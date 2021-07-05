@@ -29,7 +29,7 @@ export function cxScoped<TValue, TAsset = TValue, TContext extends CxValues = Cx
     }
 
     return {
-      assign(set: CxEntry.Assigner<TValue>, request: CxRequest<TValue>) {
+      assign(set: CxEntry.Receiver<TValue>, request: CxRequest<TValue>) {
         if (request.by /* explicit request method */) {
           // Wrap request to handle fallback value.
           context.get(target.entry, cxScoped$request(CxRequestMethod.Assets, set, request));
@@ -39,7 +39,7 @@ export function cxScoped<TValue, TAsset = TValue, TContext extends CxValues = Cx
           context.get(target.entry, { ...request, set });
         }
       },
-      assignDefault(set: CxEntry.Assigner<TValue>, request: CxRequest<TValue>) {
+      assignDefault(set: CxEntry.Receiver<TValue>, request: CxRequest<TValue>) {
         if (request.by /* explicit (defaults) request method */) {
           // Wrap request to handle fallback value.
           context.get(target.entry, cxScoped$request(CxRequestMethod.Defaults, set, request));
@@ -76,12 +76,12 @@ export function cxDefaultScoped<TValue, TAsset = TValue, TContext extends CxValu
     const getDefiner = target.lazy(definer);
 
     return {
-      assign(assigner: CxEntry.Assigner<TValue>, request: CxRequest<TValue>) {
-        getDefiner().assign?.(assigner, request);
+      assign(receiver: CxEntry.Receiver<TValue>, request: CxRequest<TValue>) {
+        getDefiner().assign?.(receiver, request);
       },
-      assignDefault(assigner: CxEntry.Assigner<TValue>, request: CxRequest<TValue>) {
+      assignDefault(receiver: CxEntry.Receiver<TValue>, request: CxRequest<TValue>) {
         // Wrap request to handle fallback value.
-        context.get(target.entry, cxScoped$request(CxRequestMethod.Defaults, assigner, request));
+        context.get(target.entry, cxScoped$request(CxRequestMethod.Defaults, receiver, request));
       },
     };
   };
@@ -89,7 +89,7 @@ export function cxDefaultScoped<TValue, TAsset = TValue, TContext extends CxValu
 
 function cxScoped$request<TValue>(
     by: CxRequestMethod,
-    assigner: CxEntry.Assigner<TValue>,
+    receiver: CxEntry.Receiver<TValue>,
     request: CxRequest<TValue>,
 ): CxRequest<TValue> {
 
@@ -98,11 +98,11 @@ function cxScoped$request<TValue>(
 
   if (or !== undefined /* fallback specified */) {
     // Pass the value through.
-    set = assigner;
+    set = receiver;
   } else {
     // Set fallback to `null` and ignore any fallback received.
     or = null;
-    set = (value, receivedBy = by) => receivedBy && assigner(value, receivedBy);
+    set = (value, receivedBy = by) => receivedBy && receiver(value, receivedBy);
   }
 
   return {

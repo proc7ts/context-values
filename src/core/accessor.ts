@@ -2,9 +2,9 @@ import { CxEntry } from './entry';
 import { CxRequest } from './request';
 
 /**
- * Context value getter signature.
+ * Context value accessor signature.
  */
-export interface CxGetter {
+export interface CxAccessor {
 
   /**
    * Obtains a value of the given context entry.

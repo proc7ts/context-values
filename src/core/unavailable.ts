@@ -2,13 +2,13 @@ import { CxEntry } from './entry';
 import { CxReferenceError } from './reference-error';
 
 /**
- * Creates unavailable context entity accessor function.
+ * Creates unavailable context entry accessor function.
  *
  * The created function would throw a {@link CxReferenceError} on each call.
  *
- * @param entry - The unavailable entity.
+ * @param entry - The unavailable entry.
  * @param message - Error message.
- * @param reason - The reason why entity is no longer available.
+ * @param reason - The reason why entry is no longer available.
  *
  * @returns A no-arg function that always throws.
  */
