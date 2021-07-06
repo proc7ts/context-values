@@ -49,7 +49,7 @@ export function cxRecent<TValue>(
  *
  * @returns New context entry definer.
  */
-export function cxRecent<TValue, TAsset>(
+export function cxRecent<TValue, TAsset = TValue>(
     {
       create,
       byDefault,
@@ -74,7 +74,7 @@ export function cxRecent<TValue, TAsset>(
  *
  * @returns New context entry definer.
  */
-export function cxRecent<TValue, TAsset, TState>(
+export function cxRecent<TValue, TAsset = TValue, TState = TValue>(
     {
       create,
       assign,
@@ -113,7 +113,7 @@ export function cxRecent<TValue, TAsset, TState>(
  *
  * @returns New context entry definer.
  */
-export function cxRecent<TValue, TAsset, TState>(
+export function cxRecent<TValue, TAsset = TValue, TState = TValue>(
     // eslint-disable-next-line @typescript-eslint/unified-signatures
     {
       create,

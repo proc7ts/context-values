@@ -49,7 +49,7 @@ export function cxDynamic<TElement>(
  *
  * @returns New context entry definer.
  */
-export function cxDynamic<TValue, TAsset>(
+export function cxDynamic<TValue, TAsset = TValue>(
     {
       create,
       byDefault,
@@ -74,7 +74,7 @@ export function cxDynamic<TValue, TAsset>(
  *
  * @returns New context entry definer.
  */
-export function cxDynamic<TValue, TAsset, TState>(
+export function cxDynamic<TValue, TAsset = TValue, TState = TValue>(
     {
       create,
       assign,
@@ -113,7 +113,7 @@ export function cxDynamic<TValue, TAsset, TState>(
  *
  * @returns New context entry definer.
  */
-export function cxDynamic<TValue, TAsset, TState>(
+export function cxDynamic<TValue, TAsset = TValue, TState = TValue>(
     // eslint-disable-next-line @typescript-eslint/unified-signatures
     {
       create,
