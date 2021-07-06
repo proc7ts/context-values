@@ -17,11 +17,11 @@ export function CxTracker$create<T>(
     getDefault?: () => T,
 ): CxTracker<T> {
 
-  const trackerSupply = new Supply().needs(target);
+  const trackerSupply = target.supply.derive();
   const track = getDefault
       ? (
           receiver: CxTracking.Receiver<T>,
-          { supply = new Supply() } = {},
+          { supply }: CxTracking = {},
       ): Supply => trackAssets(
           (value?: T, by?: CxRequestMethod) => {
             if (by != null) {
@@ -30,12 +30,12 @@ export function CxTracker$create<T>(
               receiver(getDefault(), CxRequestMethod.Defaults);
             }
           },
-          supply.needs(trackerSupply),
+          trackerSupply.derive(supply),
       )
       : (
           receiver: CxTracking.Receiver<T>,
-          { supply = new Supply() } = {},
-      ): Supply => trackAssets(receiver, supply.needs(trackerSupply));
+          { supply }: CxTracking = {},
+      ): Supply => trackAssets(receiver, trackerSupply.derive(supply));
 
   let get: () => T;
   let to: (receiver: CxTracking.MandatoryReceiver<T>) => void;
@@ -76,8 +76,9 @@ export function CxTracker$create<T>(
 export function CxTracker$default<T>(target: CxEntry.Target<unknown>, getDefault?: () => T): CxTracker<T> {
   return CxTracker$create(
       target,
-      (receiver: CxTracking.Receiver<T>, { supply = new Supply() }: CxTracking = {}): Supply => {
-        if (!supply.needs(target).isOff) {
+      (receiver: CxTracking.Receiver<T>, { supply }: CxTracking = {}): Supply => {
+        supply = target.supply.derive(supply);
+        if (!supply.isOff) {
           receiver();
         }
         return supply;
