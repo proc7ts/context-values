@@ -94,7 +94,7 @@ export namespace CxAsset {
    * @typeParam TAsset - Context value asset type.
    * @typeParam TContext - Context type.
    */
-  export interface Placer<TAsset, TValue = TAsset, TContext extends CxValues = CxValues>
+  export interface Placer<TValue, TAsset = TValue, TContext extends CxValues = CxValues>
       extends Base<TValue, TAsset, TContext> {
 
     placeAsset(
@@ -116,7 +116,7 @@ export namespace CxAsset {
    * @typeParam TAsset - Context value asset type.
    * @typeParam TContext - Context type.
    */
-  export interface Builder<TAsset, TValue = TAsset, TContext extends CxValues = CxValues>
+  export interface Builder<TValue, TAsset = TValue, TContext extends CxValues = CxValues>
       extends Base<TValue, TAsset, TContext> {
 
     /** Ignored when {@link buildAsset} defined. */
@@ -137,7 +137,7 @@ export namespace CxAsset {
    * @typeParam TAsset - Context value asset type.
    * @typeParam TContext - Context type.
    */
-  export interface Setup<TAsset, TValue = TAsset, TContext extends CxValues = CxValues>
+  export interface Setup<TValue, TAsset = TValue, TContext extends CxValues = CxValues>
       extends Base<TValue, TAsset, TContext> {
 
     /** {@link setupAsset} is required when both {@link placeAsset} and {@link buildAsset} missing. */
