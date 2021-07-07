@@ -60,16 +60,17 @@ export namespace CxAsset {
     /**
      * Builds value asset provider. The provider would then place value assets to the `target` context entry.
      *
-     * In contrast to {@link placeAsset}, this method is called at most once per context. The returned provider will be
+     * In contrast to {@link placeAsset}, this method is called at most once per context. If provider will be
      * called each time value assets requested.
      *
      * @param target - Context entry definition target.
      *
-     * @returns Value assets provider accepting assets collector to place assets to as its only parameter.
+     * @returns Value assets provider accepting assets collector to place assets to as its only parameter, or
+     * falsy value if there are no value assets.
      */
     buildAsset?(
         target: CxEntry.Target<TValue, TAsset, TContext>,
-    ): (this: void, collector: Collector<TAsset>) => void;
+    ): ((this: void, collector: Collector<TAsset>) => void) | false | null | undefined;
 
     /**
      * Sets up asset.
@@ -124,7 +125,7 @@ export namespace CxAsset {
 
     buildAsset(
         target: CxEntry.Target<TValue, TAsset, TContext>,
-    ): (this: void, collector: Collector<TAsset>) => void;
+    ): ((this: void, collector: Collector<TAsset>) => void) | false | null | undefined;
 
   }
 
