@@ -5,56 +5,150 @@ import { CxValues } from './values';
 /**
  * Context entry asset.
  *
- * Builds assets for the value of specific context entry.
+ * Provides assets for the value of specific context entry.
  *
  * @typeParam TValue - Context value type.
  * @typeParam TAsset - Context value asset type.
  * @typeParam TContext - Context type.
  */
-export interface CxAsset<TValue, TAsset = TValue, TContext extends CxValues = CxValues> {
-
-  /**
-   * Target context entry.
-   */
-  readonly entry: CxEntry<TValue, TAsset>;
-
-  /**
-   * Evaluates value asset or multiple assets and places them to `target` context entry.
-   *
-   * Passes each evaluated asset to the given `collector`, until the latter returns `false` or there are no more assets
-   * to place.
-   *
-   * @param target - Context entry definition target.
-   * @param collector - Assets collector to place assets to.
-   */
-  placeAsset(
-      target: CxEntry.Target<TValue, TAsset, TContext>,
-      collector: CxAsset.Collector<TAsset>,
-  ): void;
-
-  /**
-   * Sets up asset.
-   *
-   * This method is called immediately when asset {@link CxModifier.provide provided}.
-   *
-   * It can be used e.g. to provide additional assets. Additional assets will be revoked when the asset itself revoked.
-   *
-   * @param target - Context entry definition target.
-   */
-  setupAsset?(target: CxEntry.Target<TValue, TAsset, TContext>): void;
-
-  /**
-   * Asset supply.
-   *
-   * Removes the asset once cut off.
-   *
-   * Returned from {@link CxModifier.provide} when specified. New one created when omitted.
-   */
-  readonly supply?: Supply;
-
-}
+export type CxAsset<TValue, TAsset = TValue, TContext extends CxValues = CxValues> =
+    | CxAsset.Placer<TValue, TAsset, TContext>
+    | CxAsset.Builder<TValue, TAsset, TContext>
+    | CxAsset.Setup<TValue, TAsset, TContext>;
 
 export namespace CxAsset {
+
+  /**
+   * Base interface of context entry asset implementations.
+   *
+   * @typeParam TValue - Context value type.
+   * @typeParam TAsset - Context value asset type.
+   * @typeParam TContext - Context type.
+   */
+  export interface Base<TValue, TAsset, TContext extends CxValues> {
+
+    /**
+     * Target context entry.
+     */
+    readonly entry: CxEntry<TValue, TAsset>;
+
+    /**
+     * Asset supply.
+     *
+     * Removes the asset once cut off.
+     *
+     * Returned from {@link CxModifier.provide} when specified. New one created when omitted.
+     */
+    readonly supply?: Supply;
+
+    /**
+     * Evaluates value asset or multiple assets and places them to `target` context entry.
+     *
+     * Passes each evaluated asset to the given `collector`, until the latter returns `false` or there are no more
+     * assets to place.
+     *
+     * This method is called each time value assets requested.
+     *
+     * @param target - Context entry definition target.
+     * @param collector - Assets collector to place assets to.
+     */
+    placeAsset?(
+        target: CxEntry.Target<TValue, TAsset, TContext>,
+        collector: CxAsset.Collector<TAsset>,
+    ): void;
+
+    /**
+     * Builds value asset provider. The provider would then place value assets to the `target` context entry.
+     *
+     * In contrast to {@link placeAsset}, this method is called at most once per context. The returned provider will be
+     * called each time value assets requested.
+     *
+     * @param target - Context entry definition target.
+     *
+     * @returns Value assets provider accepting assets collector to place assets to as its only parameter.
+     */
+    buildAsset?(
+        target: CxEntry.Target<TValue, TAsset, TContext>,
+    ): (this: void, collector: Collector<TAsset>) => void;
+
+    /**
+     * Sets up asset.
+     *
+     * This method is called immediately when asset {@link CxModifier.provide provided}.
+     *
+     * It can be used e.g. to provide additional assets. Additional assets will be revoked when the asset itself
+     * revoked.
+     *
+     * @param target - Context entry definition target.
+     */
+    setupAsset?(target: CxEntry.Target<TValue, TAsset, TContext>): void;
+
+  }
+
+  /**
+   * Context entry asset placer.
+   *
+   * Places assets for the value of specific context entry.
+   *
+   * @typeParam TValue - Context value type.
+   * @typeParam TAsset - Context value asset type.
+   * @typeParam TContext - Context type.
+   */
+  export interface Placer<TValue, TAsset = TValue, TContext extends CxValues = CxValues>
+      extends Base<TValue, TAsset, TContext> {
+
+    placeAsset(
+        target: CxEntry.Target<TValue, TAsset, TContext>,
+        collector: CxAsset.Collector<TAsset>,
+    ): void;
+
+    /* Ignored when {@link placeAsset} defined. */
+    readonly buildAsset?: undefined;
+
+  }
+
+  /**
+   * Context entry asset builder.
+   *
+   * Builds a provider of assets for the value of specific context entry.
+   *
+   * @typeParam TValue - Context value type.
+   * @typeParam TAsset - Context value asset type.
+   * @typeParam TContext - Context type.
+   */
+  export interface Builder<TValue, TAsset = TValue, TContext extends CxValues = CxValues>
+      extends Base<TValue, TAsset, TContext> {
+
+    /** Ignored when {@link buildAsset} defined. */
+    readonly placeAsset?: undefined;
+
+    buildAsset(
+        target: CxEntry.Target<TValue, TAsset, TContext>,
+    ): (this: void, collector: Collector<TAsset>) => void;
+
+  }
+
+  /**
+   * Context entry asset builder.
+   *
+   * Only sets up an asset.
+   *
+   * @typeParam TValue - Context value type.
+   * @typeParam TAsset - Context value asset type.
+   * @typeParam TContext - Context type.
+   */
+  export interface Setup<TValue, TAsset = TValue, TContext extends CxValues = CxValues>
+      extends Base<TValue, TAsset, TContext> {
+
+    /** {@link setupAsset} is required when both {@link placeAsset} and {@link buildAsset} missing. */
+    readonly placeAsset?: undefined;
+
+    /** {@link setupAsset} is required when both {@link placeAsset} and {@link buildAsset} missing. */
+    readonly buildAsset?: undefined;
+
+    setupAsset(target: CxEntry.Target<TValue, TAsset, TContext>): void;
+
+  }
 
   /**
    * A signature of context value assets collector.
