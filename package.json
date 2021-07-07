@@ -18,10 +18,7 @@
   "type": "module",
   "main": "./dist/context-values.js",
   "types": "./index.d.ts",
-  "exports": {
-    ".": "./dist/context-values.js",
-    "./updatable": "./dist/context-values.updatable.js"
-  },
+  "exports": "./dist/context-values.js",
   "peerDependencies": {
     "@proc7ts/fun-events": "^10.5.0"
   },

@@ -3,8 +3,7 @@ export default {
   collectCoverage: true,
   collectCoverageFrom: [
     'src/**/*.ts',
-    '!src/context-ref.ts',
-    '!src/entries/**/*.ts',
+    '!src/entries/**/*.ts', // Tested in `@proc7ts/context-builder`
     '!src/**/*.spec.ts',
     '!src/**/index.ts',
     '!**/node_modules/**',

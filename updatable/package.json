@@ -1,4 +1,0 @@
-{
-  "main": "../dist/context-values.updatable.js",
-  "types": "./index.d.ts"
-}
