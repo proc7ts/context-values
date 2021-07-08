@@ -1,5 +1,6 @@
 import { Supply } from '@proc7ts/supply';
 import { CxEntry } from './entry';
+import { CxTracking } from './tracking';
 import { CxValues } from './values';
 
 /**
@@ -63,13 +64,19 @@ export namespace CxAsset {
      * In contrast to {@link placeAsset}, this method is called at most once per context. If provider will be
      * called each time value assets requested.
      *
+     * This method also supports updatable assets. For that, an `update` function is passed as second parameter. Call it
+     * to inform the interested parties on value asset update. The updated asset has to be provided by provider returned
+     * earlier.
+     *
      * @param target - Context entry definition target.
+     * @param update - A function to call when asset updated.
      *
      * @returns Value assets provider accepting assets collector to place assets to as its only parameter, or
      * falsy value if there are no value assets.
      */
     buildAsset?(
         target: CxEntry.Target<TValue, TAsset, TContext>,
+        update: (this: void) => void,
     ): ((this: void, collector: Collector<TAsset>) => void) | false | null | undefined;
 
     /**
@@ -125,6 +132,7 @@ export namespace CxAsset {
 
     buildAsset(
         target: CxEntry.Target<TValue, TAsset, TContext>,
+        update: (this: void) => void,
     ): ((this: void, collector: Collector<TAsset>) => void) | false | null | undefined;
 
   }
@@ -245,6 +253,19 @@ export namespace CxAsset {
      * @param callback - Assets callback.
      */
     eachRecentAsset(callback: CxAsset.Callback<TAsset>): void;
+
+    /**
+     * Starts tracing for this asset updates.
+     *
+     * Whenever this asset is {@link CxAsset.Base.buildAsset updated}, the registered receiver will be notified, until
+     * updates supply cut off.
+     *
+     * @param receiver - A no-op receiver function to call on every asset update.
+     * @param tracking - Updates tracking options.
+     *
+     * @returns Updates supply. Stops updates tracking once cut off. Cut off immediately if this asset is not updatable.
+     */
+    onUpdate(receiver: (this: void) => void, tracking?: CxTracking): Supply;
 
   }
 
