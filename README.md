@@ -202,15 +202,17 @@ a `toString()` method, so that error messages contain a string representation of
 
 There are several standard customizable [CxEntry] implementations. It is typically enough to use one of them:
 
-- [cxSingle()] - Lazily evaluated single-valued context entry.
 - [cxArray()] - Lazily evaluated array-valued context entry.
 - [cxDynamic()] - Dynamically updating context entry reflecting the changes in entry assets.
+- [cxEvaluated()] - Context entry with value lazily evaluated by the given function.
 - [cxRecent()] - Dynamically updating context entry reflecting the changes in the most recent entry asset.
+- [cxSingle()] - Lazily evaluated single-valued context entry.
 
 The functions create entry definers. I.e. functions that can be used as `perContext` implementations.
 
 [cxArray()]: https://proc7ts.github.io/context-values/modules.html#cxArray
 [cxDynamic()]: https://proc7ts.github.io/context-values/modules.html#cxDynamic
+[cxEvaluated()]: https://proc7ts.github.io/context-values/modules.html#cxEvaluated
 [cxRecent()]: https://proc7ts.github.io/context-values/modules.html#cxRecent
 [cxSingle()]: https://proc7ts.github.io/context-values/modules.html#cxSingle
 
