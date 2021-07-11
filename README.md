@@ -120,7 +120,7 @@ Context entry may have a [default value] that will be returned, unless the entry
 import { CxEntry, CxRequestMethod, cxSingle } from '@proc7ts/context-values';
 
 const myEntry: CxEntry<string> = {
-  perContext: cxSingle({ byDefault: 'default' }),
+  perContext: cxSingle({ byDefault: () => 'default' }),
   toString: () => '[CxEntry myEntry]',
 };
 
@@ -140,7 +140,7 @@ In addition to returning from [get()] method call, the context value can be pass
 import { CxEntry, CxRequestMethod, cxSingle } from '@proc7ts/context-values';
 
 const myEntry: CxEntry<string> = {
-  perContext: cxSingle({ byDefault: 'default' }),
+  perContext: cxSingle({ byDefault: () => 'default' }),
   toString: () => '[CxEntry myEntry]',
 };
 
