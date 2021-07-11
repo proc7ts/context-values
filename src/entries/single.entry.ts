@@ -2,7 +2,7 @@ import { CxEntry } from '../core';
 import { CxEntry$assignOnce } from './entry.assign-once.impl';
 
 /**
- * Creates single-valued context entry definer.
+ * Creates single-value context entry definer.
  *
  * Treats the last provided asset as entry value and ignores the rest of them.
  *
