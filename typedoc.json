@@ -1,6 +1,6 @@
 {
-  "entryPoints": ["src/index.ts", "src/updatable/index.ts"],
-  "name": "Context Values",
+  "entryPoints": ["src/index.ts"],
+  "name": "IoC Context Values",
   "out": "./target/typedoc",
   "tsconfig": "tsconfig.main.json"
 }
