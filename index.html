@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Context Values</title>
-	<meta name="description" content="Documentation for Context Values">
+	<title>IoC Context Values</title>
+	<meta name="description" content="Documentation for IoC Context Values">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
 	<script async src="assets/js/search.js" id="search-script"></script>
@@ -23,7 +23,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="index.html" class="title">Context Values</a>
+					<a href="index.html" class="title">IoC Context Values</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -50,7 +50,7 @@
 	</div>
 	<div class="tsd-page-title">
 		<div class="container">
-			<h1>Context Values</h1>
+			<h1>IoC Context Values</h1>
 		</div>
 	</div>
 </header>
@@ -58,352 +58,288 @@
 	<div class="row">
 		<div class="col-8 col-content">
 			<div class="tsd-panel tsd-typography">
-				<a href="#ioc-context-values-provider" id="ioc-context-values-provider" style="color: inherit; text-decoration: none;">
-					<h1>IoC Context Values Provider</h1>
+				<a href="#ioc-context-values" id="ioc-context-values" style="color: inherit; text-decoration: none;">
+					<h1>IoC Context Values</h1>
 				</a>
 				<p><a href="https://www.npmjs.com/package/@proc7ts/context-values"><img src="https://img.shields.io/npm/v/@proc7ts/context-values.svg?logo=npm" alt="NPM"></a>
-					<a href="https://github.com/proc7ts/context-values/actions?query=workflow%3ABuild"><img src="https://github.com/proc7ts/context-values/workflows/Build/badge.svg" alt="Build Status"></a>
+					<a href="https://github.com/proc7ts/context-values/actions?query=workflow:Build"><img src="https://github.com/proc7ts/context-values/workflows/Build/badge.svg" alt="Build Status"></a>
+					<a href="https://www.codacy.com/gh/proc7ts/context-values/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=proc7ts/context-values&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/69f604f1399d49d58f12202fce675048" alt="Code Quality"></a>
+					<a href="https://www.codacy.com/gh/proc7ts/context-values/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=proc7ts/context-values&amp;utm_campaign=Badge_Coverage"><img src="https://app.codacy.com/project/badge/Coverage/69f604f1399d49d58f12202fce675048" alt="Coverage"></a>
 					<a href="https://github.com/proc7ts/context-values"><img src="https://img.shields.io/static/v1?logo=github&label=GitHub&message=project&color=informational" alt="GitHub Project"></a>
 				<a href="https://proc7ts.github.io/context-values/"><img src="https://img.shields.io/static/v1?logo=typescript&label=API&message=docs&color=informational" alt="API Documentation"></a></p>
-				<p>This library allows to construct an <a href="https://en.wikipedia.org/wiki/Inversion_of_control">IoC</a> context, other components can request values from.</p>
-				<p>An <a href="https://en.wikipedia.org/wiki/Inversion_of_control">IoC</a> context is an object with <code>get()</code> method implemented. This method returns a context value by its key.</p>
+				<p><a href="https://en.wikipedia.org/wiki/Inversion_of_control">IoC</a> context allows accessing its <em>values</em> identified by their <em>entries</em> and <em>provided</em> somewhere else. </p>
+				<p><strong>Features:</strong></p>
+				<ul>
+					<li><p>Type-safe API.</p>
+						<p>Each context entry has definite value type specified as generic type parameter. So, when accessing context value with
+						<a href="https://proc7ts.github.io/context-values/interfaces/CxValues.html#get">get()</a> method, the returned value has that exact type, rather <code>any</code>.</p>
+					</li>
+					<li><p>Clean distinction between <em>assets</em> provided for context entries, and their <em>values</em>.</p>
+						<p>E.g. entry value is an array, while its entry value assets are elements of this array.</p>
+					</li>
+					<li><p>Customizable relations between entry assets and its value.</p>
+						<p>This relation established by entry implementation. Typically, the entry builds its value out of its assets. </p>
+					</li>
+					<li><p>Reusable context entry implementations suitable for the majority of the use cases.</p>
+						<p>E.g. <a href="https://proc7ts.github.io/context-values/modules.html#cxSingle">cxSingle()</a> for single-values entries, or <a href="https://proc7ts.github.io/context-values/modules.html#cxArray">cxArray()</a> for array-values ones.</p>
+					</li>
+					<li><p>Dynamically updatable context values.</p>
+						<p>The <a href="https://proc7ts.github.io/context-values/modules.html#cxSingle">cxSingle()</a> and <a href="https://proc7ts.github.io/context-values/modules.html#cxArray">cxArray()</a> entries build the value <em>once</em> on first access and return it on each subsequent
+							access. In contrast, the <a href="https://proc7ts.github.io/context-values/modules.html#cxRecent">cxRecent()</a> and <a href="https://proc7ts.github.io/context-values/modules.html#cxDynamic">cxDynamic()</a> are able to track asset changes and reflect these changes in
+						entry value.</p>
+					</li>
+					<li><p>Context derivation.</p>
+						<p>A context may derive another context to make the values available in the latter available in the former.</p>
+					</li>
+				</ul>
+				<a href="#project-modules" id="project-modules" style="color: inherit; text-decoration: none;">
+					<h2>Project Modules</h2>
+				</a>
+				<ul>
+					<li><a href="https://www.npmjs.com/package/@proc7ts/context-values">@proc7ts/context-values</a> library declares context API, and provides basic context entries implementations.</li>
+					<li><a href="https://www.npmjs.com/package/@proc7ts/context-builder">@proc7ts/context-builder</a> builds IoC contexts, and provided basic context entry assets implementations.</li>
+					<li><a href="https://www.npmjs.com/package/@proc7ts/context-modules">@proc7ts/context-modules</a> brings support for dynamically loadable (and un-loadable) context modules.</li>
+				</ul>
 				<a href="#accessing-context-values" id="accessing-context-values" style="color: inherit; text-decoration: none;">
 					<h2>Accessing Context Values</h2>
 				</a>
-				<p>A context should implement a <code>ContextValues</code> interface. This interface declares a <code>get()</code> method accepting a
-				<code>ContextRequest</code> identifying the requested value (e.g. a <code>ContextKey</code> instance), and a non-mandatory options.</p>
-				<p>The following code returns a string value associated with <code>key</code>, or throws an exception if the value not found.</p>
-				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">SingleContextKey</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@proc7ts/context-values&#039;</span><span style="color: #000000">;</span>
+				<p>An IoC context implements a <a href="https://proc7ts.github.io/context-values/interfaces/CxValues.html">CxValues</a> interface. This interface declares a single <a href="https://proc7ts.github.io/context-values/interfaces/CxValues.html#get">get()</a> method accepting requested
+				entry instance (<a href="https://proc7ts.github.io/context-values/interfaces/CxEntry.html">CxEntry</a>) identifying the requested value, and optional request (<a href="https://proc7ts.github.io/context-values/interfaces/CxRequest.html">CxRequest</a>).</p>
+				<p>The following code returns a string value of <code>myEntry</code> entry, or throws an exception if the entry has no value.</p>
+				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">CxEntry</span><span style="color: #000000">, </span><span style="color: #001080">cxSingle</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@proc7ts/context-values&#039;</span><span style="color: #000000">;</span>
 
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">key</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">SingleContextKey</span><span style="color: #000000">&lt;</span><span style="color: #267F99">string</span><span style="color: #000000">&gt;(</span><span style="color: #A31515">&#039;my-key&#039;</span><span style="color: #000000">);</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">myEntry</span><span style="color: #000000">: </span><span style="color: #267F99">CxEntry</span><span style="color: #000000">&lt;</span><span style="color: #267F99">string</span><span style="color: #000000">&gt; = { </span>
+<span style="color: #000000">  </span><span style="color: #001080">perContext:</span><span style="color: #000000"> </span><span style="color: #795E26">cxSingle</span><span style="color: #000000">(),</span>
+<span style="color: #000000">  </span><span style="color: #795E26">toString</span><span style="color: #001080">:</span><span style="color: #000000"> () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;[CxEntry myEntry]&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">};</span>
 
-<span style="color: #001080">myContext</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">key</span><span style="color: #000000">)</span>
+<span style="color: #001080">myContext</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">myEntry</span><span style="color: #000000">);</span>
 </code></pre>
 				<a href="#fallback-value" id="fallback-value" style="color: inherit; text-decoration: none;">
 					<h3>Fallback Value</h3>
 				</a>
-				<p>Normally, if the value associated with the given key can not be found, an exception is thrown. To avoid this, a fallback
-				value can be provided. It will be returned if the value not found.</p>
-				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">SingleContextKey</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@proc7ts/context-values&#039;</span><span style="color: #000000">;</span>
+				<p>Normally, if context entry has no value, an exception thrown. To avoid this, a <a href="https://proc7ts.github.io/context-values/interfaces/CxRequest.html#or">fallback value</a> can be provided. It will
+				be returned in case there is no value.</p>
+				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">CxEntry</span><span style="color: #000000">, </span><span style="color: #001080">cxSingle</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@proc7ts/context-values&#039;</span><span style="color: #000000">;</span>
 
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">key</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">SingleContextKey</span><span style="color: #000000">&lt;</span><span style="color: #267F99">string</span><span style="color: #000000">&gt;(</span><span style="color: #A31515">&#039;my-key&#039;</span><span style="color: #000000">);</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">myEntry</span><span style="color: #000000">: </span><span style="color: #267F99">CxEntry</span><span style="color: #000000">&lt;</span><span style="color: #267F99">string</span><span style="color: #000000">&gt; = {</span>
+<span style="color: #000000">  </span><span style="color: #001080">perContext:</span><span style="color: #000000"> </span><span style="color: #795E26">cxSingle</span><span style="color: #000000">(),</span>
+<span style="color: #000000">  </span><span style="color: #795E26">toString</span><span style="color: #001080">:</span><span style="color: #000000"> () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;[CxEntry myEntry]&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">};</span>
 
-<span style="color: #001080">myContext</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">key</span><span style="color: #000000">, { </span><span style="color: #001080">or:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;empty&#039;</span><span style="color: #000000"> });</span>
+<span style="color: #001080">myContext</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">myEntry</span><span style="color: #000000">, { </span><span style="color: #001080">or:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;empty&#039;</span><span style="color: #000000"> }); </span><span style="color: #008000">// &#039;empty&#039;</span>
 </code></pre>
-				<a href="#context-value-request" id="context-value-request" style="color: inherit; text-decoration: none;">
-					<h3>Context Value Request</h3>
-				</a>
-				<p>The <code>get()</code> method accepts not only a <code>ContextKey</code> instance, but arbitrary <code>ContextRequest</code>. The latter is just an
-				object with <code>[ContextKey__symbol]</code> property containing a <code>ContextKey</code> instance to find.</p>
-				<p>This can be handy e.g. when requesting an instance of some known type:</p>
-				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">ContextKey</span><span style="color: #000000">, </span><span style="color: #001080">ContextKey__symbol</span><span style="color: #000000">, </span><span style="color: #001080">SingleContextKey</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@proc7ts/context-values&#039;</span><span style="color: #000000">;</span>
-
-<span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">MyService</span><span style="color: #000000"> {</span>
-<span style="color: #000000">  </span>
-<span style="color: #000000">  </span><span style="color: #008000">// MyService class (not instance) implements a `ContextRequest`</span>
-<span style="color: #000000">  </span><span style="color: #0000FF">static</span><span style="color: #000000"> </span><span style="color: #0000FF">readonly</span><span style="color: #000000"> [</span><span style="color: #001080">ContextKey__symbol</span><span style="color: #000000">]: </span><span style="color: #267F99">ContextKey</span><span style="color: #000000">&lt;</span><span style="color: #267F99">MyService</span><span style="color: #000000">&gt; = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">SingleContextKey</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;my-service&#039;</span><span style="color: #000000">);</span>
-<span style="color: #000000">  </span>
-<span style="color: #000000">}</span>
-
-<span style="color: #001080">myContext</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">MyService</span><span style="color: #000000">); </span><span style="color: #008000">// No need to specify `MyService[ContextKey__symbol]` here</span>
-<span style="color: #001080">myContext</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">MyService</span><span style="color: #000000">[</span><span style="color: #001080">ContextKey__symbol</span><span style="color: #000000">]); </span><span style="color: #008000">// The same as above.</span>
-</code></pre>
-				<a href="#providing-context-values" id="providing-context-values" style="color: inherit; text-decoration: none;">
-					<h2>Providing Context Values</h2>
-				</a>
-				<p>Context values can be provided using <code>ContextRegistry</code>.
-				Then the values can be requested from <code>ContextValues</code> instance constructed by the <code>newValues()</code> method of the registry. </p>
-				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">ContextRegistry</span><span style="color: #000000">, </span><span style="color: #001080">SingleContextKey</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@proc7ts/context-values&#039;</span><span style="color: #000000">;</span>
-
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">key1</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">SingleContextKey</span><span style="color: #000000">&lt;</span><span style="color: #267F99">string</span><span style="color: #000000">&gt;(</span><span style="color: #A31515">&#039;key1&#039;</span><span style="color: #000000">);</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">key2</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">SingleContextKey</span><span style="color: #000000">&lt;</span><span style="color: #267F99">number</span><span style="color: #000000">&gt;(</span><span style="color: #A31515">&#039;key2&#039;</span><span style="color: #000000">);</span>
-
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">registry</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">ContextRegistry</span><span style="color: #000000">();</span>
-
-<span style="color: #001080">registry</span><span style="color: #000000">.</span><span style="color: #795E26">provide</span><span style="color: #000000">({ </span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #001080">key1</span><span style="color: #000000">, </span><span style="color: #001080">is:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;string&#039;</span><span style="color: #000000"> });</span>
-<span style="color: #001080">registry</span><span style="color: #000000">.</span><span style="color: #795E26">provide</span><span style="color: #000000">({ </span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #001080">key2</span><span style="color: #000000">, </span><span style="color: #795E26">by</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #001080">ctx</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">ctx</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">key1</span><span style="color: #000000">).</span><span style="color: #001080">length</span><span style="color: #000000"> })</span>
-
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">context</span><span style="color: #000000"> = </span><span style="color: #001080">registry</span><span style="color: #000000">.</span><span style="color: #795E26">newValues</span><span style="color: #000000">();</span>
-
-<span style="color: #001080">context</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">key1</span><span style="color: #000000">); </span><span style="color: #008000">// &#039;string&#039;</span>
-<span style="color: #001080">context</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">key2</span><span style="color: #000000">); </span><span style="color: #008000">// 6</span>
-</code></pre>
-				<a href="#context-value-target" id="context-value-target" style="color: inherit; text-decoration: none;">
-					<h3>Context Value Target</h3>
-				</a>
-				<p>The <code>provide()</code> method accepts not only a <code>ContextKey</code> instance, but arbitrary <code>ContextTarget</code>. The latter is just an
-				object with <code>[ContextKey__symbol]</code> property containing a <code>ContextKey</code> to provide.</p>
-				<p>This can be handy e.g. when providing an instance of some known type:</p>
-				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">ContextKey</span><span style="color: #000000">, </span><span style="color: #001080">ContextKey__symbol</span><span style="color: #000000">, </span><span style="color: #001080">ContextRegistry</span><span style="color: #000000">, </span><span style="color: #001080">SingleContextKey</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@proc7ts/context-values&#039;</span><span style="color: #000000">;</span>
-
-<span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">MyService</span><span style="color: #000000"> {</span>
-<span style="color: #000000">  </span>
-<span style="color: #000000">  </span><span style="color: #008000">// MyService class (not instance) implements a `ContextRequest`</span>
-<span style="color: #000000">  </span><span style="color: #0000FF">static</span><span style="color: #000000"> </span><span style="color: #0000FF">readonly</span><span style="color: #000000"> [</span><span style="color: #001080">ContextKey__symbol</span><span style="color: #000000">]: </span><span style="color: #267F99">ContextKey</span><span style="color: #000000">&lt;</span><span style="color: #267F99">MyService</span><span style="color: #000000">&gt; = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">SingleContextKey</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;my-service&#039;</span><span style="color: #000000">);</span>
-<span style="color: #000000">  </span>
-<span style="color: #000000">}</span>
-
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">registry</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">ContextRegistry</span><span style="color: #000000">();</span>
-
-<span style="color: #001080">registry</span><span style="color: #000000">.</span><span style="color: #795E26">provide</span><span style="color: #000000">({ </span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #001080">MyService</span><span style="color: #000000">, </span><span style="color: #001080">is:</span><span style="color: #000000"> </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">MyService</span><span style="color: #000000">() });</span>
-
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">context</span><span style="color: #000000"> = </span><span style="color: #001080">registry</span><span style="color: #000000">.</span><span style="color: #795E26">newValues</span><span style="color: #000000">();</span>
-
-<span style="color: #001080">context</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">MyService</span><span style="color: #000000">); </span><span style="color: #008000">// No need to specify `MyService[ContextKey__symbol]` here</span>
-</code></pre>
-				<a href="#context-value-specifier" id="context-value-specifier" style="color: inherit; text-decoration: none;">
-					<h3>Context Value Specifier</h3>
-				</a>
-				<p>The <code>provide()</code> method of <code>ContextRegistry</code> accepts a <em>context value specifier</em> as its only parameter.</p>
-				<p>This specifier defines a value (or, more precisely, the <a href="#value-sources">value sources</a>). It may specify the value in a different ways:</p>
-				<ul>
-					<li><code>registry.provide({ a: key, is: value })</code> - provides the value explicitly.</li>
-					<li><code>registry.provide({ a: key, by: ctx =&gt; calculateValue(ctx) })</code> - evaluates the value in most generic way. <code>ctx</code> here
-					is the target context.</li>
-					<li><code>registry.provide({ a: key, by: (a, b) =&gt; calculateValue(a, b), with: [keyA, keyB] })</code> - evaluates the value based on
-					other context values with keys <code>keyA</code> and <code>keyB</code>.</li>
-					<li><code>registry.provide({ a: key, as: MyService })</code> - constructs the value as <code>new MyService(ctx)</code>, where <code>ctx</code> is the
-						target context. The <code>a</code> property may be omitted if <code>MyService</code> has a static <code>[ContextKey__symbol]</code> property.
-					See <a href="#context-value-target">Context Value Target</a>.</li>
-					<li><code>registry.provide({ a: key, as: MyService, with: [keyA, keyB] })</code> - constructs the value as <code>new MyService(a, b)</code>,
-						where <code>a</code> and <code>b</code> are context values with keys <code>keyA</code> and <code>keyB</code> respectively. The <code>a</code> property may be omitted if
-					<code>MyService</code> has a static <code>[ContextKey__symbol]</code> property. See <a href="#context-value-target">Context Value Target</a>.</li>
-					<li><code>registry.provide({ a: key, via: otherKey })</code> - makes the value available under <code>otherKey</code> available under <code>key</code>.
-					I.e. aliases it.  </li>
-				</ul>
-				<a href="#context-value-key" id="context-value-key" style="color: inherit; text-decoration: none;">
-					<h2>Context Value Key</h2>
-				</a>
-				<p>Context value keys identify context values.</p>
-				<p>They extend a <code>ContextKey</code> abstract class. The following implementations are available:</p>
-				<ul>
-					<li><code>SingleContextKey</code> that allows associating a single value with it, and  </li>
-					<li><code>MultiContextKey</code> that allows associating multiple values with it.</li>
-				</ul>
-				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">ContextRegistry</span><span style="color: #000000">, </span><span style="color: #001080">SingleContextKey</span><span style="color: #000000">, </span><span style="color: #001080">MultiContextKey</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@proc7ts/context-values&#039;</span><span style="color: #000000">;</span>
-
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">key1</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">SingleContextKey</span><span style="color: #000000">&lt;</span><span style="color: #267F99">string</span><span style="color: #000000">&gt;(</span><span style="color: #A31515">&#039;key1&#039;</span><span style="color: #000000">);</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">key2</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">MultiContextKey</span><span style="color: #000000">&lt;</span><span style="color: #267F99">number</span><span style="color: #000000">&gt;(</span><span style="color: #A31515">&#039;key2&#039;</span><span style="color: #000000">);</span>
-
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">registry</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">ContextRegistry</span><span style="color: #000000">();</span>
-
-<span style="color: #001080">registry</span><span style="color: #000000">.</span><span style="color: #795E26">provide</span><span style="color: #000000">({ </span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #001080">key1</span><span style="color: #000000">, </span><span style="color: #001080">is:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;value1&#039;</span><span style="color: #000000"> });</span>
-<span style="color: #001080">registry</span><span style="color: #000000">.</span><span style="color: #795E26">provide</span><span style="color: #000000">({ </span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #001080">key1</span><span style="color: #000000">, </span><span style="color: #001080">is:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;value2&#039;</span><span style="color: #000000"> });</span>
-<span style="color: #001080">registry</span><span style="color: #000000">.</span><span style="color: #795E26">provide</span><span style="color: #000000">({ </span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #001080">key2</span><span style="color: #000000">, </span><span style="color: #001080">is:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000"> });</span>
-<span style="color: #001080">registry</span><span style="color: #000000">.</span><span style="color: #795E26">provide</span><span style="color: #000000">({ </span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #001080">key2</span><span style="color: #000000">, </span><span style="color: #001080">is:</span><span style="color: #000000"> </span><span style="color: #098658">2</span><span style="color: #000000"> });</span>
-
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">context</span><span style="color: #000000"> = </span><span style="color: #001080">registry</span><span style="color: #000000">.</span><span style="color: #795E26">newValues</span><span style="color: #000000">();</span>
-
-<span style="color: #001080">context</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">key1</span><span style="color: #000000">); </span><span style="color: #008000">// &#039;value2&#039; - SingleContextKey uses the latest value provided</span>
-<span style="color: #001080">context</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">key2</span><span style="color: #000000">); </span><span style="color: #008000">// [1, 2] - MultiContextKey returns all provided values as an array</span>
-</code></pre>
+				<p>A <code>null</code> value can be used as a fallback one.</p>
 				<a href="#default-value" id="default-value" style="color: inherit; text-decoration: none;">
 					<h3>Default Value</h3>
 				</a>
-				<p>Context value key may declare a default value. It will be evaluated and returned when the value not found and no
-				fallback one specified in the request.</p>
-				<p>The default value is evaluated by the function accepting a <code>ContextValues</code> instance as its only argument.</p>
-				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">ContextRegistry</span><span style="color: #000000">, </span><span style="color: #001080">SingleContextKey</span><span style="color: #000000">, </span><span style="color: #001080">MultiContextKey</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@proc7ts/context-values&#039;</span><span style="color: #000000">;</span>
+				<p>Context entry may have a <a href="https://proc7ts.github.io/context-values/interfaces/CxEntry.Definition.html#assignDefault">default value</a> that will be returned, unless the entry has an explicitly provided one, or a
+				<a href="https://proc7ts.github.io/context-values/interfaces/CxRequest.html#or">fallback value</a> specified. It is possible to request the default value directly:</p>
+				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">CxEntry</span><span style="color: #000000">, </span><span style="color: #001080">CxRequestMethod</span><span style="color: #000000">, </span><span style="color: #001080">cxSingle</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@proc7ts/context-values&#039;</span><span style="color: #000000">;</span>
 
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">key1</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">SingleContextKey</span><span style="color: #000000">&lt;</span><span style="color: #267F99">string</span><span style="color: #000000">&gt;(</span><span style="color: #A31515">&#039;key1&#039;</span><span style="color: #000000">);</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">key2</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">SingleContextKey</span><span style="color: #000000">&lt;</span><span style="color: #267F99">number</span><span style="color: #000000">&gt;(</span><span style="color: #A31515">&#039;key2&#039;</span><span style="color: #000000">, { </span><span style="color: #795E26">byDefault</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #001080">ctx</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">ctx</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;key1&#039;</span><span style="color: #000000">).</span><span style="color: #001080">length</span><span style="color: #000000"> });</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">key3</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">MultiContextKey</span><span style="color: #000000">&lt;</span><span style="color: #267F99">number</span><span style="color: #000000">&gt;(</span><span style="color: #A31515">&#039;key3&#039;</span><span style="color: #000000">);</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">myEntry</span><span style="color: #000000">: </span><span style="color: #267F99">CxEntry</span><span style="color: #000000">&lt;</span><span style="color: #267F99">string</span><span style="color: #000000">&gt; = {</span>
+<span style="color: #000000">  </span><span style="color: #001080">perContext:</span><span style="color: #000000"> </span><span style="color: #795E26">cxSingle</span><span style="color: #000000">({ </span><span style="color: #795E26">byDefault</span><span style="color: #001080">:</span><span style="color: #000000"> () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;default&#039;</span><span style="color: #000000"> }),</span>
+<span style="color: #000000">  </span><span style="color: #795E26">toString</span><span style="color: #001080">:</span><span style="color: #000000"> () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;[CxEntry myEntry]&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">};</span>
 
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">registry</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">ContextRegistry</span><span style="color: #000000">();</span>
-
-<span style="color: #001080">registry</span><span style="color: #000000">.</span><span style="color: #795E26">provide</span><span style="color: #000000">({ </span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #001080">key1</span><span style="color: #000000">, </span><span style="color: #001080">is:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;value&#039;</span><span style="color: #000000"> });</span>
-
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">context</span><span style="color: #000000"> = </span><span style="color: #001080">registry</span><span style="color: #000000">.</span><span style="color: #795E26">newValues</span><span style="color: #000000">();</span>
-
-<span style="color: #001080">context</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">key1</span><span style="color: #000000">); </span><span style="color: #008000">// &#039;value&#039;</span>
-<span style="color: #001080">context</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">key2</span><span style="color: #000000">); </span><span style="color: #008000">// 6 - evaluated, as it is not provided</span>
-<span style="color: #001080">context</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">key2</span><span style="color: #000000">, { </span><span style="color: #001080">or:</span><span style="color: #000000"> </span><span style="color: #0000FF">null</span><span style="color: #000000"> }); </span><span style="color: #008000">// null - fallback value always takes precedence</span>
-<span style="color: #001080">context</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">key3</span><span style="color: #000000">); </span><span style="color: #008000">// [] - MultiContextKey uses it as a default value, unless explicitly specified</span>
-
-<span style="color: #001080">registry</span><span style="color: #000000">.</span><span style="color: #795E26">provide</span><span style="color: #000000">({ </span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #001080">key2</span><span style="color: #000000">, </span><span style="color: #001080">value:</span><span style="color: #000000"> </span><span style="color: #098658">999</span><span style="color: #000000"> });</span>
-
-<span style="color: #001080">context</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">key2</span><span style="color: #000000">); </span><span style="color: #008000">// 999 - provided explicitly</span>
+<span style="color: #001080">myContext</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">myEntry</span><span style="color: #000000">, { </span><span style="color: #001080">by:</span><span style="color: #000000"> </span><span style="color: #001080">CxRequestMethod</span><span style="color: #000000">.</span><span style="color: #001080">Defaults</span><span style="color: #000000"> }); </span><span style="color: #008000">// &#039;default&#039;</span>
 </code></pre>
-				<a href="#custom-context-key" id="custom-context-key" style="color: inherit; text-decoration: none;">
-					<h3>Custom Context Key</h3>
+				<p>It is also possible to request an explicitly provided value with <code>{ by: CxRequestMethod.Assets }</code>.</p>
+				<a href="#request-callback" id="request-callback" style="color: inherit; text-decoration: none;">
+					<h3>Request Callback</h3>
 				</a>
-				<p>It is possible to implement a custom <code>ContextKey</code>.</p>
-				<p>For that extend e.g. a <code>SimpleContextKey</code> that implements the boilerplate. The only method left to implement then is a
-				<code>grow()</code> one.</p>
-				<p>The <code>grow()</code> method takes a single <code>ContextValueSlot</code> parameter to insert the constructed value to.</p>
-				<a href="#value-sources-and-seeds" id="value-sources-and-seeds" style="color: inherit; text-decoration: none;">
-					<h4>Value Sources and Seeds</h4>
-				</a>
-				<p>Instead of the value itself, the registry allows to provide its sources. Those are combined into <em>value seed</em>.
-				That is passed to <a href="#custom-context-key">ContextKey.grow()</a> method to construct the value (or grow it from the seed).</p>
-				<p>There could be multiple sources per single value. They could be of a different type.</p>
-				<p>For example, the seed of <code>MultiContextKey</code> is an <code>Iterable</code> instance of value sources.</p>
-				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span>
-<span style="color: #000000">  </span><span style="color: #001080">ContextRegistry</span><span style="color: #000000">,</span>
-<span style="color: #000000">  </span><span style="color: #001080">ContextValueSlot</span><span style="color: #000000">,</span>
-<span style="color: #000000">  </span><span style="color: #001080">IterativeContextKey</span><span style="color: #000000">,</span>
-<span style="color: #000000">} </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@proc7ts/context-values&#039;</span><span style="color: #000000">;</span>
+				<p>In addition to returning from <a href="https://proc7ts.github.io/context-values/interfaces/CxValues.html#get">get()</a> method call, the context value can be passed to a callback:</p>
+				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">CxEntry</span><span style="color: #000000">, </span><span style="color: #001080">CxRequestMethod</span><span style="color: #000000">, </span><span style="color: #001080">cxSingle</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@proc7ts/context-values&#039;</span><span style="color: #000000">;</span>
 
-<span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">ConcatContextKey</span><span style="color: #000000">&lt;</span><span style="color: #267F99">Src</span><span style="color: #000000">&gt; </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">IterativeContextKey</span><span style="color: #000000">&lt;</span><span style="color: #267F99">string</span><span style="color: #000000">, </span><span style="color: #267F99">Src</span><span style="color: #000000">&gt; {</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">myEntry</span><span style="color: #000000">: </span><span style="color: #267F99">CxEntry</span><span style="color: #000000">&lt;</span><span style="color: #267F99">string</span><span style="color: #000000">&gt; = {</span>
+<span style="color: #000000">  </span><span style="color: #001080">perContext:</span><span style="color: #000000"> </span><span style="color: #795E26">cxSingle</span><span style="color: #000000">({ </span><span style="color: #795E26">byDefault</span><span style="color: #001080">:</span><span style="color: #000000"> () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;default&#039;</span><span style="color: #000000"> }),</span>
+<span style="color: #000000">  </span><span style="color: #795E26">toString</span><span style="color: #001080">:</span><span style="color: #000000"> () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;[CxEntry myEntry]&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">};</span>
 
-<span style="color: #000000">  </span><span style="color: #0000FF">constructor</span><span style="color: #000000">(</span><span style="color: #001080">name</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000">) {</span>
-<span style="color: #000000">    </span><span style="color: #0000FF">super</span><span style="color: #000000">(</span><span style="color: #001080">name</span><span style="color: #000000">);  </span>
-<span style="color: #000000">  }</span>
+<span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">myValue</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000"> | </span><span style="color: #267F99">undefined</span><span style="color: #000000">;</span>
+<span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">myValueBy</span><span style="color: #000000">: </span><span style="color: #267F99">CxRequestMethod</span><span style="color: #000000"> | </span><span style="color: #267F99">undefined</span><span style="color: #000000">;</span>
 
-<span style="color: #000000">  </span><span style="color: #795E26">grow</span><span style="color: #000000">(</span>
-<span style="color: #000000">    </span><span style="color: #001080">slot</span><span style="color: #000000">: </span><span style="color: #267F99">ContextValueSlot</span><span style="color: #000000">&lt;</span><span style="color: #267F99">string</span><span style="color: #000000">, </span><span style="color: #267F99">Src</span><span style="color: #000000">, </span><span style="color: #267F99">Iterable</span><span style="color: #000000">&lt;</span><span style="color: #267F99">Src</span><span style="color: #000000">&gt;&gt;,</span>
-<span style="color: #000000">  ): </span><span style="color: #267F99">void</span><span style="color: #000000"> {</span>
-<span style="color: #000000">    </span>
-<span style="color: #000000">    </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">result</span><span style="color: #000000"> = </span><span style="color: #001080">slot</span><span style="color: #000000">.</span><span style="color: #001080">seed</span><span style="color: #000000">.</span><span style="color: #795E26">reduce</span><span style="color: #000000">((</span><span style="color: #001080">p</span><span style="color: #000000">, </span><span style="color: #001080">s</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">p</span><span style="color: #000000"> != </span><span style="color: #0000FF">null</span><span style="color: #000000"> ? </span><span style="color: #A31515">`</span><span style="color: #0000FF">${</span><span style="color: #001080">p</span><span style="color: #0000FF">}</span><span style="color: #A31515">, </span><span style="color: #0000FF">${</span><span style="color: #001080">s</span><span style="color: #0000FF">}</span><span style="color: #A31515">`</span><span style="color: #000000"> : </span><span style="color: #A31515">`</span><span style="color: #0000FF">${</span><span style="color: #001080">s</span><span style="color: #0000FF">}</span><span style="color: #A31515">`</span><span style="color: #000000">, </span><span style="color: #0000FF">null</span><span style="color: #000000">);</span>
-<span style="color: #000000">    </span>
-<span style="color: #000000">    </span><span style="color: #AF00DB">if</span><span style="color: #000000"> (</span><span style="color: #001080">result</span><span style="color: #000000"> != </span><span style="color: #0000FF">null</span><span style="color: #000000">) {</span>
-<span style="color: #000000">      </span><span style="color: #008000">// Insert the result if there is at leas one source.</span>
-<span style="color: #000000">      </span><span style="color: #001080">slot</span><span style="color: #000000">.</span><span style="color: #795E26">insert</span><span style="color: #000000">(</span><span style="color: #001080">result</span><span style="color: #000000">);</span>
-<span style="color: #000000">    } </span><span style="color: #AF00DB">else</span><span style="color: #000000"> </span><span style="color: #AF00DB">if</span><span style="color: #000000"> (</span><span style="color: #001080">slot</span><span style="color: #000000">.</span><span style="color: #001080">hasFallback</span><span style="color: #000000">) {</span>
-<span style="color: #000000">        </span><span style="color: #008000">// No sources provided, but there is a fallback value. Insert the latter.</span>
-<span style="color: #000000">        </span><span style="color: #001080">slot</span><span style="color: #000000">.</span><span style="color: #795E26">insert</span><span style="color: #000000">(</span><span style="color: #001080">slot</span><span style="color: #000000">.</span><span style="color: #001080">or</span><span style="color: #000000">);    </span>
-<span style="color: #000000">    } </span><span style="color: #AF00DB">else</span><span style="color: #000000"> {</span>
-<span style="color: #000000">        </span><span style="color: #008000">// No sources provided, and there is no a fallback value. Insert an empty string.    </span>
-<span style="color: #000000">        </span><span style="color: #001080">slot</span><span style="color: #000000">.</span><span style="color: #795E26">insert</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;&#039;</span><span style="color: #000000">);</span>
-<span style="color: #000000">    }</span>
-<span style="color: #000000">  }</span>
-
-<span style="color: #000000">}</span>
-
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">key1</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">ConcatContextKey</span><span style="color: #000000">&lt;</span><span style="color: #267F99">number</span><span style="color: #000000">&gt;(</span><span style="color: #A31515">&#039;my-numbers&#039;</span><span style="color: #000000">);</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">key2</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">ConcatContextKey</span><span style="color: #000000">&lt;</span><span style="color: #267F99">string</span><span style="color: #000000">&gt;(</span><span style="color: #A31515">&#039;my-string&#039;</span><span style="color: #000000">);</span>
-
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">registry</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">ContextRegistry</span><span style="color: #000000">();</span>
-
-<span style="color: #001080">registry</span><span style="color: #000000">.</span><span style="color: #795E26">provide</span><span style="color: #000000">({ </span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #001080">key1</span><span style="color: #000000">, </span><span style="color: #001080">is:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000"> });</span>
-<span style="color: #001080">registry</span><span style="color: #000000">.</span><span style="color: #795E26">provide</span><span style="color: #000000">({ </span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #001080">key1</span><span style="color: #000000">, </span><span style="color: #001080">is:</span><span style="color: #000000"> </span><span style="color: #098658">2</span><span style="color: #000000"> });</span>
-<span style="color: #001080">registry</span><span style="color: #000000">.</span><span style="color: #795E26">provide</span><span style="color: #000000">({ </span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #001080">key1</span><span style="color: #000000">, </span><span style="color: #001080">is:</span><span style="color: #000000"> </span><span style="color: #098658">3</span><span style="color: #000000"> });</span>
-
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">context</span><span style="color: #000000"> = </span><span style="color: #001080">registry</span><span style="color: #000000">.</span><span style="color: #795E26">newValues</span><span style="color: #000000">();</span>
-
-<span style="color: #001080">context</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">key1</span><span style="color: #000000">); </span><span style="color: #008000">// &#039;1, 2, 3&#039; - concatenated value</span>
-<span style="color: #001080">context</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">key2</span><span style="color: #000000">); </span><span style="color: #008000">// &#039;&#039; - empty string by default </span>
-<span style="color: #001080">context</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">key2</span><span style="color: #000000">, { </span><span style="color: #001080">or:</span><span style="color: #000000"> </span><span style="color: #0000FF">undefined</span><span style="color: #000000"> }); </span><span style="color: #008000">// undefined - fallback value </span>
+<span style="color: #001080">myContext</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">myEntry</span><span style="color: #000000">, { </span><span style="color: #795E26">set</span><span style="color: #001080">:</span><span style="color: #000000"> (</span><span style="color: #001080">value</span><span style="color: #000000">, </span><span style="color: #001080">by</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> { </span><span style="color: #001080">myValue</span><span style="color: #000000"> = </span><span style="color: #001080">value</span><span style="color: #000000">; </span><span style="color: #001080">myValueBy</span><span style="color: #000000"> = </span><span style="color: #001080">my</span><span style="color: #000000"> });</span>
+<span style="color: #008000">// myValue === &#039;default&#039;</span>
+<span style="color: #008000">// myValueBy === CxRequestMethod.Defaults</span>
 </code></pre>
-				<p>A context value for particular key is constructed at most once. Thus, the <code>grow()</code> method is called at most once per
-				key.</p>
-				<p>A <a href="#context-value-specifier">context value specifier</a> is consulted at most once per key. Only when the <code>grow()</code>
-					method requested the source value. So, for example, if multiple sources specified for the same <code>SingleContextKey</code>, only
-				the last one will be constructed and used as a context value. The rest of them won&#39;t be constructed at all.</p>
-				<a href="#updatable-context-values" id="updatable-context-values" style="color: inherit; text-decoration: none;">
-					<h2>Updatable Context Values</h2>
-				</a>
-				<p>The <code>SingleContextKey</code> and <code>MultiContextKey</code> imply that once the associated context value constructed, it no longer
-					changes. I.e. even though more sources provided for the same key in <code>ContextRegistry</code> they won&#39;t affect the already
-				constructed value. </p>
-				<p>However, it is possible to update context values. For that a <code>ContextUpKey</code> abstract key may be used,
-				or <code>SingleContextUpKey</code> and <code>MultiContextUpKey</code> key implementations.</p>
-				<p>They provide an <a href="https://www.npmjs.com/package/@proc7ts/fun-events">AfterEvent</a> keeper of value. The receivers registered in this keeper would receive the actual value
-				immediately, and each time it changes. E.g. when new value source is provided in <code>ContextRegistry</code>.</p>
-				<p>This functionality is implemented in <code>@proc7ts/context-values/updatable</code> sub-module and depends on
-				<code>@proc7ts/fun-events</code>.</p>
-				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">ContextRegistry</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@proc7ts/context-values&#039;</span><span style="color: #000000">; </span>
-<span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">SingleContextUpKey</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@proc7ts/context-values/updatable&#039;</span><span style="color: #000000">;</span>
-
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">key</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">SingleContextUpKey</span><span style="color: #000000">&lt;</span><span style="color: #267F99">string</span><span style="color: #000000">&gt;(</span><span style="color: #A31515">&#039;updatable-value&#039;</span><span style="color: #000000">);</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">registry</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">ContextRegistry</span><span style="color: #000000">();</span>
-
-<span style="color: #001080">registry</span><span style="color: #000000">.</span><span style="color: #795E26">provide</span><span style="color: #000000">({ </span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #001080">key</span><span style="color: #000000">, </span><span style="color: #001080">is:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;initial&#039;</span><span style="color: #000000"> });</span>
-
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">values</span><span style="color: #000000"> = </span><span style="color: #001080">registry</span><span style="color: #000000">.</span><span style="color: #795E26">newValues</span><span style="color: #000000">();</span>
-
-<span style="color: #001080">values</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">key</span><span style="color: #000000">)(</span><span style="color: #001080">value</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">value</span><span style="color: #000000">)); </span><span style="color: #008000">// Log: &#039;initial&#039;</span>
-
-<span style="color: #001080">registry</span><span style="color: #000000">.</span><span style="color: #795E26">provide</span><span style="color: #000000">({ </span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #001080">key</span><span style="color: #000000">, </span><span style="color: #001080">is:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;updated&#039;</span><span style="color: #000000"> });  </span><span style="color: #008000">// Log: &#039;updated&#039;</span>
-</code></pre>
-				<a href="#modules" id="modules" style="color: inherit; text-decoration: none;">
-					<h2>Modules</h2>
-				</a>
-				<p>Context modules may be used to combine multiple context value providers, apply them at once, and unload when no longer
-				needed.</p>
-				<p>Usage example:</p>
-				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">ContextModule</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@proc7ts/context-values/updatable&#039;</span><span style="color: #000000">;</span>
-
-<span style="color: #008000">// Construct new module.</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">myModule</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">ContextModule</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;my module&#039;</span><span style="color: #000000">, {</span>
-<span style="color: #000000">  </span><span style="color: #795E26">setup</span><span style="color: #000000">(</span><span style="color: #001080">setup</span><span style="color: #000000">) {</span>
-<span style="color: #000000">    </span><span style="color: #008000">// Provide the values</span>
-<span style="color: #000000">    </span><span style="color: #001080">setup</span><span style="color: #000000">.</span><span style="color: #795E26">provide</span><span style="color: #000000">({ </span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #001080">Foo</span><span style="color: #000000">, </span><span style="color: #001080">is:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000"> });</span>
-<span style="color: #000000">  },</span>
-<span style="color: #000000">});</span>
-
-<span style="color: #008000">// Load the module</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">myModuleSupply</span><span style="color: #000000"> = </span><span style="color: #001080">contextRegistry</span><span style="color: #000000">.</span><span style="color: #795E26">provide</span><span style="color: #000000">(</span><span style="color: #001080">myModule</span><span style="color: #000000">);</span>
-
-<span style="color: #008000">// Start using the module</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">myModuleUse</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">context</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">myModule</span><span style="color: #000000">).</span><span style="color: #795E26">use</span><span style="color: #000000">();</span>
-
-<span style="color: #008000">// Await for the module to load</span>
-<span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">myModuleUse</span><span style="color: #000000">.</span><span style="color: #001080">whenReady</span><span style="color: #000000">;</span>
-
-<span style="color: #008000">// Access the value provided by module.</span>
-<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">context</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">Foo</span><span style="color: #000000">));</span>
-
-<span style="color: #008000">// Stop using the module</span>
-<span style="color: #001080">myModuleUse</span><span style="color: #000000">.</span><span style="color: #001080">supply</span><span style="color: #000000">.</span><span style="color: #795E26">off</span><span style="color: #000000">();</span>
-
-<span style="color: #008000">// Unload the module declaration.</span>
-<span style="color: #001080">myModuleSupply</span><span style="color: #000000">.</span><span style="color: #795E26">off</span><span style="color: #000000">();</span>
-</code></pre>
-				<p>Context module constructor accepts a human-readable module name, and options object.</p>
-				<p>The following options supported:</p>
+				<p>The callback won&#39;t be called if the entry has no value.</p>
+				<p>Note that this is the only way to know the origin of the value received. I.e. whether it is</p>
 				<ul>
-					<li><p><code>needs</code> - A module or modules the constructed one requires.</p>
-						<p>The listed modules will be loaded prior to loading the constructed one.</p>
-					</li>
-					<li><p><code>has</code> - A module or modules the constructed one provides.</p>
-						<p>When specified, the constructed module will be loaded <em>instead</em> of the listed ones.</p>
-					</li>
-					<li><p><code>setup()</code> - A method that sets up constructed module.</p>
-						<p>May be synchronous or asynchronous.</p>
-						<p>Accepts a <code>ContextModule.Setup</code> instance with the following properties:</p>
-						<ul>
-							<li><p><code>get()</code> - For accessing context values.</p>
-								<p>Inherited from <code>ContextValues</code> interface.</p>
-							</li>
-							<li><p><code>provide()</code> - For providing context values.</p>
-								<p>The same as in <code>ContextRegistry</code>.</p>
-								<p>The value providers will be removed automatically once the module is unloaded.</p>
-							</li>
-							<li><p><code>initBy()</code> - For registering module initializers.</p>
-							</li>
-						</ul>
-					</li>
+					<li>an explicitly provided value (<code>CxRequestMethod.Assets</code>),</li>
+					<li>a <a href="https://proc7ts.github.io/context-values/interfaces/CxEntry.Definition.html#assignDefault">default value</a> (<code>CxRequestMethod.Defaults</code>), or</li>
+					<li>a <a href="https://proc7ts.github.io/context-values/interfaces/CxRequest.html#or">fallback value</a> (<code>CxRequestMethod.Fallback</code>).</li>
 				</ul>
-				<p>To use a module:</p>
-				<ol>
-					<li>Create its implementation.</li>
-					<li>Provide it with <code>ContextRegistry.provide(module)</code> call.</li>
-					<li>Obtain its handle from context by calling <code>ContextValues.get(module)</code>.</li>
-					<li>Start using it by calling the <code>.use()</code> method of obtained module handle.</li>
-					<li>Wait when the module loaded and ready: <code>await use.whenReady</code></li>
-					<li>When no longer needed, cut off the module use supply: <code>use.supply.off()</code>
-						The module will be unloaded once no longer uses remain.
-					Note that the module can be in use indirectly, when required by another one.</li>
-				</ol>
+				<a href="#providing-context-values" id="providing-context-values" style="color: inherit; text-decoration: none;">
+					<h2>Providing Context Values</h2>
+				</a>
+				<p>The <a href="https://www.npmjs.com/package/@proc7ts/context-builder">@proc7ts/context-builder</a> contains everything needed to build the context and provides values for it.</p>
+				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">CxBuilder</span><span style="color: #000000">, </span><span style="color: #001080">cxBuildAsset</span><span style="color: #000000">, </span><span style="color: #001080">cxConstAsset</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@proc7ts/context-builder&#039;</span><span style="color: #000000">;</span>
+<span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">CxEntry</span><span style="color: #000000">, </span><span style="color: #001080">cxSingle</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@proc7ts/context-values&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">entry1</span><span style="color: #000000">: </span><span style="color: #267F99">CxEntry</span><span style="color: #000000">&lt;</span><span style="color: #267F99">string</span><span style="color: #000000">&gt; = { </span><span style="color: #001080">perContext:</span><span style="color: #000000"> </span><span style="color: #795E26">cxSingle</span><span style="color: #000000">(), </span><span style="color: #795E26">toString</span><span style="color: #001080">:</span><span style="color: #000000"> () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;[CxEntry entry1]&#039;</span><span style="color: #000000"> };</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">entry2</span><span style="color: #000000">: </span><span style="color: #267F99">CxEntry</span><span style="color: #000000">&lt;</span><span style="color: #267F99">number</span><span style="color: #000000">&gt; = { </span><span style="color: #001080">perContext:</span><span style="color: #000000"> </span><span style="color: #795E26">cxSingle</span><span style="color: #000000">(), </span><span style="color: #795E26">toString</span><span style="color: #001080">:</span><span style="color: #000000"> () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;[CxEntry entry2]&#039;</span><span style="color: #000000"> };</span>
+
+<span style="color: #008000">// Create context builder.</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">cxBuilder</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">CxBuilder</span><span style="color: #000000">(</span><span style="color: #001080">get</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> ({ </span><span style="color: #001080">get</span><span style="color: #000000"> } </span><span style="color: #008000">/* create context instance with `get` method */</span><span style="color: #000000">));</span>
+
+<span style="color: #008000">// Provide asset for `entry1` as constant.</span>
+<span style="color: #001080">cxBuilder</span><span style="color: #000000">.</span><span style="color: #795E26">provide</span><span style="color: #000000">(</span><span style="color: #795E26">cxConstAsset</span><span style="color: #000000">(</span><span style="color: #001080">entry1</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;string&#039;</span><span style="color: #000000">));</span>
+
+<span style="color: #008000">// Evaluate asset for `entry2` as the length `entry1` value.</span>
+<span style="color: #001080">cxBuilder</span><span style="color: #000000">.</span><span style="color: #795E26">provide</span><span style="color: #000000">(</span><span style="color: #795E26">cxBuildAsset</span><span style="color: #000000">(</span><span style="color: #001080">entry2</span><span style="color: #000000">, </span><span style="color: #001080">target</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">target</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">entry1</span><span style="color: #000000">).</span><span style="color: #001080">length</span><span style="color: #000000">))</span>
+
+<span style="color: #008000">// Obtain context instance.</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">context</span><span style="color: #000000"> = </span><span style="color: #001080">registry</span><span style="color: #000000">.</span><span style="color: #001080">context</span><span style="color: #000000">;</span>
+
+<span style="color: #008000">// Obtain context values.</span>
+<span style="color: #001080">context</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">entry1</span><span style="color: #000000">); </span><span style="color: #008000">// &#039;string&#039;</span>
+<span style="color: #001080">context</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">entry2</span><span style="color: #000000">); </span><span style="color: #008000">// 6</span>
+</code></pre>
+				<a href="#context-entry" id="context-entry" style="color: inherit; text-decoration: none;">
+					<h2>Context Entry</h2>
+				</a>
+				<p>Context entry identifies the value to obtain when passed to context&#39;s <a href="https://proc7ts.github.io/context-values/interfaces/CxValues.html#get">get()</a> method. It is also responsible for
+				combining provided <em>assets</em> into context <em>value</em>.</p>
+				<p>Context entry implements <a href="https://proc7ts.github.io/context-values/interfaces/CxEntry.html">CxEntry</a> interface containing single <code>perContext</code> method. It also a good practice to override
+				a <code>toString()</code> method, so that error messages contain a string representation of the entry.</p>
+				<p>There are several standard customizable <a href="https://proc7ts.github.io/context-values/interfaces/CxEntry.html">CxEntry</a> implementations. It is typically enough to use one of them:</p>
+				<ul>
+					<li><a href="https://proc7ts.github.io/context-values/modules.html#cxArray">cxArray()</a> - Lazily evaluated array-valued context entry.</li>
+					<li><a href="https://proc7ts.github.io/context-values/modules.html#cxDynamic">cxDynamic()</a> - Dynamically updating context entry reflecting the changes in entry assets.</li>
+					<li><a href="https://proc7ts.github.io/context-values/modules.html#cxEvaluated">cxEvaluated()</a> - Context entry with value lazily evaluated by the given function.</li>
+					<li><a href="https://proc7ts.github.io/context-values/modules.html#cxRecent">cxRecent()</a> - Dynamically updating context entry reflecting the changes in the most recent entry asset.</li>
+					<li><a href="https://proc7ts.github.io/context-values/modules.html#cxSingle">cxSingle()</a> - Lazily evaluated single-valued context entry.</li>
+				</ul>
+				<p>The functions create entry definers. I.e. functions that can be used as <code>perContext</code> implementations.</p>
+				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">CxBuilder</span><span style="color: #000000">, </span><span style="color: #001080">cxConstAsset</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@proc7ts/context-builder&#039;</span><span style="color: #000000">;</span>
+<span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">cxDynamic</span><span style="color: #000000">, </span><span style="color: #001080">CxEntry</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@proc7ts/context-values&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #008000">// Context value is a readonly array of strings,</span>
+<span style="color: #008000">// wwhile its assets are stringhs.</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">myEntry</span><span style="color: #000000">: </span><span style="color: #267F99">CxEntry</span><span style="color: #000000">&lt;</span><span style="color: #0000FF">readonly</span><span style="color: #000000"> </span><span style="color: #267F99">string</span><span style="color: #000000">[], </span><span style="color: #267F99">string</span><span style="color: #000000">&gt; = { </span>
+<span style="color: #000000">  </span><span style="color: #001080">perContext:</span><span style="color: #000000"> </span><span style="color: #795E26">cxDynamic</span><span style="color: #000000">(),</span>
+<span style="color: #000000">  </span><span style="color: #795E26">toString</span><span style="color: #001080">:</span><span style="color: #000000"> () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;[CxEntry myEntry]&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">};</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">cxBuilder</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">CxBuilder</span><span style="color: #000000">(</span><span style="color: #001080">get</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> ({ </span><span style="color: #001080">get</span><span style="color: #000000"> }));</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">context</span><span style="color: #000000"> = </span><span style="color: #001080">cxBuilder</span><span style="color: #000000">.</span><span style="color: #001080">context</span><span style="color: #000000">;</span>
+
+<span style="color: #001080">context</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">myEntry</span><span style="color: #000000">); </span><span style="color: #008000">// []</span>
+
+<span style="color: #008000">// Provide first asset.</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">supply</span><span style="color: #000000"> = </span><span style="color: #001080">cxBuilder</span><span style="color: #000000">.</span><span style="color: #795E26">provide</span><span style="color: #000000">(</span><span style="color: #795E26">cxConstAsset</span><span style="color: #000000">(</span><span style="color: #001080">myEntry</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">));</span>
+
+<span style="color: #001080">context</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">myEntry</span><span style="color: #000000">); </span><span style="color: #008000">// [&#039;foo&#039;]</span>
+
+<span style="color: #008000">// Provide second asset.</span>
+<span style="color: #001080">cxBuilder</span><span style="color: #000000">.</span><span style="color: #795E26">provide</span><span style="color: #000000">(</span><span style="color: #795E26">cxConstAsset</span><span style="color: #000000">(</span><span style="color: #001080">myEntry</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bar&#039;</span><span style="color: #000000">));</span>
+<span style="color: #001080">context</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">myEntry</span><span style="color: #000000">); </span><span style="color: #008000">// [&#039;foo&#039;, &#039;bar&#039;]</span>
+
+<span style="color: #008000">// Revoke the first asset.</span>
+<span style="color: #001080">supply</span><span style="color: #000000">.</span><span style="color: #795E26">off</span><span style="color: #000000">();</span>
+<span style="color: #001080">context</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">myEntry</span><span style="color: #000000">); </span><span style="color: #008000">// [&#039;bar&#039;]</span>
+</code></pre>
+				<a href="#context-scopes" id="context-scopes" style="color: inherit; text-decoration: none;">
+					<h3>Context Scopes</h3>
+				</a>
+				<p>When combining multiple contexts (i.e. make one context derive another one), it is often required to obtain some entry
+				from particular context only.</p>
+				<p>To make it possible a context may provide itself as its own context value. Then the entry implementation may obtain
+				this context, and then obtain its value from that context.</p>
+				<p>A context entry containing a context as its value called <em>scope</em>. There are two context entry implementations able to
+				handle scopes:</p>
+				<ul>
+					<li><a href="https://proc7ts.github.io/context-values/modules.html#cxScoped">cxScoped()</a> - Scoped context entry.</li>
+					<li><a href="https://proc7ts.github.io/context-values/modules.html#cxDefaultScoped">cxDefaultScoped()</a> - Context entry with scoped default value. </li>
+				</ul>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 			<nav class="tsd-navigation primary">
 				<ul>
 					<li class=" ">
-						<a href="modules.html">Modules</a>
+						<a href="modules.html">Exports</a>
 					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/module__proc7ts_context_values.html">Module @proc7ts/context-<wbr>values</a>
+					<li class=" tsd-kind-namespace">
+						<a href="modules/CxAsset.html">Cx<wbr>Asset</a>
 					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/module__proc7ts_context_values_updatable.html">Module @proc7ts/context-<wbr>values/updatable</a>
+					<li class=" tsd-kind-namespace">
+						<a href="modules/CxEntry.html">Cx<wbr>Entry</a>
+					</li>
+					<li class=" tsd-kind-namespace">
+						<a href="modules/CxRequest.html">Cx<wbr>Request</a>
+					</li>
+					<li class=" tsd-kind-namespace">
+						<a href="modules/CxTracker.html">Cx<wbr>Tracker</a>
+					</li>
+					<li class=" tsd-kind-namespace">
+						<a href="modules/CxTracking.html">Cx<wbr>Tracking</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-enum">
+						<a href="enums/CxRequestMethod.html" class="tsd-kind-icon">Cx<wbr>Request<wbr>Method</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/CxReferenceError.html" class="tsd-kind-icon">Cx<wbr>Reference<wbr>Error</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/CxAccessor.html" class="tsd-kind-icon">Cx<wbr>Accessor</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/CxEntry.html" class="tsd-kind-icon">Cx<wbr>Entry</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/CxModifier.html" class="tsd-kind-icon">Cx<wbr>Modifier</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/CxRequest.html" class="tsd-kind-icon">Cx<wbr>Request</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/CxTracker.html" class="tsd-kind-icon">Cx<wbr>Tracker</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/CxTracking.html" class="tsd-kind-icon">Cx<wbr>Tracking</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/CxValues.html" class="tsd-kind-icon">Cx<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="modules.html#CxAsset" class="tsd-kind-icon">Cx<wbr>Asset</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#CxGlobals" class="tsd-kind-icon">Cx<wbr>Globals</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#CxGlobals" class="tsd-kind-icon">Cx<wbr>Globals</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter">
+						<a href="modules.html#cxArray" class="tsd-kind-icon">cx<wbr>Array</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter">
+						<a href="modules.html#cxDefaultScoped" class="tsd-kind-icon">cx<wbr>Default<wbr>Scoped</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter">
+						<a href="modules.html#cxDynamic" class="tsd-kind-icon">cx<wbr>Dynamic</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter">
+						<a href="modules.html#cxEvaluated" class="tsd-kind-icon">cx<wbr>Evaluated</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter">
+						<a href="modules.html#cxRecent" class="tsd-kind-icon">cx<wbr>Recent</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter">
+						<a href="modules.html#cxScoped" class="tsd-kind-icon">cx<wbr>Scoped</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter">
+						<a href="modules.html#cxSingle" class="tsd-kind-icon">cx<wbr>Single</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#cxUnavailable" class="tsd-kind-icon">cx<wbr>Unavailable</a>
+					</li>
 				</ul>
 			</nav>
 		</div>
@@ -414,19 +350,12 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li>
-				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
-				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
-				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
-				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
-				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
-				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
 			</ul>
 		</div>
 	</div>
