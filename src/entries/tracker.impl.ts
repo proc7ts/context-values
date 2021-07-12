@@ -62,7 +62,7 @@ export function CxTracker$create<T>(
   };
 
   trackerSupply.whenOff(reason => {
-    get = to = cxUnavailable(target.entry, undefined, reason);
+    get = to = cxUnavailable(target.entry, `The ${target.entry} is no longer available`, reason);
   });
 
   return {
