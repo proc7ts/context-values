@@ -19,25 +19,25 @@ IoC Context Values
 
 - Clean distinction between _assets_ provided for context entries, and their _values_.
 
-  E.g. entry value is an array, while its entry value assets are elements of this array.
+  E.g. entry value is an array, while its assets are elements of this array.
 
-- Customizable relations between entry assets and its value.
+- Customizable relation between entry assets and its value.
 
   This relation established by entry implementation. Typically, the entry builds its value out of its assets. 
 
-- Reusable context entry implementations suitable for the majority of the use cases.
+- Reusable context entry implementations suitable for the majority of use cases.
 
-  E.g. [cxSingle()] for single-values entries, or [cxArray()] for array-values ones.
+  E.g. [cxSingle()] for single-valued entries, or [cxArray()] for array-valued ones.
 
 - Dynamically updatable context values.
 
-  The [cxSingle()] and [cxArray()] entries build the value _once_ on first access and return it on each subsequent
+  The [cxSingle()] and [cxArray()] entries build the value _once_ on the first access, and return it on each subsequent
   access. In contrast, the [cxRecent()] and [cxDynamic()] are able to track asset changes and reflect these changes in
   entry value.
 
 - Context derivation.
 
-  A context may derive another context to make the values available in the latter available in the former.
+  A context may derive another context to make the values from the latter available in the former.
 
 [npm-image]: https://img.shields.io/npm/v/@proc7ts/context-values.svg?logo=npm
 [npm-url]: https://www.npmjs.com/package/@proc7ts/context-values
@@ -58,7 +58,7 @@ Project Modules
 ---------------
   
 - [@proc7ts/context-values] library declares context API, and provides basic context entries implementations.
-- [@proc7ts/context-builder] builds IoC contexts, and provided basic context entry assets implementations.
+- [@proc7ts/context-builder] builds IoC contexts, and provides basic context entry assets implementations.
 - [@proc7ts/context-modules] brings support for dynamically loadable (and un-loadable) context modules.
 
 [@proc7ts/context-builder]: https://www.npmjs.com/package/@proc7ts/context-builder
@@ -70,7 +70,7 @@ Accessing Context Values
 ------------------------
 
 An IoC context implements a [CxValues] interface. This interface declares a single [get()] method accepting requested
-entry instance ([CxEntry]) identifying the requested value, and optional request ([CxRequest]).
+entry instance ([CxEntry]), and optional request ([CxRequest]).
 
 The following code returns a string value of `myEntry` entry, or throws an exception if the entry has no value.
 ```typescript
@@ -113,7 +113,7 @@ A `null` value can be used as a fallback one.
 
 ### Default Value
 
-Context entry may have a [default value] that will be returned, unless the entry has an explicitly provided one, or a
+Context entry may have a [default value] that will be returned, unless the entry has an explicitly provided one or a
 [fallback value] specified. It is possible to request the default value directly:
 
 ```typescript
@@ -127,7 +127,7 @@ const myEntry: CxEntry<string> = {
 myContext.get(myEntry, { by: CxRequestMethod.Defaults }); // 'default'
 ```
 
-It is also possible to request an explicitly provided value with `{ by: CxRequestMethod.Assets }`.
+It is also possible to request explicitly provided value with `{ by: CxRequestMethod.Assets }` request.
 
 [default value]: https://proc7ts.github.io/context-values/interfaces/CxEntry.Definition.html#assignDefault
 
@@ -164,7 +164,7 @@ Note that this is the only way to know the origin of the value received. I.e. wh
 Providing Context Values
 ------------------------
 
-The [@proc7ts/context-builder] contains everything needed to build the context and provides values for it.
+The [@proc7ts/context-builder] contains everything needed to build a context and to provide assets for it.
 
 ```typescript
 import { CxBuilder, cxBuildAsset, cxConstAsset } from '@proc7ts/context-builder';
@@ -197,8 +197,8 @@ Context Entry
 Context entry identifies the value to obtain when passed to context's [get()] method. It is also responsible for
 combining provided _assets_ into context _value_.
 
-Context entry implements [CxEntry] interface containing single `perContext` method. It also a good practice to override
-a `toString()` method, so that error messages contain a string representation of the entry.
+Context entry implements [CxEntry] interface containing a single `perContext` method. It also a good practice to
+override a `toString()` method, so that error messages contain a string representation of the entry.
 
 There are several standard customizable [CxEntry] implementations. It is typically enough to use one of them:
 
@@ -208,7 +208,7 @@ There are several standard customizable [CxEntry] implementations. It is typical
 - [cxRecent()] - Dynamically updating context entry reflecting the changes in the most recent entry asset.
 - [cxSingle()] - Lazily evaluated single-valued context entry.
 
-The functions create entry definers. I.e. functions that can be used as `perContext` implementations.
+These functions create entry definers. I.e. functions that can be used as `perContext` implementations.
 
 [cxArray()]: https://proc7ts.github.io/context-values/modules.html#cxArray
 [cxDynamic()]: https://proc7ts.github.io/context-values/modules.html#cxDynamic
@@ -249,7 +249,7 @@ context.get(myEntry); // ['bar']
 
 ### Context Scopes
 
-When combining multiple contexts (i.e. make one context derive another one), it is often required to obtain some entry
+When combining multiple contexts (i.e. making one context derive another one), it is often required to obtain some entry
 from particular context only.
 
 To make it possible a context may provide itself as its own context value. Then the entry implementation may obtain
