@@ -40,7 +40,7 @@ export namespace CxAsset {
      *
      * Returned from {@link CxModifier.provide} when specified. New one created when omitted.
      */
-    readonly supply?: Supply;
+    readonly supply?: Supply | undefined;
 
     /**
      * Evaluates value asset or multiple assets and places them to `target` context entry.

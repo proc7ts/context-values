@@ -31,7 +31,9 @@ export function cxDynamic<TElement>(
       byDefault,
     }: {
       create?: undefined;
-      byDefault?(this: void, target: CxEntry.Target<readonly TElement[], TElement>): readonly TElement[];
+      byDefault?:
+          | ((this: void, target: CxEntry.Target<readonly TElement[], TElement>) => readonly TElement[])
+          | undefined;
       assign?: undefined;
     }
 ): CxEntry.Definer<readonly TElement[], TElement>;
@@ -55,7 +57,7 @@ export function cxDynamic<TValue, TAsset = TValue>(
       byDefault,
     }: {
       create(this: void, assets: TAsset[], target: CxEntry.Target<TValue, TAsset>): TValue;
-      byDefault?(this: void, target: CxEntry.Target<TValue, TAsset>): TValue;
+      byDefault?: ((this: void, target: CxEntry.Target<TValue, TAsset>) => TValue) | undefined;
       assign?: undefined;
     },
 ): CxEntry.Definer<TValue, TAsset>;

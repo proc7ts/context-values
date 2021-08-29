@@ -31,7 +31,7 @@ export function cxRecent<TValue>(
       byDefault,
     }: {
       create?: undefined;
-      byDefault?(this: void, target: CxEntry.Target<TValue>): TValue;
+      byDefault?: ((this: void, target: CxEntry.Target<TValue>) => TValue) | undefined;
       assign?: undefined;
     },
 ): CxEntry.Definer<TValue>;
@@ -55,7 +55,7 @@ export function cxRecent<TValue, TAsset = TValue>(
       byDefault,
     }: {
       create(this: void, recent: TAsset, target: CxEntry.Target<TValue, TAsset>): TValue;
-      byDefault?(this: void, target: CxEntry.Target<TValue, TAsset>): TValue;
+      byDefault?: ((this: void, target: CxEntry.Target<TValue, TAsset>) => TValue) | undefined;
       assign?: undefined;
     },
 ): CxEntry.Definer<TValue, TAsset>;

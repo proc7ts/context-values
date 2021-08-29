@@ -22,7 +22,7 @@ export interface CxRequest<TValue> {
    * Specifies how to obtain the value. E.g. it can be used to request only {@link CxRequestMethod.Defaults default}
    * one.
    */
-  readonly by?: CxRequestMethod;
+  readonly by?: CxRequestMethod | undefined;
 
   /**
    * Assigns the value.

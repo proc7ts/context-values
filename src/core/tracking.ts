@@ -13,7 +13,7 @@ export interface CxTracking {
    *
    * Returned from tracking method when present. New instance will be constructed when omitted.
    */
-  readonly supply?: Supply;
+  readonly supply?: Supply | undefined;
 
 }
 
