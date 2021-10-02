@@ -54,6 +54,7 @@ export function CxTracker$create<T>(
 
   get = (): T => {
     init();
+
     return get();
   };
   to = (receiver: CxTracking.MandatoryReceiver<T>): void => {
@@ -81,6 +82,7 @@ export function CxTracker$default<T>(target: CxEntry.Target<unknown>, getDefault
         if (!supply.isOff) {
           receiver();
         }
+
         return supply;
       },
       getDefault,
