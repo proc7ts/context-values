@@ -1,369 +1,126 @@
-<!doctype html>
-<html class="default no-js">
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>IoC Context Values</title>
-	<meta name="description" content="Documentation for IoC Context Values">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="assets/css/main.css">
-	<script async src="assets/js/search.js" id="search-script"></script>
-</head>
-<body>
-<header>
-	<div class="tsd-page-toolbar">
-		<div class="container">
-			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
-					<div class="field">
-						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
-						<input id="tsd-search-field" type="text" />
-					</div>
-					<ul class="results">
-						<li class="state loading">Preparing search index...</li>
-						<li class="state failure">The search index is not available</li>
-					</ul>
-					<a href="index.html" class="title">IoC Context Values</a>
-				</div>
-				<div class="table-cell" id="tsd-widgets">
-					<div id="tsd-filter">
-						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
-						<div class="tsd-filter-group">
-							<div class="tsd-select" id="tsd-filter-visibility">
-								<span class="tsd-select-label">All</span>
-								<ul class="tsd-select-list">
-									<li data-value="public">Public</li>
-									<li data-value="protected">Public/Protected</li>
-									<li data-value="private" class="selected">All</li>
-								</ul>
-							</div>
-							<input type="checkbox" id="tsd-filter-inherited" checked />
-							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-							<input type="checkbox" id="tsd-filter-externals" checked />
-							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
-						</div>
-					</div>
-					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="tsd-page-title">
-		<div class="container">
-			<h1>IoC Context Values</h1>
-		</div>
-	</div>
-</header>
-<div class="container container-main">
-	<div class="row">
-		<div class="col-8 col-content">
-			<div class="tsd-panel tsd-typography">
-				<a href="#ioc-context-values" id="ioc-context-values" style="color: inherit; text-decoration: none;">
-					<h1>IoC Context Values</h1>
-				</a>
-				<p><a href="https://www.npmjs.com/package/@proc7ts/context-values"><img src="https://img.shields.io/npm/v/@proc7ts/context-values.svg?logo=npm" alt="NPM"></a>
-					<a href="https://github.com/proc7ts/context-values/actions?query=workflow:Build"><img src="https://github.com/proc7ts/context-values/workflows/Build/badge.svg" alt="Build Status"></a>
-					<a href="https://www.codacy.com/gh/proc7ts/context-values/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=proc7ts/context-values&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/69f604f1399d49d58f12202fce675048" alt="Code Quality"></a>
-					<a href="https://www.codacy.com/gh/proc7ts/context-values/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=proc7ts/context-values&amp;utm_campaign=Badge_Coverage"><img src="https://app.codacy.com/project/badge/Coverage/69f604f1399d49d58f12202fce675048" alt="Coverage"></a>
-					<a href="https://github.com/proc7ts/context-values"><img src="https://img.shields.io/static/v1?logo=github&label=GitHub&message=project&color=informational" alt="GitHub Project"></a>
-				<a href="https://proc7ts.github.io/context-values/"><img src="https://img.shields.io/static/v1?logo=typescript&label=API&message=docs&color=informational" alt="API Documentation"></a></p>
-				<p><a href="https://en.wikipedia.org/wiki/Inversion_of_control">IoC</a> context allows accessing its <em>values</em> identified by their <em>entries</em> and <em>provided</em> somewhere else. </p>
-				<p><strong>Features:</strong></p>
-				<ul>
-					<li><p>Type-safe API.</p>
-						<p>Each context entry has definite value type specified as generic type parameter. So, when accessing context value with
-						<a href="https://proc7ts.github.io/context-values/interfaces/CxValues.html#get">get()</a> method, the returned value has that exact type, rather <code>any</code>.</p>
-					</li>
-					<li><p>Clean distinction between <em>assets</em> provided for context entries, and their <em>values</em>.</p>
-						<p>E.g. entry value is an array, while its entry value assets are elements of this array.</p>
-					</li>
-					<li><p>Customizable relations between entry assets and its value.</p>
-						<p>This relation established by entry implementation. Typically, the entry builds its value out of its assets. </p>
-					</li>
-					<li><p>Reusable context entry implementations suitable for the majority of the use cases.</p>
-						<p>E.g. <a href="https://proc7ts.github.io/context-values/modules.html#cxSingle">cxSingle()</a> for single-values entries, or <a href="https://proc7ts.github.io/context-values/modules.html#cxArray">cxArray()</a> for array-values ones.</p>
-					</li>
-					<li><p>Dynamically updatable context values.</p>
-						<p>The <a href="https://proc7ts.github.io/context-values/modules.html#cxSingle">cxSingle()</a> and <a href="https://proc7ts.github.io/context-values/modules.html#cxArray">cxArray()</a> entries build the value <em>once</em> on first access and return it on each subsequent
-							access. In contrast, the <a href="https://proc7ts.github.io/context-values/modules.html#cxRecent">cxRecent()</a> and <a href="https://proc7ts.github.io/context-values/modules.html#cxDynamic">cxDynamic()</a> are able to track asset changes and reflect these changes in
-						entry value.</p>
-					</li>
-					<li><p>Context derivation.</p>
-						<p>A context may derive another context to make the values available in the latter available in the former.</p>
-					</li>
-				</ul>
-				<a href="#project-modules" id="project-modules" style="color: inherit; text-decoration: none;">
-					<h2>Project Modules</h2>
-				</a>
-				<ul>
-					<li><a href="https://www.npmjs.com/package/@proc7ts/context-values">@proc7ts/context-values</a> library declares context API, and provides basic context entries implementations.</li>
-					<li><a href="https://www.npmjs.com/package/@proc7ts/context-builder">@proc7ts/context-builder</a> builds IoC contexts, and provided basic context entry assets implementations.</li>
-					<li><a href="https://www.npmjs.com/package/@proc7ts/context-modules">@proc7ts/context-modules</a> brings support for dynamically loadable (and un-loadable) context modules.</li>
-				</ul>
-				<a href="#accessing-context-values" id="accessing-context-values" style="color: inherit; text-decoration: none;">
-					<h2>Accessing Context Values</h2>
-				</a>
-				<p>An IoC context implements a <a href="https://proc7ts.github.io/context-values/interfaces/CxValues.html">CxValues</a> interface. This interface declares a single <a href="https://proc7ts.github.io/context-values/interfaces/CxValues.html#get">get()</a> method accepting requested
-				entry instance (<a href="https://proc7ts.github.io/context-values/interfaces/CxEntry.html">CxEntry</a>) identifying the requested value, and optional request (<a href="https://proc7ts.github.io/context-values/interfaces/CxRequest.html">CxRequest</a>).</p>
-				<p>The following code returns a string value of <code>myEntry</code> entry, or throws an exception if the entry has no value.</p>
-				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">CxEntry</span><span style="color: #000000">, </span><span style="color: #001080">cxSingle</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@proc7ts/context-values&#039;</span><span style="color: #000000">;</span>
+<!DOCTYPE html><html class="default no-js"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>IoC Context Values</title><meta name="description" content="Documentation for IoC Context Values"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script async src="assets/search.js" id="search-script"></script></head><body><header><div class="tsd-page-toolbar"><div class="container"><div class="table-wrap"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget search no-caption">Search</label><input type="text" id="tsd-search-field"/></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">IoC Context Values</a></div><div class="table-cell" id="tsd-widgets"><div id="tsd-filter"><a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a><div class="tsd-filter-group"><div class="tsd-select" id="tsd-filter-visibility"><span class="tsd-select-label">All</span><ul class="tsd-select-list"><li data-value="public">Public</li><li data-value="protected">Public/Protected</li><li data-value="private" class="selected">All</li></ul></div> <input type="checkbox" id="tsd-filter-inherited" checked/><label class="tsd-widget" for="tsd-filter-inherited">Inherited</label><input type="checkbox" id="tsd-filter-externals" checked/><label class="tsd-widget" for="tsd-filter-externals">Externals</label></div></div><a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a></div></div></div></div><div class="tsd-page-title"><div class="container"><h1>IoC Context Values</h1></div></div></header><div class="container container-main"><div class="row"><div class="col-8 col-content"><div class="tsd-panel tsd-typography">
+<a href="#ioc-context-values" id="ioc-context-values" style="color: inherit; text-decoration: none;">
+  <h1>IoC Context Values</h1>
+</a>
+<p><a href="https://www.npmjs.com/package/@proc7ts/context-values"><img src="https://img.shields.io/npm/v/@proc7ts/context-values.svg?logo=npm" alt="NPM"></a>
+<a href="https://github.com/proc7ts/context-values/actions?query=workflow:Build"><img src="https://github.com/proc7ts/context-values/workflows/Build/badge.svg" alt="Build Status"></a>
+<a href="https://www.codacy.com/gh/proc7ts/context-values/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=proc7ts/context-values&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/69f604f1399d49d58f12202fce675048" alt="Code Quality"></a>
+<a href="https://www.codacy.com/gh/proc7ts/context-values/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=proc7ts/context-values&amp;utm_campaign=Badge_Coverage"><img src="https://app.codacy.com/project/badge/Coverage/69f604f1399d49d58f12202fce675048" alt="Coverage"></a>
+<a href="https://github.com/proc7ts/context-values"><img src="https://img.shields.io/static/v1?logo=github&label=GitHub&message=project&color=informational" alt="GitHub Project"></a>
+<a href="https://proc7ts.github.io/context-values/"><img src="https://img.shields.io/static/v1?logo=typescript&label=API&message=docs&color=informational" alt="API Documentation"></a></p>
+<p><a href="https://en.wikipedia.org/wiki/Inversion_of_control">IoC</a> context allows accessing its <em>values</em> identified by their <em>entries</em> and <em>provided</em> somewhere else. </p>
+<p><strong>Features:</strong></p>
+<ul>
+<li><p>Type-safe API.</p>
+<p>Each context entry has definite value type specified as generic type parameter. So, when accessing context value with
+<a href="https://proc7ts.github.io/context-values/interfaces/CxValues.html#get">get()</a> method, the returned value has that exact type, rather <code>any</code>.</p>
+</li>
+<li><p>Clean distinction between <em>assets</em> provided for context entries, and their <em>values</em>.</p>
+<p>E.g. entry value is an array, while its assets are elements of this array.</p>
+</li>
+<li><p>Customizable relation between entry assets and its value.</p>
+<p>This relation established by entry implementation. Typically, the entry builds its value out of its assets. </p>
+</li>
+<li><p>Reusable context entry implementations suitable for the majority of use cases.</p>
+<p>E.g. <a href="https://proc7ts.github.io/context-values/modules.html#cxSingle">cxSingle()</a> for single-valued entries, or <a href="https://proc7ts.github.io/context-values/modules.html#cxArray">cxArray()</a> for array-valued ones.</p>
+</li>
+<li><p>Dynamically updatable context values.</p>
+<p>The <a href="https://proc7ts.github.io/context-values/modules.html#cxSingle">cxSingle()</a> and <a href="https://proc7ts.github.io/context-values/modules.html#cxArray">cxArray()</a> entries build the value <em>once</em> on the first access, and return it on each subsequent
+access. In contrast, the <a href="https://proc7ts.github.io/context-values/modules.html#cxRecent">cxRecent()</a> and <a href="https://proc7ts.github.io/context-values/modules.html#cxDynamic">cxDynamic()</a> are able to track asset changes and reflect these changes in
+entry value.</p>
+</li>
+<li><p>Context derivation.</p>
+<p>A context may derive another context to make the values from the latter available in the former.</p>
+</li>
+</ul>
 
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">myEntry</span><span style="color: #000000">: </span><span style="color: #267F99">CxEntry</span><span style="color: #000000">&lt;</span><span style="color: #267F99">string</span><span style="color: #000000">&gt; = { </span>
-<span style="color: #000000">  </span><span style="color: #001080">perContext:</span><span style="color: #000000"> </span><span style="color: #795E26">cxSingle</span><span style="color: #000000">(),</span>
-<span style="color: #000000">  </span><span style="color: #795E26">toString</span><span style="color: #001080">:</span><span style="color: #000000"> () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;[CxEntry myEntry]&#039;</span><span style="color: #000000">,</span>
-<span style="color: #000000">};</span>
+<a href="#project-modules" id="project-modules" style="color: inherit; text-decoration: none;">
+  <h2>Project Modules</h2>
+</a>
+<ul>
+<li><a href="https://www.npmjs.com/package/@proc7ts/context-values">@proc7ts/context-values</a> library declares context API, and provides basic context entries implementations.</li>
+<li><a href="https://www.npmjs.com/package/@proc7ts/context-builder">@proc7ts/context-builder</a> builds IoC contexts, and provides basic context entry assets implementations.</li>
+<li><a href="https://www.npmjs.com/package/@proc7ts/context-modules">@proc7ts/context-modules</a> brings support for dynamically loadable (and un-loadable) context modules.</li>
+</ul>
 
-<span style="color: #001080">myContext</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">myEntry</span><span style="color: #000000">);</span>
+<a href="#accessing-context-values" id="accessing-context-values" style="color: inherit; text-decoration: none;">
+  <h2>Accessing Context Values</h2>
+</a>
+<p>An IoC context implements a <a href="https://proc7ts.github.io/context-values/interfaces/CxValues.html">CxValues</a> interface. This interface declares a single <a href="https://proc7ts.github.io/context-values/interfaces/CxValues.html#get">get()</a> method accepting requested
+entry instance (<a href="https://proc7ts.github.io/context-values/interfaces/CxEntry.html">CxEntry</a>), and optional request (<a href="https://proc7ts.github.io/context-values/interfaces/CxRequest.html">CxRequest</a>).</p>
+<p>The following code returns a string value of <code>myEntry</code> entry, or throws an exception if the entry has no value.</p>
+<pre><code class="language-typescript"><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">CxEntry</span><span class="hl-1">, </span><span class="hl-2">cxSingle</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;@proc7ts/context-values&#39;</span><span class="hl-1">;</span><br/><br/><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-5">myEntry</span><span class="hl-1">: </span><span class="hl-6">CxEntry</span><span class="hl-1">&lt;</span><span class="hl-6">string</span><span class="hl-1">&gt; = { </span><br/><span class="hl-1">  </span><span class="hl-2">perContext:</span><span class="hl-1"> </span><span class="hl-7">cxSingle</span><span class="hl-1">(),</span><br/><span class="hl-1">  </span><span class="hl-7">toString</span><span class="hl-2">:</span><span class="hl-1"> () </span><span class="hl-4">=&gt;</span><span class="hl-1"> </span><span class="hl-3">&#39;[CxEntry myEntry]&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">};</span><br/><br/><span class="hl-2">myContext</span><span class="hl-1">.</span><span class="hl-7">get</span><span class="hl-1">(</span><span class="hl-2">myEntry</span><span class="hl-1">);</span>
 </code></pre>
-				<a href="#fallback-value" id="fallback-value" style="color: inherit; text-decoration: none;">
-					<h3>Fallback Value</h3>
-				</a>
-				<p>Normally, if context entry has no value, an exception thrown. To avoid this, a <a href="https://proc7ts.github.io/context-values/interfaces/CxRequest.html#or">fallback value</a> can be provided. It will
-				be returned in case there is no value.</p>
-				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">CxEntry</span><span style="color: #000000">, </span><span style="color: #001080">cxSingle</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@proc7ts/context-values&#039;</span><span style="color: #000000">;</span>
 
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">myEntry</span><span style="color: #000000">: </span><span style="color: #267F99">CxEntry</span><span style="color: #000000">&lt;</span><span style="color: #267F99">string</span><span style="color: #000000">&gt; = {</span>
-<span style="color: #000000">  </span><span style="color: #001080">perContext:</span><span style="color: #000000"> </span><span style="color: #795E26">cxSingle</span><span style="color: #000000">(),</span>
-<span style="color: #000000">  </span><span style="color: #795E26">toString</span><span style="color: #001080">:</span><span style="color: #000000"> () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;[CxEntry myEntry]&#039;</span><span style="color: #000000">,</span>
-<span style="color: #000000">};</span>
-
-<span style="color: #001080">myContext</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">myEntry</span><span style="color: #000000">, { </span><span style="color: #001080">or:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;empty&#039;</span><span style="color: #000000"> }); </span><span style="color: #008000">// &#039;empty&#039;</span>
+<a href="#fallback-value" id="fallback-value" style="color: inherit; text-decoration: none;">
+  <h3>Fallback Value</h3>
+</a>
+<p>Normally, if context entry has no value, an exception thrown. To avoid this, a <a href="https://proc7ts.github.io/context-values/interfaces/CxRequest.html#or">fallback value</a> can be provided. It will
+be returned in case there is no value.</p>
+<pre><code class="language-typescript"><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">CxEntry</span><span class="hl-1">, </span><span class="hl-2">cxSingle</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;@proc7ts/context-values&#39;</span><span class="hl-1">;</span><br/><br/><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-5">myEntry</span><span class="hl-1">: </span><span class="hl-6">CxEntry</span><span class="hl-1">&lt;</span><span class="hl-6">string</span><span class="hl-1">&gt; = {</span><br/><span class="hl-1">  </span><span class="hl-2">perContext:</span><span class="hl-1"> </span><span class="hl-7">cxSingle</span><span class="hl-1">(),</span><br/><span class="hl-1">  </span><span class="hl-7">toString</span><span class="hl-2">:</span><span class="hl-1"> () </span><span class="hl-4">=&gt;</span><span class="hl-1"> </span><span class="hl-3">&#39;[CxEntry myEntry]&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">};</span><br/><br/><span class="hl-2">myContext</span><span class="hl-1">.</span><span class="hl-7">get</span><span class="hl-1">(</span><span class="hl-2">myEntry</span><span class="hl-1">, { </span><span class="hl-2">or:</span><span class="hl-1"> </span><span class="hl-3">&#39;empty&#39;</span><span class="hl-1"> }); </span><span class="hl-8">// &#39;empty&#39;</span>
 </code></pre>
-				<p>A <code>null</code> value can be used as a fallback one.</p>
-				<a href="#default-value" id="default-value" style="color: inherit; text-decoration: none;">
-					<h3>Default Value</h3>
-				</a>
-				<p>Context entry may have a <a href="https://proc7ts.github.io/context-values/interfaces/CxEntry.Definition.html#assignDefault">default value</a> that will be returned, unless the entry has an explicitly provided one, or a
-				<a href="https://proc7ts.github.io/context-values/interfaces/CxRequest.html#or">fallback value</a> specified. It is possible to request the default value directly:</p>
-				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">CxEntry</span><span style="color: #000000">, </span><span style="color: #001080">CxRequestMethod</span><span style="color: #000000">, </span><span style="color: #001080">cxSingle</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@proc7ts/context-values&#039;</span><span style="color: #000000">;</span>
+<p>A <code>null</code> value can be used as a fallback one.</p>
 
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">myEntry</span><span style="color: #000000">: </span><span style="color: #267F99">CxEntry</span><span style="color: #000000">&lt;</span><span style="color: #267F99">string</span><span style="color: #000000">&gt; = {</span>
-<span style="color: #000000">  </span><span style="color: #001080">perContext:</span><span style="color: #000000"> </span><span style="color: #795E26">cxSingle</span><span style="color: #000000">({ </span><span style="color: #795E26">byDefault</span><span style="color: #001080">:</span><span style="color: #000000"> () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;default&#039;</span><span style="color: #000000"> }),</span>
-<span style="color: #000000">  </span><span style="color: #795E26">toString</span><span style="color: #001080">:</span><span style="color: #000000"> () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;[CxEntry myEntry]&#039;</span><span style="color: #000000">,</span>
-<span style="color: #000000">};</span>
-
-<span style="color: #001080">myContext</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">myEntry</span><span style="color: #000000">, { </span><span style="color: #001080">by:</span><span style="color: #000000"> </span><span style="color: #001080">CxRequestMethod</span><span style="color: #000000">.</span><span style="color: #001080">Defaults</span><span style="color: #000000"> }); </span><span style="color: #008000">// &#039;default&#039;</span>
+<a href="#default-value" id="default-value" style="color: inherit; text-decoration: none;">
+  <h3>Default Value</h3>
+</a>
+<p>Context entry may have a <a href="https://proc7ts.github.io/context-values/interfaces/CxEntry.Definition.html#assignDefault">default value</a> that will be returned, unless the entry has an explicitly provided one or a
+<a href="https://proc7ts.github.io/context-values/interfaces/CxRequest.html#or">fallback value</a> specified. It is possible to request the default value directly:</p>
+<pre><code class="language-typescript"><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">CxEntry</span><span class="hl-1">, </span><span class="hl-2">CxRequestMethod</span><span class="hl-1">, </span><span class="hl-2">cxSingle</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;@proc7ts/context-values&#39;</span><span class="hl-1">;</span><br/><br/><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-5">myEntry</span><span class="hl-1">: </span><span class="hl-6">CxEntry</span><span class="hl-1">&lt;</span><span class="hl-6">string</span><span class="hl-1">&gt; = {</span><br/><span class="hl-1">  </span><span class="hl-2">perContext:</span><span class="hl-1"> </span><span class="hl-7">cxSingle</span><span class="hl-1">({ </span><span class="hl-7">byDefault</span><span class="hl-2">:</span><span class="hl-1"> () </span><span class="hl-4">=&gt;</span><span class="hl-1"> </span><span class="hl-3">&#39;default&#39;</span><span class="hl-1"> }),</span><br/><span class="hl-1">  </span><span class="hl-7">toString</span><span class="hl-2">:</span><span class="hl-1"> () </span><span class="hl-4">=&gt;</span><span class="hl-1"> </span><span class="hl-3">&#39;[CxEntry myEntry]&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">};</span><br/><br/><span class="hl-2">myContext</span><span class="hl-1">.</span><span class="hl-7">get</span><span class="hl-1">(</span><span class="hl-2">myEntry</span><span class="hl-1">, { </span><span class="hl-2">by:</span><span class="hl-1"> </span><span class="hl-2">CxRequestMethod</span><span class="hl-1">.</span><span class="hl-2">Defaults</span><span class="hl-1"> }); </span><span class="hl-8">// &#39;default&#39;</span>
 </code></pre>
-				<p>It is also possible to request an explicitly provided value with <code>{ by: CxRequestMethod.Assets }</code>.</p>
-				<a href="#request-callback" id="request-callback" style="color: inherit; text-decoration: none;">
-					<h3>Request Callback</h3>
-				</a>
-				<p>In addition to returning from <a href="https://proc7ts.github.io/context-values/interfaces/CxValues.html#get">get()</a> method call, the context value can be passed to a callback:</p>
-				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">CxEntry</span><span style="color: #000000">, </span><span style="color: #001080">CxRequestMethod</span><span style="color: #000000">, </span><span style="color: #001080">cxSingle</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@proc7ts/context-values&#039;</span><span style="color: #000000">;</span>
+<p>It is also possible to request explicitly provided value with <code>{ by: CxRequestMethod.Assets }</code> request.</p>
 
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">myEntry</span><span style="color: #000000">: </span><span style="color: #267F99">CxEntry</span><span style="color: #000000">&lt;</span><span style="color: #267F99">string</span><span style="color: #000000">&gt; = {</span>
-<span style="color: #000000">  </span><span style="color: #001080">perContext:</span><span style="color: #000000"> </span><span style="color: #795E26">cxSingle</span><span style="color: #000000">({ </span><span style="color: #795E26">byDefault</span><span style="color: #001080">:</span><span style="color: #000000"> () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;default&#039;</span><span style="color: #000000"> }),</span>
-<span style="color: #000000">  </span><span style="color: #795E26">toString</span><span style="color: #001080">:</span><span style="color: #000000"> () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;[CxEntry myEntry]&#039;</span><span style="color: #000000">,</span>
-<span style="color: #000000">};</span>
-
-<span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">myValue</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000"> | </span><span style="color: #267F99">undefined</span><span style="color: #000000">;</span>
-<span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">myValueBy</span><span style="color: #000000">: </span><span style="color: #267F99">CxRequestMethod</span><span style="color: #000000"> | </span><span style="color: #267F99">undefined</span><span style="color: #000000">;</span>
-
-<span style="color: #001080">myContext</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">myEntry</span><span style="color: #000000">, { </span><span style="color: #795E26">set</span><span style="color: #001080">:</span><span style="color: #000000"> (</span><span style="color: #001080">value</span><span style="color: #000000">, </span><span style="color: #001080">by</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> { </span><span style="color: #001080">myValue</span><span style="color: #000000"> = </span><span style="color: #001080">value</span><span style="color: #000000">; </span><span style="color: #001080">myValueBy</span><span style="color: #000000"> = </span><span style="color: #001080">my</span><span style="color: #000000"> });</span>
-<span style="color: #008000">// myValue === &#039;default&#039;</span>
-<span style="color: #008000">// myValueBy === CxRequestMethod.Defaults</span>
+<a href="#request-callback" id="request-callback" style="color: inherit; text-decoration: none;">
+  <h3>Request Callback</h3>
+</a>
+<p>In addition to returning from <a href="https://proc7ts.github.io/context-values/interfaces/CxValues.html#get">get()</a> method call, the context value can be passed to a callback:</p>
+<pre><code class="language-typescript"><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">CxEntry</span><span class="hl-1">, </span><span class="hl-2">CxRequestMethod</span><span class="hl-1">, </span><span class="hl-2">cxSingle</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;@proc7ts/context-values&#39;</span><span class="hl-1">;</span><br/><br/><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-5">myEntry</span><span class="hl-1">: </span><span class="hl-6">CxEntry</span><span class="hl-1">&lt;</span><span class="hl-6">string</span><span class="hl-1">&gt; = {</span><br/><span class="hl-1">  </span><span class="hl-2">perContext:</span><span class="hl-1"> </span><span class="hl-7">cxSingle</span><span class="hl-1">({ </span><span class="hl-7">byDefault</span><span class="hl-2">:</span><span class="hl-1"> () </span><span class="hl-4">=&gt;</span><span class="hl-1"> </span><span class="hl-3">&#39;default&#39;</span><span class="hl-1"> }),</span><br/><span class="hl-1">  </span><span class="hl-7">toString</span><span class="hl-2">:</span><span class="hl-1"> () </span><span class="hl-4">=&gt;</span><span class="hl-1"> </span><span class="hl-3">&#39;[CxEntry myEntry]&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">};</span><br/><br/><span class="hl-4">let</span><span class="hl-1"> </span><span class="hl-2">myValue</span><span class="hl-1">: </span><span class="hl-6">string</span><span class="hl-1"> | </span><span class="hl-6">undefined</span><span class="hl-1">;</span><br/><span class="hl-4">let</span><span class="hl-1"> </span><span class="hl-2">myValueBy</span><span class="hl-1">: </span><span class="hl-6">CxRequestMethod</span><span class="hl-1"> | </span><span class="hl-6">undefined</span><span class="hl-1">;</span><br/><br/><span class="hl-2">myContext</span><span class="hl-1">.</span><span class="hl-7">get</span><span class="hl-1">(</span><span class="hl-2">myEntry</span><span class="hl-1">, { </span><span class="hl-7">set</span><span class="hl-2">:</span><span class="hl-1"> (</span><span class="hl-2">value</span><span class="hl-1">, </span><span class="hl-2">by</span><span class="hl-1">) </span><span class="hl-4">=&gt;</span><span class="hl-1"> { </span><span class="hl-2">myValue</span><span class="hl-1"> = </span><span class="hl-2">value</span><span class="hl-1">; </span><span class="hl-2">myValueBy</span><span class="hl-1"> = </span><span class="hl-2">my</span><span class="hl-1"> });</span><br/><span class="hl-8">// myValue === &#39;default&#39;</span><br/><span class="hl-8">// myValueBy === CxRequestMethod.Defaults</span>
 </code></pre>
-				<p>The callback won&#39;t be called if the entry has no value.</p>
-				<p>Note that this is the only way to know the origin of the value received. I.e. whether it is</p>
-				<ul>
-					<li>an explicitly provided value (<code>CxRequestMethod.Assets</code>),</li>
-					<li>a <a href="https://proc7ts.github.io/context-values/interfaces/CxEntry.Definition.html#assignDefault">default value</a> (<code>CxRequestMethod.Defaults</code>), or</li>
-					<li>a <a href="https://proc7ts.github.io/context-values/interfaces/CxRequest.html#or">fallback value</a> (<code>CxRequestMethod.Fallback</code>).</li>
-				</ul>
-				<a href="#providing-context-values" id="providing-context-values" style="color: inherit; text-decoration: none;">
-					<h2>Providing Context Values</h2>
-				</a>
-				<p>The <a href="https://www.npmjs.com/package/@proc7ts/context-builder">@proc7ts/context-builder</a> contains everything needed to build the context and provides values for it.</p>
-				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">CxBuilder</span><span style="color: #000000">, </span><span style="color: #001080">cxBuildAsset</span><span style="color: #000000">, </span><span style="color: #001080">cxConstAsset</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@proc7ts/context-builder&#039;</span><span style="color: #000000">;</span>
-<span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">CxEntry</span><span style="color: #000000">, </span><span style="color: #001080">cxSingle</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@proc7ts/context-values&#039;</span><span style="color: #000000">;</span>
+<p>The callback won&#39;t be called if the entry has no value.</p>
+<p>Note that this is the only way to know the origin of the value received. I.e. whether it is</p>
+<ul>
+<li>an explicitly provided value (<code>CxRequestMethod.Assets</code>),</li>
+<li>a <a href="https://proc7ts.github.io/context-values/interfaces/CxEntry.Definition.html#assignDefault">default value</a> (<code>CxRequestMethod.Defaults</code>), or</li>
+<li>a <a href="https://proc7ts.github.io/context-values/interfaces/CxRequest.html#or">fallback value</a> (<code>CxRequestMethod.Fallback</code>).</li>
+</ul>
 
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">entry1</span><span style="color: #000000">: </span><span style="color: #267F99">CxEntry</span><span style="color: #000000">&lt;</span><span style="color: #267F99">string</span><span style="color: #000000">&gt; = { </span><span style="color: #001080">perContext:</span><span style="color: #000000"> </span><span style="color: #795E26">cxSingle</span><span style="color: #000000">(), </span><span style="color: #795E26">toString</span><span style="color: #001080">:</span><span style="color: #000000"> () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;[CxEntry entry1]&#039;</span><span style="color: #000000"> };</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">entry2</span><span style="color: #000000">: </span><span style="color: #267F99">CxEntry</span><span style="color: #000000">&lt;</span><span style="color: #267F99">number</span><span style="color: #000000">&gt; = { </span><span style="color: #001080">perContext:</span><span style="color: #000000"> </span><span style="color: #795E26">cxSingle</span><span style="color: #000000">(), </span><span style="color: #795E26">toString</span><span style="color: #001080">:</span><span style="color: #000000"> () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;[CxEntry entry2]&#039;</span><span style="color: #000000"> };</span>
-
-<span style="color: #008000">// Create context builder.</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">cxBuilder</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">CxBuilder</span><span style="color: #000000">(</span><span style="color: #001080">get</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> ({ </span><span style="color: #001080">get</span><span style="color: #000000"> } </span><span style="color: #008000">/* create context instance with `get` method */</span><span style="color: #000000">));</span>
-
-<span style="color: #008000">// Provide asset for `entry1` as constant.</span>
-<span style="color: #001080">cxBuilder</span><span style="color: #000000">.</span><span style="color: #795E26">provide</span><span style="color: #000000">(</span><span style="color: #795E26">cxConstAsset</span><span style="color: #000000">(</span><span style="color: #001080">entry1</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;string&#039;</span><span style="color: #000000">));</span>
-
-<span style="color: #008000">// Evaluate asset for `entry2` as the length `entry1` value.</span>
-<span style="color: #001080">cxBuilder</span><span style="color: #000000">.</span><span style="color: #795E26">provide</span><span style="color: #000000">(</span><span style="color: #795E26">cxBuildAsset</span><span style="color: #000000">(</span><span style="color: #001080">entry2</span><span style="color: #000000">, </span><span style="color: #001080">target</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">target</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">entry1</span><span style="color: #000000">).</span><span style="color: #001080">length</span><span style="color: #000000">))</span>
-
-<span style="color: #008000">// Obtain context instance.</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">context</span><span style="color: #000000"> = </span><span style="color: #001080">registry</span><span style="color: #000000">.</span><span style="color: #001080">context</span><span style="color: #000000">;</span>
-
-<span style="color: #008000">// Obtain context values.</span>
-<span style="color: #001080">context</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">entry1</span><span style="color: #000000">); </span><span style="color: #008000">// &#039;string&#039;</span>
-<span style="color: #001080">context</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">entry2</span><span style="color: #000000">); </span><span style="color: #008000">// 6</span>
+<a href="#providing-context-values" id="providing-context-values" style="color: inherit; text-decoration: none;">
+  <h2>Providing Context Values</h2>
+</a>
+<p>The <a href="https://www.npmjs.com/package/@proc7ts/context-builder">@proc7ts/context-builder</a> contains everything needed to build a context and to provide assets for it.</p>
+<pre><code class="language-typescript"><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">CxBuilder</span><span class="hl-1">, </span><span class="hl-2">cxBuildAsset</span><span class="hl-1">, </span><span class="hl-2">cxConstAsset</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;@proc7ts/context-builder&#39;</span><span class="hl-1">;</span><br/><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">CxEntry</span><span class="hl-1">, </span><span class="hl-2">cxSingle</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;@proc7ts/context-values&#39;</span><span class="hl-1">;</span><br/><br/><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-5">entry1</span><span class="hl-1">: </span><span class="hl-6">CxEntry</span><span class="hl-1">&lt;</span><span class="hl-6">string</span><span class="hl-1">&gt; = { </span><span class="hl-2">perContext:</span><span class="hl-1"> </span><span class="hl-7">cxSingle</span><span class="hl-1">(), </span><span class="hl-7">toString</span><span class="hl-2">:</span><span class="hl-1"> () </span><span class="hl-4">=&gt;</span><span class="hl-1"> </span><span class="hl-3">&#39;[CxEntry entry1]&#39;</span><span class="hl-1"> };</span><br/><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-5">entry2</span><span class="hl-1">: </span><span class="hl-6">CxEntry</span><span class="hl-1">&lt;</span><span class="hl-6">number</span><span class="hl-1">&gt; = { </span><span class="hl-2">perContext:</span><span class="hl-1"> </span><span class="hl-7">cxSingle</span><span class="hl-1">(), </span><span class="hl-7">toString</span><span class="hl-2">:</span><span class="hl-1"> () </span><span class="hl-4">=&gt;</span><span class="hl-1"> </span><span class="hl-3">&#39;[CxEntry entry2]&#39;</span><span class="hl-1"> };</span><br/><br/><span class="hl-8">// Create context builder.</span><br/><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-5">cxBuilder</span><span class="hl-1"> = </span><span class="hl-4">new</span><span class="hl-1"> </span><span class="hl-7">CxBuilder</span><span class="hl-1">(</span><span class="hl-2">get</span><span class="hl-1"> </span><span class="hl-4">=&gt;</span><span class="hl-1"> ({ </span><span class="hl-2">get</span><span class="hl-1"> } </span><span class="hl-8">/* create context instance with `get` method */</span><span class="hl-1">));</span><br/><br/><span class="hl-8">// Provide asset for `entry1` as constant.</span><br/><span class="hl-2">cxBuilder</span><span class="hl-1">.</span><span class="hl-7">provide</span><span class="hl-1">(</span><span class="hl-7">cxConstAsset</span><span class="hl-1">(</span><span class="hl-2">entry1</span><span class="hl-1">, </span><span class="hl-3">&#39;string&#39;</span><span class="hl-1">));</span><br/><br/><span class="hl-8">// Evaluate asset for `entry2` as the length `entry1` value.</span><br/><span class="hl-2">cxBuilder</span><span class="hl-1">.</span><span class="hl-7">provide</span><span class="hl-1">(</span><span class="hl-7">cxBuildAsset</span><span class="hl-1">(</span><span class="hl-2">entry2</span><span class="hl-1">, </span><span class="hl-2">target</span><span class="hl-1"> </span><span class="hl-4">=&gt;</span><span class="hl-1"> </span><span class="hl-2">target</span><span class="hl-1">.</span><span class="hl-7">get</span><span class="hl-1">(</span><span class="hl-2">entry1</span><span class="hl-1">).</span><span class="hl-2">length</span><span class="hl-1">))</span><br/><br/><span class="hl-8">// Obtain context instance.</span><br/><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-5">context</span><span class="hl-1"> = </span><span class="hl-2">registry</span><span class="hl-1">.</span><span class="hl-2">context</span><span class="hl-1">;</span><br/><br/><span class="hl-8">// Obtain context values.</span><br/><span class="hl-2">context</span><span class="hl-1">.</span><span class="hl-7">get</span><span class="hl-1">(</span><span class="hl-2">entry1</span><span class="hl-1">); </span><span class="hl-8">// &#39;string&#39;</span><br/><span class="hl-2">context</span><span class="hl-1">.</span><span class="hl-7">get</span><span class="hl-1">(</span><span class="hl-2">entry2</span><span class="hl-1">); </span><span class="hl-8">// 6</span>
 </code></pre>
-				<a href="#context-entry" id="context-entry" style="color: inherit; text-decoration: none;">
-					<h2>Context Entry</h2>
-				</a>
-				<p>Context entry identifies the value to obtain when passed to context&#39;s <a href="https://proc7ts.github.io/context-values/interfaces/CxValues.html#get">get()</a> method. It is also responsible for
-				combining provided <em>assets</em> into context <em>value</em>.</p>
-				<p>Context entry implements <a href="https://proc7ts.github.io/context-values/interfaces/CxEntry.html">CxEntry</a> interface containing single <code>perContext</code> method. It also a good practice to override
-				a <code>toString()</code> method, so that error messages contain a string representation of the entry.</p>
-				<p>There are several standard customizable <a href="https://proc7ts.github.io/context-values/interfaces/CxEntry.html">CxEntry</a> implementations. It is typically enough to use one of them:</p>
-				<ul>
-					<li><a href="https://proc7ts.github.io/context-values/modules.html#cxArray">cxArray()</a> - Lazily evaluated array-valued context entry.</li>
-					<li><a href="https://proc7ts.github.io/context-values/modules.html#cxDynamic">cxDynamic()</a> - Dynamically updating context entry reflecting the changes in entry assets.</li>
-					<li><a href="https://proc7ts.github.io/context-values/modules.html#cxEvaluated">cxEvaluated()</a> - Context entry with value lazily evaluated by the given function.</li>
-					<li><a href="https://proc7ts.github.io/context-values/modules.html#cxRecent">cxRecent()</a> - Dynamically updating context entry reflecting the changes in the most recent entry asset.</li>
-					<li><a href="https://proc7ts.github.io/context-values/modules.html#cxSingle">cxSingle()</a> - Lazily evaluated single-valued context entry.</li>
-				</ul>
-				<p>The functions create entry definers. I.e. functions that can be used as <code>perContext</code> implementations.</p>
-				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">CxBuilder</span><span style="color: #000000">, </span><span style="color: #001080">cxConstAsset</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@proc7ts/context-builder&#039;</span><span style="color: #000000">;</span>
-<span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">cxDynamic</span><span style="color: #000000">, </span><span style="color: #001080">CxEntry</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@proc7ts/context-values&#039;</span><span style="color: #000000">;</span>
 
-<span style="color: #008000">// Context value is a readonly array of strings,</span>
-<span style="color: #008000">// wwhile its assets are stringhs.</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">myEntry</span><span style="color: #000000">: </span><span style="color: #267F99">CxEntry</span><span style="color: #000000">&lt;</span><span style="color: #0000FF">readonly</span><span style="color: #000000"> </span><span style="color: #267F99">string</span><span style="color: #000000">[], </span><span style="color: #267F99">string</span><span style="color: #000000">&gt; = { </span>
-<span style="color: #000000">  </span><span style="color: #001080">perContext:</span><span style="color: #000000"> </span><span style="color: #795E26">cxDynamic</span><span style="color: #000000">(),</span>
-<span style="color: #000000">  </span><span style="color: #795E26">toString</span><span style="color: #001080">:</span><span style="color: #000000"> () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;[CxEntry myEntry]&#039;</span><span style="color: #000000">,</span>
-<span style="color: #000000">};</span>
-
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">cxBuilder</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">CxBuilder</span><span style="color: #000000">(</span><span style="color: #001080">get</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> ({ </span><span style="color: #001080">get</span><span style="color: #000000"> }));</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">context</span><span style="color: #000000"> = </span><span style="color: #001080">cxBuilder</span><span style="color: #000000">.</span><span style="color: #001080">context</span><span style="color: #000000">;</span>
-
-<span style="color: #001080">context</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">myEntry</span><span style="color: #000000">); </span><span style="color: #008000">// []</span>
-
-<span style="color: #008000">// Provide first asset.</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">supply</span><span style="color: #000000"> = </span><span style="color: #001080">cxBuilder</span><span style="color: #000000">.</span><span style="color: #795E26">provide</span><span style="color: #000000">(</span><span style="color: #795E26">cxConstAsset</span><span style="color: #000000">(</span><span style="color: #001080">myEntry</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">));</span>
-
-<span style="color: #001080">context</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">myEntry</span><span style="color: #000000">); </span><span style="color: #008000">// [&#039;foo&#039;]</span>
-
-<span style="color: #008000">// Provide second asset.</span>
-<span style="color: #001080">cxBuilder</span><span style="color: #000000">.</span><span style="color: #795E26">provide</span><span style="color: #000000">(</span><span style="color: #795E26">cxConstAsset</span><span style="color: #000000">(</span><span style="color: #001080">myEntry</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bar&#039;</span><span style="color: #000000">));</span>
-<span style="color: #001080">context</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">myEntry</span><span style="color: #000000">); </span><span style="color: #008000">// [&#039;foo&#039;, &#039;bar&#039;]</span>
-
-<span style="color: #008000">// Revoke the first asset.</span>
-<span style="color: #001080">supply</span><span style="color: #000000">.</span><span style="color: #795E26">off</span><span style="color: #000000">();</span>
-<span style="color: #001080">context</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #001080">myEntry</span><span style="color: #000000">); </span><span style="color: #008000">// [&#039;bar&#039;]</span>
+<a href="#context-entry" id="context-entry" style="color: inherit; text-decoration: none;">
+  <h2>Context Entry</h2>
+</a>
+<p>Context entry identifies the value to obtain when passed to context&#39;s <a href="https://proc7ts.github.io/context-values/interfaces/CxValues.html#get">get()</a> method. It is also responsible for
+combining provided <em>assets</em> into context <em>value</em>.</p>
+<p>Context entry implements <a href="https://proc7ts.github.io/context-values/interfaces/CxEntry.html">CxEntry</a> interface containing a single <code>perContext</code> method. It also a good practice to
+override a <code>toString()</code> method, so that error messages contain a string representation of the entry.</p>
+<p>There are several standard customizable <a href="https://proc7ts.github.io/context-values/interfaces/CxEntry.html">CxEntry</a> implementations. It is typically enough to use one of them:</p>
+<ul>
+<li><a href="https://proc7ts.github.io/context-values/modules.html#cxArray">cxArray()</a> - Lazily evaluated array-valued context entry.</li>
+<li><a href="https://proc7ts.github.io/context-values/modules.html#cxDynamic">cxDynamic()</a> - Dynamically updating context entry reflecting the changes in entry assets.</li>
+<li><a href="https://proc7ts.github.io/context-values/modules.html#cxEvaluated">cxEvaluated()</a> - Context entry with value lazily evaluated by the given function.</li>
+<li><a href="https://proc7ts.github.io/context-values/modules.html#cxRecent">cxRecent()</a> - Dynamically updating context entry reflecting the changes in the most recent entry asset.</li>
+<li><a href="https://proc7ts.github.io/context-values/modules.html#cxSingle">cxSingle()</a> - Lazily evaluated single-valued context entry.</li>
+</ul>
+<p>These functions create entry definers. I.e. functions that can be used as <code>perContext</code> implementations.</p>
+<pre><code class="language-typescript"><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">CxBuilder</span><span class="hl-1">, </span><span class="hl-2">cxConstAsset</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;@proc7ts/context-builder&#39;</span><span class="hl-1">;</span><br/><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">cxDynamic</span><span class="hl-1">, </span><span class="hl-2">CxEntry</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;@proc7ts/context-values&#39;</span><span class="hl-1">;</span><br/><br/><span class="hl-8">// Context value is a readonly array of strings,</span><br/><span class="hl-8">// wwhile its assets are stringhs.</span><br/><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-5">myEntry</span><span class="hl-1">: </span><span class="hl-6">CxEntry</span><span class="hl-1">&lt;</span><span class="hl-4">readonly</span><span class="hl-1"> </span><span class="hl-6">string</span><span class="hl-1">[], </span><span class="hl-6">string</span><span class="hl-1">&gt; = { </span><br/><span class="hl-1">  </span><span class="hl-2">perContext:</span><span class="hl-1"> </span><span class="hl-7">cxDynamic</span><span class="hl-1">(),</span><br/><span class="hl-1">  </span><span class="hl-7">toString</span><span class="hl-2">:</span><span class="hl-1"> () </span><span class="hl-4">=&gt;</span><span class="hl-1"> </span><span class="hl-3">&#39;[CxEntry myEntry]&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">};</span><br/><br/><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-5">cxBuilder</span><span class="hl-1"> = </span><span class="hl-4">new</span><span class="hl-1"> </span><span class="hl-7">CxBuilder</span><span class="hl-1">(</span><span class="hl-2">get</span><span class="hl-1"> </span><span class="hl-4">=&gt;</span><span class="hl-1"> ({ </span><span class="hl-2">get</span><span class="hl-1"> }));</span><br/><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-5">context</span><span class="hl-1"> = </span><span class="hl-2">cxBuilder</span><span class="hl-1">.</span><span class="hl-2">context</span><span class="hl-1">;</span><br/><br/><span class="hl-2">context</span><span class="hl-1">.</span><span class="hl-7">get</span><span class="hl-1">(</span><span class="hl-2">myEntry</span><span class="hl-1">); </span><span class="hl-8">// []</span><br/><br/><span class="hl-8">// Provide first asset.</span><br/><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-5">supply</span><span class="hl-1"> = </span><span class="hl-2">cxBuilder</span><span class="hl-1">.</span><span class="hl-7">provide</span><span class="hl-1">(</span><span class="hl-7">cxConstAsset</span><span class="hl-1">(</span><span class="hl-2">myEntry</span><span class="hl-1">, </span><span class="hl-3">&#39;foo&#39;</span><span class="hl-1">));</span><br/><br/><span class="hl-2">context</span><span class="hl-1">.</span><span class="hl-7">get</span><span class="hl-1">(</span><span class="hl-2">myEntry</span><span class="hl-1">); </span><span class="hl-8">// [&#39;foo&#39;]</span><br/><br/><span class="hl-8">// Provide second asset.</span><br/><span class="hl-2">cxBuilder</span><span class="hl-1">.</span><span class="hl-7">provide</span><span class="hl-1">(</span><span class="hl-7">cxConstAsset</span><span class="hl-1">(</span><span class="hl-2">myEntry</span><span class="hl-1">, </span><span class="hl-3">&#39;bar&#39;</span><span class="hl-1">));</span><br/><span class="hl-2">context</span><span class="hl-1">.</span><span class="hl-7">get</span><span class="hl-1">(</span><span class="hl-2">myEntry</span><span class="hl-1">); </span><span class="hl-8">// [&#39;foo&#39;, &#39;bar&#39;]</span><br/><br/><span class="hl-8">// Revoke the first asset.</span><br/><span class="hl-2">supply</span><span class="hl-1">.</span><span class="hl-7">off</span><span class="hl-1">();</span><br/><span class="hl-2">context</span><span class="hl-1">.</span><span class="hl-7">get</span><span class="hl-1">(</span><span class="hl-2">myEntry</span><span class="hl-1">); </span><span class="hl-8">// [&#39;bar&#39;]</span>
 </code></pre>
-				<a href="#context-scopes" id="context-scopes" style="color: inherit; text-decoration: none;">
-					<h3>Context Scopes</h3>
-				</a>
-				<p>When combining multiple contexts (i.e. make one context derive another one), it is often required to obtain some entry
-				from particular context only.</p>
-				<p>To make it possible a context may provide itself as its own context value. Then the entry implementation may obtain
-				this context, and then obtain its value from that context.</p>
-				<p>A context entry containing a context as its value called <em>scope</em>. There are two context entry implementations able to
-				handle scopes:</p>
-				<ul>
-					<li><a href="https://proc7ts.github.io/context-values/modules.html#cxScoped">cxScoped()</a> - Scoped context entry.</li>
-					<li><a href="https://proc7ts.github.io/context-values/modules.html#cxDefaultScoped">cxDefaultScoped()</a> - Context entry with scoped default value. </li>
-				</ul>
-			</div>
-		</div>
-		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
-			<nav class="tsd-navigation primary">
-				<ul>
-					<li class=" ">
-						<a href="modules.html">Exports</a>
-					</li>
-					<li class=" tsd-kind-namespace">
-						<a href="modules/CxAsset.html">Cx<wbr>Asset</a>
-					</li>
-					<li class=" tsd-kind-namespace">
-						<a href="modules/CxEntry.html">Cx<wbr>Entry</a>
-					</li>
-					<li class=" tsd-kind-namespace">
-						<a href="modules/CxRequest.html">Cx<wbr>Request</a>
-					</li>
-					<li class=" tsd-kind-namespace">
-						<a href="modules/CxTracker.html">Cx<wbr>Tracker</a>
-					</li>
-					<li class=" tsd-kind-namespace">
-						<a href="modules/CxTracking.html">Cx<wbr>Tracking</a>
-					</li>
-				</ul>
-			</nav>
-			<nav class="tsd-navigation secondary menu-sticky">
-				<ul class="before-current">
-					<li class=" tsd-kind-enum">
-						<a href="enums/CxRequestMethod.html" class="tsd-kind-icon">Cx<wbr>Request<wbr>Method</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/CxReferenceError.html" class="tsd-kind-icon">Cx<wbr>Reference<wbr>Error</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter">
-						<a href="interfaces/CxAccessor.html" class="tsd-kind-icon">Cx<wbr>Accessor</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter">
-						<a href="interfaces/CxEntry.html" class="tsd-kind-icon">Cx<wbr>Entry</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter">
-						<a href="interfaces/CxModifier.html" class="tsd-kind-icon">Cx<wbr>Modifier</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter">
-						<a href="interfaces/CxRequest.html" class="tsd-kind-icon">Cx<wbr>Request</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter">
-						<a href="interfaces/CxTracker.html" class="tsd-kind-icon">Cx<wbr>Tracker</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/CxTracking.html" class="tsd-kind-icon">Cx<wbr>Tracking</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/CxValues.html" class="tsd-kind-icon">Cx<wbr>Values</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
-						<a href="modules.html#CxAsset" class="tsd-kind-icon">Cx<wbr>Asset</a>
-					</li>
-					<li class=" tsd-kind-type-alias">
-						<a href="modules.html#CxGlobals" class="tsd-kind-icon">Cx<wbr>Globals</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="modules.html#CxGlobals" class="tsd-kind-icon">Cx<wbr>Globals</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter">
-						<a href="modules.html#cxArray" class="tsd-kind-icon">cx<wbr>Array</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter">
-						<a href="modules.html#cxDefaultScoped" class="tsd-kind-icon">cx<wbr>Default<wbr>Scoped</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter">
-						<a href="modules.html#cxDynamic" class="tsd-kind-icon">cx<wbr>Dynamic</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter">
-						<a href="modules.html#cxEvaluated" class="tsd-kind-icon">cx<wbr>Evaluated</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter">
-						<a href="modules.html#cxRecent" class="tsd-kind-icon">cx<wbr>Recent</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter">
-						<a href="modules.html#cxScoped" class="tsd-kind-icon">cx<wbr>Scoped</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter">
-						<a href="modules.html#cxSingle" class="tsd-kind-icon">cx<wbr>Single</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="modules.html#cxUnavailable" class="tsd-kind-icon">cx<wbr>Unavailable</a>
-					</li>
-				</ul>
-			</nav>
-		</div>
-	</div>
-</div>
-<footer class="with-border-bottom">
-	<div class="container">
-		<h2>Legend</h2>
-		<div class="tsd-legend-group">
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
-			</ul>
-		</div>
-	</div>
-</footer>
-<div class="container tsd-generator">
-	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
-</div>
-<div class="overlay"></div>
-<script src="assets/js/main.js"></script>
-</body>
-</html>
+
+<a href="#context-scopes" id="context-scopes" style="color: inherit; text-decoration: none;">
+  <h3>Context Scopes</h3>
+</a>
+<p>When combining multiple contexts (i.e. making one context derive another one), it is often required to obtain some entry
+from particular context only.</p>
+<p>To make it possible a context may provide itself as its own context value. Then the entry implementation may obtain
+this context, and then obtain its value from that context.</p>
+<p>A context entry containing a context as its value called <em>scope</em>. There are two context entry implementations able to
+handle scopes:</p>
+<ul>
+<li><a href="https://proc7ts.github.io/context-values/modules.html#cxScoped">cxScoped()</a> - Scoped context entry.</li>
+<li><a href="https://proc7ts.github.io/context-values/modules.html#cxDefaultScoped">cxDefaultScoped()</a> - Context entry with scoped default value.</li>
+</ul>
+</div></div><div class="col-4 col-menu menu-sticky-wrap menu-highlight"><nav class="tsd-navigation primary"><ul><li class="current"><a href="modules.html">Exports</a></li><li class=" tsd-kind-namespace"><a href="modules/CxAsset.html">Cx<wbr/>Asset</a></li><li class=" tsd-kind-namespace"><a href="modules/CxEntry.html">Cx<wbr/>Entry</a></li><li class=" tsd-kind-namespace"><a href="modules/CxRequest.html">Cx<wbr/>Request</a></li><li class=" tsd-kind-namespace"><a href="modules/CxTracker.html">Cx<wbr/>Tracker</a></li><li class=" tsd-kind-namespace"><a href="modules/CxTracking.html">Cx<wbr/>Tracking</a></li></ul></nav><nav class="tsd-navigation secondary menu-sticky"><ul><li class="tsd-kind-enum"><a href="enums/CxRequestMethod.html" class="tsd-kind-icon">Cx<wbr/>Request<wbr/>Method</a></li><li class="tsd-kind-class"><a href="classes/CxReferenceError.html" class="tsd-kind-icon">Cx<wbr/>Reference<wbr/>Error</a></li><li class="tsd-kind-interface tsd-has-type-parameter"><a href="interfaces/CxAccessor.html" class="tsd-kind-icon">Cx<wbr/>Accessor</a></li><li class="tsd-kind-interface tsd-has-type-parameter"><a href="interfaces/CxEntry.html" class="tsd-kind-icon">Cx<wbr/>Entry</a></li><li class="tsd-kind-interface tsd-has-type-parameter"><a href="interfaces/CxModifier.html" class="tsd-kind-icon">Cx<wbr/>Modifier</a></li><li class="tsd-kind-interface tsd-has-type-parameter"><a href="interfaces/CxRequest.html" class="tsd-kind-icon">Cx<wbr/>Request</a></li><li class="tsd-kind-interface tsd-has-type-parameter"><a href="interfaces/CxTracker.html" class="tsd-kind-icon">Cx<wbr/>Tracker</a></li><li class="tsd-kind-interface"><a href="interfaces/CxTracking.html" class="tsd-kind-icon">Cx<wbr/>Tracking</a></li><li class="tsd-kind-interface"><a href="interfaces/CxValues.html" class="tsd-kind-icon">Cx<wbr/>Values</a></li><li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="modules.html#CxAsset" class="tsd-kind-icon">Cx<wbr/>Asset</a></li><li class="tsd-kind-type-alias"><a href="modules.html#CxGlobals" class="tsd-kind-icon">Cx<wbr/>Globals</a></li><li class="tsd-kind-variable"><a href="modules.html#CxGlobals" class="tsd-kind-icon">Cx<wbr/>Globals</a></li><li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#cxArray" class="tsd-kind-icon">cx<wbr/>Array</a></li><li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#cxDefaultScoped" class="tsd-kind-icon">cx<wbr/>Default<wbr/>Scoped</a></li><li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#cxDynamic" class="tsd-kind-icon">cx<wbr/>Dynamic</a></li><li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#cxEvaluated" class="tsd-kind-icon">cx<wbr/>Evaluated</a></li><li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#cxRecent" class="tsd-kind-icon">cx<wbr/>Recent</a></li><li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#cxScoped" class="tsd-kind-icon">cx<wbr/>Scoped</a></li><li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#cxSingle" class="tsd-kind-icon">cx<wbr/>Single</a></li><li class="tsd-kind-function"><a href="modules.html#cxUnavailable" class="tsd-kind-icon">cx<wbr/>Unavailable</a></li></ul></nav></div></div></div><footer class="with-border-bottom"><div class="container"><h2>Legend</h2><div class="tsd-legend-group"><ul class="tsd-legend"><li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li><li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li></ul><ul class="tsd-legend"><li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li><li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li></ul></div><h2>Settings</h2><p>Theme <select id="theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></p></div></footer><div class="container tsd-generator"><p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div><div class="overlay"></div><script src="assets/main.js"></script></body></html>
