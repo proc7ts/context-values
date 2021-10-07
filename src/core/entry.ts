@@ -62,7 +62,7 @@ export namespace CxEntry {
   export interface Target<
       TValue,
       TAsset = TValue,
-      TContext extends CxValues = CxValues
+      TContext extends CxValues = CxValues,
       > extends CxValues, CxModifier<TContext>, SupplyPeer {
 
     /**
