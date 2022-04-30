@@ -1,5 +1,4 @@
-IoC Context Values
-==================
+# IoC Context Values
 
 [![NPM][npm-image]][npm-url]
 [![Build Status][build-status-img]][build-status-link]
@@ -8,7 +7,7 @@ IoC Context Values
 [![GitHub Project][github-image]][github-url]
 [![API Documentation][api-docs-image]][api-docs-url]
 
-[IoC] context allows accessing its _values_ identified by their _entries_ and _provided_ somewhere else. 
+[IoC] context allows accessing its _values_ identified by their _entries_ and _provided_ somewhere else.
 
 **Features:**
 
@@ -23,7 +22,7 @@ IoC Context Values
 
 - Customizable relation between entry assets and its value.
 
-  This relation established by entry implementation. Typically, the entry builds its value out of its assets. 
+  This relation established by entry implementation. Typically, the entry builds its value out of its assets.
 
 - Reusable context entry implementations suitable for the majority of use cases.
 
@@ -51,12 +50,10 @@ IoC Context Values
 [github-url]: https://github.com/proc7ts/context-values
 [api-docs-image]: https://img.shields.io/static/v1?logo=typescript&label=API&message=docs&color=informational
 [api-docs-url]: https://proc7ts.github.io/context-values/
-[IoC]: https://en.wikipedia.org/wiki/Inversion_of_control
+[ioc]: https://en.wikipedia.org/wiki/Inversion_of_control
 
+## Project Modules
 
-Project Modules
----------------
-  
 - [@proc7ts/context-values] library declares context API, and provides basic context entries implementations.
 - [@proc7ts/context-builder] builds IoC contexts, and provides basic context entry assets implementations.
 - [@proc7ts/context-modules] brings support for dynamically loadable (and un-loadable) context modules.
@@ -65,18 +62,17 @@ Project Modules
 [@proc7ts/context-modules]: https://www.npmjs.com/package/@proc7ts/context-modules
 [@proc7ts/context-values]: https://www.npmjs.com/package/@proc7ts/context-values
 
-
-Accessing Context Values
-------------------------
+## Accessing Context Values
 
 An IoC context implements a [CxValues] interface. This interface declares a single [get()] method accepting requested
 entry instance ([CxEntry]), and optional request ([CxRequest]).
 
 The following code returns a string value of `myEntry` entry, or throws an exception if the entry has no value.
+
 ```typescript
 import { CxEntry, cxSingle } from '@proc7ts/context-values';
 
-const myEntry: CxEntry<string> = { 
+const myEntry: CxEntry<string> = {
   perContext: cxSingle(),
   toString: () => '[CxEntry myEntry]',
 };
@@ -85,10 +81,9 @@ myContext.get(myEntry);
 ```
 
 [get()]: https://proc7ts.github.io/context-values/interfaces/CxValues.html#get
-[CxEntry]: https://proc7ts.github.io/context-values/interfaces/CxEntry.html
-[CxRequest]: https://proc7ts.github.io/context-values/interfaces/CxRequest.html
-[CxValues]: https://proc7ts.github.io/context-values/interfaces/CxValues.html
-
+[cxentry]: https://proc7ts.github.io/context-values/interfaces/CxEntry.html
+[cxrequest]: https://proc7ts.github.io/context-values/interfaces/CxRequest.html
+[cxvalues]: https://proc7ts.github.io/context-values/interfaces/CxValues.html
 
 ### Fallback Value
 
@@ -110,7 +105,6 @@ A `null` value can be used as a fallback one.
 
 [fallback value]: https://proc7ts.github.io/context-values/interfaces/CxRequest.html#or
 
-
 ### Default Value
 
 Context entry may have a [default value] that will be returned, unless the entry has an explicitly provided one or a
@@ -130,7 +124,6 @@ myContext.get(myEntry, { by: CxRequestMethod.Defaults }); // 'default'
 It is also possible to request explicitly provided value with `{ by: CxRequestMethod.Assets }` request.
 
 [default value]: https://proc7ts.github.io/context-values/interfaces/CxEntry.Definition.html#assignDefault
-
 
 ### Request Callback
 
@@ -160,9 +153,7 @@ Note that this is the only way to know the origin of the value received. I.e. wh
 - a [default value] (`CxRequestMethod.Defaults`), or
 - a [fallback value] (`CxRequestMethod.Fallback`).
 
-
-Providing Context Values
-------------------------
+## Providing Context Values
 
 The [@proc7ts/context-builder] contains everything needed to build a context and to provide assets for it.
 
@@ -174,13 +165,13 @@ const entry1: CxEntry<string> = { perContext: cxSingle(), toString: () => '[CxEn
 const entry2: CxEntry<number> = { perContext: cxSingle(), toString: () => '[CxEntry entry2]' };
 
 // Create context builder.
-const cxBuilder = new CxBuilder(get => ({ get } /* create context instance with `get` method */));
+const cxBuilder = new CxBuilder(get => ({ get }) /* create context instance with `get` method */);
 
 // Provide asset for `entry1` as constant.
 cxBuilder.provide(cxConstAsset(entry1, 'string'));
 
 // Evaluate asset for `entry2` as the length `entry1` value.
-cxBuilder.provide(cxBuildAsset(entry2, target => target.get(entry1).length))
+cxBuilder.provide(cxBuildAsset(entry2, target => target.get(entry1).length));
 
 // Obtain context instance.
 const context = registry.context;
@@ -190,9 +181,7 @@ context.get(entry1); // 'string'
 context.get(entry2); // 6
 ```
 
-
-Context Entry
--------------
+## Context Entry
 
 Context entry identifies the value to obtain when passed to context's [get()] method. It is also responsible for
 combining provided _assets_ into context _value_.
@@ -210,11 +199,11 @@ There are several standard customizable [CxEntry] implementations. It is typical
 
 These functions create entry definers. I.e. functions that can be used as `perContext` implementations.
 
-[cxArray()]: https://proc7ts.github.io/context-values/modules.html#cxArray
-[cxDynamic()]: https://proc7ts.github.io/context-values/modules.html#cxDynamic
-[cxEvaluated()]: https://proc7ts.github.io/context-values/modules.html#cxEvaluated
-[cxRecent()]: https://proc7ts.github.io/context-values/modules.html#cxRecent
-[cxSingle()]: https://proc7ts.github.io/context-values/modules.html#cxSingle
+[cxarray()]: https://proc7ts.github.io/context-values/modules.html#cxArray
+[cxdynamic()]: https://proc7ts.github.io/context-values/modules.html#cxDynamic
+[cxevaluated()]: https://proc7ts.github.io/context-values/modules.html#cxEvaluated
+[cxrecent()]: https://proc7ts.github.io/context-values/modules.html#cxRecent
+[cxsingle()]: https://proc7ts.github.io/context-values/modules.html#cxSingle
 
 ```typescript
 import { CxBuilder, cxConstAsset } from '@proc7ts/context-builder';
@@ -222,7 +211,7 @@ import { cxDynamic, CxEntry } from '@proc7ts/context-values';
 
 // Context value is a readonly array of strings,
 // wwhile its assets are stringhs.
-const myEntry: CxEntry<readonly string[], string> = { 
+const myEntry: CxEntry<readonly string[], string> = {
   perContext: cxDynamic(),
   toString: () => '[CxEntry myEntry]',
 };
@@ -246,7 +235,6 @@ supply.off();
 context.get(myEntry); // ['bar']
 ```
 
-
 ### Context Scopes
 
 When combining multiple contexts (i.e. making one context derive another one), it is often required to obtain some entry
@@ -259,7 +247,7 @@ A context entry containing a context as its value called _scope_. There are two 
 handle scopes:
 
 - [cxScoped()] - Scoped context entry.
-- [cxDefaultScoped()] - Context entry with scoped default value. 
+- [cxDefaultScoped()] - Context entry with scoped default value.
 
-[cxDefaultScoped()]: https://proc7ts.github.io/context-values/modules.html#cxDefaultScoped
-[cxScoped()]: https://proc7ts.github.io/context-values/modules.html#cxScoped
+[cxdefaultscoped()]: https://proc7ts.github.io/context-values/modules.html#cxDefaultScoped
+[cxscoped()]: https://proc7ts.github.io/context-values/modules.html#cxScoped
