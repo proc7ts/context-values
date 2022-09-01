@@ -14,13 +14,11 @@ import { CxEntry$assignOnce } from './entry.assign-once.impl';
  *
  * @returns New context entry definer.
  */
-export function cxSingle<TValue>(
-    {
-      byDefault,
-    }: {
-      byDefault?(this: void, target: CxEntry.Target<TValue>): TValue | null | undefined;
-    } = {},
-): CxEntry.Definer<TValue> {
+export function cxSingle<TValue>({
+  byDefault,
+}: {
+  byDefault?(this: void, target: CxEntry.Target<TValue>): TValue | null | undefined;
+} = {}): CxEntry.Definer<TValue> {
   return target => ({
     assign: CxEntry$assignOnce(target, cxSingle$value),
     assignDefault: byDefault && CxEntry$assignOnce(target, byDefault),

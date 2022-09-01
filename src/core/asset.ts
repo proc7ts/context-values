@@ -13,12 +13,11 @@ import { CxValues } from './values';
  * @typeParam TContext - Context type.
  */
 export type CxAsset<TValue, TAsset = TValue, TContext extends CxValues = CxValues> =
-    | CxAsset.Placer<TValue, TAsset, TContext>
-    | CxAsset.Builder<TValue, TAsset, TContext>
-    | CxAsset.Setup<TValue, TAsset, TContext>;
+  | CxAsset.Placer<TValue, TAsset, TContext>
+  | CxAsset.Builder<TValue, TAsset, TContext>
+  | CxAsset.Setup<TValue, TAsset, TContext>;
 
 export namespace CxAsset {
-
   /**
    * Base interface of context entry asset implementations.
    *
@@ -27,7 +26,6 @@ export namespace CxAsset {
    * @typeParam TContext - Context type.
    */
   export interface Base<TValue, TAsset, TContext extends CxValues> {
-
     /**
      * Target context entry.
      */
@@ -54,8 +52,8 @@ export namespace CxAsset {
      * @param collector - Assets collector to place assets to.
      */
     placeAsset?(
-        target: CxEntry.Target<TValue, TAsset, TContext>,
-        collector: CxAsset.Collector<TAsset>,
+      target: CxEntry.Target<TValue, TAsset, TContext>,
+      collector: CxAsset.Collector<TAsset>,
     ): void;
 
     /**
@@ -75,8 +73,8 @@ export namespace CxAsset {
      * falsy value if there are no value assets.
      */
     buildAsset?(
-        target: CxEntry.Target<TValue, TAsset, TContext>,
-        update: (this: void) => void,
+      target: CxEntry.Target<TValue, TAsset, TContext>,
+      update: (this: void) => void,
     ): ((this: void, collector: Collector<TAsset>) => void) | false | null | undefined;
 
     /**
@@ -90,7 +88,6 @@ export namespace CxAsset {
      * @param target - Context entry definition target.
      */
     setupAsset?(target: CxEntry.Target<TValue, TAsset, TContext>): void;
-
   }
 
   /**
@@ -103,16 +100,14 @@ export namespace CxAsset {
    * @typeParam TContext - Context type.
    */
   export interface Placer<TValue, TAsset = TValue, TContext extends CxValues = CxValues>
-      extends Base<TValue, TAsset, TContext> {
-
+    extends Base<TValue, TAsset, TContext> {
     placeAsset(
-        target: CxEntry.Target<TValue, TAsset, TContext>,
-        collector: CxAsset.Collector<TAsset>,
+      target: CxEntry.Target<TValue, TAsset, TContext>,
+      collector: CxAsset.Collector<TAsset>,
     ): void;
 
     /* Ignored when {@link placeAsset} defined. */
     readonly buildAsset?: undefined;
-
   }
 
   /**
@@ -125,16 +120,14 @@ export namespace CxAsset {
    * @typeParam TContext - Context type.
    */
   export interface Builder<TValue, TAsset = TValue, TContext extends CxValues = CxValues>
-      extends Base<TValue, TAsset, TContext> {
-
+    extends Base<TValue, TAsset, TContext> {
     /** Ignored when {@link buildAsset} defined. */
     readonly placeAsset?: undefined;
 
     buildAsset(
-        target: CxEntry.Target<TValue, TAsset, TContext>,
-        update: (this: void) => void,
+      target: CxEntry.Target<TValue, TAsset, TContext>,
+      update: (this: void) => void,
     ): ((this: void, collector: Collector<TAsset>) => void) | false | null | undefined;
-
   }
 
   /**
@@ -147,8 +140,7 @@ export namespace CxAsset {
    * @typeParam TContext - Context type.
    */
   export interface Setup<TValue, TAsset = TValue, TContext extends CxValues = CxValues>
-      extends Base<TValue, TAsset, TContext> {
-
+    extends Base<TValue, TAsset, TContext> {
     /** {@link setupAsset} is required when both {@link placeAsset} and {@link buildAsset} missing. */
     readonly placeAsset?: undefined;
 
@@ -156,7 +148,6 @@ export namespace CxAsset {
     readonly buildAsset?: undefined;
 
     setupAsset(target: CxEntry.Target<TValue, TAsset, TContext>): void;
-
   }
 
   /**
@@ -212,7 +203,6 @@ export namespace CxAsset {
    * @typeParam TAsset - Context value asset type.
    */
   export interface Provided<TAsset> {
-
     /**
      * A rank of context peer this asset is provided by.
      *
@@ -266,7 +256,6 @@ export namespace CxAsset {
      * @returns Updates supply. Stops updates tracking once cut off. Cut off immediately if this asset is not updatable.
      */
     onUpdate(receiver: (this: void) => void, tracking?: CxTracking): Supply;
-
   }
 
   /**
@@ -275,7 +264,6 @@ export namespace CxAsset {
    * @typeParam TAsset - Context value asset type.
    */
   export interface Evaluated<TAsset> {
-
     /**
      * Evaluated value asset.
      */
@@ -294,7 +282,5 @@ export namespace CxAsset {
      * The asset is revoked once cut off.
      */
     readonly supply: Supply;
-
   }
-
 }

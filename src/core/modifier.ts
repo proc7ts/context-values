@@ -6,7 +6,6 @@ import { CxValues } from './values';
  * Context modifier interface.
  */
 export interface CxModifier<TContext extends CxValues = CxValues> {
-
   /**
    * Modified context.
    */
@@ -22,5 +21,4 @@ export interface CxModifier<TContext extends CxValues = CxValues> {
    * @returns Asset supply. Revokes provided asset once cut off.
    */
   provide<TValue, TAsset = TValue>(asset: CxAsset<TValue, TAsset, TContext>): Supply;
-
 }

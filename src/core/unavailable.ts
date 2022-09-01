@@ -13,9 +13,9 @@ import { CxReferenceError } from './reference-error';
  * @returns A no-arg function that always throws.
  */
 export function cxUnavailable(
-    entry: CxEntry<unknown>,
-    message?: string,
-    reason?: unknown,
+  entry: CxEntry<unknown>,
+  message?: string,
+  reason?: unknown,
 ): (this: void) => never {
   return () => {
     throw new CxReferenceError(entry, message || `The ${entry} is unavailable`, reason);

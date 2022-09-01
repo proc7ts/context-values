@@ -5,7 +5,6 @@ import { CxRequest } from './request';
  * Context value accessor signature.
  */
 export interface CxAccessor {
-
   /**
    * Obtains a value of the given context entry.
    *
@@ -15,10 +14,10 @@ export interface CxAccessor {
    *
    * @returns Either context entry value, or a fallback one.
    */
-      <TValue>(
-      this: void,
-      entry: CxEntry<TValue, unknown>,
-      request?: CxRequest.WithoutFallback<TValue>,
+  <TValue>(
+    this: void,
+    entry: CxEntry<TValue, unknown>,
+    request?: CxRequest.WithoutFallback<TValue>,
   ): TValue;
 
   /**
@@ -30,10 +29,10 @@ export interface CxAccessor {
    *
    * @returns Either context entry value, or a fallback one.
    */
-      <TValue>(
-      this: void,
-      entry: CxEntry<TValue, any>,
-      request: CxRequest.WithFallback<TValue>,
+  <TValue>(
+    this: void,
+    entry: CxEntry<TValue, any>,
+    request: CxRequest.WithFallback<TValue>,
   ): TValue;
 
   /**
@@ -47,9 +46,5 @@ export interface CxAccessor {
    *
    * @throws CxReferenceError - If the target `entry` has no value and fallback one is not provided.
    */
-      <TValue>(
-      entry: CxEntry<TValue, any>,
-      request?: CxRequest<TValue>,
-  ): TValue | null;
-
+  <TValue>(entry: CxEntry<TValue, any>, request?: CxRequest<TValue>): TValue | null;
 }

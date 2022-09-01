@@ -4,7 +4,6 @@ import { CxEntry } from './entry';
 import { CxReferenceError } from './reference-error';
 
 describe('CxReferenceError', () => {
-
   const entry: CxEntry<string> = {
     perContext: cxSingle(),
     toString() {
@@ -13,7 +12,6 @@ describe('CxReferenceError', () => {
   };
 
   it('has default message', () => {
-
     const error = new CxReferenceError(entry);
 
     expect(error.entry).toBe(entry);
@@ -22,7 +20,6 @@ describe('CxReferenceError', () => {
     expect(String(error)).toBe('CxReferenceError: The [CxEntry test] has no value');
   });
   it('accepts custom message', () => {
-
     const error = new CxReferenceError(entry, 'Test');
 
     expect(error.entry).toBe(entry);
@@ -31,7 +28,6 @@ describe('CxReferenceError', () => {
     expect(String(error)).toBe('CxReferenceError: Test');
   });
   it('accepts reason', () => {
-
     const reason = new Error('Test');
     const error = new CxReferenceError(entry, undefined, reason);
 

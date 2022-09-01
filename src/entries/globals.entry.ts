@@ -18,6 +18,6 @@ export type CxGlobals = CxValues;
  * It is an application (or framework) responsibility to provide a global context.
  */
 export const CxGlobals: CxEntry<CxGlobals> = {
-  perContext: (/*#__PURE__*/ cxSingle()),
+  perContext: /*#__PURE__*/ cxSingle(),
   toString: () => '[CxGlobal]',
 };

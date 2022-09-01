@@ -26,14 +26,14 @@ export function cxRecent<TValue>(): CxEntry.Definer<TValue>;
  * @returns New context entry definer.
  */
 export function cxRecent<TValue>(
-    // eslint-disable-next-line @typescript-eslint/unified-signatures
-    {
-      byDefault,
-    }: {
-      create?: undefined;
-      byDefault?: ((this: void, target: CxEntry.Target<TValue>) => TValue) | undefined;
-      assign?: undefined;
-    },
+  // eslint-disable-next-line @typescript-eslint/unified-signatures
+  {
+    byDefault,
+  }: {
+    create?: undefined;
+    byDefault?: ((this: void, target: CxEntry.Target<TValue>) => TValue) | undefined;
+    assign?: undefined;
+  },
 ): CxEntry.Definer<TValue>;
 
 /**
@@ -49,16 +49,14 @@ export function cxRecent<TValue>(
  *
  * @returns New context entry definer.
  */
-export function cxRecent<TValue, TAsset = TValue>(
-    {
-      create,
-      byDefault,
-    }: {
-      create(this: void, recent: TAsset, target: CxEntry.Target<TValue, TAsset>): TValue;
-      byDefault?: ((this: void, target: CxEntry.Target<TValue, TAsset>) => TValue) | undefined;
-      assign?: undefined;
-    },
-): CxEntry.Definer<TValue, TAsset>;
+export function cxRecent<TValue, TAsset = TValue>({
+  create,
+  byDefault,
+}: {
+  create(this: void, recent: TAsset, target: CxEntry.Target<TValue, TAsset>): TValue;
+  byDefault?: ((this: void, target: CxEntry.Target<TValue, TAsset>) => TValue) | undefined;
+  assign?: undefined;
+}): CxEntry.Definer<TValue, TAsset>;
 
 /**
  * Creates single-valued context entry definer with internal state based on {@link CxEntry.Target.trackRecentAsset most
@@ -74,28 +72,20 @@ export function cxRecent<TValue, TAsset = TValue>(
  *
  * @returns New context entry definer.
  */
-export function cxRecent<TValue, TAsset = TValue, TState = TValue>(
-    {
-      create,
-      assign,
-    }: {
+export function cxRecent<TValue, TAsset = TValue, TState = TValue>({
+  create,
+  assign,
+}: {
+  create(this: void, recent: TAsset, target: CxEntry.Target<TValue, TAsset>): TState;
 
-      create(
-          this: void,
-          recent: TAsset,
-          target: CxEntry.Target<TValue, TAsset>,
-      ): TState;
+  byDefault?: undefined;
 
-      byDefault?: undefined;
-
-      assign(
-          this: void,
-          tracker: CxTracker<TState>,
-          target: CxEntry.Target<TValue, TAsset>,
-      ): CxEntry.Assigner<TValue>;
-
-    },
-): CxEntry.Definer<TValue, TAsset>;
+  assign(
+    this: void,
+    tracker: CxTracker<TState>,
+    target: CxEntry.Target<TValue, TAsset>,
+  ): CxEntry.Assigner<TValue>;
+}): CxEntry.Definer<TValue, TAsset>;
 
 /**
  * Creates single-valued context entry definer with internal state based on {@link CxEntry.Target.trackRecentAsset most
@@ -114,53 +104,45 @@ export function cxRecent<TValue, TAsset = TValue, TState = TValue>(
  * @returns New context entry definer.
  */
 export function cxRecent<TValue, TAsset = TValue, TState = TValue>(
-    // eslint-disable-next-line @typescript-eslint/unified-signatures
-    {
-      create,
-      byDefault,
-      assign,
-    }: {
+  // eslint-disable-next-line @typescript-eslint/unified-signatures
+  {
+    create,
+    byDefault,
+    assign,
+  }: {
+    create(this: void, recent: TAsset, target: CxEntry.Target<TValue, TAsset>): TState;
 
-      create(
-          this: void,
-          recent: TAsset,
-          target: CxEntry.Target<TValue, TAsset>,
-      ): TState;
+    byDefault(this: void, target: CxEntry.Target<TValue, TAsset>): TState;
 
-      byDefault(
-          this: void,
-          target: CxEntry.Target<TValue, TAsset>,
-      ): TState;
-
-      assign(
-          this: void,
-          tracker: CxTracker.Mandatory<TState>,
-          target: CxEntry.Target<TValue, TAsset>,
-      ): CxEntry.Assigner<TValue>;
-
-    },
+    assign(
+      this: void,
+      tracker: CxTracker.Mandatory<TState>,
+      target: CxEntry.Target<TValue, TAsset>,
+    ): CxEntry.Assigner<TValue>;
+  },
 ): CxEntry.Definer<TValue, TAsset>;
 
-export function cxRecent<TValue, TAsset, TState>(
-    {
-      create = cxRecent$create,
-      byDefault,
-      assign = CxTracker$assign,
-    }: {
-      create?(this: void, recent: TAsset, target: CxEntry.Target<TValue, TAsset>): TState;
-      byDefault?(this: void, target: CxEntry.Target<TValue, TAsset>): TState;
-      assign?(this: void, tracker: CxTracker<TState>, target: CxEntry.Target<TValue, TAsset>): CxEntry.Assigner<TValue>;
-    } = {},
-): CxEntry.Definer<TValue, TAsset> {
+export function cxRecent<TValue, TAsset, TState>({
+  create = cxRecent$create,
+  byDefault,
+  assign = CxTracker$assign,
+}: {
+  create?(this: void, recent: TAsset, target: CxEntry.Target<TValue, TAsset>): TState;
+  byDefault?(this: void, target: CxEntry.Target<TValue, TAsset>): TState;
+  assign?(
+    this: void,
+    tracker: CxTracker<TState>,
+    target: CxEntry.Target<TValue, TAsset>,
+  ): CxEntry.Assigner<TValue>;
+} = {}): CxEntry.Definer<TValue, TAsset> {
   return target => {
-
     const getDefault = byDefault && target.lazy(byDefault);
     const tracker = CxTracker$create<TState>(
-        target,
-        receiver => target.trackRecentAsset(evaluated => evaluated
+      target,
+      receiver => target.trackRecentAsset(evaluated => evaluated
             ? receiver(create(evaluated.asset, target), CxRequestMethod.Assets)
             : receiver()),
-        getDefault,
+      getDefault,
     );
     const defaultTracker = CxTracker$default<TState>(target, getDefault);
 
@@ -172,8 +154,8 @@ export function cxRecent<TValue, TAsset, TState>(
 }
 
 function cxRecent$create<TValue, TAsset, TState>(
-    recent: TAsset,
-    _target: CxEntry.Target<TValue, TAsset>,
+  recent: TAsset,
+  _target: CxEntry.Target<TValue, TAsset>,
 ): TState {
   return recent as unknown as TState;
 }

@@ -17,11 +17,10 @@ import { CxEntry, CxRequest, CxRequestMethod, CxValues } from '../core';
  * @returns New scoped context entry definer.
  */
 export function cxScoped<TValue, TAsset = TValue, TContext extends CxValues = CxValues>(
-    scope: CxEntry<TContext, unknown>,
-    definer: CxEntry.Definer<TValue, TAsset>,
+  scope: CxEntry<TContext, unknown>,
+  definer: CxEntry.Definer<TValue, TAsset>,
 ): CxEntry.Definer<TValue, TAsset> {
   return target => {
-
     const context = target.get(scope);
 
     if (context === target.context) {
@@ -62,11 +61,10 @@ export function cxScoped<TValue, TAsset = TValue, TContext extends CxValues = Cx
  * @returns New scoped context entry definer.
  */
 export function cxDefaultScoped<TValue, TAsset = TValue, TContext extends CxValues = CxValues>(
-    scope: CxEntry<TContext, unknown>,
-    definer: CxEntry.Definer<TValue, TAsset>,
+  scope: CxEntry<TContext, unknown>,
+  definer: CxEntry.Definer<TValue, TAsset>,
 ): CxEntry.Definer<TValue, TAsset> {
   return target => {
-
     const context = target.get(scope);
 
     if (context === target.context) {
@@ -88,11 +86,10 @@ export function cxDefaultScoped<TValue, TAsset = TValue, TContext extends CxValu
 }
 
 function cxScoped$request<TValue>(
-    by: CxRequestMethod,
-    receiver: CxEntry.Receiver<TValue>,
-    request: CxRequest<TValue>,
+  by: CxRequestMethod,
+  receiver: CxEntry.Receiver<TValue>,
+  request: CxRequest<TValue>,
 ): CxRequest<TValue> {
-
   let { or } = request;
   let set: (this: void, value: TValue, by: CxRequestMethod) => void;
 

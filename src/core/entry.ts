@@ -15,7 +15,6 @@ import { CxValues } from './values';
  * @typeParam TAsset - Context value asset type.
  */
 export interface CxEntry<TValue, TAsset = TValue> {
-
   /**
    * Starts the definition of context entry.
    *
@@ -28,11 +27,9 @@ export interface CxEntry<TValue, TAsset = TValue> {
   perContext(target: CxEntry.Target<TValue, TAsset>): CxEntry.Definition<TValue>;
 
   toString?(): string;
-
 }
 
 export namespace CxEntry {
-
   /**
    * Context entry definer signature.
    *
@@ -46,8 +43,10 @@ export namespace CxEntry {
    *
    * @returns New context entry definition instance.
    */
-  export type Definer<TValue, TAsset = TValue> =
-      (this: void, target: CxEntry.Target<TValue, TAsset>) => Definition<TValue>;
+  export type Definer<TValue, TAsset = TValue> = (
+    this: void,
+    target: CxEntry.Target<TValue, TAsset>,
+  ) => Definition<TValue>;
 
   /**
    * Context entry definition target.
@@ -59,12 +58,10 @@ export namespace CxEntry {
    * @typeParam TValue - Context value type.
    * @typeParam TAsset - Context value asset type.
    */
-  export interface Target<
-      TValue,
-      TAsset = TValue,
-      TContext extends CxValues = CxValues,
-      > extends CxValues, CxModifier<TContext>, SupplyPeer {
-
+  export interface Target<TValue, TAsset = TValue, TContext extends CxValues = CxValues>
+    extends CxValues,
+      CxModifier<TContext>,
+      SupplyPeer {
     /**
      * Context entry to define.
      */
@@ -157,7 +154,6 @@ export namespace CxEntry {
      * @returns A function without parameters returning the evaluated result. The result will be evaluated at most once.
      */
     lazy<T>(evaluator: (this: void, target: this) => T): (this: void) => T;
-
   }
 
   /**
@@ -170,7 +166,6 @@ export namespace CxEntry {
    * @typeParam TValue - Context value type.
    */
   export interface Definition<TValue> {
-
     /**
      * Assigns context entry value {@link CxModifier.provide provided} by its assets.
      *
@@ -194,7 +189,6 @@ export namespace CxEntry {
      * @param request - Original context value {@link CxValues.get request}.
      */
     assignDefault?(receiver: Receiver<TValue>, request: CxRequest<TValue>): void;
-
   }
 
   /**
@@ -218,5 +212,4 @@ export namespace CxEntry {
    * @param Entity value receive to call if the value is available.
    */
   export type Assigner<TValue> = (this: void, receiver: Receiver<TValue>) => void;
-
 }

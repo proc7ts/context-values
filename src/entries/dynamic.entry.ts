@@ -26,16 +26,16 @@ export function cxDynamic<TElement>(): CxEntry.Definer<readonly TElement[], TEle
  * @returns New context entry definer.
  */
 export function cxDynamic<TElement>(
-    // eslint-disable-next-line @typescript-eslint/unified-signatures
-    {
-      byDefault,
-    }: {
-      create?: undefined;
-      byDefault?:
-          | ((this: void, target: CxEntry.Target<readonly TElement[], TElement>) => readonly TElement[])
-          | undefined;
-      assign?: undefined;
-    }
+  // eslint-disable-next-line @typescript-eslint/unified-signatures
+  {
+    byDefault,
+  }: {
+    create?: undefined;
+    byDefault?:
+      | ((this: void, target: CxEntry.Target<readonly TElement[], TElement>) => readonly TElement[])
+      | undefined;
+    assign?: undefined;
+  },
 ): CxEntry.Definer<readonly TElement[], TElement>;
 
 /**
@@ -51,16 +51,14 @@ export function cxDynamic<TElement>(
  *
  * @returns New context entry definer.
  */
-export function cxDynamic<TValue, TAsset = TValue>(
-    {
-      create,
-      byDefault,
-    }: {
-      create(this: void, assets: TAsset[], target: CxEntry.Target<TValue, TAsset>): TValue;
-      byDefault?: ((this: void, target: CxEntry.Target<TValue, TAsset>) => TValue) | undefined;
-      assign?: undefined;
-    },
-): CxEntry.Definer<TValue, TAsset>;
+export function cxDynamic<TValue, TAsset = TValue>({
+  create,
+  byDefault,
+}: {
+  create(this: void, assets: TAsset[], target: CxEntry.Target<TValue, TAsset>): TValue;
+  byDefault?: ((this: void, target: CxEntry.Target<TValue, TAsset>) => TValue) | undefined;
+  assign?: undefined;
+}): CxEntry.Definer<TValue, TAsset>;
 
 /**
  * Creates single-valued context entry definer with internal state based on {@link CxEntry.Target.trackAssetList entry
@@ -76,28 +74,20 @@ export function cxDynamic<TValue, TAsset = TValue>(
  *
  * @returns New context entry definer.
  */
-export function cxDynamic<TValue, TAsset = TValue, TState = TValue>(
-    {
-      create,
-      assign,
-    }: {
+export function cxDynamic<TValue, TAsset = TValue, TState = TValue>({
+  create,
+  assign,
+}: {
+  create(this: void, assets: TAsset[], target: CxEntry.Target<TValue, TAsset>): TState;
 
-      create(
-          this: void,
-          assets: TAsset[],
-          target: CxEntry.Target<TValue, TAsset>,
-      ): TState;
+  byDefault?: undefined;
 
-      byDefault?: undefined;
-
-      assign(
-          this: void,
-          tracker: CxTracker<TState>,
-          target: CxEntry.Target<TValue, TAsset>,
-      ): CxEntry.Assigner<TValue>;
-
-    },
-): CxEntry.Definer<TValue, TAsset>;
+  assign(
+    this: void,
+    tracker: CxTracker<TState>,
+    target: CxEntry.Target<TValue, TAsset>,
+  ): CxEntry.Assigner<TValue>;
+}): CxEntry.Definer<TValue, TAsset>;
 
 /**
  * Creates single-valued context entry definer with internal state based on {@link CxEntry.Target.trackAssetList entry
@@ -116,44 +106,37 @@ export function cxDynamic<TValue, TAsset = TValue, TState = TValue>(
  * @returns New context entry definer.
  */
 export function cxDynamic<TValue, TAsset = TValue, TState = TValue>(
-    // eslint-disable-next-line @typescript-eslint/unified-signatures
-    {
-      create,
-      byDefault,
-      assign,
-    }: {
+  // eslint-disable-next-line @typescript-eslint/unified-signatures
+  {
+    create,
+    byDefault,
+    assign,
+  }: {
+    create(this: void, assets: TAsset[], target: CxEntry.Target<TValue, TAsset>): TState;
 
-      create(
-          this: void,
-          assets: TAsset[],
-          target: CxEntry.Target<TValue, TAsset>,
-      ): TState;
+    byDefault(this: void, target: CxEntry.Target<TValue, TAsset>): TState;
 
-      byDefault(
-          this: void,
-          target: CxEntry.Target<TValue, TAsset>,
-      ): TState;
-
-      assign(
-          this: void,
-          tracker: CxTracker.Mandatory<TState>,
-          target: CxEntry.Target<TValue, TAsset>,
-      ): CxEntry.Assigner<TValue>;
-
-    },
+    assign(
+      this: void,
+      tracker: CxTracker.Mandatory<TState>,
+      target: CxEntry.Target<TValue, TAsset>,
+    ): CxEntry.Assigner<TValue>;
+  },
 ): CxEntry.Definer<TValue, TAsset>;
 
-export function cxDynamic<TValue, TAsset, TState>(
-    {
-      create,
-      byDefault,
-      assign = CxTracker$assign,
-    }: {
-      create?(this: void, assets: TAsset[], target: CxEntry.Target<TValue, TAsset>): TState;
-      byDefault?(this: void, target: CxEntry.Target<TValue, TAsset>): TState;
-      assign?(this: void, tracker: CxTracker<TState>, target: CxEntry.Target<TValue, TAsset>): CxEntry.Assigner<TValue>;
-    } = {},
-): CxEntry.Definer<TValue, TAsset> {
+export function cxDynamic<TValue, TAsset, TState>({
+  create,
+  byDefault,
+  assign = CxTracker$assign,
+}: {
+  create?(this: void, assets: TAsset[], target: CxEntry.Target<TValue, TAsset>): TState;
+  byDefault?(this: void, target: CxEntry.Target<TValue, TAsset>): TState;
+  assign?(
+    this: void,
+    tracker: CxTracker<TState>,
+    target: CxEntry.Target<TValue, TAsset>,
+  ): CxEntry.Assigner<TValue>;
+} = {}): CxEntry.Definer<TValue, TAsset> {
   return target => {
     if (!byDefault && !create) {
       byDefault = cxDynamic$byDefault;
@@ -162,9 +145,8 @@ export function cxDynamic<TValue, TAsset, TState>(
 
     const getDefault = byDefault && target.lazy(byDefault);
     const tracker = CxTracker$create<TState>(
-        target,
-        receiver => target.trackAssetList(list => {
-
+      target,
+      receiver => target.trackAssetList(list => {
           const assets: TAsset[] = [];
 
           for (const provided of list) {
@@ -174,10 +156,10 @@ export function cxDynamic<TValue, TAsset, TState>(
           }
 
           return assets.length
-              ? receiver(create!(assets, target), CxRequestMethod.Assets)
-              : receiver();
+            ? receiver(create!(assets, target), CxRequestMethod.Assets)
+            : receiver();
         }),
-        getDefault,
+      getDefault,
     );
     const defaultTracker = CxTracker$default<TState>(target, getDefault);
 
@@ -189,8 +171,8 @@ export function cxDynamic<TValue, TAsset, TState>(
 }
 
 function cxDynamic$create<TValue, TAsset, TState>(
-    assets: TAsset[],
-    _target: CxEntry.Target<TValue, TAsset>,
+  assets: TAsset[],
+  _target: CxEntry.Target<TValue, TAsset>,
 ): TState {
   return assets as unknown as TState;
 }

@@ -5,7 +5,6 @@ import { CxRequest } from './request';
  * The values available in context, identified by their entries.
  */
 export interface CxValues {
-
   /**
    * Obtains value of the given context entry.
    *
@@ -40,5 +39,4 @@ export interface CxValues {
    * @throws CxReferenceError - If the target `entry` has no value and fallback one is not provided.
    */
   get<TValue>(entry: CxEntry<TValue, unknown>, request?: CxRequest<TValue>): TValue | null;
-
 }

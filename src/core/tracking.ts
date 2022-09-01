@@ -5,7 +5,6 @@ import { CxRequestMethod } from './request-method';
  * Options for value tracking.
  */
 export interface CxTracking {
-
   /**
    * Tracking supply.
    *
@@ -14,11 +13,9 @@ export interface CxTracking {
    * Returned from tracking method when present. New instance will be constructed when omitted.
    */
   readonly supply?: Supply | undefined;
-
 }
 
 export namespace CxTracking {
-
   /**
    * Mandatory tracked value receiver signature.
    *
@@ -39,8 +36,7 @@ export namespace CxTracking {
    * @typeParam T - Tracked value type.
    */
   export type Receiver<T> = (
-      this: void,
-      ...args: [value: T, by: CxRequestMethod] | [undefined?, undefined?]
+    this: void,
+    ...args: [value: T, by: CxRequestMethod] | [undefined?, undefined?]
   ) => void;
-
 }

@@ -15,15 +15,12 @@ import { CxEntry$assignOnce } from './entry.assign-once.impl';
  * @returns New context entry definer.
  */
 export function cxEvaluated<TValue, TAsset = TValue>(
-    evaluate: (this: void, target: CxEntry.Target<TValue, TAsset>) => TValue | null | undefined,
-    {
-      byDefault = () => null,
-    }: {
-      byDefault?(
-          this: void,
-          target: CxEntry.Target<TValue, TAsset>,
-      ): TValue | null | undefined;
-    } = {},
+  evaluate: (this: void, target: CxEntry.Target<TValue, TAsset>) => TValue | null | undefined,
+  {
+    byDefault = () => null,
+  }: {
+    byDefault?(this: void, target: CxEntry.Target<TValue, TAsset>): TValue | null | undefined;
+  } = {},
 ): CxEntry.Definer<TValue, TAsset> {
   return target => ({
     assign: CxEntry$assignOnce(target, evaluate),

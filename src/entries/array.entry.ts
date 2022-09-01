@@ -14,16 +14,14 @@ import { CxEntry$assignOnce } from './entry.assign-once.impl';
  *
  * @returns New context entry definer.
  */
-export function cxArray<TElement>(
-    {
-      byDefault = cxArray$byDefault,
-    }: {
-      byDefault?(
-          this: void,
-          target: CxEntry.Target<readonly TElement[], TElement>,
-      ): readonly TElement[] | null | undefined;
-    } = {},
-): CxEntry.Definer<readonly TElement[], TElement> {
+export function cxArray<TElement>({
+  byDefault = cxArray$byDefault,
+}: {
+  byDefault?(
+    this: void,
+    target: CxEntry.Target<readonly TElement[], TElement>,
+  ): readonly TElement[] | null | undefined;
+} = {}): CxEntry.Definer<readonly TElement[], TElement> {
   return target => ({
     assign: CxEntry$assignOnce(target, cxArray$value),
     assignDefault: CxEntry$assignOnce(target, byDefault),
@@ -34,8 +32,9 @@ function cxArray$byDefault<TValue, TAsset>(_target: CxEntry.Target<TValue, TAsse
   return [] as unknown as TValue;
 }
 
-function cxArray$value<TElement>(target: CxEntry.Target<readonly TElement[], TElement>): readonly TElement[] | null {
-
+function cxArray$value<TElement>(
+  target: CxEntry.Target<readonly TElement[], TElement>,
+): readonly TElement[] | null {
   const array: TElement[] = [];
 
   target.eachAsset(asset => {

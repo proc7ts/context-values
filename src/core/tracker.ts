@@ -7,7 +7,6 @@ import { CxTracking } from './tracking';
  * @typeParam T - Tracked value type.
  */
 export interface CxTracker<T> extends SupplyPeer {
-
   /**
    * Tracking supply.
    *
@@ -45,11 +44,9 @@ export interface CxTracker<T> extends SupplyPeer {
    * @returns Tracking supply. Stops tracking once cut off.
    */
   track(this: void, receiver: CxTracking.Receiver<T>, tracking?: CxTracking): Supply;
-
 }
 
 export namespace CxTracker {
-
   /**
    * Mandatory value changes tracker.
    *
@@ -58,7 +55,6 @@ export namespace CxTracker {
    * @typeParam T - Tracked value type.
    */
   export interface Mandatory<T> extends CxTracker<T> {
-
     /**
      * Starts value tracking.
      *
@@ -71,7 +67,5 @@ export namespace CxTracker {
      * @returns Tracking supply. Stops tracking once cut off.
      */
     track(this: void, receiver: CxTracking.MandatoryReceiver<T>, tracking?: CxTracking): Supply;
-
   }
-
 }

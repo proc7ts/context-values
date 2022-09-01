@@ -4,7 +4,6 @@
  * {@link CxRequest.by Specifies} how to obtain the value.
  */
 export const enum CxRequestMethod {
-
   /**
    * Requests any available value.
    *
@@ -39,5 +38,4 @@ export const enum CxRequestMethod {
    * entry assets.
    */
   Assets = 1,
-
 }

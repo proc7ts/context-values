@@ -8,7 +8,6 @@ import { CxRequestMethod } from './request-method';
  * @typeParam TValue - Requested context value type.
  */
 export interface CxRequest<TValue> {
-
   /**
    * A fallback value to use if there is no value {@link Definition.assign available} for requested entry.
    *
@@ -35,11 +34,9 @@ export interface CxRequest<TValue> {
    * @param by - The request method the value is obtained by.
    */
   set?(this: void, value: TValue | null, by: CxRequestMethod): void;
-
 }
 
 export namespace CxRequest {
-
   /**
    * Context value request with fallback specified.
    *
@@ -48,14 +45,12 @@ export namespace CxRequest {
    * @typeParam TValue - Requested context value type.
    */
   export interface WithFallback<TValue> extends CxRequest<TValue> {
-
     /**
      * A fallback value to use if there is no value {@link Definition.assign available} for requested entry.
      */
     readonly or: TValue;
 
     set?(this: void, value: TValue, by: CxRequestMethod): void;
-
   }
 
   /**
@@ -66,11 +61,8 @@ export namespace CxRequest {
    * @typeParam TValue - Requested context value type.
    */
   export interface WithoutFallback<TValue> extends CxRequest<TValue> {
-
     readonly or?: undefined;
 
     set?(this: void, value: TValue, by: CxRequestMethod): void;
-
   }
-
 }
