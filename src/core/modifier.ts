@@ -12,7 +12,7 @@ export interface CxModifier<TContext extends CxValues = CxValues> {
   readonly context: TContext;
 
   /**
-   * Provides an asset for context {@link CxAsset.entry entry}.
+   * Provides an asset for context {@link CxAsset.Base#entry entry}.
    *
    * @typeParam TValue - Context value type.
    * @typeParam TAsset - Context value asset type.

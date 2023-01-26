@@ -51,8 +51,8 @@ export function cxScoped<TValue, TAsset = TValue, TContext extends CxValues = Cx
 /**
  * Creates value definer with scoped default value.
  *
- * Unlike {@link cxScoped}, the definer created by this function scopes only {@link CxEntry.Definition.assignDefault
- * default value}, while the {@link CxEntry.Definition.assign value provided by assets} is always evaluated in the
+ * Unlike {@link cxScoped}, the definer created by this function scopes only {@link CxEntry.Definition#assignDefault
+ * default value}, while the {@link CxEntry.Definition#assign value provided by assets} is always evaluated in the
  * requested context.
  *
  * @param scope - Context entry containing target scope as its value.

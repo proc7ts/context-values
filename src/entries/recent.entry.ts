@@ -2,10 +2,10 @@ import { CxEntry, CxRequestMethod, CxTracker } from '../core';
 import { CxTracker$assign, CxTracker$create, CxTracker$default } from './tracker.impl';
 
 /**
- * Creates single-valued context entry definer that treats the {@link CxEntry.Target.trackRecentAsset most recent asset}
+ * Creates single-valued context entry definer that treats the {@link CxEntry.Target#trackRecentAsset most recent asset}
  * as entry value, or becomes unavailable when there is no one.
  *
- * The entry value updated each time the {@link CxEntry.Target.trackRecentAsset most recent asset} changes.
+ * The entry value updated each time the {@link CxEntry.Target#trackRecentAsset most recent asset} changes.
  *
  * @typeParam TValue - Context value asset type.
  *
@@ -14,10 +14,10 @@ import { CxTracker$assign, CxTracker$create, CxTracker$default } from './tracker
 export function cxRecent<TValue>(): CxEntry.Definer<TValue>;
 
 /**
- * Creates single-valued context entry definer that treats the {@link CxEntry.Target.trackRecentAsset most recent asset}
+ * Creates single-valued context entry definer that treats the {@link CxEntry.Target#trackRecentAsset most recent asset}
  * as entry value.
  *
- * The entry value updated each time the {@link CxEntry.Target.trackRecentAsset most recent asset} changes.
+ * The entry value updated each time the {@link CxEntry.Target#trackRecentAsset most recent asset} changes.
  *
  * @typeParam TValue - Context value asset type.
  * @param byDefault - Creates default entry value used when there are no assets. The default value evaluated at most
@@ -37,9 +37,9 @@ export function cxRecent<TValue>(
 ): CxEntry.Definer<TValue>;
 
 /**
- * Creates single-valued context entry definer based on the {@link CxEntry.Target.trackRecentAsset most recent asset}.
+ * Creates single-valued context entry definer based on the {@link CxEntry.Target#trackRecentAsset most recent asset}.
  *
- * The entry value updated each time the {@link CxEntry.Target.trackRecentAsset most recent asset} changes.
+ * The entry value updated each time the {@link CxEntry.Target#trackRecentAsset most recent asset} changes.
  *
  * @typeParam TValue - Context value type.
  * @typeParam TAsset - Context value asset type.
@@ -59,10 +59,10 @@ export function cxRecent<TValue, TAsset = TValue>({
 }): CxEntry.Definer<TValue, TAsset>;
 
 /**
- * Creates single-valued context entry definer with internal state based on {@link CxEntry.Target.trackRecentAsset most
+ * Creates single-valued context entry definer with internal state based on {@link CxEntry.Target#trackRecentAsset most
  * recent asset} and without default state.
  *
- * The internal state updated each time the {@link CxEntry.Target.trackRecentAsset most recent asset} changes.
+ * The internal state updated each time the {@link CxEntry.Target#trackRecentAsset most recent asset} changes.
  *
  * @typeParam TValue - Context value type.
  * @typeParam TAsset - Context value asset type.
@@ -88,10 +88,10 @@ export function cxRecent<TValue, TAsset = TValue, TState = TValue>({
 }): CxEntry.Definer<TValue, TAsset>;
 
 /**
- * Creates single-valued context entry definer with internal state based on {@link CxEntry.Target.trackRecentAsset most
+ * Creates single-valued context entry definer with internal state based on {@link CxEntry.Target#trackRecentAsset most
  * recent asset}.
  *
- * The internal state updated each time the {@link CxEntry.Target.trackRecentAsset most recent asset} changes.
+ * The internal state updated each time the {@link CxEntry.Target#trackRecentAsset most recent asset} changes.
  *
  * @typeParam TValue - Context value type.
  * @typeParam TAsset - Context value asset type.

@@ -36,7 +36,7 @@ export namespace CxAsset {
      *
      * Removes the asset once cut off.
      *
-     * Returned from {@link CxModifier.provide} when specified. New one created when omitted.
+     * Returned from {@link CxModifier#provide} when specified. New one created when omitted.
      */
     readonly supply?: Supply | undefined;
 
@@ -80,7 +80,7 @@ export namespace CxAsset {
     /**
      * Sets up asset.
      *
-     * This method is called immediately when asset {@link CxModifier.provide provided}.
+     * This method is called immediately when asset {@link CxModifier#provide provided}.
      *
      * It can be used e.g. to provide additional assets. Additional assets will be revoked when the asset itself
      * revoked.
@@ -153,7 +153,7 @@ export namespace CxAsset {
   /**
    * A signature of context value assets collector.
    *
-   * The {@link CxAsset.placeAsset} method passes evaluated assets to it.
+   * The {@link CxAsset.Base#placeAsset} method passes evaluated assets to it.
    *
    * @typeParam TAsset - Context value asset type.
    * @param asset - Asset to collect.
@@ -163,7 +163,7 @@ export namespace CxAsset {
   export type Collector<TAsset> = (this: void, asset: TAsset) => void | boolean;
 
   /**
-   * A signature of {@link CxEntry.Target.eachAsset assets iteration} callback.
+   * A signature of {@link CxEntry.Target#eachAsset assets iteration} callback.
    *
    * @typeParam TAsset - Context value asset type.
    * @param asset - Current asset.
@@ -247,7 +247,7 @@ export namespace CxAsset {
     /**
      * Starts tracing for this asset updates.
      *
-     * Whenever this asset is {@link CxAsset.Base.buildAsset updated}, the registered receiver will be notified, until
+     * Whenever this asset is {@link CxAsset.Base#buildAsset updated}, the registered receiver will be notified, until
      * updates supply cut off.
      *
      * @param receiver - A no-op receiver function to call on every asset update.
@@ -270,7 +270,7 @@ export namespace CxAsset {
     readonly asset: TAsset;
 
     /**
-     * A rank of the asset modifier it is {@link CxModifier.provide provided} for.
+     * A rank of the asset modifier it is {@link CxModifier#provide provided} for.
      *
      * `0` refers to current context modifier, `1` - to its predecessor, etc.
      */

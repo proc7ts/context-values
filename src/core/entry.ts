@@ -51,7 +51,7 @@ export namespace CxEntry {
   /**
    * Context entry definition target.
    *
-   * Passed to {@link CxEntry.perContext context entry} to start the definition.
+   * Passed to {@link CxEntry#perContext context entry} to start the definition.
    *
    * Allows to access context values and provide assets for them.
    *
@@ -119,7 +119,7 @@ export namespace CxEntry {
     /**
      * Reads the most recent entry asset and starts its tracking.
      *
-     * The most recent asset is the one with the smallest {@link CxAsset.Provided.rank rank} provided last.
+     * The most recent asset is the one with the smallest {@link CxAsset.Provided#rank rank} provided last.
      *
      * Sends the recent asset to the given `receiver`, then sends again whenever the recent asset changes. Sends
      * `undefined` when there are no assets provided for the entry.
@@ -161,21 +161,21 @@ export namespace CxEntry {
    *
    * The entry is defined based on value assets available via {@link Target definition target}.
    *
-   * The definition is {@link CxEntry.perContext started} for context entry at most once per context.
+   * The definition is {@link CxEntry#perContext started} for context entry at most once per context.
    *
    * @typeParam TValue - Context value type.
    */
   export interface Definition<TValue> {
     /**
-     * Assigns context entry value {@link CxModifier.provide provided} by its assets.
+     * Assigns context entry value {@link CxModifier#provide provided} by its assets.
      *
      * When defined, this method is tried first when accessing the context entry value.
      *
-     * If the value is not assigned by this method call, the {@link CxRequest.or fallback} value is used. If the latter
+     * If the value is not assigned by this method call, the {@link CxRequest#or fallback} value is used. If the latter
      * is not available, the {@link assignDefault default value} is used instead.
      *
      * @param receiver - Entry value receiver to call if the value is available.
-     * @param request - Original context value {@link CxValues.get request}.
+     * @param request - Original context value {@link CxValues#get request}.
      */
     assign?(receiver: Receiver<TValue>, request: CxRequest<TValue>): void;
 

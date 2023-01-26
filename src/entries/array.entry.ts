@@ -9,7 +9,7 @@ import { CxEntry$assignOnce } from './entry.assign-once.impl';
  * The entry value is evaluated at most once per context.
  *
  * @typeParam TElement - Array element type. The same as entry value asset type.
- * @param byDefault - Creates {@link CxEntry.Definition.assignDefault default} entry value. Accepts entry definition
+ * @param byDefault - Creates {@link CxEntry.Definition#assignDefault default} entry value. Accepts entry definition
  * target as the only parameter. Empty array will be used as default value when omitted.
  *
  * @returns New context entry definer.

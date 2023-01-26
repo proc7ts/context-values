@@ -2,7 +2,7 @@ import { CxEntry, CxRequestMethod, CxTracker } from '../core';
 import { CxTracker$assign, CxTracker$create, CxTracker$default } from './tracker.impl';
 
 /**
- * Creates potentially empty array-valued context entry definer that treats all {@link CxEntry.Target.trackAssetList
+ * Creates potentially empty array-valued context entry definer that treats all {@link CxEntry.Target#trackAssetList
  * entry assets} as entry value.
  *
  * The entry value updated each time an asset provided or revoked.
@@ -14,7 +14,7 @@ import { CxTracker$assign, CxTracker$create, CxTracker$default } from './tracker
 export function cxDynamic<TElement>(): CxEntry.Definer<readonly TElement[], TElement>;
 
 /**
- * Creates array-valued context entry definer that treats all {@link CxEntry.Target.trackAssetList entry assets}
+ * Creates array-valued context entry definer that treats all {@link CxEntry.Target#trackAssetList entry assets}
  * as entry value.
  *
  * The entry value updated each time an asset provided or revoked.
@@ -39,7 +39,7 @@ export function cxDynamic<TElement>(
 ): CxEntry.Definer<readonly TElement[], TElement>;
 
 /**
- * Creates single-valued context entry definer based on {@link CxEntry.Target.trackAssetList entry asset list}.
+ * Creates single-valued context entry definer based on {@link CxEntry.Target#trackAssetList entry asset list}.
  *
  * The entry value updated each time an asset provided or revoked.
  *
@@ -61,7 +61,7 @@ export function cxDynamic<TValue, TAsset = TValue>({
 }): CxEntry.Definer<TValue, TAsset>;
 
 /**
- * Creates single-valued context entry definer with internal state based on {@link CxEntry.Target.trackAssetList entry
+ * Creates single-valued context entry definer with internal state based on {@link CxEntry.Target#trackAssetList entry
  * asset list} and without default state.
  *
  * The internal state updated each time an asset provided or revoked.
@@ -90,7 +90,7 @@ export function cxDynamic<TValue, TAsset = TValue, TState = TValue>({
 }): CxEntry.Definer<TValue, TAsset>;
 
 /**
- * Creates single-valued context entry definer with internal state based on {@link CxEntry.Target.trackAssetList entry
+ * Creates single-valued context entry definer with internal state based on {@link CxEntry.Target#trackAssetList entry
  * asset list}.
  *
  * The internal state updated each time an asset provided or revoked.

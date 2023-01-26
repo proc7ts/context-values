@@ -9,7 +9,7 @@ import { CxEntry$assignOnce } from './entry.assign-once.impl';
  * @typeParam TValue - Combined context value type.
  * @typeParam TAsset - A type of context value assets to combine.
  * @param evaluate - Evaluates entry value out. Accepts entry definition target as the only parameter.
- * @param byDefault - Evaluates {@link CxEntry.Definition.assignDefault default} entry value. Accepts entry definition
+ * @param byDefault - Evaluates {@link CxEntry.Definition#assignDefault default} entry value. Accepts entry definition
  * target as the only parameter. Evaluates to nothing by default.
  *
  * @returns New context entry definer.
