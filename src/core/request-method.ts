@@ -3,7 +3,7 @@
  *
  * {@link CxRequest.by Specifies} how to obtain the value.
  */
-export const enum CxRequestMethod {
+export enum CxRequestMethod {
   /**
    * Requests any available value.
    *
