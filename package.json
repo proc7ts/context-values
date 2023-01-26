@@ -16,9 +16,11 @@
     "url": "https://github.com/proc7ts/context-values/issues"
   },
   "type": "module",
-  "main": "./dist/context-values.js",
-  "types": "./index.d.ts",
-  "exports": "./dist/context-values.js",
+  "types": "./dist/context-values.d.ts",
+  "exports": {
+    "types": "./dist/context-values.d.ts",
+    "default": "./dist/context-values.js"
+  },
   "peerDependencies": {
     "@proc7ts/fun-events": "^10.5.1"
   },
