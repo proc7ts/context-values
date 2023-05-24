@@ -21,6 +21,7 @@
     "types": "./dist/context-values.d.ts",
     "default": "./dist/context-values.js"
   },
+  "sideEffects": false,
   "peerDependencies": {
     "@proc7ts/fun-events": "^10.5.1"
   },
